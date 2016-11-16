@@ -1,0 +1,96 @@
+.top-navbar{
+	border-radius: 0 !important;
+	background: rgb(40,40,40) !important;
+}
+.profile-picture{
+	float: left;
+	width: 30px;
+	height: 30px;
+	background: rgb(200,200,200);
+	margin: 5px 20px 0 10px;
+}
+.profile-name{
+	padding: 10px 10px 0 0;
+	color:rgb(200,200,200);
+}
+
+/**chart**/
+
+.status-indicator li{
+	float: left;
+	display: table;
+
+
+	padding: 5px;
+	font-size: 15px;
+
+}
+.status-box{
+	float: left;
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	background: #ccc;
+	margin-right: 15px;
+	color:rgb(255,255,255);
+	padding: 5px;
+}
+
+.status-box.blue{
+	background: rgb(32,122,199);
+}
+
+.status-box.green{
+	background: rgb(32,199,150);
+}
+
+.status-box.red{
+	background: rgb(255,82,87); 
+}
+
+.status-box.gray{
+	background: rgb(100,100,100);
+}
+
+/*tabs*/
+.tab-line{
+	float: left;
+	width: 100%;
+	height: 1px;
+	background: #ddd;
+	margin-top: 40px;
+}
+
+/*loading*/
+.loading-circle{
+	position: absolute;
+	top:45%;
+	left:48%;
+	animation: load 2s infinite
+}
+
+@-webkit-keyframes load{
+	100% { -webkit-transform: rotate(360deg); }
+}
+
+/*automobile status*/
+.status-box-sm{
+width: 20px !important;
+height: 20px;
+padding: 2px;
+}
+
+.status-box-sm a{
+	color: rgb(255,255,255);
+}
+/*automobile-list*/
+.automobile-list{
+	margin-top: 50px;
+}
+.automobile-list-item{
+	height: 50vh;
+	display: table;
+}
+.automobile-list-item img{
+	width: 100%;
+}
