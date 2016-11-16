@@ -14,20 +14,50 @@
 		</div>
 	</nav>
 @endsection	
+@section('modal')
+	<div class="backdrop">
+		<div class="modalx">
+			<div class="container">
+				<div class="col col-md-4 col-sm-6">
+					<dl class="dl-horizontal preview-dl">
+						<dt><b>Menu</b></dt>
+						<dd><a href="#">Vehicle Information</a></dd>
+						<dd><a href="#">Gasoline</a></dd>
+						<dd><a href="#">Maintenance</a></dd>
+						<dd><a href="#">Maintenance Ledger</a></dd>
+					</dl>
+				</div>
 
+				<div class="col col-md-8 col-sm-6">
+					<div>
+						<h1 style="color:#ff9933"><span class="glyphicon glyphicon-menu-right"></span> Information</h1>
+						<p>Plate number : 1598fd</p>
+
+				<p>Current Mileage Reading : 0 km</p>
+
+				<p>Brand/Make/Model : Toyota Camry LE</p>
+
+				<p>Color :</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+@endsection
 @section('chart')
+
 	<section class="row">
 		<div class="col col-md-12 col-sm-12 col-xs-12" style="float:left;">
-			<center  class="col col-xs-4 col-sm-4 col-md-2  col-md-offset-5 col-sm-offset-4 col-xs-offset-4  chart-section">
+			<center  class="col col-xs-6 col-sm-6 col-md-4  col-md-offset-4 col-sm-offset-3 col-xs-offset-3  chart-section">
 				<h3>Current Status</h3>
-				<canvas id="myChart" width="400" height="400"></canvas>
+				<canvas id="myChart" width="400" height="200"></canvas>
 				
 			</center>
-			<div class="col col-md-12 col-sm-12 col-xs-12"><br/>
+			<div class="col col-md-10 col-sm-10 col-xs-10 col-md-offset-2 col-sm-offset-2 col-xs-offset-2 "><br/>
 				<ul class="list-unstyled status-indicator">
-					<li class="col col-md-3 col-sm-3 col-md-offset-2 col-sm-offset-2 "><div class="status-box blue">20</div>Automobile</li>
-					<li class="col col-md-3 col-sm-3"><div class="status-box green">5</div>Available Cars</li>
-					<li class="col col-md-3 col-sm-3"><div class="status-box red">30</div>Unavailable</li>
+					<li class="col col-md-4"><div class="status-box blue">20</div>Automobile</li>
+					<li class="col col-md-4"><div class="status-box green">5</div>Available Cars</li>
+					<li class="col col-md-4"><div class="status-box red">30</div>Unavailable</li>
 				</ul>
 			</div>
 		</div>
@@ -40,22 +70,22 @@
 	<div>
 		<br/><br/>
 	  <!-- Nav tabs -->
-	  <div class="col col-md-4 col-sm-4 hidden-xs" style="padding-right:0;"><div class="tab-line">&nbsp;</div></div>
-	  <ul class="nav nav-tabs col col-md-8 col-sm-8" role="tablist">
+	  <div class="col col-md-4 col-sm-4 col-xs-4" style="padding-right:0;"><div class="tab-line">&nbsp;</div></div>
+	  <ul class="nav nav-tabs col col-md-8 col-sm-8 col-xs-8" role="tablist">
 	    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Automobile</a></li>
 	    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Calendar</a></li>
 	    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Travel</a></li>
 	  </ul>
 
 	  <!-- Tab panes -->
-	  <div class="tab-content" style="margin-top: 5vh;">
+	  <div class="tab-content" style="margin-top: 80px;">
 
 	  <!--home-->
 	    <div role="tabpanel" class="tab-pane active" id="home">
 	    	<!--<img src="{{asset('img/loading.png')}}" class="loading-circle" style="width: 80px !important;" />-->
 	    	<div class="col col-md-12">
 	    		<p><a href="#"><div class="status-box status-box-sm gray">+</div> Status</a></p>
-		    	<div class="col col-md-12">
+		    	<div class="col col-md-12 row">
 		    		<div class="col col-md-12">
 		    			<h1>100 Liters</h1>
 		    			<p><small>The graph below shows the annual gasoline expense of motorpool from year 2014 to 2016</small></p>
@@ -67,7 +97,7 @@
 
 		    	<div class="col col-md-12">
 		    		<p><a href="#"><div class="status-box status-box-sm gray">+</div>Vehicle</a></p>
-		    		<div class="col col-md-12">
+		    		<div class="col col-md-12 row">
 		    			<div class="col col-md-12 automobile-list">
 		    				<!--automobile-->
 		    			</div>
@@ -146,7 +176,7 @@ data2.datasets= [
 				},
 				{
 					label: statData[1].total.year+ " outlay",
-           			backgroundColor:'rgba(0,100,150, 0.5)',
+           			backgroundColor:'rgba(255, 99, 60, 0.8)',
             		data:[statData[1].data[0].jan.amount,statData[1].data[0].feb.amount,statData[1].data[0].mar.amount,statData[1].data[0].apr.amount,statData[1].data[0].may.amount,statData[1].data[0].jun.amount,statData[1].data[0].jul.amount,statData[1].data[0].aug.amount,statData[1].data[0].sep.amount,statData[1].data[0].oct.amount,statData[1].data[0].nov.amount,statData[1].data[0].dec.amount]
 					
 				}
@@ -176,22 +206,44 @@ var myDoughnutChart = new Chart(ctx2, {
 
 @section('automobile-script')
 <script type="text/javascript">
+function automobilePreview(){
+	$('.backdrop').css({marginTop:0}).click(function(e){
+		//$('body').css({overflow:'hidden'})
+
+		if(this==e.target){
+			$(this).css({marginTop:'-200%'})
+		}
+	})
+}
+
 $(document).ready(function(){
+
+	
 
 
 	var auto=[{"id":"0EV-21859","brand":"Toyota Corolla GLI","color":"Gray","status":"in_use","image":null},{"id":"1598fd","brand":"Toyota Camry LE","color":"#004040","status":"available","image":"1598fd.png"},{"id":"4589df","brand":"","color":"#000000","status":"available","image":"4589df.png"},{"id":"abc1315","brand":"Honda CR-V","color":"black","status":"available","image":"abc1315.png"},{"id":"asd","brand":"","color":"","status":"available","image":null},{"id":"asdasd","brand":"","color":"","status":"available","image":null},{"id":"AXA 1341","brand":"Toyota Fortuner 4x2 SUV","color":"#ffdbb7","status":"available","image":"asdasdasdas.png"},{"id":"new","brand":"Toyota Wigo 13.0 GMT","color":"#ffffff","status":"available","image":"new.png"},{"id":"no plate 2","brand":"Toyota Innova 2.5J MT","color":"white","status":"available","image":"35603A.png"},{"id":"OEV-22436","brand":"Mitsubishi L300 cab","color":"#ff9900","status":"available","image":null},{"id":"OEV-24469","brand":"Toyota Hi-ACE Grandia GL 2.5 DSL 5s","color":"#f7f7f7","status":"available","image":"OEV-24469.png"},{"id":"OEV-24498","brand":"Toyota Hi-Lux J M\/T 4x2","color":"#ffffff","status":"available","image":"OEV-24498.jpg"},{"id":"OEV-26782","brand":"Honda Accord 3.5 S AT","color":"#000000","status":"available","image":"OEV-26782.png"},{"id":"OEV-28050","brand":"Hyundai Grand Starex GL","color":"#ffffff","status":"available","image":"OEV-28050.png"},{"id":"po435","brand":"","color":"#800000","status":"available","image":null},{"id":"RENT A CAR","brand":"RENT A CAR","color":"#000000","status":"available","image":"RENT A CAR.png"},{"id":"sdfsdf","brand":"","color":"#000000","status":"available","image":null},{"id":"TQE 247","brand":"SUZUKI multicab","color":"#ffffd7","status":"available","image":null}];
 
 	for(var x=0;x<auto.length;x++){
 		console.log(auto[x].brand)
-		var htm=`<div class="col col-md-3 automobile-list-item">
+		var brand=auto[x].brand.length>1?auto[x].brand:'<br/>';
+		var htm=`<div class="col col-md-3 col-sm-4 col-xs-6 " onclick="automobilePreview()"><div class="automobile-list-item">
 		    					<img src="/laravel/public/uploads/automobile/`+auto[x].image+`" onerror="this.src='/laravel/public/img/no-photo-available.jpg'"/>
 		    					<div class="col col-md-12">
-		    						<h4 class="page-header">`+auto[x].brand+`</h4>
-		    						<p><b>`+auto[x].id+`</b></p>
-		    					</div>
+		    						<h4 class="page-header">`+brand+`</h4>
+		    						<p><div class="marker marker-danger">`+auto[x].id+`</div></p>`
+		   if(auto[x].status=='in_use'){
+		   	htm+=`<p><center class="text-muted"><b>Unavailable</b></ceter></p>`
+		   }
+		    						
+		htm+=`
+		    					</div></div>
 		    				</div>`
 		$('.automobile-list').append(htm)
 	}
+
+
+
+
 })
 </script>
 @stop

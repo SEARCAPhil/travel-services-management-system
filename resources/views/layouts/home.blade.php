@@ -12,6 +12,7 @@
 
 @yield('header')
 <article class="container">
+	@yield('modal')
 	@yield('chart')
 	@yield('tabs')
 </article>
