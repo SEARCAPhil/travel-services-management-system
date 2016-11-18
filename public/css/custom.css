@@ -1,3 +1,12 @@
+/*global*/
+summary{
+  outline:none;
+  cursor: pointer;
+}
+input[disabled]{
+	cursor: initial !important;
+}
+/*navbar*/
 .top-navbar{
 	border-radius: 0 !important;
 	background: rgb(40,40,40) !important;
@@ -140,5 +149,96 @@ padding: 5px;
 	color: rgb(255,255,255);
 	background: rgb(40,40,40);
 	margin-top: 100px;
-	padding: 20px 0 0 0;
+	padding: 20px 0 20px 0;
+}
+.backdrop{
+	
+	overflow-y:scroll;
+}
+
+/*custom button*/
+.btn-primary{
+	background: rgb(0,100,150) !important;
+	background-image: none;
+	
+	box-shadow: none !important;
+}
+
+.btn-primary:hover{
+	background: rgb(0,100,170) !important;
+}
+/*maintenance table*/
+.ledgerContentTable.table tbody tr{color:rgb(200,200,200);}
+.ledgerContentTable.table tbody tr:nth-child(odd){
+
+	background: rgba(100,100,100,0.5) !important;
+	border:0px !important;
+}
+
+.ledgerContentTable.table tbody tr td,.table thead th{
+	border:none!important;
+}
+/*list*/
+.list-details p{
+
+}
+
+/*preview*/
+.preview-title{
+	background: rgb(0,100,150);
+	color:rgb(255,255,255);
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+.preview-menu-li li{
+	float: left;
+	display: block;
+	margin-right: 5px;
+	margin-left: 5px;
+	cursor: pointer;
+	color:rgb(0,100,150);
+}
+.preview-table{
+
+}
+.preview-sections{
+	margin-top: 10px;
+	margin-bottom: 15px;
+}
+
+.mini-circle {
+    float: left;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgb(100,100,100);
+    margin: 5px 10px 0 0px;
+}
+
+.purpose-content{
+	text-align: justify;
+}
+
+
+.profile-image.profile-image-main {
+    width: 70px;
+    height: 70px;
+    margin-top: 15px;
+}
+.profile-image {
+    float: left;
+    width: 35px;
+    height: 35px;
+    background: #fff;
+    border-radius: 50%;
+    text-align: center;
+    overflow: hidden;
+    background-size: cover;
+    
+}
+
+/*calendar*/
+.calendar tbody tr td{
+	width:100px;
+	height: 100px;
 }

@@ -17,52 +17,16 @@
 @section('modal')
 	<div class="backdrop">
 		<div class="modalx">
-			<div class="container">
-				<div class="col col-md-4 col-sm-6">
-					<dl class="dl-horizontal preview-dl">
-						<dt><b>Menu</b></dt>
-						<dd><a href="#">Vehicle Information</a></dd>
-						<dd><a href="#">Gasoline</a></dd>
-						<dd><a href="#">Maintenance</a></dd>
-						<dd><a href="#">Maintenance Ledger</a></dd>
-					</dl>
-				</div>
-
-				<div class="col col-md-8 col-sm-6">
-					<div>
-						<h1 style="color:#ff9933"><span class="glyphicon glyphicon-menu-right"></span> Information</h1>
-						<p>Plate number : 1598fd</p>
-
-				<p>Current Mileage Reading : 0 km</p>
-
-				<p>Brand/Make/Model : Toyota Camry LE</p>
-
-				<p>Color :</p>
-					</div>
-				</div>
-			</div>
+			@include('automobile.info')
 		</div>
 	</div>
 @endsection
+@section('content-preview')
+sdsdsds
+@endsection
 @section('chart')
 
-	<section class="row">
-		<div class="col col-md-12 col-sm-12 col-xs-12" style="float:left;">
-			<center  class="col col-xs-6 col-sm-6 col-md-4  col-md-offset-4 col-sm-offset-3 col-xs-offset-3  chart-section">
-				<h3>Current Status</h3>
-				<canvas id="myChart" width="400" height="200"></canvas>
-				
-			</center>
-			<div class="col col-md-10 col-sm-10 col-xs-10 col-md-offset-2 col-sm-offset-2 col-xs-offset-2 "><br/>
-				<ul class="list-unstyled status-indicator">
-					<li class="col col-md-4"><div class="status-box blue">20</div>Automobile</li>
-					<li class="col col-md-4"><div class="status-box green">5</div>Available Cars</li>
-					<li class="col col-md-4"><div class="status-box red">30</div>Unavailable</li>
-				</ul>
-			</div>
-		</div>
-		
-	</section>
+	
 	
 @endsection
 
@@ -176,7 +140,7 @@ data2.datasets= [
 				},
 				{
 					label: statData[1].total.year+ " outlay",
-           			backgroundColor:'rgba(255, 99, 60, 0.8)',
+           			backgroundColor:'rgba(255, 150, 0, 0.5)',
             		data:[statData[1].data[0].jan.amount,statData[1].data[0].feb.amount,statData[1].data[0].mar.amount,statData[1].data[0].apr.amount,statData[1].data[0].may.amount,statData[1].data[0].jun.amount,statData[1].data[0].jul.amount,statData[1].data[0].aug.amount,statData[1].data[0].sep.amount,statData[1].data[0].oct.amount,statData[1].data[0].nov.amount,statData[1].data[0].dec.amount]
 					
 				}
@@ -194,10 +158,52 @@ data2.datasets= [
 
 var ctx2 = document.getElementById("myChart2");
 
-// And for a doughnut chart
+
+
+
+// bar
 var myDoughnutChart = new Chart(ctx2, {
     type: 'bar',
     data: data2,
+   
+});
+
+
+var ctx3 = document.getElementById("myChart3");
+var data3 = {
+    labels:months,
+};
+
+
+data3.datasets= [
+				
+				{
+					label: statData[0].total.year + " outlay",
+					backgroundColor:'rgba(255,255,255, 0.8)',
+            		data:[statData[0].data[0].jan.amount,statData[0].data[0].feb.amount,statData[0].data[0].mar.amount,statData[0].data[0].apr.amount,statData[0].data[0].may.amount,statData[0].data[0].jun.amount,statData[0].data[0].jul.amount,statData[0].data[0].aug.amount,statData[0].data[0].sep.amount,statData[0].data[0].oct.amount,statData[0].data[0].nov.amount,statData[0].data[0].dec.amount]
+					
+				},
+				{
+					label: statData[1].total.year+ " outlay",
+           			backgroundColor:'rgba(0,150,150, 0.8)',
+            		data:[statData[1].data[0].jan.amount,statData[1].data[0].feb.amount,statData[1].data[0].mar.amount,statData[1].data[0].apr.amount,statData[1].data[0].may.amount,statData[1].data[0].jun.amount,statData[1].data[0].jul.amount,statData[1].data[0].aug.amount,statData[1].data[0].sep.amount,statData[1].data[0].oct.amount,statData[1].data[0].nov.amount,statData[1].data[0].dec.amount]
+					
+				}
+				,
+				{
+					label: statData[2].total.year+ " outlay",
+					backgroundColor:'rgba(255, 150, 0, 0.9)',
+            		data:[statData[2].data[0].jan.amount,statData[2].data[0].feb.amount,statData[2].data[0].mar.amount,statData[2].data[0].apr.amount,statData[2].data[0].may.amount,statData[2].data[0].jun.amount,statData[2].data[0].jul.amount,statData[2].data[0].aug.amount,statData[2].data[0].sep.amount,statData[2].data[0].oct.amount,statData[2].data[0].nov.amount,statData[2].data[0].dec.amount]
+					
+				}
+				
+
+			]
+
+// And for a doughnut chart
+var c3 = new Chart(ctx3, {
+    type: 'line',
+    data: data3,
    
 });
 </script>
@@ -207,11 +213,11 @@ var myDoughnutChart = new Chart(ctx2, {
 @section('automobile-script')
 <script type="text/javascript">
 function automobilePreview(){
+	$("body").css("overflow", "hidden");
 	$('.backdrop').css({marginTop:0}).click(function(e){
-		//$('body').css({overflow:'hidden'})
-
 		if(this==e.target){
 			$(this).css({marginTop:'-200%'})
+			$("body").css("overflow", "auto");
 		}
 	})
 }

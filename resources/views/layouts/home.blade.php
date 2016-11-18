@@ -12,14 +12,14 @@
 
 @yield('header')
 <article class="container">
-	@yield('modal')
+	<!--@yield('modal')
 	@yield('chart')
-	@yield('tabs')
+	@yield('tabs')-->
+	@yield('content')
 </article>
 
 
 
 </body>
 </html>
-@yield('page-script')
-@yield('automobile-script')
+@yield('external-script')
