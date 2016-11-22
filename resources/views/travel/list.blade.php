@@ -28,21 +28,12 @@
 			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
 		</dd>
 
-		<dd>
-			<h4 class="page-header"><b>5691</b></h4>
-			<p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-		</dd>
-
-
-		<dd>
-			<h4 class="page-header"><b>5692</b></h4>
-			<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo</p>
-		</dd>
+		
 	</dl>
 
 	<p class="row">
-			<b class="text-danger">Page /40</b>
-			<input type="number" class="form-control" value="1" pagers="">
+			<b class="text-danger">Page /<span class="list-total-pages">40</span></b>
+			<input type="number" class="form-control" value="1" pagers="" class="list-current-page">
 		</p>
 </div>
 
@@ -50,6 +41,52 @@
 
 
 <div class="col col-md-6 col-md-offset-1 col-sm-9 pull-right">
-	@include('travel/tr-personal-preview')
+	@include('travel/tr-preview')
 </div>
 
+<script type="text/javascript">	
+
+//travel placeholder
+var travel;
+var list;
+
+//get list
+function ajax_getOfficialTravelList(){
+
+	travel={"current_page":1,"total_pages":1,"data":[{"id":"290","purpose":null,"source_of_fund":"opf","requested_by":"16","approved_by":null,"date_approved":"","date_created":"2016-11-09 16:08:58","date_modified":"2016-11-09 16:15:43","plate_no":null,"status":"2"},{"id":"284","purpose":"Lorem ipsum dolor sit amet, his populo malorum alienum ea, mei in semper albucius suavitate. Mea volutpat salutatus consetetur ea, at case audire nom. . . ","source_of_fund":"opf","requested_by":"1","approved_by":null,"date_approved":"","date_created":"2016-10-17 09:36:42","date_modified":"2016-11-09 15:27:26","plate_no":null,"status":"2"}]}
+	list= typeof travel.data!=undefined?travel.data:[];
+
+	return travel;
+
+}
+
+function showOfficialTravelList(){
+	ajax_getOfficialTravelList();
+	$('.list-details').html('') //clear
+	$('.list-total-pages').html(travel.total_pages);
+	$('.list-current_page').val(travel.current_page);
+	var htm='';
+	for(var x=0; x<list.length; x++){
+		var purpose=list[x].purpose!=null?list[x].purpose:'';
+		htm+=`<dd>
+			<h4 class="page-header"><b>`+list[x].id+`</b></h4>
+			<p>`+purpose+`</p>
+		</dd>`
+	}
+
+	$('.list-details').append(htm)
+}
+
+
+
+$(document).ready(function(){
+
+showOfficialTravelList();
+
+$('.list-details dd').click(function(){
+	$('.list-details dd').removeClass('active')
+	$(this).addClass('active');
+})
+	
+});
+</script>

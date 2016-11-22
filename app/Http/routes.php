@@ -15,4 +15,5 @@
     return view('welcome');
 });*/
 Route::get('/','Home@index');
+Route::get('/travel/official','Official@index');
 

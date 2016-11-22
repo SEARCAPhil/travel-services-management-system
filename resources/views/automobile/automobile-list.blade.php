@@ -1,7 +1,7 @@
 <section class="automobile-list"></section>
 <div class="backdrop">
 		<div class="modalx">
-			@includeif('automobile.ledger')
+			@includeif('automobile.info')
 		</div>
 	</div>
 <script type="text/javascript">
