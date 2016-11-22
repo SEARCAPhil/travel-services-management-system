@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row preview-content">
 		<div class="col col-md-12 row">
 			<ul class="list-unstyled preview-menu-li">
 				<li><strong>5691</strong></li>
@@ -53,16 +53,7 @@
 
 	</div>
 
-<div class="modal fade" id="preview-modal">
-	<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header"></div>
-				<div class="modal-body">s</div>
-				<div class="modal-content"></div>
 
-			</div>
-	</div>
-</div>
 <script type="text/javascript">	
 
 // placeholder
@@ -153,7 +144,7 @@ function showOfficialTravelPassengerScholarsPreview(){
 
 function showOfficialTravelPassengerCustomPreview(){
 	ajax_getOfficialTravelPassengerCustomPreview();
-	for(var x=0;x<staff.length;x++){
+	for(var x=0;x<official_travel_custom_passenger.length;x++){
 		var htm=`<tr data-menu="removePassengerMenu" data-selection="`+official_travel_custom_passenger[x].id+ `" id="official_travel_custom_passenger_tr`+official_travel_custom_passenger[x].id+`">
 							<td>
 								<div class="col col-md-3"><div class="profile-image profile-image-tr" display-image="" data-mode="custom"></div></div>
@@ -170,7 +161,7 @@ function showOfficialTravelPassengerCustomPreview(){
 function showOfficialTravelItenerary(){
 	ajax_getOfficialTravelItenerary();
 	for(var x=0; x<official_travel_itenerary.length;x++){
-		var htm=`<details class="col col-md-12">
+		var htm=`<details class="col col-md-12" id="official_travel_itenerary`+official_travel_itenerary[x].id+`">
 					<summary>`+official_travel_itenerary[x].location+` - `+official_travel_itenerary[x].destination+`</summary>
 					<table class="table table-fluid" style="background:rgba(250,250,250,0.7);color:rgb(40,40,40);">
 						<thead>
@@ -194,25 +185,129 @@ function showOfficialTravelItenerary(){
 
 
 function removeOfficialTravelPassengerCustom(id){
-	$('#preview-modal').modal('show');
-	$('#official_travel_custom_passenger_tr'+id).fadeOut()
+	
+	$('#preview-modal').on('show.bs.modal', function (e) {
+	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
+	    	$('.modal-submit').on('click',function(){
+
+	    		//disable onclick
+	    		$(this).attr('disabled','disabled')
+
+	    		//ajax here
+	    		$('#official_travel_custom_passenger_tr'+id).fadeOut()
+	    		$('#preview-modal').modal('hide');
+
+	    		//back to original
+	    		$(this).attr('disabled','enabled')
+	    	})
+	    })
+	});
+
+	$('#preview-modal').modal('toggle');
+
+	
 }
 
 function removeOfficialTravelPassengerScholar(id){
 
 	$('#preview-modal').on('show.bs.modal', function (e) {
-	    alert('modal show');
+	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
+	    	$('.modal-submit').on('click',function(){
+
+	    		//disable onclick
+	    		$(this).attr('disabled','disabled')
+
+	    		//ajax here
+	    		$('#official_travel_scholars_passenger_tr'+id).fadeOut()
+	    		$('#preview-modal').modal('hide');
+
+	    		//back to original
+	    		$(this).attr('disabled','enabled')
+	    	})
+	    })
 	});
 
-	$('#preview-modal').modal('show');
+	$('#preview-modal').modal('toggle');
 
-	$('#official_travel_scholars_passenger_tr'+id).fadeOut()
+	
 }
 
 function removeOfficialTravelPassengerStaff(id){
+	$('#preview-modal').on('show.bs.modal', function (e) {
+	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
+	    	$('.modal-submit').on('click',function(){
+
+	    		//disable onclick
+	    		$(this).attr('disabled','disabled')
+
+	    		//ajax here
+	    		$('#official_travel_staff_passenger_tr'+id).fadeOut()
+	    		$('#preview-modal').modal('hide');
+
+	    		//back to original
+	    		$(this).attr('disabled','enabled')
+	    	})
+	    })
+	});
+
+	$('#preview-modal').modal('toggle');
 	
-	$('#official_travel_staff_passenger_tr'+id).fadeOut()
 }
+
+function removeOfficialTravelItenerary(id){
+	$('#preview-modal').on('show.bs.modal', function (e) {
+	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
+	    	$('.modal-submit').on('click',function(){
+
+	    		//disable onclick
+	    		$(this).attr('disabled','disabled')
+
+	    		//ajax here
+	    		$('#official_travel_itenerary'+id).fadeOut()
+	    		$('#preview-modal').modal('hide');
+
+	    		//back to original
+	    		$(this).attr('disabled','enabled')
+	    	})
+	    })
+	});
+
+	$('#preview-modal').modal('toggle');
+	
+}
+
+
+function removeOfficialTravel(id){
+	$('#preview-modal').on('show.bs.modal', function (e) {
+	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
+	    	$('.modal-submit').on('click',function(){
+
+	    		//loading
+	    		previewLoadingEffect()
+	    		
+	    		//disable onclick
+	    		$(this).attr('disabled','disabled')
+
+	    		//ajax here
+	    		setTimeout(function(){
+
+	    			$('.preview-content').fadeOut()
+	    			$(selectedElement).remove();
+	    			
+	    		},1000)
+
+	    		$('#preview-modal').modal('hide');
+
+	    		//back to original
+	    		$(this).attr('disabled','enabled')
+	    	})
+	    })
+	});
+
+	$('#preview-modal').modal('toggle');
+	
+}
+
 
 
 

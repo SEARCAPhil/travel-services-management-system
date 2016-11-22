@@ -20,14 +20,12 @@
 </div>
 
 
-<div class="col col col-md-2 col-sm-9 hidden-sm hidden-xs">
-	<dl class="row list-details">
-		
+<div class=" list-section col col col-md-2 col-sm-9 hidden-sm hidden-xs">
+	<dl class="row list-details">	
 		<dd>
 			<h4 class="page-header"><b>5690</b></h4>
 			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
 		</dd>
-
 		
 	</dl>
 
@@ -39,9 +37,13 @@
 
 
 
-
-<div class="col col-md-6 col-md-offset-1 col-sm-9 pull-right">
-	@include('travel/tr-preview')
+<div class="modal fade" id="preview-modal">
+	<div class="modal-dialog" id="preview-modal-dialog">
+			
+	</div>
+</div>
+<div class="col col-md-6 col-md-offset-1 col-sm-9 pull-right preview-section">
+	<!--@include('travel/tr-preview')-->
 </div>
 
 <script type="text/javascript">	
@@ -49,6 +51,7 @@
 //travel placeholder
 var travel;
 var list;
+var selectedElement;
 
 //get list
 function ajax_getOfficialTravelList(){
@@ -75,6 +78,9 @@ function showOfficialTravelList(){
 	}
 
 	$('.list-details').append(htm)
+	setTimeout(function(){
+		$('.list-details dd')[0].click()
+	},1000)
 }
 
 
@@ -84,9 +90,33 @@ $(document).ready(function(){
 showOfficialTravelList();
 
 $('.list-details dd').click(function(){
+
+	//add selected style
 	$('.list-details dd').removeClass('active')
 	$(this).addClass('active');
+	
+
+	//only allowed ne click for the current element	
+	if(!(selectedElement==this)){
+		//get preview
+		//loading
+		previewLoadingEffect();
+
+
+		$('.preview-section').load('travel/official/preview/1');
+		selectedElement=this;
+	}
+
 })
+
+$('.list-hidden-menu').click(function(e){
+	e.preventDefault();
+
+	$('.list-section.hidden-sm').addClass('modal-list')
+
+	
+})
+
 	
 });
 </script>

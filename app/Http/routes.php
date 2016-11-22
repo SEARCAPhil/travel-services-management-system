@@ -16,4 +16,11 @@
 });*/
 Route::get('/','Home@index');
 Route::get('/travel/official','Official@index');
+Route::get('/travel/modal/{page}',function($page){
+	return View::make('travel/modal/'.$page);
+});
+Route::get('/travel/official/preview/{id}',function($id){
+	return View::make('travel/tr-preview',array('id'=>$id));
+});
+
 

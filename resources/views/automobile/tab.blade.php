@@ -37,9 +37,9 @@
 		<br/><br/>
 	  <div class="col col-md-4 col-sm-4 col-xs-4" style="padding-right:0;"><div class="tab-line">&nbsp;</div></div>
 		  <ul class="nav nav-tabs col col-md-8 col-sm-8 col-xs-8" role="tablist">
-		    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Automobile</a></li>
-		    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Calendar</a></li>
-		    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Travel</a></li>
+		    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab" class="automobile-tab">Automobile</a></li>
+		    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"  class="automobile-tab">Calendar</a></li>
+		    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab">Travel</a></li>
 		  </ul>
 	  </div>
 
@@ -52,6 +52,7 @@
 		
 	  <!-- Tab panes -->
 	  <div class="tab-content" style="margin-top: 80px;">
+
 
 	  <!--home-->
 	    <div role="tabpanel" class="tab-pane active" id="home">
@@ -88,6 +89,7 @@
 
 
 	    <div role="tabpanel" class="tab-pane" id="messages">
+	    <span class="col col-md-12 page-header visible-sm visible-xs"><a href="#" class="list-hidden-menu"><span class="glyphicon glyphicon-th"></span> List</a></span>
 	    @include('travel/list')
 	    </div>
 	  </div>
@@ -105,6 +107,29 @@
 @section('script')
 
 <script type="text/javascript" src="js/Chart.min.js"></script>
+<script>
+//global function
+function previewLoadingEffect(){
+	$('.preview-content').css({opacity:'0.3','user-select':'none'});
+	$('.preview-content').append('<img src="img/loading.png" class="loading-circle" style="width: 80px !important;top:20%;" />');
+}
+
+function previewLoadingEffect(panel){
+	$(panel).css({opacity:'0.3','user-select':'none'});
+	$(panel).append('<img src="img/loading.png" class="loading-circle" style="width: 80px !important;top:50%;" />');
+}
+
+$(document).ready(function(){
+	 $(".automobile-tab").on('click',function(){
+	 	var target=$(this).attr('href');
+
+	 	var panel=document.querySelector(target);
+	 	//previewLoadingEffect(panel)
+	 })
+})
+
+
+</script>
 
 @stop
 
