@@ -1,5 +1,6 @@
 @extends('automobile.page')
 @section('header')
+<script type="text/javascript" src="js/preview.official.js"></script>
 <nav class="navbar navbar-inverse top-navbar">
 		<div class="container">
 			<div class="navbar-header">
@@ -33,13 +34,20 @@
 	</section>
 @endsection
 @section('tabs')
+<div class="modal fade" id="preview-modal">
+	<div class="modal-dialog" id="preview-modal-dialog">
+			
+	</div>
+</div>
+
 	<div>
 		<br/><br/>
 	  <div class="col col-md-4 col-sm-4 col-xs-4" style="padding-right:0;"><div class="tab-line">&nbsp;</div></div>
 		  <ul class="nav nav-tabs col col-md-8 col-sm-8 col-xs-8" role="tablist">
-		    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab" class="automobile-tab">Automobile</a></li>
-		    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"  class="automobile-tab">Calendar</a></li>
-		    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab">Travel</a></li>
+		    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab" class="automobile-tab" data-page="automobile">Automobile</a></li>
+		    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"  class="automobile-tab" data-page="calendar">Calendar</a></li>
+		    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab" data-page="travel">Travel</a></li>
+		    <li role="presentation"><a href="#editor" aria-controls="messages" role="tab" data-toggle="tab"  data-page="travel/official/editor" id="editorTab" style="display:none;">Editor</a></li>
 		  </ul>
 	  </div>
 
@@ -89,9 +97,10 @@
 
 
 	    <div role="tabpanel" class="tab-pane" id="messages">
-	    <span class="col col-md-12 page-header visible-sm visible-xs"><a href="#" class="list-hidden-menu"><span class="glyphicon glyphicon-th"></span> List</a></span>
 	    @include('travel/list')
 	    </div>
+
+	    <div role="tabpanel" class="tab-pane" id="editor"> </div>
 	  </div>
 
 	</div>
@@ -119,12 +128,21 @@ function previewLoadingEffect(panel){
 	$(panel).append('<img src="img/loading.png" class="loading-circle" style="width: 80px !important;top:50%;" />');
 }
 
+function previewLoadingEffectFade(panel){
+	$(panel).css({opacity:'1','user-select':'auto'});
+}
+
 $(document).ready(function(){
 	 $(".automobile-tab").on('click',function(){
 	 	var target=$(this).attr('href');
 
 	 	var panel=document.querySelector(target);
-	 	//previewLoadingEffect(panel)
+	 	previewLoadingEffect(panel)
+	 	$(panel).load($(this).attr('data-page'),function(){
+	 		previewLoadingEffectFade(panel)
+	 	})
+
+	 	
 	 })
 })
 

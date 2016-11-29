@@ -26,33 +26,14 @@
 
 			<div class="col col-md-12 preview-sections">
 				<p><div class="mini-circle"></div> <b>Passengers</b></p>
-				<table class="table table-striped passenger-table preview-table" id="table-passenger" ng-show="passengersX.length>=1||passengersScholar.length>=1||passengersCustom.length>=1">
+				<table class="table table-striped passenger-table preview-table table-fluid" id="table-passenger" ng-show="passengersX.length>=1||passengersScholar.length>=1||passengersCustom.length>=1">
 					<thead>
 						<tr>
 							<th>Name</th><th>Designation</th><th>Office/Unit</th>
 						</tr>
 					</thead>
-					<tbody>
-						<!-- ngRepeat: (key, value) in passengersX --><tr ng-repeat="(key, value) in passengersX" id="tr0" class="tr-passenger ng-scope" data-menu="removePassengerMenu" context="0" data-selection="13">
-							<td id="passenger0">
-								<div class="col col-md-2"><div class="profile-image profile-image-tr" display-image="67.PNG" data-mode="staff" style="background: url(&quot;/profiler/profile/67.PNG&quot;) center center / cover no-repeat;"></div></div>
-								<div class="col col-md-10"><b class="ng-binding">John Kenneth G. Abella</b></div></td>
-
-							
-							<td id="designation0" class="ng-binding">programmer</td>
-							<td id="office0" class="ng-binding">ITSU<input type="hidden" id="passengerId0" value="13"></td>
-						</tr><!-- end ngRepeat: (key, value) in passengersX --><tr ng-repeat="(key, value) in passengersX" id="tr1" class="tr-passenger ng-scope" data-menu="removePassengerMenu" context="1" data-selection="14">
-							<td id="passenger1">
-								<div class="col col-md-2"><div class="profile-image profile-image-tr" display-image="3.jpg" data-mode="staff" style="background: url(&quot;/profiler/profile/3.jpg&quot;) center center / cover no-repeat;"></div></div>
-								<div class="col col-md-10"><b class="ng-binding">FMU</b></div></td>
-
-							
-							<td id="designation1" class="ng-binding"></td>
-							<td id="office1" class="ng-binding">FMU<input type="hidden" id="passengerId1" value="14"></td>
-						</tr><!-- end ngRepeat: (key, value) in passengersX -->
-						<!-- ngRepeat: (key, value) in passengersScholar -->
-
-						<!-- ngRepeat: (key, value) in passengersCustom -->
+					<tbody class="preview-passengers">
+						
 
 					</tbody>
 				</table>
@@ -61,23 +42,9 @@
 
 			<div class="col col-md-12 preview-sections">
 				<p><div class="mini-circle"></div> <b>Itenerary</b></p>
-				<details class="col col-md-12">
-					<summary>SEARCA - Manila</summary>
-					<table class="table table-fluid">
-						<thead>
-							<th>Origin</th> <th>Destination</th>  <th>Date</th> <th>Time</th>
-						</thead>
-						<tbody>
-							<tr>
-								<td>SEARCA</td>
-								<td>Manila</td>
-								<td>10/5/16</td>
-								<td>5:00 AM</td>
-							</tr>
-						</tbody>
-					</table>
-				</details>
+				<div class="preview-itenerary">
 
+				</div>
 				
 			</div>
 
@@ -102,4 +69,20 @@
 
 
 	</div>
+
+
+<script type="text/javascript">	
+
+
+$(document).ready(function(){
+
+
+showOfficialTravelListPreview()
+showOfficialTravelPassengerStaffPreview()
+showOfficialTravelPassengerScholarsPreview()
+showOfficialTravelPassengerCustomPreview()
+showOfficialTravelItenerary()
+	
+});
+</script>
 

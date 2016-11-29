@@ -164,6 +164,15 @@ padding: 5px;
 	box-shadow: none !important;
 }
 
+.btn-success{
+	background: rgb(32,199,150) !important;
+		background-image: none;
+}
+.btn-danger{
+	background: rgb(255,82,87) !important;
+	background-image: none;
+}
+
 .btn-primary:hover{
 	background: rgb(0,100,170) !important;
 }
@@ -256,9 +265,25 @@ padding: 5px;
     background-size: cover;
     
 }
+.profile-image.profile-image-lg{
+	width:150px;
+	height: 150px;
+}
 
 /*calendar*/
 .calendar tbody tr td{
 	width:100px;
 	height: 100px;
+}
+
+/*contextmenu*/
+.contextMenu {
+    position: fixed;
+    min-width: 130px;
+    height: auto;
+    padding: 4px;
+    z-index: 100 !important;
+    display: none;
+    transition: all 0.3s ease-in-out;
+
 }
