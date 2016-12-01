@@ -79,32 +79,34 @@
 
 
 	    <div role="tabpanel" class="tab-pane text-center row" id="custom">
-	    	
-	    	<div class="col col-md-5 col-sm-5 col-md-offset-4 col-sm-offset-4">
-	    		<div class="profile-image profile-image-lg" display-image="" data-mode="staff" style="background: url(&quot;/profiler/profile/user.png&quot;) center center / cover no-repeat;"></div>
-	    	</div>
-	    	<div class="col col-md-12">
-            	<h3 class="ng-scope">Custom Passenger</h3>
-            	<p class="ng-scope">Passenger that is not employed in this organization</p>
-	            <form class="form col col-md-10 col-md-offset-1">
-	                <div class="form-group "><br/>
-	                    
-	                        <label class="">Full Name</label>
-	                    <input type="text" class="form-control" id="tPass">
-	                </div>
+	    	<div class="row" id="custom-dialog-content">
+		    	<div class="col col-md-5 col-sm-5 col-md-offset-4 col-sm-offset-4">
+		    		<div class="profile-image profile-image-lg" display-image="" data-mode="staff" style="background: url(&quot;/profiler/profile/user.png&quot;) center center / cover no-repeat;"></div>
+		    	</div>
+		    	<div class="col col-md-12">
+	            	<h3 class="ng-scope">Custom Passenger</h3>
+	            	<p class="ng-scope">Passenger that is not employed in this organization</p>
+		            <form class="form col col-md-10 col-md-offset-1">
+		                <div class="form-group "><br/>
+		                    
+		                        <label class="">Full Name</label>
+		                    <input type="text" class="form-control" id="customFullName">
+		                </div>
 
-	                <div class="form-group">
-	                    <label class="">Designation</label>
-	                    <input type="text" class="form-control" id="tDes">
-	                </div>
+		                <div class="form-group">
+		                    <label class="">Designation</label>
+		                    <input type="text" class="form-control" id="customDesignation">
+		                </div>
 
 
-	                <div class="form-group text-right">
-	                     <button class="btn btn-success" data-toggle="modal" data-target="#custom-passenger-modal" type="button" onclick="">Add</button>
-	                    <button class="btn btn-default">Cancel</button>
-	                </div>
-	            </form> 
-            </div>
+		                <div class="form-group text-right">
+		                     <button class="btn btn-success" type="button" onclick="appendCustomListPreviewConfirmation()">Add</button>
+		                    <button class="btn btn-default" type="button">Cancel</button>
+		                </div>
+		            </form> 
+	            </div>
+	        </div>
+            <div class="col col-md-12" id="custom-confirmation"></div>
 
 	    </div>
    	</div>
@@ -185,14 +187,14 @@
 
 			for(var x=0;x<scholarList.length;x++){
 
-				htm+=` <div class="col col-md-1">
+				htm+=`<div> <div class="col col-md-1">
 	                        <input type="checkbox" name="staff" value="`+scholarList[x].uid+`"  data-json='`+JSON.stringify(scholarList[x])+`' class="scholarListCheckbox">
 	                    </div>
 	                    <div class="col col-md-11">
 	                        <div class="col col-md-2">
 	                        	<div class="profile-image profile-image-tr" display-image="1.jpg" data-mode="staff" style="background: url('/profiler/profile/`+scholarList[x].profile_image+`') center center cover no-repeat;"></div>
 	                        </div>`+scholarList[x].full_name+`&emsp;<small><b>(`+scholarList[x].nationality+`)</b></small>
-	                    </div>`
+	                    </div></div>`
 				
 			}
 
@@ -240,11 +242,83 @@
 
 							
 							<td>`+data.nationality+`</td>
-							<td>`+data.office+`</td>
+							<td>N/A</td>
 						</tr>`
 		$('.preview-passengers').append(htm)
 
 		setTimeout(function(){ unbindContext(); context(); },1000);
+	}
+
+
+	function appendCustomToListPreview(jsonData){
+		var a={}
+		a={id:1,full_name:'kenneth',designation:'director'}
+		a.id=1;
+		a.full_name='kenneth'
+		a.designation="IT Director"
+		var data=JSON.parse(JSON.stringify(jsonData))
+		var htm=`<tr data-menu="customPassengerMenu" data-selection="`+data.id+ `" id="official_travel_custom_passenger_tr`+data.id+`" class="contextMenuSelector official_travel_custom_passenger_tr`+data.id+`">
+							<td>
+								<div class="col col-md-3"><div class="profile-image profile-image-tr" display-image="" data-mode="custom"></div></div>
+								<div class="col col-md-9"><b>`+data.full_name+`</b></div></td>
+							<td>`+data.designation+`</td>
+							<td>N/A</td>
+						</tr>`
+		$('.preview-passengers').append(htm)
+
+		setTimeout(function(){ unbindContext(); context(); },1000);
+	}
+
+
+	function appendCustomListPreviewConfirmation(){
+		var htm=`<br/><br/><div class="col col-md-12"><h4>Are you sure you want to add this to the passenger list?</h4>
+			<button class="btn btn-danger" id="customPassengerConfirmationButton"><span class="glyphicon glyphicon-ok"></span>&nbsp;Yes</button> <button class="btn btn-default" id="customPassengerConfirmationButtonCancel">No</button>
+		</div>`
+
+
+		var fullName=$('#customFullName').val();
+		var designation=$('#customDesignation').val();
+
+		if(fullName.length>0&&designation.length>0){
+			$('#custom-dialog-content').hide();
+			$('#custom-confirmation').html(htm)
+		}
+
+
+		$('#customPassengerConfirmationButton').click(function(){
+			
+			$(this).html('saving . . .')
+
+			//insert to view
+			var data={full_name:fullName,designation:designation,id:0}
+
+
+			appendCustomToListPreview(data)
+
+			//show form
+			setTimeout(function(){
+
+				$('#passenger-modal').modal('hide');
+				//clear form
+				$('#customFullName').val('')
+				$('#customDesignation').val('')
+
+				//display default view
+				$('#custom-dialog-content').show();
+				$('#custom-confirmation').html('')
+			},1200)
+		})
+
+		//cancel
+		$('#customPassengerConfirmationButtonCancel').click(function(){
+			//show form
+			setTimeout(function(){
+
+				//display default view
+				$('#custom-dialog-content').show();
+				$('#custom-confirmation').html('')
+			},1200)
+		});
 	}
 
 

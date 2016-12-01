@@ -75,8 +75,8 @@ $('.preview-remove').on('click',function(){
 $('.preview-update').on('click',function(){
 		$('#editorTab').click();
 		//loading
-	    previewLoadingEffect()
-		setTimeout(function(){ $('#editor').load('travel/official/editor/1'); },2000);
+	    showLoading('#editor','<div><img src="img/loading.png" class="loading-circle" style="width: 80px !important;" /></div>')
+		setTimeout(function(){ $('#editor').load('travel/official/editor/1'); },100);
 })
 	
 });

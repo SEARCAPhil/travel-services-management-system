@@ -45,4 +45,8 @@ Route::get('/automobile',function(){
 	return View::make('automobile/status');
 });
 
+#login
+Route::get('/authentication',function(){
+	return View::make('authentication');
+});
 

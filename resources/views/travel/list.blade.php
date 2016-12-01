@@ -109,13 +109,17 @@ function attachClickEventToListOfficial(){
 
 		//only allowed ne click for the current element	
 		if(!(selectedElement==this)){
+			//clear
+			$('.preview-section').html('')
 			//get preview
 			//loading
-			previewLoadingEffect();
+			showLoading('.preview-section','<div><img src="img/loading.png" class="loading-circle" style="width: 80px !important;" /></div>')
 
-
-			$('.preview-section').load('travel/official/preview/1');
 			selectedElement=this;
+			setTimeout(function(){
+				$('.preview-section').load('travel/official/preview/1');
+			},100);
+			
 		}
 
 	})
@@ -132,13 +136,21 @@ function attachClickEventToListPersonal(){
 
 		//only allowed ne click for the current element	
 		if(!(selectedElement==this)){
+			//clear
+			$('.preview-section').html('')
+			
 			//get preview
 			//loading
-			previewLoadingEffect();
+			//previewLoadingEffect();
+			showLoading('.preview-section','<div><img src="img/loading.png" class="loading-circle" style="width: 80px !important;" /></div>')
 
-
-			$('.preview-section').load('travel/personal/preview/1');
 			selectedElement=this;
+			setTimeout(function(){
+
+				$('.preview-section').load('travel/personal/preview/1');
+			},100)
+			
+			
 		}
 
 	})

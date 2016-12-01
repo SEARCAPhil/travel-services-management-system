@@ -77,11 +77,11 @@
 $(document).ready(function(){
 
 
-showOfficialTravelListPreview()
-showOfficialTravelPassengerStaffPreview()
-showOfficialTravelPassengerScholarsPreview()
-showOfficialTravelPassengerCustomPreview()
-showOfficialTravelItenerary()
+//showOfficialTravelListPreview()
+//showOfficialTravelPassengerStaffPreview()
+//showOfficialTravelPassengerScholarsPreview()
+//showOfficialTravelPassengerCustomPreview()
+//showOfficialTravelItenerary()
 	
 });
 </script>

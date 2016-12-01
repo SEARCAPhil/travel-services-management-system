@@ -41,8 +41,8 @@ function ajax_getOfficialTravelItenerary(){
 
 
 
-function showOfficialTravelListPreview(){
-	ajax_getOfficialTravelListPreview()
+function showOfficialTravelListPreview(id){
+	ajax_getOfficialTravelListPreview(id)
 	
 	$('.preview-name').html(preview[0].profile_name)
 	$('.preview-unit').html(preview[0].department)
@@ -50,8 +50,8 @@ function showOfficialTravelListPreview(){
 	$('.preview-purpose').html(preview[0].purpose)
 }
 
-function showOfficialTravelPassengerStaffPreview(){
-	ajax_getOfficialTravelPassengerStaffPreview();
+function showOfficialTravelPassengerStaffPreview(id){
+	ajax_getOfficialTravelPassengerStaffPreview(id);
 	var htm='';
 	for(var x=0;x<staff.length;x++){
 		htm+=`<tr data-menu="staffPassengerMenu" context="0" data-selection="`+staff[x].id+`" id="official_travel_staff_passenger_tr`+staff[x].id+`" class="contextMenuSelector official_travel_staff_passenger_tr`+staff[x].id+`">
@@ -71,8 +71,8 @@ function showOfficialTravelPassengerStaffPreview(){
 }
 
 
-function showOfficialTravelPassengerScholarsPreview(){
-	ajax_getOfficialTravelPassengerScholarsPreview();
+function showOfficialTravelPassengerScholarsPreview(id){
+	ajax_getOfficialTravelPassengerScholarsPreview(id);
 	for(var x=0;x<scholars.length;x++){
 		var htm=`<tr data-menu="scholarPassengerMenu"  context="0" data-selection="`+scholars[x].id+`" id="official_travel_scholars_passenger_tr`+scholars[x].id+`" class="contextMenuSelector official_travel_scholars_passenger_tr`+scholars[x].id+`">
 							<td>
@@ -89,8 +89,8 @@ function showOfficialTravelPassengerScholarsPreview(){
 }
 
 
-function showOfficialTravelPassengerCustomPreview(){
-	ajax_getOfficialTravelPassengerCustomPreview();
+function showOfficialTravelPassengerCustomPreview(id){
+	ajax_getOfficialTravelPassengerCustomPreview(id);
 	var htm=''
 	for(var x=0;x<official_travel_custom_passenger.length;x++){
 		htm+=`<tr data-menu="customPassengerMenu" data-selection="`+official_travel_custom_passenger[x].id+ `" id="official_travel_custom_passenger_tr`+official_travel_custom_passenger[x].id+`" class="contextMenuSelector official_travel_custom_passenger_tr`+official_travel_custom_passenger[x].id+`">
@@ -107,8 +107,8 @@ function showOfficialTravelPassengerCustomPreview(){
 }
 
 
-function showOfficialTravelItenerary(){
-	ajax_getOfficialTravelItenerary();
+function showOfficialTravelItenerary(id){
+	ajax_getOfficialTravelItenerary(id);
 	var htm='';
 	for(var x=0; x<official_travel_itenerary.length;x++){
 		htm+=`<details id="official_travel_itenerary`+official_travel_itenerary[x].id+`" data-menu="iteneraryMenu" data-selection="`+official_travel_itenerary[x].id+ `" class="contextMenuSelector official_travel_itenerary`+official_travel_itenerary[x].id+` col col-md-12">
@@ -342,5 +342,17 @@ function bindRemoveItenerary(){
 		var context=($(contextSelectedElement).attr('data-selection'));
 		removeOfficialTravelItenerary(context)
 	})
+}
+
+/*loading*/
+function showLoading(targetDiv,status){
+	var targetDiv=document.querySelectorAll(targetDiv);
+	
+	
+	if(typeof status!='undefined'){
+		$(targetDiv).prepend('<span class="loading-status">'+status+'</span>');
+	}else{
+		$('.loading-status').remove();
+	}
 }
 
