@@ -1,7 +1,9 @@
+<p><a href="#"><div class="status-box status-box-sm gray">+</div>Vehicle</a></p>
 <section class="automobile-list"></section>
+
 <div class="backdrop">
 		<div class="modalx">
-			@includeif('automobile.info')
+			@includeif('layouts/automobile-preview')
 		</div>
 	</div>
 <script type="text/javascript">

@@ -56,28 +56,7 @@
 		</div>
 		
 		<div class="row">
-			<div class="col col-md-8 col-sm-12 col-md-offset-2 preview-sections">
-				<p></p><div class="mini-circle"></div> <b>Purpose</b> 
-					<span class="btn btn-success btn-xs" id="officialPurposeSaveButton"><span class="glyphicon glyphicon-floppy-disk"></span></span>
-					<div id="officialPurposeSaveStatus" class="text-muted" style="float:right;height:20px;width:250px;overflow: hidden;position:relative;"></div>
-					<p></p>
-				<p class="purpose-content"> <textarea class="col col-md-12 col-sm-12 col-xs-12  preview-purpose" rows="15">Lorem ipsum dolor sit amet, his populo malorum alienum ea, mei in semper albucius suavitate. Mea volutpat salutatus consetetur ea, at case audire nominati duo. Et tempor omittam pri, mel sonet dicant intellegam eu. Latine malorum liberavisse ei sit, commodo volutpat vel ea. Nec ut epicuri suscipit scaevola, eam nisl ipsum omittantur id. Sit ut dolores posidonium, maiorum civibus ad eum.<br>Ex lorem impetus insolens usu. Et sea omnes aperiri, ut vim ipsum legimus reformidans. Vix ad suas veniam fabulas, eos ut purto sonet principes. Est inimicus laboramus forensibus cu.<br><br>Virtute expetenda pri et. Pro dicunt delenit tincidunt in. Partiendo corrumpit cum ea, alii docendi sed at. Electram efficiendi mel ad, cu eos altera erroribus. Mei id atqui percipit molestiae, ea delenit oporteat pro. Usu te vero harum similique, ut vix reque dolorum recusabo.<br><br>Ea doming impetus pertinax sit, ut qui liber vulputate, cum ad diceret senserit. Et has falli tacimates, cu suas reprehendunt ius. Harum commodo sit an, duo congue reprehendunt et. Ut pro luptatum expetendis, cu nobis ubique abhorreant sit. Populo urbanitas has an, eu graecis atomorum cum.<br><br>Pro commodo maluisset salutatus eu, cetero convenire qui ne. Mea alii apeirian ut, ut quo zril veniam commodo, et porro soluta pertinax sit. Ne luptatum periculis temporibus mea, melius aliquando definitiones sed an, aeque commodo albucius nec an. Duo eu paulo partem iisque. In mei quas choro assueverit, cu iudico nonumy omittam mea, nec cu justo omnes.
-				</textarea>	
-				</p>	
-			</div>
-
-			<div class="col col-md-8  col-md-offset-2 preview-sections">
-				<p></p><div class="mini-circle"></div> <b>Passengers</b> <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#passenger-modal"><span class="glyphicon glyphicon-plus"></span></button><p></p>
-				<table class="table table-striped passenger-table preview-table table-fluid" id="table-passenger" ng-show="passengersX.length>=1||passengersScholar.length>=1||passengersCustom.length>=1">
-					<thead>
-						<tr>
-							<th>Name</th><th>Designation</th><th>Office/Unit</th>
-						</tr>
-					</thead>
-					<tbody class="preview-passengers">
-					</tbody>
-				</table>
-			</div>
+			
 
 
 			<div class="col col-md-8  col-md-offset-2 preview-sections">

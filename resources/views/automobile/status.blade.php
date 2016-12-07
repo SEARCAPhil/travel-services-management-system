@@ -5,12 +5,7 @@
 <div class="col col-md-12">
 	<canvas id="myChart2" width="400" height="200"></canvas>
 </div>
- <div class="col col-md-12">
-	<p><a href="#"><div class="status-box status-box-sm gray">+</div>Vehicle</a></p>
-	<div class="col col-md-12 row">
-		@include('automobile/automobile-list')
-	</div>
-</div>
+ 
 <script type="text/javascript" src="js/Chart.min.js"></script>
 <script>
 

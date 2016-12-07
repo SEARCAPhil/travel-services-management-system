@@ -1,5 +1,3 @@
-@extends('layouts.automobile-preview')
-@section('content-preview')
 	<div>
 		<h1 style="color:#ff9933"><span class="glyphicon glyphicon-menu-right"></span>Ledger</h1>
 		<div class="col col-md-12 ">
@@ -35,5 +33,3 @@
 		</section>
 
 	</div>
-
-@endsection

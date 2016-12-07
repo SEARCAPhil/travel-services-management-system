@@ -38,7 +38,7 @@
 
 
 <div class="col col-md-6 col-md-offset-1 col-sm-9 pull-right preview-section">
-	<!--@include('travel/tr-preview')-->
+	
 </div>
 
 <script type="text/javascript">	
@@ -49,85 +49,53 @@ var list;
 var selectedElement;
 
 //get list
-function ajax_getOfficialTravelList(){
-
-	travel={"current_page":1,"total_pages":1,"data":[{"id":"290","purpose":null,"source_of_fund":"opf","requested_by":"16","approved_by":null,"date_approved":"","date_created":"2016-11-09 16:08:58","date_modified":"2016-11-09 16:15:43","plate_no":null,"status":"2"},{"id":"284","purpose":"Lorem ipsum dolor sit amet, his populo malorum alienum ea, mei in semper albucius suavitate. Mea volutpat salutatus consetetur ea, at case audire nom. . . ","source_of_fund":"opf","requested_by":"1","approved_by":null,"date_approved":"","date_created":"2016-10-17 09:36:42","date_modified":"2016-11-09 15:27:26","plate_no":null,"status":"2"}]}
-	list= typeof travel.data!=undefined?travel.data:[];
-
-	return travel;
-
-}
-
-function showOfficialTravelList(){
-	ajax_getOfficialTravelList();
-	appendToList();
-	attachClickEventToListOfficial()
-}
-
-function appendToList(){
-	$('.list-details').html('') //clear
-	$('.list-total-pages').html(travel.total_pages);
-	$('.list-current_page').val(travel.current_page);
-	var htm='';
-	for(var x=0; x<list.length; x++){
-		var purpose=list[x].purpose!=null?list[x].purpose:'';
-		htm+=`<dd>
-			<h4 class="page-header"><b>`+list[x].id+`</b></h4>
-			<p>`+purpose+`</p>
-		</dd>`
-	}
-
-	$('.list-details').append(htm)
-	setTimeout(function(){
-		$('.list-details dd')[0].click()
-	},1000)
-}
+function ajax_getOfficialTravelList(page=1,callback){
 
 
-function ajax_getPersonalTravelList(){
-
-	travel={"current_page":1,"total_pages":1,"data":[{"id":"8","purpose":null,"mode_of_payment":"cash","requested_by":"1","approved_by":null,"departure_date":"2016-10-29","departure_time":"03:00:00","returned_date":"0000-00-00","returned_time":"00:00:00","location":"SEARA","destination":"Tagaytay","charge_to":null,"vehicle_type":"3","date_created":"2016-10-11 09:21:39","date_modified":"2016-11-21 09:35:33","plate_no":"AXA 1341","driver_id":"141","status":"scheduled","trp_status":"2"}]}
-	list= typeof travel.data!=undefined?travel.data:[];
-
-	return travel;
-
-}
-
-function showPersonalTravelList(){
-	ajax_getPersonalTravelList();
-	appendToList();
-	attachClickEventToListPersonal()
-}
-
-function attachClickEventToListOfficial(){
-	$('.list-details dd').click(function(e){
-		e.preventDefault();
-		//add selected style
-		$('.list-details dd').removeClass('active')
-		$(this).addClass('active');
-		
-
-		//only allowed ne click for the current element	
-		if(!(selectedElement==this)){
-			//clear
-			$('.preview-section').html('')
-			//get preview
-			//loading
-			showLoading('.preview-section','<div><img src="img/loading.png" class="loading-circle" style="width: 80px !important;" /></div>')
-
-			selectedElement=this;
-			setTimeout(function(){
-				$('.preview-section').load('travel/official/preview/1');
-			},100);
-			
-		}
-
+	$.get('api/travel/official/'+page,function(json){
+		travel=JSON.parse(json)
+		list= typeof travel.data!=undefined?travel.data:[];
+		callback();
+		return travel;
 	})
+
+
 }
 
 
-function attachClickEventToListPersonal(){
+
+function ajax_getPersonalTravelList(page=1,callback){
+
+	$.get('api/travel/personal/'+page,function(json){
+		travel=JSON.parse(json)
+		list= typeof travel.data!=undefined?travel.data:[];
+		callback();
+		return travel;
+	})
+
+}
+
+
+
+
+function ajax_getCampusTravelList(page=1,callback){
+
+	$.get('api/travel/campus/'+page,function(json){
+		travel=JSON.parse(json)
+		list= typeof travel.data!=undefined?travel.data:[];
+		callback();
+		return travel;
+	})
+
+}
+
+
+
+
+
+function attachClickEventToList(url,callback){
 	$('.list-details dd').click(function(e){
+		var parent=this;
 		e.preventDefault();
 		//add selected style
 		$('.list-details dd').removeClass('active')
@@ -146,8 +114,11 @@ function attachClickEventToListPersonal(){
 
 			selectedElement=this;
 			setTimeout(function(){
-
-				$('.preview-section').load('travel/personal/preview/1');
+				console.log($(parent).attr('id'))
+				var param=$(parent).attr('id');
+				$('.preview-section').load(url+''+param,function(){
+					callback(e);
+				});
 			},100)
 			
 			
@@ -157,20 +128,76 @@ function attachClickEventToListPersonal(){
 }
 
 
-function ajax_getCampusTravelList(){
+function appendToList(callback){
+	$('.list-details').html('') //clear
+	$('.list-total-pages').html(travel.total_pages);
+	$('.list-current_page').val(travel.current_page);
+	var htm='';
+	for(var x=0; x<list.length; x++){
+		var purpose=list[x].purpose!=null?list[x].purpose:'';
+		htm+=`<dd id="`+list[x].id+`">
+			<h4 class="page-header"><b>`+list[x].id+`</b></h4>
+			<p>`+purpose+`</p>
+		</dd>`
+	}
 
-	travel={"current_page":1,"total_pages":1,"data":[{"id":"112","purpose":null,"source_of_fund":"opf","requested_by":"16","approved_by":null,"date_approved":"","date_created":"2016-11-09 16:08:58","date_modified":"2016-11-09 16:15:43","plate_no":null,"status":"2"},{"id":"657","purpose":"Lorem ipsum dolor sit amet, his populo malorum alienum ea, mei in semper albucius suavitate. Mea volutpat salutatus consetetur ea, at case audire nom. . . ","source_of_fund":"opf","requested_by":"1","approved_by":null,"date_approved":"","date_created":"2016-10-17 09:36:42","date_modified":"2016-11-09 15:27:26","plate_no":null,"status":"2"}]}
-	list= typeof travel.data!=undefined?travel.data:[];
+	$('.list-details').append(htm)
 
-	return travel;
-
+	callback();
+	
+	setTimeout(function(){
+		$('.list-details dd')[0].click()
+	},300)
 }
 
 
-function showCampusTravelList(){
-	ajax_getCampusTravelList();
-	appendToList();
-	attachClickEventToList()
+
+function showOfficialTravelList(page=1){
+	ajax_getOfficialTravelList(page,function(){
+		appendToList(function(){
+			//attach click event
+			attachClickEventToList('travel/official/preview/',function(e){
+
+				//get all necessary information of the request
+				showOfficialTravelListPreview(e.currentTarget.id)
+				showOfficialTravelPassengerStaffPreview(e.currentTarget.id)
+				showOfficialTravelPassengerScholarsPreview(e.currentTarget.id)
+				showOfficialTravelPassengerCustomPreview(e.currentTarget.id)
+				showOfficialTravelItenerary(e.currentTarget.id)
+
+			})
+
+		});
+	});
+	
+	
+}
+
+
+function showPersonalTravelList(page=1){
+	ajax_getPersonalTravelList(page,function(){
+		appendToList(function(){
+			//attach click event
+			attachClickEventToList('travel/personal/preview/',function(e){
+				showPersonalTravelPassengerStaffPreview(e.currentTarget.id)
+			})
+		});
+	});
+	
+}
+
+
+
+function showCampusTravelList(page=1){
+	ajax_getCampusTravelList(page,function(){
+		appendToList(function(){
+			attachClickEventToList('travel/campus/preview/',function(){
+			//alert('campus')
+			})
+		});	
+	});
+	
+	
 }
 
 

@@ -43,8 +43,9 @@
 	<div>
 		<br/><br/>
 	  <div class="col col-md-4 col-sm-4 col-xs-4" style="padding-right:0;"><div class="tab-line">&nbsp;</div></div>
-		  <ul class="nav nav-tabs col col-md-8 col-sm-8 col-xs-8" role="tablist">
-		    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab" class="automobile-tab" data-page="automobile">Automobile</a></li>
+		  <ul class="nav nav-tabs col col-md-8 col-sm-8 col-xs-8 tablist" role="tablist">
+		  <li role="presentation" class="active"><a href="#status" aria-controls="status" role="tab" data-toggle="tab" class="automobile-tab" data-page="status">Status</a></li>
+		    <li role="presentation"><a href="#home" aria-controls="home" role="tab" data-toggle="tab" class="automobile-tab" data-page="automobile">Automobile</a></li>
 		    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"  class="automobile-tab" data-page="calendar">Calendar</a></li>
 		    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab" data-page="travel">Travel</a></li>
 		    <li role="presentation"><a href="#editor" aria-controls="messages" role="tab" data-toggle="tab"  data-page="travel/official/editor" id="editorTab" style="display:none;">Editor</a></li>
@@ -62,42 +63,26 @@
 	  <div class="tab-content" style="margin-top: 80px;">
 
 
+	  <!--status-->
+	    <div role="tabpanel" class="tab-pane active" id="status">
+	    	
+	    </div>
+
 	  <!--home-->
-	    <div role="tabpanel" class="tab-pane active" id="home">
-	    	<!--<img src="{{asset('img/loading.png')}}" class="loading-circle" style="width: 80px !important;" />-->
-	    	<div class="col col-md-12">
-	    		<p><a href="#"><div class="status-box status-box-sm gray">+</div>Status</a></p>
-		    	<div class="col col-md-12 row">
-		    	@include('automobile/status')
-		    		<!--<p class="text-muted">Loading . . .</p>-->
-		    	</div>
-		    </div>
-
-		    <div class="col col-md-12">
-	    		<p><a href="#"><div class="status-box status-box-sm gray">+</div>Vehicle</a></p>
-		    	<div class="col col-md-12 row">
-		    		@include('automobile/automobile-list')
-		    	</div>
-		    </div>
-
-		    <div class="col col-md-12">
-	    		<p><a href="#"><div class="status-box status-box-sm gray">+</div>Ledger</a></p>
-		    	<div class="col col-md-12 row">
-		    		<p class="text-muted">Loading . . .</p>
-		    	</div>
-		    </div>
+	    <div role="tabpanel" class="tab-pane" id="home">
+	    	
 	    </div>
 
 
 	    <!--profile-->
 	    <div role="tabpanel" class="tab-pane" id="profile">
-	    	@include('calendar/calendar')
+	    	
 	    </div>
 
 
 
 	    <div role="tabpanel" class="tab-pane" id="messages">
-	    @include('travel/list')
+	    
 	    </div>
 
 	    <div role="tabpanel" class="tab-pane" id="editor"> </div>
@@ -144,6 +129,10 @@ $(document).ready(function(){
 
 	 	
 	 })
+
+
+	 //preselect first child
+	 $('.automobile-tab')[0].click()
 })
 
 

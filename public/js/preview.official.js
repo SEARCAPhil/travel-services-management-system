@@ -8,110 +8,149 @@ var official_travel_itenerary;
 var contextSelectedElement;
 
 
-function ajax_getOfficialTravelListPreview(page_number=1){
-	preview=[{"id":"1","0":"284","purpose":"Lorem ipsum dolor sit amet, his populo malorum alienum ea, mei in semper albucius suavitate. Mea volutpat salutatus consetetur ea, at case audire nominati duo. Et tempor omittam pri, mel sonet dicant intellegam eu. Latine malorum liberavisse ei sit, commodo volutpat vel ea. Nec ut epicuri suscipit scaevola, eam nisl ipsum omittantur id. Sit ut dolores posidonium, maiorum civibus ad eum.<br/>Ex lorem impetus insolens usu. Et sea omnes aperiri, ut vim ipsum legimus reformidans. Vix ad suas veniam fabulas, eos ut purto sonet principes. Est inimicus laboramus forensibus cu.<br/><br/>Virtute expetenda pri et. Pro dicunt delenit tincidunt in. Partiendo corrumpit cum ea, alii docendi sed at. Electram efficiendi mel ad, cu eos altera erroribus. Mei id atqui percipit molestiae, ea delenit oporteat pro. Usu te vero harum similique, ut vix reque dolorum recusabo.<br/><br/>Ea doming impetus pertinax sit, ut qui liber vulputate, cum ad diceret senserit. Et has falli tacimates, cu suas reprehendunt ius. Harum commodo sit an, duo congue reprehendunt et. Ut pro luptatum expetendis, cu nobis ubique abhorreant sit. Populo urbanitas has an, eu graecis atomorum cum.<br/><br/>Pro commodo maluisset salutatus eu, cetero convenire qui ne. Mea alii apeirian ut, ut quo zril veniam commodo, et porro soluta pertinax sit. Ne luptatum periculis temporibus mea, melius aliquando definitiones sed an, aeque commodo albucius nec an. Duo eu paulo partem iisque. In mei quas choro assueverit, cu iudico nonumy omittam mea, nec cu justo omnes.","1":"Lorem ipsum dolor sit amet, his populo malorum alienum ea, mei in semper albucius suavitate. Mea volutpat salutatus consetetur ea, at case audire nominati duo. Et tempor omittam pri, mel sonet dicant intellegam eu. Latine malorum liberavisse ei sit, commodo volutpat vel ea. Nec ut epicuri suscipit scaevola, eam nisl ipsum omittantur id. Sit ut dolores posidonium, maiorum civibus ad eum.<br/><br/>Ex lorem impetus insolens usu. Et sea omnes aperiri, ut vim ipsum legimus reformidans. Vix ad suas veniam fabulas, eos ut purto sonet principes. Est inimicus laboramus forensibus cu.<br/><br/>Virtute expetenda pri et. Pro dicunt delenit tincidunt in. Partiendo corrumpit cum ea, alii docendi sed at. Electram efficiendi mel ad, cu eos altera erroribus. Mei id atqui percipit molestiae, ea delenit oporteat pro. Usu te vero harum similique, ut vix reque dolorum recusabo.<br/><br/>Ea doming impetus pertinax sit, ut qui liber vulputate, cum ad diceret senserit. Et has falli tacimates, cu suas reprehendunt ius. Harum commodo sit an, duo congue reprehendunt et. Ut pro luptatum expetendis, cu nobis ubique abhorreant sit. Populo urbanitas has an, eu graecis atomorum cum.<br/><br/>Pro commodo maluisset salutatus eu, cetero convenire qui ne. Mea alii apeirian ut, ut quo zril veniam commodo, et porro soluta pertinax sit. Ne luptatum periculis temporibus mea, melius aliquando definitiones sed an, aeque commodo albucius nec an. Duo eu paulo partem iisque. In mei quas choro assueverit, cu iudico nonumy omittam mea, nec cu justo omnes.","source_of_fund":"opf","2":"opf","requested_by":"1","3":"1","approved_by":null,"4":null,"date_approved":"","5":"","date_created":"2016-10-17 09:36:42","6":"2016-10-17 09:36:42","date_modified":"2016-09-29 10:08:01","7":"2016-11-09 15:27:26","plate_no":null,"8":null,"status":"2","9":"2","10":"1","uid":"67","11":"67","profile_name":"John Kenneth G. Abella","12":"John Kenneth G. Abella","last_name":"Abella","13":"Abella","first_name":"John Kenneth","14":"John Kenneth","middle_name":null,"15":null,"profile_email":null,"16":null,"department":"Info Tech Services Unit","17":"Info Tech Services Unit","department_alias":"ITSU","18":"ITSU","position":"programmer","19":"programmer","profile_image":"67.PNG","20":"67.PNG","21":"2016-09-29 10:08:01"}]
-
-	return preview;
+function ajax_getOfficialTravelListPreview(id,callback){
+	$.get('api/travel/official/preview/'+id,function(json){
+		preview=JSON.parse(json)
+		callback();
+		return preview;
+	})
 }
 
 
-function ajax_getOfficialTravelPassengerScholarsPreview(){
-	scholars=[{"full_name":"Chya Suthiwanith","uid":"7","id":"303","nationality":"Thai","profile_image":"","office":"scholar"},{"full_name":"Yuwat Vuthimedhi","uid":"8","id":"304","nationality":"Thai","profile_image":"","office":"scholar"},{"full_name":"Ngamchuen Kaowichian-Ratanadilok","uid":"3","id":"305","nationality":"Thai","profile_image":"","office":"scholar"},{"full_name":"Pensook Ratisoontorn-Tauthong","uid":"2","id":"306","nationality":"Thai","profile_image":"","office":"scholar"}]
+function ajax_getOfficialTravelPassengerScholarsPreview(id,callback){
 
-	return scholars;
+	$.get('api/travel/official/scholars/'+id,function(json){
+		scholars=JSON.parse(json)
+		callback(scholars);
+		return scholars;
+	})
+
 }
 
-function ajax_getOfficialTravelPassengerStaffPreview(){
-	staff=[{"name":"ICU","uid":"4","id":"299","designation":"Accounting Head","office":"Accounting Unit","profile_image":null,"allias":"AcU"},{"name":"FMU","uid":"3","id":"300","designation":null,"office":"Facilities Management Unit","profile_image":"3.jpg","allias":"FMU"},{"name":"Administrator","uid":"1","id":"301","designation":"administrator","office":"Accounting Unit","profile_image":"1.jpg","allias":"AcU"},{"name":"Amy A. Antonio","uid":"29","id":"302","designation":null,"office":"Project Development and Technical Services","profile_image":null,"allias":"PDTS"}]
+function ajax_getOfficialTravelPassengerStaffPreview(id,callback){
 
-	return staff;
+	$.get('api/travel/official/staff/'+id,function(json){
+		staff=JSON.parse(json)
+		callback(staff);
+		return staff;
+	})
 }
 
-function ajax_getOfficialTravelPassengerCustomPreview(){
-	official_travel_custom_passenger=[{"id":"1","0":"1","tr_id":"291","1":"291","full_name":"john","2":"john","designation":"test","3":"test"}]
+function ajax_getOfficialTravelPassengerCustomPreview(id,callback){
 
-	return official_travel_custom_passenger;
+
+	$.get('api/travel/official/custom/'+id,function(json){
+		official_travel_custom_passenger=JSON.parse(json)
+		callback(official_travel_custom_passenger);
+		return official_travel_custom_passenger;
+	})
+
+	
 }
 
 
-function ajax_getOfficialTravelItenerary(){
-	official_travel_itenerary=[{"id":"273","0":"273","tr_id":"291","1":"291","res_id":null,"2":null,"location":"SEARCA","3":"SEARCA","destination":"Cavite","4":"Cavite","departure_time":"05:00:00","5":"05:00:00","actual_departure_time":"00:00:00","6":"00:00:00","returned_time":"00:00:00","7":"00:00:00","departure_date":"2016-11-30","8":"2016-11-30","returned_date":"0000-00-00","9":"0000-00-00","status":"scheduled","10":"scheduled","plate_no":null,"11":null,"driver_id":"0","12":"0","linked":"no","13":"no","date_created":"2016-11-21 13:36:24","14":"2016-11-21 13:36:24"},{"id":"274","0":"274","tr_id":"291","1":"291","res_id":null,"2":null,"location":"Cabuyao","3":"Cabuyao","destination":"test","4":"test","departure_time":"05:00:00","5":"05:00:00","actual_departure_time":"00:00:00","6":"00:00:00","returned_time":"00:00:00","7":"00:00:00","departure_date":"2016-11-29","8":"2016-11-29","returned_date":"0000-00-00","9":"0000-00-00","status":"scheduled","10":"scheduled","plate_no":null,"11":null,"driver_id":"0","12":"0","linked":"no","13":"no","date_created":"2016-11-21 14:02:03","14":"2016-11-21 14:02:03"}]
-	return official_travel_itenerary;
+function ajax_getOfficialTravelItenerary(id,callback){
+	$.get('api/travel/official/itenerary/'+id,function(json){
+		official_travel_itenerary=JSON.parse(json)
+		callback(official_travel_itenerary);
+		return official_travel_itenerary;
+	})
 }
 
 
 
 function showOfficialTravelListPreview(id){
-	ajax_getOfficialTravelListPreview(id)
+	ajax_getOfficialTravelListPreview(id,function(){
+
+		$('.preview-name').html(preview[0].profile_name)
+		$('.preview-unit').html(preview[0].department)
+		$('.preview-created').html(((preview[0].date_created).split(' '))[0])
+		$('.preview-purpose').html(preview[0].purpose)
+
+	})
 	
-	$('.preview-name').html(preview[0].profile_name)
-	$('.preview-unit').html(preview[0].department)
-	$('.preview-created').html(((preview[0].date_created).split(' '))[0])
-	$('.preview-purpose').html(preview[0].purpose)
+
 }
 
 function showOfficialTravelPassengerStaffPreview(id){
-	ajax_getOfficialTravelPassengerStaffPreview(id);
-	var htm='';
-	for(var x=0;x<staff.length;x++){
-		htm+=`<tr data-menu="staffPassengerMenu" context="0" data-selection="`+staff[x].id+`" id="official_travel_staff_passenger_tr`+staff[x].id+`" class="contextMenuSelector official_travel_staff_passenger_tr`+staff[x].id+`">
-							<td>
-								<div class="col col-md-3"><div class="profile-image profile-image-tr" display-image="`+staff[x].profile_image+`" data-mode="staff"></div></div>
-								<div class="col col-md-9"><b>`+staff[x].name+`</b></div></td>
+	ajax_getOfficialTravelPassengerStaffPreview(id,function(staff){
 
-							
-							<td>`+staff[x].designation+`</td>
-							<td>`+staff[x].office+`</td>
-						</tr>`
+			
+			for(var x=0;x<staff.length;x++){
+				var htm=`<tr data-menu="staffPassengerMenu" context="0" data-selection="`+staff[x].id+`" id="official_travel_staff_passenger_tr`+staff[x].id+`" class="contextMenuSelector official_travel_staff_passenger_tr`+staff[x].id+`">
+									<td>
+										<div class="col col-md-3"><div class="profile-image profile-image-tr" display-image="`+staff[x].profile_image+`" data-mode="staff"></div></div>
+										<div class="col col-md-9"><b>`+staff[x].name+`</b></div></td>
 
-		
-	}
-	$('.preview-passengers').html(htm)
-	setTimeout(function(){ context() },1000);
+									
+									<td>`+staff[x].designation+`</td>
+									<td>`+staff[x].office+`</td>
+								</tr>`
+				$('.preview-passengers').append(htm)
+			}
+			
+			setTimeout(function(){ context() },1000);
+
+
+	});
+	
 }
 
 
 function showOfficialTravelPassengerScholarsPreview(id){
-	ajax_getOfficialTravelPassengerScholarsPreview(id);
-	for(var x=0;x<scholars.length;x++){
-		var htm=`<tr data-menu="scholarPassengerMenu"  context="0" data-selection="`+scholars[x].id+`" id="official_travel_scholars_passenger_tr`+scholars[x].id+`" class="contextMenuSelector official_travel_scholars_passenger_tr`+scholars[x].id+`">
-							<td>
-								<div class="col col-md-3"><div class="profile-image profile-image-tr" display-image="`+scholars[x].profile_image+`" data-mode="scholars"></div></div>
-								<div class="col col-md-9"><b>`+scholars[x].full_name+`</b></div></td>
+	
+	ajax_getOfficialTravelPassengerScholarsPreview(id,function(scholars){
+		
+		for(var x=0;x<scholars.length;x++){
+			var htm=''
+			 htm=`<tr data-menu="scholarPassengerMenu"  context="0" data-selection="`+scholars[x].id+`" id="official_travel_scholars_passenger_tr`+scholars[x].id+`" class="contextMenuSelector official_travel_scholars_passenger_tr`+scholars[x].id+`">
+								<td>
+									<div class="col col-md-3"><div class="profile-image profile-image-tr" display-image="`+scholars[x].profile_image+`" data-mode="scholars"></div></div>
+									<div class="col col-md-9"><b>`+scholars[x].full_name+`</b></div></td>
 
-							
-							<td>`+scholars[x].nationality+`</td>
-							<td>`+scholars[x].office+`</td>
-						</tr>`
+								
+								<td>`+scholars[x].nationality+`</td>
+								<td>`+scholars[x].office+`</td>
+							</tr>`
+			$('.preview-passengers').append(htm);
+			
+		}
 
-		$('.preview-passengers').append(htm)
-	}	
+		
+		setTimeout(function(){ context() },2000);	
+	});
+	
 }
 
 
 function showOfficialTravelPassengerCustomPreview(id){
-	ajax_getOfficialTravelPassengerCustomPreview(id);
-	var htm=''
-	for(var x=0;x<official_travel_custom_passenger.length;x++){
-		htm+=`<tr data-menu="customPassengerMenu" data-selection="`+official_travel_custom_passenger[x].id+ `" id="official_travel_custom_passenger_tr`+official_travel_custom_passenger[x].id+`" class="contextMenuSelector official_travel_custom_passenger_tr`+official_travel_custom_passenger[x].id+`">
-							<td>
-								<div class="col col-md-3"><div class="profile-image profile-image-tr" display-image="" data-mode="custom"></div></div>
-								<div class="col col-md-9"><b>`+official_travel_custom_passenger[x].id+`</b></div></td>
-							<td>`+official_travel_custom_passenger[x].designation+`</td>
-							<td>N/A</td>
-						</tr>`
-
+	ajax_getOfficialTravelPassengerCustomPreview(id,function(official_travel_custom_passenger){
 		
-	}
-	$('.preview-passengers').append(htm)
+		var htm='';	
+		for(var x=0;x<official_travel_custom_passenger.length;x++){
+
+			htm=`<tr data-menu="customPassengerMenu" data-selection="`+official_travel_custom_passenger[x].id+ `" id="official_travel_custom_passenger_tr`+official_travel_custom_passenger[x].id+`" class="contextMenuSelector official_travel_custom_passenger_tr`+official_travel_custom_passenger[x].id+`">
+								<td>
+									<div class="col col-md-3"><div class="profile-image profile-image-tr" display-image="" data-mode="custom"></div></div>
+									<div class="col col-md-9"><b>`+official_travel_custom_passenger[x].id+`</b></div></td>
+								<td>`+official_travel_custom_passenger[x].designation+`</td>
+								<td>N/A</td>
+							</tr>`
+
+			$('.preview-passengers').append(htm)
+		}
+		
+		setTimeout(function(){ context() },1000);
+	});
+	
 }
 
 
 function showOfficialTravelItenerary(id){
-	ajax_getOfficialTravelItenerary(id);
-	var htm='';
-	for(var x=0; x<official_travel_itenerary.length;x++){
-		htm+=`<details id="official_travel_itenerary`+official_travel_itenerary[x].id+`" data-menu="iteneraryMenu" data-selection="`+official_travel_itenerary[x].id+ `" class="contextMenuSelector official_travel_itenerary`+official_travel_itenerary[x].id+` col col-md-12">
+	ajax_getOfficialTravelItenerary(id,function(official_travel_itenerary){
+
+		for(var x=0; x<official_travel_itenerary.length;x++){
+			var htm=`<details id="official_travel_itenerary`+official_travel_itenerary[x].id+`" data-menu="iteneraryMenu" data-selection="`+official_travel_itenerary[x].id+ `" class="contextMenuSelector official_travel_itenerary`+official_travel_itenerary[x].id+` col col-md-12">
 					<summary>`+official_travel_itenerary[x].location+` - `+official_travel_itenerary[x].destination+`</summary>
 					<table class="table table-fluid" style="background:rgba(250,250,250,0.7);color:rgb(40,40,40);">
 						<thead>
@@ -129,10 +168,15 @@ function showOfficialTravelItenerary(id){
 				</details>
 			`
 
-		
-	}
+			$('.preview-itenerary').append(htm)
+		}
 
-	$('.preview-itenerary').html(htm)
+
+
+	});
+	
+	
+	
 }
 
 
@@ -234,8 +278,7 @@ function removeOfficialTravelItenerary(id){
 
 
 function removeOfficialTravel(id){
-	$('#preview-modal').on('show.bs.modal', function (e) {
-	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
+
 	    	$('.modal-submit').on('click',function(){
 
 	    		//loading
@@ -257,11 +300,44 @@ function removeOfficialTravel(id){
 	    		//back to original
 	    		$(this).attr('disabled','enabled')
 	    	})
-	    })
+	
+}
+
+
+function forwardOfficialTravelRequest(id){
+	
+	$('.modal-submit').on('click',function(){
+
+		//loading
+	    previewLoadingEffect()
+	    		
+	    //disable onclick
+	    $(this).attr('disabled','disabled')
+
+	    //ajax here
+	    setTimeout(function(){
+
+	    	$('.preview-content').fadeOut()
+	    	$(selectedElement).remove();
+	    			
+	    },1000)
+
+	    $('#preview-modal').modal('hide');
+
+	    //back to original
+	    $(this).attr('disabled','enabled')
+	})
+	
+}
+
+function showBootstrapDialog(modal,modalSection,url,callback){
+
+	$(modal).on('show.bs.modal', function (e) {
+	    $(modalSection).load(url,callback)
 	});
 
-	$('#preview-modal').modal('toggle');
-	
+	$(modal).modal('toggle');
+
 }
 
 /**context menu**/
@@ -309,6 +385,17 @@ function context(fun){
 }
 
 
+function ajaxLoad(){
+	$('.ajaxload').on('click',function(){
+		var target=$(this).attr('data-section')
+		var content=$(this).attr('data-content')
+		$(target).load(content,function(){
+
+		})
+	})
+}
+
+
 /*bind action to contextMenu*/
 function unbindContext(){
 	//use explicitely to remove context
@@ -319,6 +406,12 @@ function unbindContext(){
 		$(menuSelector[x]).off('contextmenu');
 	}
 }
+
+function unbindAjaxLoad(){
+	$('.ajaxload').off('click')
+}
+
+
 function bindRemoveStaff(){
 	$('.removeOfficialPassengerButton').click(function(){
 		var context=($(contextSelectedElement).attr('data-selection'));

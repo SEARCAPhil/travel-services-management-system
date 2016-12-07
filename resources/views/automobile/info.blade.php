@@ -1,5 +1,4 @@
-@extends('layouts.automobile-preview')
-@section('content-preview')
+
 	<div>
 		<h1 style="color:#ff9933"><span class="glyphicon glyphicon-menu-right"></span> Information</h1>
 		<p>Plate number : 1598fd</p>
@@ -52,4 +51,4 @@ var c3 = new Chart(ctx3, {
    
 });
 </script>
-@endsection
+

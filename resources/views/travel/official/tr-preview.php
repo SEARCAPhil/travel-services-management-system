@@ -1,8 +1,8 @@
 <div class="row preview-content">
 		<div class="col col-md-12 row">
-			<ul class="list-unstyled preview-menu-li">
+			<ul class="list-unstyled preview-menu-li pull-right">
 				<li><strong>5691</strong></li>
-				<li><span class="glyphicon glyphicon-share-alt"></span></li>
+				<li class="preview-forward"><span class="glyphicon glyphicon-share-alt"></span></li>
 				<li><span class="glyphicon glyphicon-print"></span></li>
 				<li class="preview-remove"><span class="glyphicon glyphicon-remove"></span></li>
 				<li class="preview-update"><span class="glyphicon glyphicon-pencil"></span></li>
@@ -14,7 +14,7 @@
 				<div class="profile-image profile-image-main" display-image="67.PNG" data-mode="staff" style="background: url(&quot;/profiler/profile/user.png&quot;) center center / cover no-repeat;"></div>
 			</div>
 			<div class="col col-md-9">
-				<h4 class="preview-name"></h4>
+				<h3 class="preview-name"></h3>
 				<p class="preview-unit">Management Services Unit</p>
 				<p class="preview-created">1/17/16</p>
 			</div>
@@ -61,16 +61,33 @@
 $(document).ready(function(){
 
 
-showOfficialTravelListPreview()
-showOfficialTravelPassengerStaffPreview()
-showOfficialTravelPassengerScholarsPreview()
-showOfficialTravelPassengerCustomPreview()
-showOfficialTravelItenerary()
+//showOfficialTravelListPreview()
+//showOfficialTravelPassengerStaffPreview()
+//showOfficialTravelPassengerScholarsPreview()
+//showOfficialTravelPassengerCustomPreview()
+//showOfficialTravelItenerary()
 
 
 $('.preview-remove').on('click',function(){
-		removeOfficialTravel(1)
+	//call custom bootstrap dialog
+		showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/remove',function(){
+			//remove
+			removeOfficialTravel(1)
+
+		})
+		
 })
+
+$('.preview-forward').on('click',function(){
+
+		//call custom bootstrap dialog
+		showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/forward',function(){
+			//forward
+			forwardOfficialTravelRequest()
+
+		})
+})
+
 
 $('.preview-update').on('click',function(){
 		$('#editorTab').click();

@@ -67,7 +67,7 @@
 			</div>
 
 			<div class="col col-md-8  col-md-offset-2 preview-sections">
-				<p></p><div class="mini-circle"></div> <b>Passengers</b> <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#passenger-modal"><span class="glyphicon glyphicon-plus"></span></button><p></p>
+				<p><div class="mini-circle"></div> <b>Passengers</b> <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#passenger-modal"><span class="glyphicon glyphicon-plus"></span></button></p>
 				<table class="table table-striped passenger-table preview-table table-fluid" id="table-passenger" ng-show="passengersX.length>=1||passengersScholar.length>=1||passengersCustom.length>=1">
 					<thead>
 						<tr>
@@ -75,19 +75,36 @@
 						</tr>
 					</thead>
 					<tbody class="preview-passengers">
+						
+
 					</tbody>
 				</table>
 			</div>
 
 
 			<div class="col col-md-8  col-md-offset-2 preview-sections">
-				<p></p><div class="mini-circle"></div> <b>Itenerary</b>
-				<span class="btn btn-success btn-xs" id="officialIteneraryButton" data-toggle="modal" data-target="#itenerary-modal"><span class="glyphicon glyphicon-map-marker"></span></span>
-					<div id="officialIteneraryStatus" class="text-muted" style="float:right;height:20px;width:250px;overflow: hidden;position:relative;"></div>
-				</p>
+				<p><div class="mini-circle"></div> <b>Itenerary</b> <span class="btn btn-success btn-xs" id="officialIteneraryButton" data-toggle="modal" data-target="#itenerary-modal"><span class="glyphicon glyphicon-map-marker"></span></span></p>
 				<div class="preview-itenerary">
 
+				</div>
 				
+			</div>
+
+			<div class="col col-md-8  col-md-offset-2 preview-sections">
+				<p><div class="mini-circle"></div> <b>Type of Vehicle</b></p>
+				<p class="col col-md-12">
+					<input type="radio" name="vtype" value="1" select-mobi="1" disabled="disabled" > SUV 
+					<input type="radio" name="vtype" value="2" select-mobi="2" checked="checked"> Van
+					<input type="radio" name="vtype" value="3" select-mobi="3" disabled="disabled"> Pick-up	
+				</p>
+			</div>
+
+			<div class="col col-md-8  col-md-offset-2 preview-sections">
+				<p><div class="mini-circle"></div> <b>Mode of Payment</b></p>
+				<p class="col col-md-12">
+					<span>Cash <input type="radio" name="mode-of-payment" disabled="disabled" checked="checked"></span>
+					<span>Salary Deduction <input type="radio" name="mode-of-payment" disabled="disabled"></span>
+				</p>
 			</div>
 				
 			</div>
