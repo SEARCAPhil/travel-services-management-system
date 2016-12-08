@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
+use Illuminate\Support\Facades\DB;
+
+
 class Official extends Controller
 {
     /**
@@ -15,8 +18,58 @@ class Official extends Controller
      */
     public function index($page=1)
     {
-        $json='{"current_page":1,"total_pages":1,"data":[{"id":"290","purpose":null,"source_of_fund":"opf","requested_by":"16","approved_by":null,"date_approved":"","date_created":"2016-11-09 16:08:58","date_modified":"2016-11-09 16:15:43","plate_no":null,"status":"2"},{"id":"284","purpose":"Lorem ipsum dolor sit amet, his populo malorum alienum ea, mei in semper albucius suavitate. Mea volutpat salutatus consetetur ea, at case audire nom. . . ","source_of_fund":"opf","requested_by":"1","approved_by":null,"date_approved":"","date_created":"2016-10-17 09:36:42","date_modified":"2016-11-09 15:27:26","plate_no":null,"status":"2"}]}';
-        echo $json;
+            try{
+                $this->pdoObject=DB::connection()->getPdo();
+                $this->page=htmlentities(htmlspecialchars($page));
+                $this->page=$page>1?$page:1;
+                $this->id=16;
+                #set starting limit(page 1=10,page 2=20)
+                $start_page=$this->page<2?0:( integer)($this->page-1)*10;
+
+
+                $this->pdoObject->beginTransaction();
+
+                $sql="SELECT * FROM tr where tr.requested_by=:id ORDER BY date_created DESC LIMIT :start, 10";
+                $sql2="SELECT count(*) as total FROM tr where tr.requested_by=:id";
+
+                $statement=$this->pdoObject->prepare($sql);
+                $statement2=$this->pdoObject->prepare($sql2);
+                $statement->bindParam(':start',$start_page,\PDO::PARAM_INT);
+                $statement->bindParam(':id',$this->id,\PDO::PARAM_INT);
+                $statement2->bindParam(':id',$this->id,\PDO::PARAM_INT);
+                $statement->execute();
+                $statement2->execute();
+                $res=Array();
+                $data=Array();
+                while($row=$statement->fetch()){
+                    $data[]=$row;
+                }
+                
+
+                $count=0;
+                if($row_c=$statement2->fetch(\PDO::FETCH_OBJ)){ $count=$row_c->total; }
+                #count pages
+                $no_pages=1;
+                if($count>=10){
+                        $pages=ceil(@$count/10);
+                        $no_pages=$pages;
+                        
+                }else{
+                        $no_pages=1;
+
+                }
+                #check if page request is < the actual page
+                $current_page=$this->page<=$no_pages?$this->page:$no_pages;
+
+                #return in json format
+                $res=Array('current_page'=>$current_page,'total_pages'=>$no_pages,'data'=>$data);
+                    
+                $this->pdoObject->commit();
+                echo json_encode($res);
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+
     }
 
     /**
@@ -46,11 +99,166 @@ class Official extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show($id)
     {
+        try{
+            $this->pdoObject=DB::connection()->getPdo();
+
+            $this->id=htmlentities(htmlspecialchars($id));
+            $this->pdoObject->beginTransaction();
+            $sql="SELECT * FROM tr LEFT JOIN account_profile on tr.requested_by=account_profile.id where tr.id=:id";
+            $statement=$this->pdoObject->prepare($sql);
+            $statement->bindParam(':id',$this->id);
+            $statement->execute();
+            $res=Array();
+            while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+                $res[]=$row;
+            }
+            $this->pdoObject->commit();
+
+            return json_encode($res);
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
         
-        $json='[{"id":"16","0":"290","purpose":"Lorem ipsum dolor sit amet, his populo malorum alienum ea, mei in semper albucius suavitate. Mea volutpat salutatus consetetur ea, at case audire nom. . .","1":null,"source_of_fund":"opf","2":"opf","requested_by":"16","3":"16","approved_by":null,"4":null,"date_approved":"","5":"","date_created":"2016-11-09 16:08:58","6":"2016-11-09 16:08:58","date_modified":"2016-10-27 10:26:13","7":"2016-11-09 16:15:43","plate_no":null,"8":null,"status":"2","9":"2","10":"16","uid":"67","11":"67","profile_name":"John Kenneth G. Abella","12":"John Kenneth G. Abella","last_name":"Abella","13":"Abella","first_name":"John Kenneth","14":"John Kenneth","middle_name":null,"15":null,"profile_email":null,"16":null,"department":"Information Technology Services Unit","17":"Information Technology Services Unit","department_alias":"ITSU","18":"ITSU","position":"programmer","19":"programmer","profile_image":"67.jpg","20":"67.jpg","21":"2016-10-27 10:26:13"}]';
-        echo $json;
+    }
+
+    public function search($param,$page=1){
+        $id=16;
+        return self::search_user_request($param,$id,$page);
+    }
+
+
+    public function search_admin($param,$page=1){
+        
+        try{
+
+            $this->pdoObject=DB::connection()->getPdo();
+            $this->page=htmlentities(htmlspecialchars($page));
+            $this->tr_id=htmlentities(htmlspecialchars($param));
+            $key='%'.$this->tr_id.'%';
+            $this->page=$page>1?$page:1;
+
+            #set starting limit(page 1=10,page 2=20)
+            $start_page=$this->page<2?0:( integer)($this->page-1)*10;
+
+
+            $this->pdoObject->beginTransaction();
+
+            $sql="SELECT * FROM tr where id LIKE :key1 or purpose LIKE :key2  ORDER BY date_created DESC LIMIT :start, 10";
+            $sql2="SELECT count(*) as total FROM tr where  id LIKE :key1 or purpose LIKE :key2 ORDER BY date_created DESC";
+            $statement=$this->pdoObject->prepare($sql);
+            $statement2=$this->pdoObject->prepare($sql2);
+
+            $statement->bindParam(':start',$start_page,\PDO::PARAM_INT);
+
+            
+            $statement->bindParam(':key1',$key);
+             $statement->bindParam(':key2',$key);
+            $statement2->bindParam(':key1',$key);
+            $statement2->bindParam(':key2',$key);
+
+
+
+            $statement->execute();
+            $statement2->execute();
+            $res=Array();
+            $data=Array();
+            while($row=$statement->fetch()){
+                $data[]=$row;
+            }
+            
+
+            $count=0;
+            if($row_c=$statement2->fetch(\PDO::FETCH_OBJ)){ $count=$row_c->total; }
+            #count pages
+            $no_pages=1;
+            if($count>=10){
+                    $pages=ceil(@$count/10);
+                    $no_pages=$pages;
+                    
+            }else{
+                    $no_pages=1;
+
+            }
+            #check if page request is < the actual page
+            $current_page=$this->page<=$no_pages?$this->page:$no_pages;
+
+            #return in json format
+            $res=Array('current_page'=>$this->page,'total_pages'=>$no_pages,'data'=>$data);
+                
+            $this->pdoObject->commit();
+            return json_encode($res);
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+       
+    }
+
+
+    function search_user_request($param,$id,$page=1){
+        
+        try{
+                $this->pdoObject=DB::connection()->getPdo();
+                $this->page=htmlentities(htmlspecialchars($page));
+                $this->id=(int) htmlentities(htmlspecialchars($id));
+                $this->tr_id=htmlentities(htmlspecialchars($param));
+                $key='%'.$this->tr_id.'%';
+                $this->page=$page>1?$page:1;
+
+                #set starting limit(page 1=10,page 2=20)
+                $start_page=$this->page<2?0:( integer)($this->page-1)*10;
+
+
+                $this->pdoObject->beginTransaction();
+
+                $sql="SELECT * FROM tr where requested_by=:id and id LIKE :key1 or purpose LIKE :key2  ORDER BY date_created DESC LIMIT :start, 10";
+                $sql2="SELECT count(*) as total FROM tr where requested_by=:id and id LIKE :key1 or purpose LIKE :key2  ORDER BY date_created DESC";
+                $statement=$this->pdoObject->prepare($sql);
+                $statement2=$this->pdoObject->prepare($sql2);
+                $statement2->bindParam(':id',$this->id,\PDO::PARAM_INT);
+                $statement->bindParam(':start',$start_page,\PDO::PARAM_INT);
+                $statement->bindParam(':id',$this->id,\PDO::PARAM_INT);
+
+                
+                $statement->bindParam(':key1',$key);
+                $statement->bindParam(':key2',$key);
+                $statement2->bindParam(':key1',$key);
+                $statement2->bindParam(':key2',$key);
+
+
+
+                $statement->execute();
+                $statement2->execute();
+                $res=Array();
+                $data=Array();
+                while($row=$statement->fetch()){
+                    $data[]=$row;
+                }
+                
+
+                $count=0;
+                if($row_c=$statement2->fetch(\PDO::FETCH_OBJ)){ $count=$row_c->total; }
+                #count pages
+                $no_pages=1;
+                if($count>=10){
+                        $pages=ceil(@$count/10);
+                        $no_pages=$pages;
+                        
+                }else{
+                        $no_pages=1;
+
+                }
+                #check if page request is < the actual page
+                $current_page=$this->page<=$no_pages?$this->page:$no_pages;
+
+                #return in json format
+                $res=Array('current_page'=>$this->page,'total_pages'=>$no_pages,'data'=>$data);
+                    
+                $this->pdoObject->commit();
+                return json_encode($res);
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+
     }
 
     /**
@@ -84,6 +292,6 @@ class Official extends Controller
      */
     public function destroy($id)
     {
-        //
+        return 1;
     }
 }

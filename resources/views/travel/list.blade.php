@@ -32,7 +32,7 @@
 
 	<p class="row">
 			<b class="text-danger">Page /<span class="list-total-pages">40</span></b>
-			<input type="number" class="form-control" value="1" pagers="" class="list-current-page">
+			<input type="number" class="form-control list-current-page" value="1">
 		</p>
 </div>
 
@@ -91,6 +91,19 @@ function ajax_getCampusTravelList(page=1,callback){
 
 
 
+function ajax_searchOfficialTravelList(param,callback){
+	$.get('api/travel/official/search/'+param,function(json){
+		travel=JSON.parse(json)
+		list= typeof travel.data!=undefined?travel.data:[];
+		callback();
+		return travel;
+	})
+
+}
+
+
+
+
 
 
 function attachClickEventToList(url,callback){
@@ -100,6 +113,9 @@ function attachClickEventToList(url,callback){
 		//add selected style
 		$('.list-details dd').removeClass('active')
 		$(this).addClass('active');
+
+		//reset count
+		passenger_count=0;
 		
 
 		//only allowed ne click for the current element	
@@ -202,6 +218,28 @@ function showCampusTravelList(page=1){
 
 
 
+function searchOfficialTravelList(param){
+	ajax_searchOfficialTravelList(param,function(){
+		appendToList(function(){
+			attachClickEventToList('travel/official/preview/',function(e){
+
+				//get all necessary information of the request
+				showOfficialTravelListPreview(e.currentTarget.id)
+				showOfficialTravelPassengerStaffPreview(e.currentTarget.id)
+				showOfficialTravelPassengerScholarsPreview(e.currentTarget.id)
+				showOfficialTravelPassengerCustomPreview(e.currentTarget.id)
+				showOfficialTravelItenerary(e.currentTarget.id)
+
+			})
+		})
+	})
+	
+
+}
+
+
+
+
 $(document).ready(function(){
 
 showOfficialTravelList();
@@ -235,6 +273,30 @@ $('.travel-link').click(function(e){
 	
 
 
+	
+})
+
+$('.list-current-page').change(function(){
+
+	if($(this).val()>travel.current_page||$(this).val()<travel.current_page){
+		$(this).css({'background-color':'#a94442','color':'#fff'})
+	}else{
+		$(this).css({'background-color':'#fff','color':'#000'})
+		//next page
+		showOfficialTravelList($(this).val())
+	}
+})
+
+var timeOut;
+$('#searchInput').keyup(function(){
+	var that=this
+	clearTimeout(timeOut)
+	timeOut=setTimeout(function(){
+		//next page
+		if($(that).val().length>1)
+		searchOfficialTravelList($(that).val())
+	},1000)
+		
 	
 })
 

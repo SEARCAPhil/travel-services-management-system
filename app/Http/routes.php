@@ -130,11 +130,17 @@ Route::get('api/travel/official/scholars/{id}',['uses' =>'Official_scholars@inde
 Route::get('api/travel/official/custom/{id}',['uses' =>'Official_custom@index']);
 Route::get('api/travel/official/itenerary/{id}',['uses' =>'Official_itenerary@index']);
 
+Route::get('api/travel/official/search/{param}',['uses' =>'Official@search']);
+
+Route::delete('api/travel/official/{id}',['uses' =>'Official@destroy']);
+Route::delete('api/travel/official/staff/{id}',['uses' =>'Official_staff@destroy']);
 
 
+#scholar
+Route::delete('api/travel/official/scholar/{id}',['uses' =>'Official_scholars@destroy']);
 
-
-
+#custom
+Route::delete('api/travel/official/custom/{id}',['uses' =>'Official_custom@destroy']);
 
 #personal
 Route::get('/api/travel/personal/{page?}',['uses' =>'Personal@index']);

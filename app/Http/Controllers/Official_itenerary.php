@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\DB;
+
 use App\Http\Requests;
 
 class Official_itenerary extends Controller
@@ -15,8 +17,27 @@ class Official_itenerary extends Controller
      */
     public function index($id)
     {
-        $json='[{"id":"273","0":"273","tr_id":"291","1":"291","res_id":null,"2":null,"location":"SEARCA","3":"SEARCA","destination":"Cavite","4":"Cavite","departure_time":"05:00:00","5":"05:00:00","actual_departure_time":"00:00:00","6":"00:00:00","returned_time":"00:00:00","7":"00:00:00","departure_date":"2016-11-30","8":"2016-11-30","returned_date":"0000-00-00","9":"0000-00-00","status":"scheduled","10":"scheduled","plate_no":null,"11":null,"driver_id":"0","12":"0","linked":"no","13":"no","date_created":"2016-11-21 13:36:24","14":"2016-11-21 13:36:24"},{"id":"274","0":"274","tr_id":"291","1":"291","res_id":null,"2":null,"location":"Cabuyao","3":"Cabuyao","destination":"test","4":"test","departure_time":"05:00:00","5":"05:00:00","actual_departure_time":"00:00:00","6":"00:00:00","returned_time":"00:00:00","7":"00:00:00","departure_date":"2016-11-29","8":"2016-11-29","returned_date":"0000-00-00","9":"0000-00-00","status":"scheduled","10":"scheduled","plate_no":null,"11":null,"driver_id":"0","12":"0","linked":"no","13":"no","date_created":"2016-11-21 14:02:03","14":"2016-11-21 14:02:03"}]';
-        echo $json;
+
+        try{
+                $this->pdoObject=DB::connection()->getPdo();
+                $this->id=htmlentities(htmlspecialchars($id));
+                $this->pdoObject->beginTransaction();
+                $sql="SELECT travel.* FROM travel where tr_id=:id";
+                $statement=$this->pdoObject->prepare($sql);
+                $statement->bindParam(':id',$this->id);
+                $statement->execute();
+                $res=Array();
+                while($row=$statement->fetch()){
+                    $res[]=$row;
+                }
+                $this->pdoObject->commit();
+
+                return json_encode($res);
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+
+        
     }
 
     /**

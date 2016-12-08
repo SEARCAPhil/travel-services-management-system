@@ -2,10 +2,10 @@
 		<div class="col col-md-12 row">
 			<ul class="list-unstyled preview-menu-li pull-right">
 				<li><strong>5691</strong></li>
-				<li class="preview-forward"><span class="glyphicon glyphicon-share-alt"></span></li>
-				<li><span class="glyphicon glyphicon-print"></span></li>
-				<li class="preview-remove"><span class="glyphicon glyphicon-remove"></span></li>
-				<li class="preview-update"><span class="glyphicon glyphicon-pencil"></span></li>
+				<li class="preview-forward preview-command"><span class="glyphicon glyphicon-share-alt"></span></li>
+				<li class="preview-command"><span class="glyphicon glyphicon-print"></span></li>
+				<li class="preview-remove preview-command"><span class="glyphicon glyphicon-remove"></span></li>
+				<li class="preview-update preview-command"><span class="glyphicon glyphicon-pencil"></span></li>
 			</ul>
 			
 		</div>
@@ -27,7 +27,7 @@
 			</div>
 
 			<div class="col col-md-12 preview-sections">
-				<p><div class="mini-circle"></div> <b>Passengers</b></p>
+				<p><div class="mini-circle"></div> <span class="pull-left"><b>Passengers</b></span> <span class="label label-success status-box status-box-mini green passenger-count">0</span></p>
 				<table class="table table-striped passenger-table preview-table table-fluid" id="table-passenger" ng-show="passengersX.length>=1||passengersScholar.length>=1||passengersCustom.length>=1">
 					<thead>
 						<tr>
@@ -43,7 +43,8 @@
 
 
 			<div class="col col-md-12 preview-sections">
-				<p><div class="mini-circle"></div> <b>Itenerary</b></p>
+				<p><div class="mini-circle"></div> <span class="pull-left"><b>Itenerary</b></span> 
+				<span class="label label-success status-box status-box-mini green itenerary-count">s</span></p>
 				<div class="preview-itenerary">
 
 				</div>
@@ -72,7 +73,7 @@ $('.preview-remove').on('click',function(){
 	//call custom bootstrap dialog
 		showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/remove',function(){
 			//remove
-			removeOfficialTravel(1)
+			removeOfficialTravelRequest($(selectedElement).attr('id'))
 
 		})
 		
@@ -93,7 +94,26 @@ $('.preview-update').on('click',function(){
 		$('#editorTab').click();
 		//loading
 	    showLoading('#editor','<div><img src="img/loading.png" class="loading-circle" style="width: 80px !important;" /></div>')
-		setTimeout(function(){ $('#editor').load('travel/official/editor/1'); },100);
+		setTimeout(function(){ 
+			$('#editor').load('travel/official/editor/'+$(selectedElement).attr('id'),function(){
+				var id=$(selectedElement).attr('id');
+				showOfficialTravelListPreview(id);
+				showOfficialTravelPassengerStaffPreview(id)
+				showOfficialTravelPassengerScholarsPreview(id)
+				showOfficialTravelPassengerCustomPreview(id)
+				showOfficialTravelItenerary(id)
+
+				setTimeout(function(){
+					bindRemoveStaff();
+					bindRemoveItenerary();
+					bindRemoveOfficialScholar();
+					bindRemoveOfficialCustom();
+				},2000)
+				
+
+			}); 
+
+		},100);
 })
 	
 });

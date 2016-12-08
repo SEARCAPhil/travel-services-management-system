@@ -44,6 +44,14 @@ input[disabled]{
 	color:rgb(255,255,255);
 	padding: 5px;
 }
+.status-box-mini{
+	width:20px;
+	height: 20px;
+	margin-left: 10px;
+	margin-top:5px;
+	text-align: center;
+	padding: 10px;
+}
 
 .status-box.blue{
 	background: rgb(32,122,199);

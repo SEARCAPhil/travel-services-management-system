@@ -3,6 +3,8 @@
 var preview;
 var scholars;
 var staff;
+var passenger_count=0;
+var itenerary_count=0;
 var official_travel_custom_passenger;
 var official_travel_itenerary;
 var contextSelectedElement;
@@ -11,7 +13,7 @@ var contextSelectedElement;
 function ajax_getOfficialTravelListPreview(id,callback){
 	$.get('api/travel/official/preview/'+id,function(json){
 		preview=JSON.parse(json)
-		callback();
+		callback(preview);
 		return preview;
 	})
 }
@@ -59,9 +61,17 @@ function ajax_getOfficialTravelItenerary(id,callback){
 
 
 
-function showOfficialTravelListPreview(id){
-	ajax_getOfficialTravelListPreview(id,function(){
 
+function showTotalPassengerCount(){
+	$('.passenger-count').html(passenger_count)
+}
+
+function showTotalIteneraryCount(){
+	$('.itenerary-count').html(itenerary_count)
+}
+
+function showOfficialTravelListPreview(id){
+	ajax_getOfficialTravelListPreview(id,function(json){
 		$('.preview-name').html(preview[0].profile_name)
 		$('.preview-unit').html(preview[0].department)
 		$('.preview-created').html(((preview[0].date_created).split(' '))[0])
@@ -77,6 +87,8 @@ function showOfficialTravelPassengerStaffPreview(id){
 
 			
 			for(var x=0;x<staff.length;x++){
+				passenger_count++;
+				showTotalPassengerCount()
 				var htm=`<tr data-menu="staffPassengerMenu" context="0" data-selection="`+staff[x].id+`" id="official_travel_staff_passenger_tr`+staff[x].id+`" class="contextMenuSelector official_travel_staff_passenger_tr`+staff[x].id+`">
 									<td>
 										<div class="col col-md-3"><div class="profile-image profile-image-tr" display-image="`+staff[x].profile_image+`" data-mode="staff"></div></div>
@@ -102,6 +114,8 @@ function showOfficialTravelPassengerScholarsPreview(id){
 	ajax_getOfficialTravelPassengerScholarsPreview(id,function(scholars){
 		
 		for(var x=0;x<scholars.length;x++){
+			passenger_count++;
+			showTotalPassengerCount()
 			var htm=''
 			 htm=`<tr data-menu="scholarPassengerMenu"  context="0" data-selection="`+scholars[x].id+`" id="official_travel_scholars_passenger_tr`+scholars[x].id+`" class="contextMenuSelector official_travel_scholars_passenger_tr`+scholars[x].id+`">
 								<td>
@@ -128,7 +142,8 @@ function showOfficialTravelPassengerCustomPreview(id){
 		
 		var htm='';	
 		for(var x=0;x<official_travel_custom_passenger.length;x++){
-
+			passenger_count++;
+			showTotalPassengerCount()
 			htm=`<tr data-menu="customPassengerMenu" data-selection="`+official_travel_custom_passenger[x].id+ `" id="official_travel_custom_passenger_tr`+official_travel_custom_passenger[x].id+`" class="contextMenuSelector official_travel_custom_passenger_tr`+official_travel_custom_passenger[x].id+`">
 								<td>
 									<div class="col col-md-3"><div class="profile-image profile-image-tr" display-image="" data-mode="custom"></div></div>
@@ -148,8 +163,10 @@ function showOfficialTravelPassengerCustomPreview(id){
 
 function showOfficialTravelItenerary(id){
 	ajax_getOfficialTravelItenerary(id,function(official_travel_itenerary){
-
+		itenerary_count=0;
 		for(var x=0; x<official_travel_itenerary.length;x++){
+			itenerary_count++;
+			showTotalIteneraryCount();
 			var htm=`<details id="official_travel_itenerary`+official_travel_itenerary[x].id+`" data-menu="iteneraryMenu" data-selection="`+official_travel_itenerary[x].id+ `" class="contextMenuSelector official_travel_itenerary`+official_travel_itenerary[x].id+` col col-md-12">
 					<summary>`+official_travel_itenerary[x].location+` - `+official_travel_itenerary[x].destination+`</summary>
 					<table class="table table-fluid" style="background:rgba(250,250,250,0.7);color:rgb(40,40,40);">
@@ -179,24 +196,51 @@ function showOfficialTravelItenerary(id){
 	
 }
 
+function removeContextListElement(url,id){
+	$('.modal-submit').on('click',function(){
+    		//disable onclick
+    		$(this).attr('disabled','disabled')
+
+    		//ajax here
+    		$.ajax({
+
+    			url:url+''+id,
+    			method:'DELETE',
+    			data: { _token: $("input[name=_token]").val()},
+    			success:function(data){
+    				if(data>0){
+    					//ajax here
+			    		setTimeout(function(){	    		
+				    		//back to original
+				    		$(this).attr('disabled','enabled') 
+    						$(contextSelectedElement).fadeOut();
+
+    						$(this).attr('enabled','enabled') 
+			    			
+			    		},1000)
+
+			    		$('#preview-modal').modal('hide');
+
+    				}else{
+    					alert('Something went wrong.Please try again later')
+    					//back to original
+    					$(this).attr('enabled','enabled')
+    					$('#preview-modal').modal('hide');
+    				}
+    			}
+    		})
+
+
+    })
+}
+
+
 
 function removeOfficialTravelPassengerCustom(id){
 	
 	$('#preview-modal').on('show.bs.modal', function (e) {
 	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
-	    	$('.modal-submit').on('click',function(){
-
-	    		//disable onclick
-	    		$(this).attr('disabled','disabled')
-
-	    		//ajax here
-	    		//$('#official_travel_custom_passenger_tr'+id).fadeOut()
-	    		$(contextSelectedElement).fadeOut();
-	    		$('#preview-modal').modal('hide');
-
-	    		//back to original
-	    		$(this).attr('disabled','enabled')
-	    	})
+	    	removeContextListElement('api/travel/official/custom/',id);
 	    })
 	});
 
@@ -209,19 +253,7 @@ function removeOfficialTravelPassengerScholar(id){
 
 	$('#preview-modal').on('show.bs.modal', function (e) {
 	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
-	    	$('.modal-submit').on('click',function(){
-
-	    		//disable onclick
-	    		$(this).attr('disabled','disabled')
-
-	    		//ajax here
-	    		//$('#official_travel_scholars_passenger_tr'+id).fadeOut()
-	    		$(contextSelectedElement).fadeOut();
-	    		$('#preview-modal').modal('hide');
-
-	    		//back to original
-	    		$(this).attr('disabled','enabled')
-	    	})
+	    	removeContextListElement('api/travel/official/scholar/',id);
 	    })
 	});
 
@@ -234,18 +266,7 @@ function removeOfficialTravelPassengerStaff(id){
 	$('#preview-modal').on('show.bs.modal', function (e) {
 	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
 	    	$('.modal-submit').on('click',function(){
-
-	    		//disable onclick
-	    		$(this).attr('disabled','disabled')
-
-	    		
-	    		//ajax here
-	    		$(contextSelectedElement).fadeOut();
-	    		//$('.official_travel_staff_passenger_tr'+id).fadeOut()
-	    		$('#preview-modal').modal('hide');
-
-	    		//back to original
-	    		$(this).attr('disabled','enabled')
+	    		removeContextListElement('api/travel/official/staff/',id);
 	    	})
 	    })
 	});
@@ -257,18 +278,7 @@ function removeOfficialTravelPassengerStaff(id){
 function removeOfficialTravelItenerary(id){
 	$('#preview-modal').on('show.bs.modal', function (e) {
 	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
-	    	$('.modal-submit').on('click',function(){
-
-	    		//disable onclick
-	    		$(this).attr('disabled','disabled')
-
-	    		//ajax here
-	    		$('.official_travel_itenerary'+id).fadeOut()
-	    		$('#preview-modal').modal('hide');
-
-	    		//back to original
-	    		$(this).attr('disabled','enabled')
-	    	})
+	    	removeContextListElement('api/travel/official/itenerary/',id);
 	    })
 	});
 
@@ -277,7 +287,7 @@ function removeOfficialTravelItenerary(id){
 }
 
 
-function removeOfficialTravel(id){
+function removeOfficialTravelRequest(id){
 
 	    	$('.modal-submit').on('click',function(){
 
@@ -287,16 +297,35 @@ function removeOfficialTravel(id){
 	    		//disable onclick
 	    		$(this).attr('disabled','disabled')
 
-	    		//ajax here
-	    		setTimeout(function(){
+	    		$(this).html('Removing . . .')
 
-	    			$('.preview-content').fadeOut()
-	    			$(selectedElement).remove();
-	    			
-	    		},1000)
+	    		$.ajax({
 
-	    		$('#preview-modal').modal('hide');
+	    			url:'api/travel/official/'+id,
+	    			method:'DELETE',
+	    			data: { _token: $("input[name=_token]").val()},
+	    			success:function(data){
+	    				if(data>0){
+	    					//ajax here
+				    		setTimeout(function(){
 
+				    			$('.preview-content').fadeOut()
+
+				    			var nextItem=$(selectedElement).next();
+				    			$(selectedElement).remove();
+
+				    			//select next
+				    			$(nextItem).click()
+				    			
+				    		},1000)
+
+				    		$('#preview-modal').modal('hide');
+	
+	    				}
+	    			}
+	    		})
+
+	    		
 	    		//back to original
 	    		$(this).attr('disabled','enabled')
 	    	})
