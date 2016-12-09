@@ -275,6 +275,17 @@ function bindAddFormNavigationButton(){
 
 }
 
+function changeButtonState(target,state='disabled'){
+	console.log(state)
+	if(state=='enabled'){
+		$(target).removeAttr('disabled');
+		$(target).attr('enabled','enabled');	
+	}else{
+		$(target).attr('disabled','disabled');
+	}
+	
+}
+
 
 
 

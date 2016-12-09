@@ -55,7 +55,7 @@
 
 	</div>
 
-	<div class="row col col-md-8">
+	<div class="row col col-md-8 col-sm-8">
 
 		<div class="col col-md-12">
 			<h3 class="page-header">Personal Travel Request Form</h3>
@@ -75,7 +75,7 @@
 		</div>
 
 
-		<div class="col col-md-12 xs-12">
+		<div class="col col-md-12 xs-12 hidden-sm">
 			<div class="bar continuation-right"></div>	
 		</div>
 		<div class="col col-md-12 xs-12 circle-pull-right">
@@ -86,7 +86,7 @@
 
 		</div>
 
-
+	
 		<div class="col col-md-12" >
 
 			<p class="purpose-content"  style="margin-top: 50px;"> 

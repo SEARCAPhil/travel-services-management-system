@@ -55,7 +55,7 @@
 
 	</div>
 
-	<div class="row col col-md-8">
+	<div class="row col col-md-8 col-sm-8">
 
 		<div class="col col-md-12">
 			<h3 class="page-header">Official Travel Request Form</h3>
@@ -63,7 +63,7 @@
 			<br/>		
 		</div>
 		
-		<div class="col col-md-12 xs-12">
+		<div class="col col-md-12 col-xs-12">
 			<div class="circle done">1<span class="circle-label">Purpose<span></div>	
 			<div class="bar done"></div>	
 			<div class="circle">2<span class="circle-label">Passenger<span></div>
@@ -75,17 +75,17 @@
 		</div>
 
 
-		<div class="col col-md-12" >
+		<div class="col col-md-12 preview-sections" >
 
 			<p class="purpose-content"  style="margin-top: 50px;"> 
-				<p><span class="mini-circle"></span><span>Purpose</span> <span class="btn btn-success btn-xs" id="officialPurposeSaveButton"><span class="glyphicon glyphicon-floppy-disk"></span></span></p>
+				<p><span class="mini-circle"></span><span>Purpose</span> <button class="btn btn-success btn-xs" id="officialPurposeSaveButton"><span class="glyphicon glyphicon-floppy-disk"></span></button></p>
 				<textarea class="col col-md-12 col-xs-12 	preview-purpose" rows="15" cols="10" placeholder="Type the purpose of your travel request in this section"></textarea>	
 			</p>
 
 		</div>
 
 		<div class="col col-md-12  preview-sections">
-				<p></p><div class="mini-circle"></div> <b>Passengers</b> <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#passenger-modal"><span class="glyphicon glyphicon-plus"></span></button><p></p>
+				<p></p><div class="mini-circle"></div> <b>Passengers</b> <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#passenger-modal" id="passengerFormButton"><span class="glyphicon glyphicon-plus"></span></button><p></p>
 				<p>ed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae </p>
 
 				<table class="table table-striped passenger-table preview-table table-fluid" id="table-passenger" ng-show="passengersX.length>=1||passengersScholar.length>=1||passengersCustom.length>=1">
@@ -97,30 +97,22 @@
 					<tbody class="preview-passengers">
 					</tbody>
 				</table>
-			</div>
+		</div>
 
 
-			<div class="col col-md-12 preview-sections">
+		<div class="col col-md-12 preview-sections">
 				<p></p><div class="mini-circle"></div> <b>Itenerary</b>
-				<span class="btn btn-success btn-xs" id="officialIteneraryButton" data-toggle="modal" data-target="#itenerary-modal"><span class="glyphicon glyphicon-map-marker"></span></span>
+				<button class="btn btn-success btn-xs" data-toggle="modal" data-target="#itenerary-modal" id="iteneraryFormButton"><span class="glyphicon glyphicon-map-marker"></span></button>
 					<div id="officialIteneraryStatus" class="text-muted" style="float:right;height:20px;width:250px;overflow: hidden;position:relative;"></div>
 				</p>
 				<p>ed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam </p>
 				<div class="preview-itenerary"></div>
 		</div>
 
-
-
-
-		
-
-		
-
-
-		</div>
-
-
 	</div>
+
+
+</div>
 
 
 <script type="text/javascript">	

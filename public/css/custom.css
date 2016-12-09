@@ -344,6 +344,7 @@ margin-right: 5px;
 	background: rgb(100,100,100);
 	margin-top: 15px;
 	margin-left: -10px;
+	margin-bottom: 20px;
 	z-index: 1;
 	position: relative;
 }
@@ -358,6 +359,7 @@ margin-right: 5px;
     padding-top: 10px;
     z-index: 2;
     position: relative;
+    margin-bottom: 20px;
 }
 
 .circle:not(:first-child){
@@ -394,9 +396,9 @@ vertical-align: text-bottom;
 
 .bar.continuation-right{
 	float: right;
-	width:50px;
+	width:120px;
 	transform: rotate(90deg);
-	margin-right: 15px;
+	margin-right: -20px;
 }
 
 
