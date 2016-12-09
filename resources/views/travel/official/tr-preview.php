@@ -115,6 +115,9 @@ $('.preview-update').on('click',function(){
 
 		},100);
 })
+
+
+
 	
 });
 </script>

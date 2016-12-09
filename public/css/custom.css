@@ -246,6 +246,7 @@ padding: 5px;
 	margin-bottom: 15px;
 }
 
+
 .mini-circle {
     float: left;
     width: 10px;
@@ -257,6 +258,8 @@ padding: 5px;
 
 .purpose-content{
 	text-align: justify;
+	border-color: rgb(230,230,230);
+	margin-bottom: 10px;
 }
 
 
@@ -298,3 +301,102 @@ padding: 5px;
     transition: all 0.3s ease-in-out;
 
 }
+
+/*add button*/
+.add-button{
+	float:left;
+	width:20px;
+	height: 20px;
+	background: rgba(0,100,150,0.9);
+
+	color: rgb(255,255,255);
+	border-radius: 50%;
+	text-align: center;
+	margin-bottom: 20px;
+	cursor: pointer;
+	font-size: 0.6em;
+}
+.add-button > span{
+	margin-top: 5px;
+
+}
+
+.add-button:hover{
+	box-shadow: 0px 0px 15px #ccc;
+}
+/*travel lin*/
+.travel-link-ul li{
+	float: left;
+	width:100%;
+
+}
+
+.travel-link-ul li a{
+margin-right: 5px;	
+}
+
+/**form-design**/
+
+.bar{
+	float: left;
+	width: 200px;
+	height: 12px;
+	background: rgb(100,100,100);
+	margin-top: 15px;
+	margin-left: -10px;
+	z-index: 1;
+	position: relative;
+}
+.circle {
+    float: left;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgb(100,100,100);
+    text-align: center;
+    color:rgb(255,255,255);
+    padding-top: 10px;
+    z-index: 2;
+    position: relative;
+}
+
+.circle:not(:first-child){
+	margin-left: -10px;
+}
+
+.circle>span.circle-label{
+	position: absolute;
+	top:100%;
+	left:0;
+	color:rgb(60,60,60);
+	font-weight: bold;
+}
+
+.circle>span.circle-label.top{
+top:-80%;
+vertical-align: text-bottom;
+}
+
+.circle-pull-right > .circle,.circle-pull-right > .bar{
+	float:right;
+}
+
+.circle-pull-right > .circle:first-child{
+	margin-right: 20px;
+}
+
+.circle.error{
+	background: rgb(255,82,87);
+}
+.circle.done,.bar.done{
+	background: rgb(32,199,150);
+}
+
+.bar.continuation-right{
+	float: right;
+	width:50px;
+	transform: rotate(90deg);
+	margin-right: 15px;
+}
+
+

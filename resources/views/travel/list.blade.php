@@ -2,10 +2,10 @@
 <div class="col col-md-12"></div>
 <div class="col col col-md-3 col-sm-3 hidden-xs">
 	<p class="page-header"><span class="glyphicon glyphicon-th-large"></span> <b>Travel Request</b></p>
-	<ul class="list-unstyled">
-		<li><a href="#" class="travel-link" data-type="official">Official</a></li>
-		<li><a href="#" class="travel-link" data-type="personal">Personal</a></li>
-		<li><a href="#" class="travel-link" data-type="campus">Campus</a></li>
+	<ul class="list-unstyled travel-link-ul">
+		<li><a href="#" class="travel-link pull-left" data-type="official">Official</a> <span class="add-button" data-content="official"><span class="glyphicon glyphicon-plus" ></span></li>
+		<li><a href="#" class="travel-link pull-left" data-type="personal">Personal</a> <span class="add-button" data-content="personal"><span class="glyphicon glyphicon-plus"></span</span></li>
+		<li><a href="#" class="travel-link pull-left" data-type="campus">Campus</a> <span class="add-button" data-content="campus"><span class="glyphicon glyphicon-plus"></span></span></li>
 	</ul>
 	<p class="page-header"><b>Options</b></p>
 	<div class="col col-md-12 row pull-left">
@@ -237,6 +237,44 @@ function searchOfficialTravelList(param){
 
 }
 
+function bindAddFormNavigationButton(){
+	$('.add-button').off('click');
+	$('.add-button').on('click',function(){
+
+		$('#editorTab').click();
+		//loading
+		showLoading('#editor','<div><img src="img/loading.png" class="loading-circle" style="width: 80px !important;" /></div>')
+		var id=$(this).attr('data-content');
+		var url='';
+
+		switch(id){
+			case 'official':
+				url="forms/travel/official";
+			break;
+
+			case 'personal':
+				url="forms/travel/personal";
+			break;
+
+			case 'campus':
+				url="forms/travel/campus";
+			break;
+				
+			default:
+			break;
+
+		}
+
+		if(url.length>1){
+			$('#editor').load(url,function(){
+				bindAddFormNavigationButton();
+			})
+		}
+	})
+
+
+}
+
 
 
 
@@ -300,6 +338,7 @@ $('#searchInput').keyup(function(){
 	
 })
 
+bindAddFormNavigationButton();
 
 	
 });

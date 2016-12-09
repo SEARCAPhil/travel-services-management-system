@@ -122,27 +122,29 @@
 	var staff_list={};
 	var scholar_list={};
 
-	function ajax_getStaffList(page=1,func){
+	function ajax_getStaffList(page=1,callback){
 
-
-		staff_list={"current_page":1,"total_pages":6,"data":[{"uid":"1","name":"Administrator","email":"johnkenne@gmail","designation":"administrator","office":"Accounting Unit","profile_image":"1.jpg"},{"uid":"3","name":"FMU","email":null,"designation":null,"office":"Facilities Management Unit","profile_image":"3.jpg"},{"uid":"4","name":"ICU","email":null,"designation":"Accounting Head","office":"Accounting Unit","profile_image":null},{"uid":"10","name":"KRU","email":null,"designation":"","office":null,"profile_image":null},{"uid":"12","name":"MSU","email":null,"designation":null,"office":"Management Services Unit","profile_image":null},{"uid":"24","name":"Adah Sofia A. Renovilla","email":null,"designation":null,"office":"Office of the Director","profile_image":null},{"uid":"25","name":"Adoracion T. Robles","email":null,"designation":null,"office":"Planning and Budget Unit","profile_image":null},{"uid":"26","name":"Aldwin H. Escobin","email":null,"designation":null,"office":null,"profile_image":null},{"uid":"27","name":"Alicia D. Revilla","email":null,"designation":null,"office":"Information Technology Services Unit","profile_image":null},{"uid":"28","name":"Alvin G. Tallada","email":null,"designation":null,"office":null,"profile_image":null},{"uid":"29","name":"Amy A. Antonio","email":null,"designation":null,"office":"Project Development and Technical Services","profile_image":null},{"uid":"30","name":"Angelito R. Menguito","email":null,"designation":null,"office":"General Services Unit","profile_image":null},{"uid":"31","name":"Annalyn P. Flores","email":null,"designation":null,"office":null,"profile_image":null},{"uid":"32","name":"Anthony L. Sarino","email":null,"designation":null,"office":"Treasury Services Unit","profile_image":null},{"uid":"33","name":"Arlene A. Nadres","email":null,"designation":null,"office":"Knowledge Resources Unit","profile_image":null},{"uid":"34","name":"Arnel R. Oabina","email":null,"designation":null,"office":"Accounting Unit","profile_image":null},{"uid":"35","name":"Avril DG. Madrid","email":null,"designation":null,"office":"Knowledge Resources Unit","profile_image":null},{"uid":"36","name":"Bernisse Sabina R. Almazan","email":null,"designation":null,"office":null,"profile_image":null},{"uid":"37","name":"Bessie M. Burgos","email":null,"designation":null,"office":"Research and Development Department","profile_image":null},{"uid":"38","name":"Blessie P. Saez","email":null,"designation":null,"office":"Graduate Education and Institutional Development Department","profile_image":null}]}
-
-		func();
-		return staff_list;
+		$.get('api/directory/staff/'+page,function(json){
+			staff_list=JSON.parse(json)
+			callback(staff_list);
+			return staff_list;
+		})
+		
 	}
 
-	function ajax_getScholarList(page=1,func){
+	function ajax_getScholarList(page=1,callback){
 
-		scholar_list={"current_page":1,"total_pages":75,"data":[{"uid":"1","full_name":"Chart Changmi-Ngam","nationality":"Thai","profile_image":""},{"uid":"2","full_name":"Pensook Ratisoontorn-Tauthong","nationality":"Thai","profile_image":""},{"uid":"3","full_name":"Ngamchuen Kaowichian-Ratanadilok","nationality":"Thai","profile_image":""},{"uid":"4","full_name":"Pairoj Juangbanich","nationality":"Thai","profile_image":""},{"uid":"5","full_name":"Yupa Vorayos","nationality":"Thai","profile_image":""},{"uid":"6","full_name":"Candido V. Rosario, Sr. (DECEASED)","nationality":"Filipino","profile_image":""},{"uid":"7","full_name":"Chya Suthiwanith","nationality":"Thai","profile_image":""},{"uid":"8","full_name":"Yuwat Vuthimedhi","nationality":"Thai","profile_image":""},{"uid":"9","full_name":"Bliss A. Aday","nationality":"Filipino","profile_image":""},{"uid":"10","full_name":"Paulina D. Pages","nationality":"Filipino","profile_image":""},{"uid":"11","full_name":"Honorato L. Angeles","nationality":"Filipino","profile_image":""},{"uid":"12","full_name":"Nguyen Tri Khiem","nationality":"Vietnamese","profile_image":""},{"uid":"13","full_name":"Adul Apinantara","nationality":"Thai","profile_image":""},{"uid":"14","full_name":"Truong Hoai Xuan","nationality":"Vietnamese","profile_image":""},{"uid":"15","full_name":"Romeo V. Saure","nationality":"Filipino","profile_image":""},{"uid":"16","full_name":"Pham Ngoc Hiep","nationality":"Vietnamese","profile_image":""},{"uid":"17","full_name":"Wipit Chaisrisongkram","nationality":"Thai","profile_image":""},{"uid":"18","full_name":"Ly Tung","nationality":"Vietnamese","profile_image":""},{"uid":"19","full_name":"Boonrawd Supa-Udomlerk (DECEASED)","nationality":"Thai","profile_image":""},{"uid":"20","full_name":"Manas Sanmaneechai","nationality":"Thai","profile_image":""}]}
-
-		func();
-		return scholar_list;
+		$.get('api/directory/scholars/'+page,function(json){
+			scholar_list=JSON.parse(json)
+			callback(scholar_list);
+			return scholar_list;
+		})
 
 	}
 
 
-	function showStaffList(){
-		ajax_getStaffList(1,function(){
+	function showStaffList(page=1){
+		ajax_getStaffList(page,function(){
 
 			var htm='';
 
@@ -178,8 +180,8 @@
 	}
 
 
-	function showScholarList(){
-		ajax_getScholarList(1,function(){
+	function showScholarList(page=1){
+		ajax_getScholarList(page,function(){
 
 			var htm='';
 
@@ -323,8 +325,8 @@
 
 
 	$(document).ready(function(){
-		showStaffList();
-		showScholarList();
+		showStaffList(1);
+		showScholarList(1);
 	})
 </script>
 

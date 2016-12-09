@@ -42,6 +42,23 @@ Route::get('/travel/official/preview/{id}',function($id){
 	return View::make('travel/official/tr-preview',array('id'=>$id));
 });
 
+#official form
+Route::get('forms/travel/official',function(){
+	return View::make('travel/official/new_form',array('id'=>1));
+});
+
+#personal form
+Route::get('forms/travel/personal',function(){
+	return View::make('travel/personal/new_form',array('id'=>1));
+});
+
+#campus form
+Route::get('forms/travel/campus',function(){
+	return View::make('travel/campus/new_form',array('id'=>1));
+});
+
+
+
 
 /**PERSONAL**/
 Route::get('/travel/personal/preview/{id}',function($id){
@@ -122,7 +139,9 @@ Route::get('/authentication',function(){
 });
 
 /**API**/
-#official
+######################################################################################
+#Official
+######################################################################################
 Route::get('api/travel/official/{page?}',['uses' =>'Official@index']);
 Route::get('api/travel/official/preview/{id}',['uses' =>'Official@show']);
 Route::get('api/travel/official/staff/{id}',['uses' =>'Official_staff@index']);
@@ -142,10 +161,20 @@ Route::delete('api/travel/official/scholar/{id}',['uses' =>'Official_scholars@de
 #custom
 Route::delete('api/travel/official/custom/{id}',['uses' =>'Official_custom@destroy']);
 
-#personal
+#itenerary
+Route::delete('api/travel/official/itenerary/{id}',['uses' =>'Official_itenerary@destroy']);
+
+######################################################################################
+#Personal
+######################################################################################
 Route::get('/api/travel/personal/{page?}',['uses' =>'Personal@index']);
 #campus
 Route::get('/api/travel/campus/{page?}',['uses' =>'Personal@index']);
 
+######################################################################################
+#Staff and scholars directory
+######################################################################################
 
+Route::get('api/directory/staff/{page?}',['uses' =>'Directory@staff']);
+Route::get('api/directory/scholars/{page?}',['uses' =>'Directory@scholars']);
 
