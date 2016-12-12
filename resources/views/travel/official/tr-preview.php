@@ -1,3 +1,4 @@
+
 <div class="row preview-content">
 		<div class="col col-md-12 row">
 			<ul class="list-unstyled preview-menu-li pull-right">
@@ -27,6 +28,7 @@
 			</div>
 
 			<div class="col col-md-12 preview-sections">
+			
 				<p><div class="mini-circle"></div> <span class="pull-left"><b>Passengers</b></span> <span class="label label-success status-box status-box-mini green passenger-count">0</span></p>
 				<table class="table table-striped passenger-table preview-table table-fluid" id="table-passenger" ng-show="passengersX.length>=1||passengersScholar.length>=1||passengersCustom.length>=1">
 					<thead>

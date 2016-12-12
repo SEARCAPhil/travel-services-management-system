@@ -148,8 +148,13 @@ Route::get('api/travel/official/staff/{id}',['uses' =>'Official_staff@index']);
 Route::get('api/travel/official/scholars/{id}',['uses' =>'Official_scholars@index']);
 Route::get('api/travel/official/custom/{id}',['uses' =>'Official_custom@index']);
 Route::get('api/travel/official/itenerary/{id}',['uses' =>'Official_itenerary@index']);
-
 Route::get('api/travel/official/search/{param}',['uses' =>'Official@search']);
+
+
+Route::post('api/directory/staff/',['uses' =>'Official_staff@create']);
+
+
+
 
 Route::delete('api/travel/official/{id}',['uses' =>'Official@destroy']);
 Route::delete('api/travel/official/staff/{id}',['uses' =>'Official_staff@destroy']);
@@ -176,5 +181,9 @@ Route::get('/api/travel/campus/{page?}',['uses' =>'Personal@index']);
 ######################################################################################
 
 Route::get('api/directory/staff/{page?}',['uses' =>'Directory@staff']);
+Route::get('api/directory/staff/search/{param}',['uses' =>'Directory@staff_search']);
 Route::get('api/directory/scholars/{page?}',['uses' =>'Directory@scholars']);
+Route::get('api/directory/scholars/search/{param}/',['uses' =>'Directory@scholar_search']);
+
+
 

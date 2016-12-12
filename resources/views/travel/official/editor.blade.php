@@ -66,6 +66,7 @@
 			</div>
 
 			<div class="col col-md-8  col-md-offset-2 preview-sections">
+			{{csrf_field()}}
 				<p></p><div class="mini-circle"></div> <b>Passengers</b> <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#passenger-modal"><span class="glyphicon glyphicon-plus"></span></button><p></p>
 				<table class="table table-striped passenger-table preview-table table-fluid" id="table-passenger" ng-show="passengersX.length>=1||passengersScholar.length>=1||passengersCustom.length>=1">
 					<thead>

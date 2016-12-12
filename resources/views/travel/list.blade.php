@@ -327,7 +327,7 @@ $('.travel-link').click(function(e){
 
 $('.list-current-page').change(function(){
 
-	if($(this).val()>travel.current_page||$(this).val()<travel.current_page){
+	if($(this).val()>travel.total_pages||$(this).val()<1){
 		$(this).css({'background-color':'#a94442','color':'#fff'})
 	}else{
 		$(this).css({'background-color':'#fff','color':'#000'})
