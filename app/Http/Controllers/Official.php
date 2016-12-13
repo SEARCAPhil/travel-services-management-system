@@ -82,6 +82,55 @@ class Official extends Controller
         //
     }
 
+
+    public function create_purpose(Request $request){
+
+        try{
+            //$uid=$request->session()->get('id');
+            $uid=16;
+            $purpose=$request->input('purpose');
+
+            $this->pdoObject=DB::connection()->getPdo();
+
+            $this->pdoObject->beginTransaction();
+            $sql="INSERT INTO tr(requested_by,purpose) values (:requested_by,:purpose)";
+            $statement=$this->pdoObject->prepare($sql);
+            $statement->bindParam(':requested_by',$uid);
+            $statement->bindParam(':purpose',$purpose);
+            $statement->execute();
+            $lastId=$this->pdoObject->lastInsertId();
+            $this->pdoObject->commit();
+
+            echo $lastId;
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+    } 
+
+
+     public function update_purpose(Request $request){
+
+        try{
+            $id=$request->input('id');
+            $purpose=$request->input('purpose');
+
+            $this->pdoObject=DB::connection()->getPdo();
+
+            $this->pdoObject->beginTransaction();
+            $sql="UPDATE tr set purpose=:purpose where id=:id";
+            $statement=$this->pdoObject->prepare($sql);
+            $statement->bindParam(':purpose',$purpose);
+            $statement->bindParam(':id',$id);
+            $statement->execute();
+            $isUpdated=$statement->rowCount();
+            $this->pdoObject->commit();
+
+            echo $isUpdated;
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+    } 
+
     /**
      * Store a newly created resource in storage.
      *

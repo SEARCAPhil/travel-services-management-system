@@ -39,7 +39,7 @@
 
 <div class="row preview-content">
 
-
+{{csrf_field()}}
 
 	<div class="col col col-md-3 col-sm-3 hidden-xs">
 		<p class="page-header"><span class="glyphicon glyphicon-th-large"></span> <b>Travel Request</b></p>
@@ -64,13 +64,13 @@
 		</div>
 		
 		<div class="col col-md-12 col-xs-12">
-			<div class="circle done">1<span class="circle-label">Purpose<span></div>	
-			<div class="bar done"></div>	
-			<div class="circle">2<span class="circle-label">Passenger<span></div>
-			<div class="bar"></div>	
-			<div class="circle">3<span class="circle-label">Itenerary<span></div>
-			<div class="bar"></div>	
-			<div class="circle"><span class="glyphicon glyphicon-check"></span><span class="circle-label">Finished<span></div>
+			<div class="circle done purpose-circle-group">1<span class="circle-label">Purpose<span></div>	
+			<div class="bar done purpose-circle-group"></div>	
+			<div class="circle passenger-circle-group">2<span class="circle-label">Passenger<span></div>
+			<div class="bar passenger-circle-group"></div>	
+			<div class="circle itenerary-circle-group">3<span class="circle-label">Itenerary<span></div>
+			<div class="bar itenerary-circle-group"></div>	
+			<div class="circle finished-circle-group"><span class="glyphicon glyphicon-check"></span><span class="circle-label">Finished<span></div>
 
 		</div>
 
@@ -78,8 +78,8 @@
 		<div class="col col-md-12 preview-sections" >
 
 			<p class="purpose-content"  style="margin-top: 50px;"> 
-				<p><span class="mini-circle"></span><span>Purpose</span> <button class="btn btn-success btn-xs" id="officialPurposeSaveButton"><span class="glyphicon glyphicon-floppy-disk"></span></button></p>
-				<textarea class="col col-md-12 col-xs-12 	preview-purpose" rows="15" cols="10" placeholder="Type the purpose of your travel request in this section"></textarea>	
+				<p><span class="mini-circle"></span><span>Purpose</span> <button class="btn btn-success btn-xs" id="officialPurposeSaveButton"><span class="glyphicon glyphicon-floppy-disk"></span></button> <span class="pull-right" id="officialPurposeSaveStatus"></span></p>
+				<textarea class="col col-md-12 col-xs-12 	preview-purpose" id="form-purpose" rows="15" cols="10" placeholder="Type the purpose of your travel request in this section"></textarea>	
 			</p>
 
 		</div>
@@ -114,26 +114,84 @@
 
 </div>
 
-
+<script type="text/javascript" src="js/directory.js"></script>
+<script type="text/javascript" src="js/callback.official.js"></script>
 <script type="text/javascript">	
+
+
+/*callback for selecting an item from directory list
+* This must be only present on this page to avoid conflict
+*/
+function appendStaffToListPreviewCallback(data){
+	//itenerary enable button on forms
+	changeCircleState('.itenerary-circle-group')
+	changeButtonState('#iteneraryFormButton','enabled')
+}
+
+
+function appendIteneraryToListPreviewCallback(data){
+	//enable finished circle on forms
+	changeCircleState('.finished-circle-group')
+}
+
+
 
 $(document).ready(function(){
 
-/*showOfficialTravelListPreview()
-showOfficialTravelPassengerStaffPreview()
-showOfficialTravelPassengerScholarsPreview()
-showOfficialTravelPassengerCustomPreview()
-showOfficialTravelItenerary()
-bindRemoveStaff();
-bindRemoveItenerary();
-bindRemoveOfficialScholar();
-bindRemoveOfficialCustom();*/
+
+//active page
+active_page='official_form';
+
+//change state
+changeButtonState('#passengerFormButton','disabled')
+changeButtonState('#iteneraryFormButton','disabled')
 
 $('#officialPurposeSaveButton').click(function(e){
 	e.preventDefault();
+	//loading
 	 showLoading('#officialPurposeSaveStatus',' <span>saving . . .</span>&emsp;<span><img src="img/loading.png" class="loading-circle" width="10px"/></span>')
 		setTimeout(function(){  showLoading('#officialPurposeSaveStatus') },1000)
-	//$('#officialPurposeSaveStatus')
+	
+
+
+	if($('#form-purpose').val().length<2) return 0;
+
+
+	//insert new item to db if not yet saved
+	if(form_id<1){
+		var data={_token:$('input[name=_token]').val(),purpose:$('#form-purpose').val()}
+		$.post('api/travel/official/purpose',data,function(res){
+			if(res>0&&res.length<50){
+				form_id=res;
+
+				//change selectedElement id to enable adding passenger
+				$(selectedElement).attr('id',form_id);
+
+				//passsenger enable
+				changeCircleState('.passenger-circle-group')
+				changeButtonState('#passengerFormButton','enabled')
+			}
+		});
+	}else{
+		//update
+		var data={_token:$('input[name=_token]').val(),purpose:$('#form-purpose').val(),id:form_id}
+
+
+		$.ajax({
+			url:'api/travel/official/purpose',
+			data:data,
+			method:'PUT',
+			success:function(res){
+				if(res>0&&res.length<50){
+
+				}
+			}
+		});
+
+	}
+
+		
+
 })
 
 });

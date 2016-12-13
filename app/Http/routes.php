@@ -151,9 +151,13 @@ Route::get('api/travel/official/itenerary/{id}',['uses' =>'Official_itenerary@in
 Route::get('api/travel/official/search/{param}',['uses' =>'Official@search']);
 
 
+Route::post('api/travel/official/purpose',['uses' =>'Official@create_purpose']);
+Route::put('api/travel/official/purpose',['uses' =>'Official@update_purpose']);
 
 Route::post('api/directory/staff/',['uses' =>'Official_staff@create']);
 Route::post('api/travel/official/itenerary',['uses' =>'Official_itenerary@create']);
+
+
 
 
 

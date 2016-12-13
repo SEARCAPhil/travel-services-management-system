@@ -4,7 +4,6 @@
 		<p>All files associated with this item will be removed. This process could not be reverted</p>
 	</div>
 	<div class="modal-footer">
-		{{csrf_field()}}
 		<button class="btn btn-danger modal-submit">Yes</button>
 		<button class="btn btn-default" data-dismiss="modal" aria-label="Close">No</button>
 	</div>

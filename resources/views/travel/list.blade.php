@@ -173,7 +173,8 @@ function showOfficialTravelList(page=1){
 		appendToList(function(){
 			//attach click event
 			attachClickEventToList('travel/official/preview/',function(e){
-
+				//set active page
+				active_page='official_preview';
 				//get all necessary information of the request
 				showOfficialTravelListPreview(e.currentTarget.id)
 				showOfficialTravelPassengerStaffPreview(e.currentTarget.id)
@@ -282,6 +283,18 @@ function changeButtonState(target,state='disabled'){
 		$(target).attr('enabled','enabled');	
 	}else{
 		$(target).attr('disabled','disabled');
+	}
+	
+}
+
+
+function changeCircleState(target,state='enabled'){
+
+	if(state=='enabled'){
+		$(target).addClass('done');	
+	
+	}else{
+		$(target).removeClass('done');
 	}
 	
 }

@@ -8,7 +8,8 @@ var itenerary_count=0;
 var official_travel_custom_passenger;
 var official_travel_itenerary;
 var contextSelectedElement;
-
+var active_page='';
+var form_id=0; //equivelent to the tr_id
 
 function ajax_getOfficialTravelListPreview(id,callback){
 	$.get('api/travel/official/preview/'+id,function(json){
