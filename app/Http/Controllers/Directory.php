@@ -241,6 +241,61 @@ class Directory extends Controller
     }
 
 
+    function drivers($page=1){
+
+    	try{
+    			$this->pdoObject=DB::connection()->getPdo();
+				$this->pdoObject->beginTransaction();
+				$this->page=htmlentities(htmlspecialchars($page));
+				$this->page=$page>1?$page:1;
+
+				#set starting limit(page 1=10,page 2=20)
+				$start_page=$this->page<2?0:( integer)($this->page-1)*20;
+
+				//$this->limit=$limit;
+				$view_account_sql="SELECT login_db.account_profile.id as profile_id, login_db.account_profile.uid,login_db.account_profile.last_name, login_db.account_profile.first_name,login_db.designation.id,login_db.position.position FROM login_db.account_profile LEFT JOIN login_db.designation on login_db.designation.uid=login_db.account_profile.uid LEFT JOIN login_db.position on login_db.position.id=login_db.designation.pid WHERE login_db.position.position = 'driver' and login_db.designation.active=1 LIMIT :start,20";
+
+				$view_account_sql2="SELECT count(*) as total FROM login_db.account_profile LEFT JOIN login_db.designation on login_db.designation.uid=login_db.account_profile.uid LEFT JOIN login_db.position on login_db.position.id=login_db.designation.pid WHERE login_db.position.position = 'driver' and login_db.designation.active=1 ";
+
+				$view_profile_statement=$this->pdoObject->prepare($view_account_sql);
+				$view_profile_statement2=$this->pdoObject->query($view_account_sql2);
+				$view_profile_statement->bindParam(':start',$start_page,\PDO::PARAM_INT);
+				$view_profile_statement->execute();
+				$view_profile_statement2->execute();
+				$result=NULL;
+
+				while ($row=$view_profile_statement->fetch(\PDO::FETCH_OBJ)) {
+
+				
+					$result[]=$row;
+
+				}
+				
+				$count=0;
+				if($row_c=$view_profile_statement2->fetch(\PDO::FETCH_OBJ)){ $count=$row_c->total; }
+				$no_pages=1;
+				if($count>=20){
+						$pages=ceil(@$count/20);
+						$no_pages=$pages;
+						
+				}else{
+						$no_pages=1;
+
+				}
+				#check if page request is < the actual page
+				$current_page=$this->page<=$no_pages?$this->page:$no_pages;
+
+				#return in json format
+				$res=Array('current_page'=>$current_page,'total_pages'=>$no_pages,'data'=>$result);
+					
+				$this->pdoObject->commit();
+				return json_encode($res);
+			
+				#return $view_profile_statement->rowCount()>0?$view_profile_statement->rowCount():0;
+		}catch(Exception $e){$this->pdoObject->rollback();}
+    }
+
+
 
 
 }

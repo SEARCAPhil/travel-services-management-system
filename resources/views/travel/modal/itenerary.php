@@ -65,15 +65,19 @@
 <script type="text/javascript">
 var driverList={}
 function ajax_getDriversList(func){
+	$.get('api/directory/drivers',function(res){
 
-	driverList={"current_page":1,"total_pages":1,"data":[{"profile_id":"133","uid":"112","last_name":"Limbaco","first_name":"Van Allen ","id":"1","position":"driver"},{"profile_id":"139","uid":"117","last_name":"Aranzaso","first_name":"Jojo","id":"2","position":"driver"},{"profile_id":"140","uid":"118","last_name":"Corpuz","first_name":"Adriano Jr.","id":"3","position":"driver"},{"profile_id":"141","uid":"119","last_name":"Milante","first_name":"Nelson","id":"4","position":"driver"},{"profile_id":"142","uid":"120","last_name":"Raymundo","first_name":"Edward","id":"5","position":"driver"},{"profile_id":"143","uid":"121","last_name":"Simon","first_name":"Simon","id":"6","position":"driver"}]}
-	func();
-	return driverList;
+		driverList=JSON.parse(res)
+		func(driverList);
+		return driverList;
+	})
+
+
+	
 }
 
 function show_driversList(){
-	ajax_getDriversList(function(){
-
+	ajax_getDriversList(function(driverList){
 		for(x of driverList.data){
 			$('#officialTravelDriver').append('<option value="'+x.id+'">'+x.first_name+' '+x.last_name+'</option>')
 		}
@@ -83,8 +87,6 @@ function show_driversList(){
 
 function appendIteneraryToListPreview(jsonData,func){
 
-	var a={}
-	a={"id":"273","0":"273","tr_id":"291","1":"291","res_id":null,"2":null,"location":"SEARCA","3":"SEARCA","destination":"Cavite","4":"Cavite","departure_time":"05:00:00","5":"05:00:00","actual_departure_time":"00:00:00","6":"00:00:00","returned_time":"00:00:00","7":"00:00:00","departure_date":"2016-11-30","8":"2016-11-30","returned_date":"0000-00-00","9":"0000-00-00","status":"scheduled","10":"scheduled","plate_no":null,"11":null,"driver_id":"0","12":"0","linked":"no","13":"no","date_created":"2016-11-21 13:36:24","14":"2016-11-21 13:36:24"}
 	var json=jsonData;
 	var data=JSON.parse(JSON.stringify(json))
 
@@ -132,27 +134,40 @@ function appendIteneraryListPreviewConfirmation(){
 			var departure_time=$('#officialTravelDepartureTime').val();
 			var date=new Date();
 			var date_created=date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate();
+			var driver=$('#officialTravelDriver').val();
 			//insert to view
-			var data={"id":1,"tr_id":1,"res_id":null,"location":origin,"destination":destination,"departure_time":departure_time,"actual_departure_time":"00:00:00","returned_time":"00:00:00","departure_date":departure_date,"returned_date":"0000-00-00","status":"scheduled","plate_no":null,"driver_id":"0","linked":"no","date_created":date_created}
+			var data={"id":null,"tr_id":$(selectedElement).attr('id'),"res_id":null,"location":origin,"destination":destination,"departure_time":departure_time,"actual_departure_time":"00:00:00","returned_time":"00:00:00","departure_date":departure_date,"returned_date":"0000-00-00","status":"scheduled","plate_no":null,"driver_id":"0","linked":"no","date_created":date_created,driver_id:driver,_token:$('input[name=_token]').val()}
 
-				//add date
-				appendIteneraryToListPreview(data,function(data){
-					//saved button
-					$(that).html('saved')
+			$.post('api/travel/official/itenerary',data,function(res){
 
-					//clear form
-					$('#officialTravelOrigin').val('');
-					$('#officialTravelDestination').val('');
-					$('#officialTravelDepartureDate').val('');
-					$('#officialTravelDepartureTime').val('');
+				try{
+					var id=JSON.parse(res).id;
+					data.id=id;
+					//add to preview
+					appendIteneraryToListPreview(data,function(data){
+						//saved button
+						$(that).html('saved')
 
-					//enabling context
-					unbindContext();
-					context();
+						//clear form
+						$('#officialTravelOrigin').val('');
+						$('#officialTravelDestination').val('');
+						$('#officialTravelDepartureDate').val('');
+						$('#officialTravelDepartureTime').val('');
+
+						//enabling context
+						unbindContext();
+						context();
+					})
+
+
+				}catch(e){
+					alert('Something went wrong.Please try again later!');
 				}
 
 
-			)
+			});
+
+				
 
 			//show form
 			setTimeout(function(){

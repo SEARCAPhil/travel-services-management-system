@@ -151,8 +151,9 @@ Route::get('api/travel/official/itenerary/{id}',['uses' =>'Official_itenerary@in
 Route::get('api/travel/official/search/{param}',['uses' =>'Official@search']);
 
 
-Route::post('api/directory/staff/',['uses' =>'Official_staff@create']);
 
+Route::post('api/directory/staff/',['uses' =>'Official_staff@create']);
+Route::post('api/travel/official/itenerary',['uses' =>'Official_itenerary@create']);
 
 
 
@@ -184,6 +185,7 @@ Route::get('api/directory/staff/{page?}',['uses' =>'Directory@staff']);
 Route::get('api/directory/staff/search/{param}',['uses' =>'Directory@staff_search']);
 Route::get('api/directory/scholars/{page?}',['uses' =>'Directory@scholars']);
 Route::get('api/directory/scholars/search/{param}/',['uses' =>'Directory@scholar_search']);
+Route::get('api/directory/drivers/{page?}',['uses' =>'Directory@drivers']);
 
 
 

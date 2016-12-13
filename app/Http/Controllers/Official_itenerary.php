@@ -45,9 +45,63 @@ class Official_itenerary extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $token = $request->input('_token');
+        $origin = $request->input('location');
+        $destination = $request->input('destination');
+        $departure_date = $request->input('departure_date');
+        $departure_time= $request->input('departure_time');
+        $driver=$request->input('driver');
+        $tr=$request->input('tr_id');
+
+         try{
+
+            $this->pdoObject=DB::connection()->getPdo();
+            $this->tr=htmlentities(htmlspecialchars($tr));
+            $this->destination=htmlentities(htmlspecialchars($destination));
+            $this->from=htmlentities(htmlspecialchars($origin));
+            $this->time=htmlentities(htmlspecialchars($departure_time));
+            $this->date=htmlentities(htmlspecialchars($departure_date));
+        
+
+            #begin transaction
+            $this->pdoObject->beginTransaction();
+            #if action is create
+            $insert_sql="INSERT INTO travel(tr_id,location,destination,departure_time,departure_date)values(:tr_id,:location,:destination,:time,:datez)";
+            #prepare sql first
+            $insert_statement=$this->pdoObject->prepare($insert_sql);
+
+            
+        
+            $insert_statement->bindParam(':tr_id',$this->tr);
+         
+
+                #all param for both
+                $insert_statement->bindParam(':location',$this->from);
+                $insert_statement->bindParam(':time',$this->time);
+                $insert_statement->bindParam(':datez',$this->date);
+                $insert_statement->bindParam(':destination',$this->destination);
+            
+
+            
+            
+            
+            
+            #exec the transaction
+            $insert_statement->execute();
+            $lastId=$this->pdoObject->lastInsertId();
+            $this->pdoObject->commit();
+            
+           
+
+            $res=array('id'=>$lastId,'departure_date'=>$this->date,'location'=>$this->from,'destination'=>$this->destination,'departure_time'=>$this->time);
+            return json_encode($res);
+            
+            
+            
+
+        }catch(Exception $e){ echo $e->getMessage();$this->pdoObject->rollback();}
     }
 
     /**
