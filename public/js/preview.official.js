@@ -306,7 +306,7 @@ function removeOfficialTravelRequest(id){
 	    			method:'DELETE',
 	    			data: { _token: $("input[name=_token]").val()},
 	    			success:function(data){
-	    				if(data>0){
+	    				if(data==1){
 	    					//ajax here
 				    		setTimeout(function(){
 
@@ -322,6 +322,8 @@ function removeOfficialTravelRequest(id){
 
 				    		$('#preview-modal').modal('hide');
 	
+	    				}else{
+	    					alert('Oops! Something went wrong.Try to refresh the page')
 	    				}
 	    			}
 	    		})

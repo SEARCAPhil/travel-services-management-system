@@ -173,14 +173,25 @@ function showOfficialTravelList(page=1){
 		appendToList(function(){
 			//attach click event
 			attachClickEventToList('travel/official/preview/',function(e){
+
+				//get target id
+				var targetId;
+
+				//for manual click and click on event trigger
+				if(typeof e.currentTarget.id=='undefined'){
+					targetId=e.target.id;
+				}else{
+					targetId=e.currentTarget.id;
+				}
+				//console.log(e.target.id)
 				//set active page
 				active_page='official_preview';
 				//get all necessary information of the request
-				showOfficialTravelListPreview(e.currentTarget.id)
-				showOfficialTravelPassengerStaffPreview(e.currentTarget.id)
-				showOfficialTravelPassengerScholarsPreview(e.currentTarget.id)
-				showOfficialTravelPassengerCustomPreview(e.currentTarget.id)
-				showOfficialTravelItenerary(e.currentTarget.id)
+				showOfficialTravelListPreview(targetId)
+				showOfficialTravelPassengerStaffPreview(targetId)
+				showOfficialTravelPassengerScholarsPreview(targetId)
+				showOfficialTravelPassengerCustomPreview(targetId)
+				showOfficialTravelItenerary(targetId)
 
 			})
 
