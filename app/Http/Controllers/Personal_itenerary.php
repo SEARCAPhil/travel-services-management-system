@@ -142,6 +142,9 @@ class Personal_itenerary extends Controller
 
     }
 
+
+
+
     /**
      * Store a newly created resource in storage.
      *

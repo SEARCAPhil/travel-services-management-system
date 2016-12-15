@@ -154,9 +154,9 @@ class Personal extends Controller
      */
      public function show($id)
     {
-       $this->pdoObject=DB::connection()->getPdo(); 
+       
         try{
-
+                $this->pdoObject=DB::connection()->getPdo(); 
                 $this->id=htmlentities(htmlspecialchars($id));
                 $this->pdoObject->beginTransaction();
                 #$sql="SELECT trp.*, account_profile.* FROM trp LEFT JOIN account_profile on trp.requested_by=account_profile.id where trp.id=:id";
@@ -177,6 +177,56 @@ class Personal extends Controller
         }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
         
     }
+
+
+
+    public function payment(Request $request){
+
+        $token = $request->input('_token');
+        $payment = $request->input('payment');
+        $id = $request->input('id');
+
+        try{
+            $this->pdoObject=DB::connection()->getPdo(); 
+            $this->tr=htmlentities(htmlspecialchars($id));
+            $this->p=htmlentities(htmlspecialchars($payment));
+
+            switch ($this->p) {
+                case 1:
+                    $pay='cash';
+                    break;
+                case 2:
+                    $pay='sd';
+                    break;
+                default:
+                     $pay='cash';
+                    break;
+            }
+           
+            #begin transaction
+            $this->pdoObject->beginTransaction();
+            
+            $insert_sql="UPDATE trp set mode_of_payment=:p where id=:tr_id";
+            $insert_statement=$this->pdoObject->prepare($insert_sql);
+    
+            #params
+            $insert_statement->bindParam(':tr_id',$this->tr);
+            $insert_statement->bindParam(':p',$pay);
+            
+            
+            #exec the transaction
+            $insert_statement->execute();
+            $lastId=$this->pdoObject->lastInsertId();
+            $this->pdoObject->commit();
+
+            #return
+            return $insert_statement->rowCount()>0?$insert_statement->rowCount():0;
+            
+
+
+        }catch(Exception $e){ echo $e->getMessage();$this->pdoObject->rollback();}
+    }
+
 
     /**
      * Show the form for editing the specified resource.

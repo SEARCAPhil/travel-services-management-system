@@ -132,10 +132,10 @@
 		</div>
 
 		<div class="col col-md-12 preview-sections">
-			<p></p><div class="mini-circle"></div> <b>Mode of Payment</b><p></p>
+			<p></p><div class="mini-circle"></div> <b>Mode of Payment</b> <span id="paymentSaveStatus" class="pull-right"></span><p></p>
 			<p class="col col-md-12">
-				<span>Cash <input type="radio" name="mode-of-payment" disabled="disabled" checked="checked" class="paymentFormButton"></span>
-				<span>Salary Deduction <input type="radio" name="mode-of-payment" disabled="disabled" class="paymentFormButton"></span>
+				<span>Cash <input type="radio" name="mode-of-payment" disabled="disabled" checked="checked" class="paymentFormButton" value="1"></span>
+				<span>Salary Deduction <input type="radio" name="mode-of-payment" disabled="disabled" class="paymentFormButton" value="2"></span>
 			</p>
 		</div>
 
@@ -200,6 +200,10 @@ function appendStaffToListPreviewCallback(data){
 function appendIteneraryToListPreviewCallback(data){
 	changeCircleState('.vehicle-circle-group')
 	changeButtonState('.vehicleTypeFormButton','enabled')
+
+	//include mode of payment
+	changeCircleState('.payment-circle-group')
+	changeButtonState('.paymentFormButton','enabled')
 }
 
 
@@ -218,7 +222,7 @@ active_page='personal_form';
 //change state
 changeButtonState('#passengerFormButton','disabled')
 changeButtonState('#iteneraryFormButton','disabled')
-changeButtonState(".vehicleTypeFormButton",'enabled')
+changeButtonState(".vehicleTypeFormButton",'disabled')
 changeButtonState(".paymentFormButton",'disabled')
 
 $('#officialPurposeSaveButton').click(function(e){
@@ -288,8 +292,9 @@ $('.vehicleTypeFormButton').on('change',function(){
 
 					//payment enable
 					changeCircleState('.payment-circle-group')
-					changeButtonState('#paymentFormButton','enabled')
+					changeButtonState(".paymentFormButton",'enabled')
 
+					changeCircleState('.finished-circle-group')
 
 				}else{
 					//status
@@ -299,6 +304,36 @@ $('.vehicleTypeFormButton').on('change',function(){
 			},
 			failed:function(){
 				$('#personalVehicleTypeSaveStatus').html('<span class="text-danger" style="color:rgb(255,10,10);">Changes not saved!.Please try again later</span>')
+			}
+		});
+})
+
+
+$('.paymentFormButton').on('change',function(){
+	//status
+	$('#paymentSaveStatus').html('saving . . .')
+	var data={_token:$('input[name=_token]').val(),payment:$(this).val(),id:form_id}
+
+	$.ajax({
+			url:'api/travel/personal/payment',
+			data:data,
+			method:'PUT',
+			success:function(res){
+				if(res==1){
+					$('#paymentSaveStatus').html('<span class="text-success">saved!</span>')	
+
+					//payment enable
+					changeCircleState('.finished-circle-group')
+
+
+				}else{
+					//status
+					$('#paymentSaveStatus').html('Changes not saved!.Please try again later')
+					//alert('Sorry!.Please try again later.');
+				}
+			},
+			failed:function(){
+				$('#paymentSaveStatus').html('<span class="text-danger" style="color:rgb(255,10,10);">Changes not saved!.Please try again later</span>')
 			}
 		});
 })
