@@ -57,7 +57,7 @@
 			for(var x=0;x<staffList.length;x++){
 
 				htm+=`<div class="form-group"> <div class="col col-md-1">
-	                        <input type="checkbox" name="staff" value="1" add-staff-passenger-trp="" data-json='`+JSON.stringify(staffList[x])+`' ng-if="selectedLists=='trp'" class="staffListCheckbox">
+	                        <input type="checkbox" name="staff" value="1" add-staff-passenger-trp="" data-json='`+JSON.stringify(staffList[x])+`' class="staffListCheckbox">
 	                    </div>
 	                    <div class="col col-md-11">
 	                        <div class="col col-md-2">

@@ -138,7 +138,8 @@ function appendIteneraryToListPreviewCallback(data){
 
 $(document).ready(function(){
 
-
+//reset form id
+form_id=0;
 //active page
 active_page='official_form';
 

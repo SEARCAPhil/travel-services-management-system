@@ -205,6 +205,8 @@ padding: 5px;
 }
 .list-details dd.active{
 	color: rgba(0,100,150,0.9);
+	border-right:2px solid #ccc;
+	border-radius: 5px;
 }
 
 

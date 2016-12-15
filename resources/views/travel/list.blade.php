@@ -151,9 +151,14 @@ function appendToList(callback){
 	var htm='';
 	for(var x=0; x<list.length; x++){
 		var purpose=list[x].purpose!=null?list[x].purpose:'';
+
+		//cut the purpose
+		if(purpose.length>100){
+			purpose=purpose.substr(0,100);
+		}
 		htm+=`<dd id="`+list[x].id+`">
 			<h4 class="page-header"><b>`+list[x].id+`</b></h4>
-			<p>`+purpose+`</p>
+			<p><small>`+purpose+`</small></p>
 		</dd>`
 	}
 
@@ -205,9 +210,26 @@ function showOfficialTravelList(page=1){
 function showPersonalTravelList(page=1){
 	ajax_getPersonalTravelList(page,function(){
 		appendToList(function(){
+
+			
+
 			//attach click event
 			attachClickEventToList('travel/personal/preview/',function(e){
-				showPersonalTravelPassengerStaffPreview(e.currentTarget.id)
+
+				//get target id
+				var targetId;
+
+				//for manual click and click on event trigger
+				if(typeof e.currentTarget.id=='undefined'){
+					targetId=e.target.id;
+				}else{
+					targetId=e.currentTarget.id;
+				}
+				//console.log(e.target.id)
+				//set active page
+				active_page='personal_preview';
+				showPersonalTravelListPreview(targetId)
+				showPersonalTravelPassengerStaffPreview(targetId)
 			})
 		});
 	});

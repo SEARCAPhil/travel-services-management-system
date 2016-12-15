@@ -52,6 +52,8 @@ Route::get('forms/travel/personal',function(){
 	return View::make('travel/personal/new_form',array('id'=>1));
 });
 
+
+
 #campus form
 Route::get('forms/travel/campus',function(){
 	return View::make('travel/campus/new_form',array('id'=>1));
@@ -178,8 +180,21 @@ Route::delete('api/travel/official/itenerary/{id}',['uses' =>'Official_itenerary
 #Personal
 ######################################################################################
 Route::get('/api/travel/personal/{page?}',['uses' =>'Personal@index']);
+Route::get('api/travel/personal/preview/{id}',['uses' =>'Personal@show']);
 #campus
 Route::get('/api/travel/campus/{page?}',['uses' =>'Personal@index']);
+
+
+Route::post('api/travel/personal/purpose',['uses' =>'Personal@create_purpose']);
+Route::put('api/travel/personal/purpose',['uses' =>'Personall@update_purpose']);
+
+
+#view staff
+Route::get('api/travel/personal/staff/{id}',['uses' =>'Personal_staff@index']);
+
+#add staff
+Route::post('api/directory/personal/staff/',['uses' =>'Personal_staff@create']);
+
 
 ######################################################################################
 #Staff and scholars directory
