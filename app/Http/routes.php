@@ -199,6 +199,10 @@ Route::get('api/travel/personal/staff/{id}',['uses' =>'Personal_staff@index']);
 Route::post('api/directory/personal/staff/',['uses' =>'Personal_staff@create']);
 
 
+#vehicle type
+Route::put('api/travel/personal/vehicle_type',['uses' =>'Personal_itenerary@vehicle_type']);
+
+
 ######################################################################################
 #Staff and scholars directory
 ######################################################################################

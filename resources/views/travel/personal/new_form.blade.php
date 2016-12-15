@@ -123,10 +123,10 @@
 		</div>
 
 		<div class="col col-md-12 preview-sections">
-			<p></p><div class="mini-circle"></div> <b>Type of Vehicle</b><p></p>
+			<p></p><div class="mini-circle"></div> <b>Type of Vehicle</b> <span id="personalVehicleTypeSaveStatus" class="pull-right"></span><p></p>
 			<p class="col col-md-12">
-				<input type="radio" name="vtype" value="1" select-mobi="1" disabled="disabled" class="vehicleTypeFormButton"> SUV 
-				<input type="radio" name="vtype" value="2" select-mobi="2" checked="checked"  class="vehicleTypeFormButton"> Van
+				<input type="radio" name="vtype" value="1" select-mobi="1" checked="checked" 	class="vehicleTypeFormButton"> SUV 
+				<input type="radio" name="vtype" value="2" select-mobi="2" disabled="disabled"  class="vehicleTypeFormButton"> Van
 				<input type="radio" name="vtype" value="3" select-mobi="3" disabled="disabled"  class="vehicleTypeFormButton"> Pick-up	
 			</p>
 		</div>
@@ -218,7 +218,7 @@ active_page='personal_form';
 //change state
 changeButtonState('#passengerFormButton','disabled')
 changeButtonState('#iteneraryFormButton','disabled')
-changeButtonState(".vehicleTypeFormButton",'disabled')
+changeButtonState(".vehicleTypeFormButton",'enabled')
 changeButtonState(".paymentFormButton",'disabled')
 
 $('#officialPurposeSaveButton').click(function(e){
@@ -269,6 +269,38 @@ $('#officialPurposeSaveButton').click(function(e){
 
 	}
 
+})
+
+
+
+$('.vehicleTypeFormButton').on('change',function(){
+	//status
+	$('#personalVehicleTypeSaveStatus').html('saving . . .')
+	var data={_token:$('input[name=_token]').val(),vehicle:$(this).val(),id:form_id}
+
+	$.ajax({
+			url:'api/travel/personal/vehicle_type',
+			data:data,
+			method:'PUT',
+			success:function(res){
+				if(res==1){
+					$('#personalVehicleTypeSaveStatus').html('<span class="text-success">saved!</span>')	
+
+					//payment enable
+					changeCircleState('.payment-circle-group')
+					changeButtonState('#paymentFormButton','enabled')
+
+
+				}else{
+					//status
+					$('#personalVehicleTypeSaveStatus').html('Changes not saved!.Please try again later')
+					//alert('Sorry!.Please try again later.');
+				}
+			},
+			failed:function(){
+				$('#personalVehicleTypeSaveStatus').html('<span class="text-danger" style="color:rgb(255,10,10);">Changes not saved!.Please try again later</span>')
+			}
+		});
 })
 
 });

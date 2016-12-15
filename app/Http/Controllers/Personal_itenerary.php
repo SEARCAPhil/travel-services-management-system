@@ -103,6 +103,45 @@ class Personal_itenerary extends Controller
         }catch(Exception $e){ echo $e->getMessage();$this->pdoObject->rollback();}
     }
 
+
+    public function vehicle_type(Request $request){
+        $token = $request->input('_token');
+        $vehicle = $request->input('vehicle');
+        $id = $request->input('id');
+
+        try{
+            $this->pdoObject=DB::connection()->getPdo();
+            $this->tr=htmlentities(htmlspecialchars($id));
+            $this->p=htmlentities(htmlspecialchars($vehicle));
+            #for update only
+            
+            
+
+            #begin transaction
+            $this->pdoObject->beginTransaction();
+            
+            $insert_sql="UPDATE trp set vehicle_type=:p where id=:tr_id";
+            $insert_statement=$this->pdoObject->prepare($insert_sql);
+    
+            #params
+            $insert_statement->bindParam(':tr_id',$this->tr);
+            $insert_statement->bindParam(':p',$this->p);
+            
+            
+            #exec the transaction
+            $insert_statement->execute();
+            $lastId=$this->pdoObject->lastInsertId();
+            $this->pdoObject->commit();
+
+            #return
+            return $insert_statement->rowCount()>0?$insert_statement->rowCount():0;
+            
+
+
+        }catch(Exception $e){ echo $e->getMessage();$this->pdoObject->rollback();}
+
+    }
+
     /**
      * Store a newly created resource in storage.
      *
