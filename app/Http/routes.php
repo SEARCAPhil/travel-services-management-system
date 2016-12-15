@@ -184,9 +184,12 @@ Route::get('api/travel/personal/preview/{id}',['uses' =>'Personal@show']);
 #campus
 Route::get('/api/travel/campus/{page?}',['uses' =>'Personal@index']);
 
-
+#purpose
 Route::post('api/travel/personal/purpose',['uses' =>'Personal@create_purpose']);
 Route::put('api/travel/personal/purpose',['uses' =>'Personall@update_purpose']);
+
+#itenerary
+Route::post('api/travel/personal/itenerary',['uses' =>'Personal_itenerary@create']);
 
 
 #view staff
