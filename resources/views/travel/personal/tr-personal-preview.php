@@ -63,8 +63,8 @@
 			<div class="col col-md-12 preview-sections">
 				<p><div class="mini-circle"></div> <b>Mode of Payment</b></p>
 				<p class="col col-md-12">
-					<span>Cash <input type="radio" name="mode-of-payment" disabled="disabled"></span>
-					<span>Salary Deduction <input type="radio" name="mode-of-payment" disabled="disabled"></span>
+					<span>Cash <input type="radio" name="mode-of-payment" disabled="disabled" value="cash"></span>
+					<span>Salary Deduction <input type="radio" name="mode-of-payment" disabled="disabled" value="sd"></span>
 				</p>
 			</div>
 
@@ -85,12 +85,40 @@ $(document).ready(function(){
 //showOfficialTravelPassengerScholarsPreview()
 //showOfficialTravelPassengerCustomPreview()
 //showOfficialTravelItenerary()
+	
+
+
+	$('.preview-remove').on('click',function(){
+	//call custom bootstrap dialog
+		showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/remove',function(){
+			//remove
+			removePersonalTravelRequest($(selectedElement).attr('id'))
+
+		})
+		
+	})
+
+
+	//remove previous handler
+	$('.preview-update').off('click');
+
+
 	$('.preview-update').on('click',function(){
 		$('#editorTab').click();
 		//loading
 	    showLoading('#editor','<div><img src="img/loading.png" class="loading-circle" style="width: 80px !important;" /></div>')
-		setTimeout(function(){ $('#editor').load('travel/personal/editor/1'); },100);
+		setTimeout(function(){ 
+			$('#editor').load('travel/personal/editor/'+$(selectedElement).attr('id'),function(){
+				var id=$(selectedElement).attr('id');
+
+				showPersonalTravelListPreview(id)
+				showPersonalTravelPassengerStaffPreview(id)
+
+			}); 
+
+		},100);
 	})
+
 	
 });
 </script>

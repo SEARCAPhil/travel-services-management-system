@@ -59,9 +59,9 @@
 			<div class="col col-md-8 col-sm-12 col-md-offset-2 preview-sections">
 				<p></p><div class="mini-circle"></div> <b>Purpose</b> 
 					<span class="btn btn-success btn-xs" id="officialPurposeSaveButton"><span class="glyphicon glyphicon-floppy-disk"></span></span>
-					<div id="officialPurposeSaveStatus" class="text-muted" style="float:right;height:20px;width:250px;overflow: hidden;position:relative;"></div>
+					<span id="officialPurposeSaveStatus" class="text-muted"></span>
 					<p></p>
-				<p class="purpose-content"> <textarea class="col col-md-12 col-sm-12 col-xs-12  preview-purpose" rows="15">Lorem ipsum dolor sit amet, his populo malorum alienum ea, mei in semper albucius suavitate. Mea volutpat salutatus consetetur ea, at case audire nominati duo. Et tempor omittam pri, mel sonet dicant intellegam eu. Latine malorum liberavisse ei sit, commodo volutpat vel ea. Nec ut epicuri suscipit scaevola, eam nisl ipsum omittantur id. Sit ut dolores posidonium, maiorum civibus ad eum.<br>Ex lorem impetus insolens usu. Et sea omnes aperiri, ut vim ipsum legimus reformidans. Vix ad suas veniam fabulas, eos ut purto sonet principes. Est inimicus laboramus forensibus cu.<br><br>Virtute expetenda pri et. Pro dicunt delenit tincidunt in. Partiendo corrumpit cum ea, alii docendi sed at. Electram efficiendi mel ad, cu eos altera erroribus. Mei id atqui percipit molestiae, ea delenit oporteat pro. Usu te vero harum similique, ut vix reque dolorum recusabo.<br><br>Ea doming impetus pertinax sit, ut qui liber vulputate, cum ad diceret senserit. Et has falli tacimates, cu suas reprehendunt ius. Harum commodo sit an, duo congue reprehendunt et. Ut pro luptatum expetendis, cu nobis ubique abhorreant sit. Populo urbanitas has an, eu graecis atomorum cum.<br><br>Pro commodo maluisset salutatus eu, cetero convenire qui ne. Mea alii apeirian ut, ut quo zril veniam commodo, et porro soluta pertinax sit. Ne luptatum periculis temporibus mea, melius aliquando definitiones sed an, aeque commodo albucius nec an. Duo eu paulo partem iisque. In mei quas choro assueverit, cu iudico nonumy omittam mea, nec cu justo omnes.
+				<p class="purpose-content"> <textarea class="col col-md-12 col-sm-12 col-xs-12  preview-purpose" rows="15" id="form-purpose">. . .
 				</textarea>	
 				</p>	
 			</div>
@@ -90,50 +90,38 @@
 				
 			</div>
 
-			<div class="col col-md-8  col-md-offset-2 preview-sections">
-				<p><div class="mini-circle"></div> <b>Type of Vehicle</b></p>
+			<div class="col col-md-12 col-md-offset-2 preview-sections">
+				<p></p><div class="mini-circle"></div> <b>Type of Vehicle</b> <span id="personalVehicleTypeSaveStatus" class=""></span><p></p>
 				<p class="col col-md-12">
-					<input type="radio" name="vtype" value="1" select-mobi="1" disabled="disabled" > SUV 
-					<input type="radio" name="vtype" value="2" select-mobi="2" checked="checked"> Van
-					<input type="radio" name="vtype" value="3" select-mobi="3" disabled="disabled"> Pick-up	
+					<input type="radio" name="vtype" value="1" select-mobi="1" 	class="vehicleTypeFormButton"> SUV 
+					<input type="radio" name="vtype" value="2" select-mobi="2"   class="vehicleTypeFormButton"> Van
+					<input type="radio" name="vtype" value="3" select-mobi="3"  class="vehicleTypeFormButton"> Pick-up	
 				</p>
 			</div>
 
-			<div class="col col-md-8  col-md-offset-2 preview-sections">
-				<p><div class="mini-circle"></div> <b>Mode of Payment</b></p>
+			<div class="col col-md-12 col-md-offset-2 preview-sections">
+				<p></p><div class="mini-circle"></div> <b>Mode of Payment</b> <span id="paymentSaveStatus" class=""></span><p></p>
 				<p class="col col-md-12">
-					<span>Cash <input type="radio" name="mode-of-payment" disabled="disabled" checked="checked"></span>
-					<span>Salary Deduction <input type="radio" name="mode-of-payment" disabled="disabled"></span>
+					<span>Cash <input type="radio" name="mode-of-payment" class="paymentFormButton" value="1"></span>
+					<span>Salary Deduction <input type="radio" name="mode-of-payment"  class="paymentFormButton" value="2"></span>
 				</p>
 			</div>
-				
-			</div>
 
-		</div>
 
 
 	</div>
-
+<script type="text/javascript" src="js/itenerary.personal.js"></script>	
+<script type="text/javascript" src="js/callback.personal.js"></script>
+<script type="text/javascript" src="js/form.personal.js"></script>
 <script type="text/javascript">	
 
 $(document).ready(function(){
+	//modify form id to assume that editor is also running inside form page
+	//this will update the purpose instead of creating another one
+	form_id=$(selectedElement).attr('id');
 
-showOfficialTravelListPreview()
-showOfficialTravelPassengerStaffPreview()
-showOfficialTravelPassengerScholarsPreview()
-showOfficialTravelPassengerCustomPreview()
-showOfficialTravelItenerary()
-bindRemoveStaff();
-bindRemoveItenerary();
-bindRemoveOfficialScholar();
-bindRemoveOfficialCustom();
-
-$('#officialPurposeSaveButton').click(function(e){
-	e.preventDefault();
-	 showLoading('#officialPurposeSaveStatus',' <span>saving . . .</span>&emsp;<span><img src="img/loading.png" class="loading-circle" width="10px"/></span>')
-		setTimeout(function(){  showLoading('#officialPurposeSaveStatus') },1000)
-	//$('#officialPurposeSaveStatus')
-})
-
+	bindVehicleType()
+	bindPayment()
+	bindPurpose()
 });
 </script>

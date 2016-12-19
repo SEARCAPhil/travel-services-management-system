@@ -81,7 +81,9 @@ function showPersonalTravelListPreview(id){
 				</details>
 			`
 
-			$('.preview-itenerary').append(htm)
+		//data must no be empty before appending
+		if(json[0].destination.length>0) $('.preview-itenerary').append(htm)
+			
 
 		//vehicle type radio
 		$('input[name=vtype]').each(function(index,value){
@@ -93,15 +95,15 @@ function showPersonalTravelListPreview(id){
 
 		//payment mode
 		$('input[name=mode-of-payment]').each(function(index,value){
-			
+			console.log(index);
 			//check Cash
-			if(json[0].mode_of_payment=='cash'&&index==0){
+			if(json[0].mode_of_payment=='cash'&&$(value).val()=='cash'){
 				$(value).attr('checked','checked')
 			}
 
 
 			//check Salary Deduction
-			if(json[0].mode_of_payment=='sd'&&index==1){
+			if(json[0].mode_of_payment=='sd'&&$(value).val()=='sd'){
 				$(value).attr('checked','checked')
 			}
 
@@ -115,9 +117,6 @@ function showPersonalTravelListPreview(id){
 
 
 function showPersonalTravelItenerary(id){
-
-
-
 	ajax_getPersonalTravelItenerary(id,function(official_travel_itenerary){
 		itenerary_count=0;
 		for(var x=0; x<official_travel_itenerary.length;x++){
@@ -144,10 +143,55 @@ function showPersonalTravelItenerary(id){
 			$('.preview-itenerary').append(htm)
 		}
 
+	});	
+}
 
 
-	});
+function removePersonalTravelRequest(id){
+
+	    	$('.modal-submit').on('click',function(){
+
+	    		//loading
+	    		previewLoadingEffect()
+	    		
+	    		//disable onclick
+	    		$(this).attr('disabled','disabled')
+
+	    		$(this).html('Removing . . .')
+
+	    		$.ajax({
+
+	    			url:'api/travel/personal/'+id,
+	    			method:'DELETE',
+	    			data: { _token: $("input[name=_token]").val()},
+	    			success:function(data){
+	    				if(data==1){
+	    					//ajax here
+				    		setTimeout(function(){
+
+				    			$('.preview-content').fadeOut()
+
+				    			var nextItem=$(selectedElement).next();
+				    			$(selectedElement).remove();
+
+				    			//select next
+				    			$(nextItem).click()
+				    			
+				    		},1000)
+
+				    		$('#preview-modal').modal('hide');
 	
-	
+	    				}else{
+	    					alert('Oops! Something went wrong.Try to refresh the page')
+	    				}
+	    			}
+	    		})
+
+	    		
+	    		//back to original
+	    		$(this).attr('disabled','enabled')
+	    	})
 	
 }
+
+

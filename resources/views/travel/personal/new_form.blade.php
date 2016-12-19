@@ -152,63 +152,9 @@
 
 	</div>
 <script type="text/javascript" src="js/itenerary.personal.js"></script>
+<script type="text/javascript" src="js/callback.personal.js"></script>
+<script type="text/javascript" src="js/form.personal.js"></script>
 <script type="text/javascript">	
-/*callback for selecting an item from directory list
-* This must be only present on this page to avoid conflict
-*/
-
-function appendStaffToListPreview(jsonData){
-
-	var data=JSON.parse(jsonData)
-
-	//ajax here
-	$.post('api/directory/personal/staff',{id:$(selectedElement).attr('id'),_token:$('input[name=_token]').val(),uid:data.uid},function(res){
-
-		if(res>0){
-
-			var htm=` <tr data-menu="staffPassengerMenu" context="0" data-selection="`+res+`" id="official_travel_staff_passenger_tr`+res+`" class="contextMenuSelector official_travel_staff_passenger_tr`+res+`">
-								<td>
-									<div class="col col-md-3"><div class="profile-image profile-image-tr" display-image="`+data.profile_image+`" data-mode="staff"></div></div>
-									<div class="col col-md-9"><b>`+data.name+`</b></div></td>
-
-								
-								<td>`+data.designation+`</td>
-								<td>`+data.office+`</td>
-							</tr>`
-			$('.preview-passengers').append(htm)
-
-
-			setTimeout(function(){ unbindContext(); context(); },1000);
-
-			appendStaffToListPreviewCallback(data);
-
-
-
-		}
-
-	})
-
-}
-
-
-function appendStaffToListPreviewCallback(data){
-	//itenerary enable button on forms
-	changeCircleState('.itenerary-circle-group')
-	changeButtonState('#iteneraryFormButton','enabled')
-}
-
-function appendIteneraryToListPreviewCallback(data){
-	changeCircleState('.vehicle-circle-group')
-	changeButtonState('.vehicleTypeFormButton','enabled')
-
-	//include mode of payment
-	changeCircleState('.payment-circle-group')
-	changeButtonState('.paymentFormButton','enabled')
-}
-
-
-
-
 
 
 
@@ -224,122 +170,9 @@ changeButtonState('#passengerFormButton','disabled')
 changeButtonState('#iteneraryFormButton','disabled')
 changeButtonState(".vehicleTypeFormButton",'disabled')
 changeButtonState(".paymentFormButton",'disabled')
-
-$('#officialPurposeSaveButton').click(function(e){
-	e.preventDefault();
-	 showLoading('#officialPurposeSaveStatus',' <span>saving . . .</span>&emsp;<span><img src="img/loading.png" class="loading-circle" width="10px"/></span>')
-		setTimeout(function(){  showLoading('#officialPurposeSaveStatus') },1000)
-
-	if($('#form-purpose').val().length<2) return 0;
-
-	//insert new item to db if not yet saved
-	if(form_id<1){
-		var data={_token:$('input[name=_token]').val(),purpose:$('#form-purpose').val()}
-		$.post('api/travel/personal/purpose',data,function(res){
-			//check if created successfully
-			if(res>0&&res.length<50){
-				form_id=res;
-
-				//change selectedElement id to enable adding passenger
-				$(selectedElement).attr('id',form_id);
-
-				
-				 $('#officialPurposeSaveStatus').html('<span class="text-success"><span class="glyphicon glyphicon-ok"></span></span>')	
-
-				//passsenger enable
-				changeCircleState('.passenger-circle-group')
-				changeButtonState('#passengerFormButton','enabled')
-			}else{
-				alert('Oops something went wrong!Please try again later.')
-			}
-
-		}).fail(function(){
-
-			alert('Oops something went wrong!Please try again later.')
-		})
-
-	}else{
-		//update
-		var data={_token:$('input[name=_token]').val(),purpose:$('#form-purpose').val(),id:form_id}
-
-
-		$.ajax({
-			url:'api/travel/personal/purpose',
-			data:data,
-			method:'PUT',
-			success:function(res){
-				if(res>0&&res.length<50){
-
-				}
-			}
-		});
-
-	}
-
-})
-
-
-
-$('.vehicleTypeFormButton').on('change',function(){
-	//status
-	$('#personalVehicleTypeSaveStatus').html('saving . . .')
-	var data={_token:$('input[name=_token]').val(),vehicle:$(this).val(),id:form_id}
-
-	$.ajax({
-			url:'api/travel/personal/vehicle_type',
-			data:data,
-			method:'PUT',
-			success:function(res){
-				if(res==1){
-					$('#personalVehicleTypeSaveStatus').html('<span class="text-success"><span class="glyphicon glyphicon-ok"></span></span>')	
-
-					//payment enable
-					changeCircleState('.payment-circle-group')
-					changeButtonState(".paymentFormButton",'enabled')
-
-					changeCircleState('.finished-circle-group')
-
-				}else{
-					//status
-					$('#personalVehicleTypeSaveStatus').html('Changes not saved!.Please try again later')
-					//alert('Sorry!.Please try again later.');
-				}
-			},
-			failed:function(){
-				$('#personalVehicleTypeSaveStatus').html('<span class="text-danger" style="color:rgb(255,10,10);">Changes not saved!.Please try again later</span>')
-			}
-		});
-})
-
-
-$('.paymentFormButton').on('change',function(){
-	//status
-	$('#paymentSaveStatus').html('saving . . .')
-	var data={_token:$('input[name=_token]').val(),payment:$(this).val(),id:form_id}
-
-	$.ajax({
-			url:'api/travel/personal/payment',
-			data:data,
-			method:'PUT',
-			success:function(res){
-				if(res==1){
-					$('#paymentSaveStatus').html('<span class="text-success"><span class="glyphicon glyphicon-ok"></span></span>')	
-
-					//payment enable
-					changeCircleState('.finished-circle-group')
-
-
-				}else{
-					//status
-					$('#paymentSaveStatus').html('Changes not saved!.Please try again later')
-					//alert('Sorry!.Please try again later.');
-				}
-			},
-			failed:function(){
-				$('#paymentSaveStatus').html('<span class="text-danger" style="color:rgb(255,10,10);">Changes not saved!.Please try again later</span>')
-			}
-		});
-})
+bindVehicleType()
+bindPayment()
+bindPurpose()
 
 });
 </script>

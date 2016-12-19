@@ -186,7 +186,7 @@ Route::get('/api/travel/campus/{page?}',['uses' =>'Personal@index']);
 
 #purpose
 Route::post('api/travel/personal/purpose',['uses' =>'Personal@create_purpose']);
-Route::put('api/travel/personal/purpose',['uses' =>'Personall@update_purpose']);
+Route::put('api/travel/personal/purpose',['uses' =>'Personal@update_purpose']);
 
 #itenerary
 Route::get('api/travel/personal/itenerary/{id}',['uses' =>'Personal_itenerary@index']);
@@ -206,6 +206,9 @@ Route::put('api/travel/personal/vehicle_type',['uses' =>'Personal_itenerary@vehi
 #payment
 Route::put('api/travel/personal/payment',['uses' =>'Personal@payment']);
 
+
+##remove request
+Route::delete('api/travel/personal/{id}',['uses' =>'Personal@destroy']);
 
 ######################################################################################
 #Staff and scholars directory
