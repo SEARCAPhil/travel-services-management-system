@@ -50,7 +50,7 @@ function appendIteneraryToListPreview(jsonData,func){
 }
 
 function appendIteneraryListPreviewConfirmation(){
-	var htm=`<br/><br/><div class="col col-md-12"><h4>Are you sure you want to add this to your itenerary?</h4>
+	var htm=`<h1>Are you sure you want to add this to your itenerary?</h1><div class="col col-md-12">
 		<button class="btn btn-danger" id="iteneraryConfirmationButton"><span class="glyphicon glyphicon-ok"></span>&nbsp;Yes</button> <button class="btn btn-default" id="iteneraryConfirmationButtonCancel">No</button>
 	</div>`
 

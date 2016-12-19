@@ -52,6 +52,8 @@ function ajax_getOfficialTravelPassengerCustomPreview(id,callback){
 }
 
 
+
+
 function ajax_getOfficialTravelItenerary(id,callback){
 	$.get('api/travel/official/itenerary/'+id,function(json){
 		official_travel_itenerary=JSON.parse(json)

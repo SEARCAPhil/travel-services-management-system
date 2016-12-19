@@ -55,7 +55,7 @@
 				<p><div class="mini-circle"></div> <b>Type of Vehicle</b></p>
 				<p class="col col-md-12">
 					<input type="radio" name="vtype" value="1" select-mobi="1" disabled="disabled" > SUV 
-					<input type="radio" name="vtype" value="2" select-mobi="2" checked="checked"> Van
+					<input type="radio" name="vtype" value="2" select-mobi="2" disabled="disabled"> Van
 					<input type="radio" name="vtype" value="3" select-mobi="3" disabled="disabled"> Pick-up	
 				</p>
 			</div>
@@ -63,7 +63,7 @@
 			<div class="col col-md-12 preview-sections">
 				<p><div class="mini-circle"></div> <b>Mode of Payment</b></p>
 				<p class="col col-md-12">
-					<span>Cash <input type="radio" name="mode-of-payment" disabled="disabled" checked="checked"></span>
+					<span>Cash <input type="radio" name="mode-of-payment" disabled="disabled"></span>
 					<span>Salary Deduction <input type="radio" name="mode-of-payment" disabled="disabled"></span>
 				</p>
 			</div>

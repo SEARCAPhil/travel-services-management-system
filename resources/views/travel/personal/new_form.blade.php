@@ -91,7 +91,7 @@
 		<div class="col col-md-12" >
 
 			<p class="purpose-content"  style="margin-top: 50px;"> 
-				<p><span class="mini-circle"></span><span>Purpose</span> <span class="btn btn-success btn-xs" id="officialPurposeSaveButton"><span class="glyphicon glyphicon-floppy-disk"></span></span> <span id="officialPurposeSaveStatus" class="pull-right"></span></p>
+				<p><span class="mini-circle"></span><span>Purpose</span> <span class="btn btn-success btn-xs" id="officialPurposeSaveButton"><span class="glyphicon glyphicon-floppy-disk"></span></span> <span id="officialPurposeSaveStatus"></span></p>
 				<textarea class="col col-md-12 col-xs-12 	preview-purpose" id="form-purpose" rows="15" cols="10" placeholder="Type the purpose of your travel request in this section"></textarea>	
 			</p>
 
@@ -123,7 +123,7 @@
 		</div>
 
 		<div class="col col-md-12 preview-sections">
-			<p></p><div class="mini-circle"></div> <b>Type of Vehicle</b> <span id="personalVehicleTypeSaveStatus" class="pull-right"></span><p></p>
+			<p></p><div class="mini-circle"></div> <b>Type of Vehicle</b> <span id="personalVehicleTypeSaveStatus" class=""></span><p></p>
 			<p class="col col-md-12">
 				<input type="radio" name="vtype" value="1" select-mobi="1" checked="checked" 	class="vehicleTypeFormButton"> SUV 
 				<input type="radio" name="vtype" value="2" select-mobi="2" disabled="disabled"  class="vehicleTypeFormButton"> Van
@@ -132,7 +132,7 @@
 		</div>
 
 		<div class="col col-md-12 preview-sections">
-			<p></p><div class="mini-circle"></div> <b>Mode of Payment</b> <span id="paymentSaveStatus" class="pull-right"></span><p></p>
+			<p></p><div class="mini-circle"></div> <b>Mode of Payment</b> <span id="paymentSaveStatus" class=""></span><p></p>
 			<p class="col col-md-12">
 				<span>Cash <input type="radio" name="mode-of-payment" disabled="disabled" checked="checked" class="paymentFormButton" value="1"></span>
 				<span>Salary Deduction <input type="radio" name="mode-of-payment" disabled="disabled" class="paymentFormButton" value="2"></span>
@@ -243,6 +243,9 @@ $('#officialPurposeSaveButton').click(function(e){
 				//change selectedElement id to enable adding passenger
 				$(selectedElement).attr('id',form_id);
 
+				
+				 $('#officialPurposeSaveStatus').html('<span class="text-success"><span class="glyphicon glyphicon-ok"></span></span>')	
+
 				//passsenger enable
 				changeCircleState('.passenger-circle-group')
 				changeButtonState('#passengerFormButton','enabled')
@@ -288,7 +291,7 @@ $('.vehicleTypeFormButton').on('change',function(){
 			method:'PUT',
 			success:function(res){
 				if(res==1){
-					$('#personalVehicleTypeSaveStatus').html('<span class="text-success">saved!</span>')	
+					$('#personalVehicleTypeSaveStatus').html('<span class="text-success"><span class="glyphicon glyphicon-ok"></span></span>')	
 
 					//payment enable
 					changeCircleState('.payment-circle-group')
@@ -320,7 +323,7 @@ $('.paymentFormButton').on('change',function(){
 			method:'PUT',
 			success:function(res){
 				if(res==1){
-					$('#paymentSaveStatus').html('<span class="text-success">saved!</span>')	
+					$('#paymentSaveStatus').html('<span class="text-success"><span class="glyphicon glyphicon-ok"></span></span>')	
 
 					//payment enable
 					changeCircleState('.finished-circle-group')

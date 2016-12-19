@@ -189,6 +189,7 @@ Route::post('api/travel/personal/purpose',['uses' =>'Personal@create_purpose']);
 Route::put('api/travel/personal/purpose',['uses' =>'Personall@update_purpose']);
 
 #itenerary
+Route::get('api/travel/personal/itenerary/{id}',['uses' =>'Personal_itenerary@index']);
 Route::post('api/travel/personal/itenerary',['uses' =>'Personal_itenerary@create']);
 
 

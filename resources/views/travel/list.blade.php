@@ -209,7 +209,7 @@ function showOfficialTravelList(page=1){
 
 function showPersonalTravelList(page=1){
 	ajax_getPersonalTravelList(page,function(){
-		appendToList(function(){
+		appendToList(function(data){
 
 			
 
