@@ -183,26 +183,26 @@ class Personal extends Controller
     public function payment(Request $request){
 
         $token = $request->input('_token');
-        $payment = $request->input('payment');
+        $payment = htmlentities(htmlspecialchars($request->input('payment')));
         $id = $request->input('id');
+
+        $pay='cash';
+        switch ($payment) {
+            case 'cash':
+                $pay='cash';
+                break;
+            case 'sd':
+                $pay='sd';
+                break;
+            default:
+                $pay='cash';
+                break;
+        }
 
         try{
             $this->pdoObject=DB::connection()->getPdo(); 
             $this->tr=htmlentities(htmlspecialchars($id));
-            $this->p=htmlentities(htmlspecialchars($payment));
-
-            switch ($this->p) {
-                case 1:
-                    $pay='cash';
-                    break;
-                case 2:
-                    $pay='sd';
-                    break;
-                default:
-                     $pay='cash';
-                    break;
-            }
-           
+            
             #begin transaction
             $this->pdoObject->beginTransaction();
             

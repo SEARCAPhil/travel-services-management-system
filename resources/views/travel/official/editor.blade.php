@@ -59,9 +59,9 @@
 			<div class="col col-md-8 col-sm-12 col-md-offset-2 preview-sections">
 				<p></p><div class="mini-circle"></div> <b>Purpose</b> 
 					<span class="btn btn-success btn-xs" id="officialPurposeSaveButton"><span class="glyphicon glyphicon-floppy-disk"></span></span>
-					<div id="officialPurposeSaveStatus" class="text-muted" style="float:right;height:20px;width:250px;overflow: hidden;position:relative;"></div>
+					<span id="officialPurposeSaveStatus"></span>
 					<p></p>
-				<p class="purpose-content"> <textarea class="col col-md-12 col-sm-12 col-xs-12  preview-purpose" rows="15">. . .</textarea>	
+				<p class="purpose-content"> <textarea class="col col-md-12 col-sm-12 col-xs-12  preview-purpose" rows="15" id="form-purpose">. . .</textarea>	
 				</p>	
 			</div>
 
@@ -97,26 +97,16 @@
 
 	</div>
 <script type="text/javascript" src="js/callback.official.js"></script>
+<script type="text/javascript" src="js/form.official.js"></script>
 <script type="text/javascript">	
 
 $(document).ready(function(){
 
-/*showOfficialTravelListPreview()
-showOfficialTravelPassengerStaffPreview()
-showOfficialTravelPassengerScholarsPreview()
-showOfficialTravelPassengerCustomPreview()
-showOfficialTravelItenerary()
-bindRemoveStaff();
-bindRemoveItenerary();
-bindRemoveOfficialScholar();
-bindRemoveOfficialCustom();*/
+	//modify form id to assume that editor is also running inside form page
+	//this will update the purpose instead of creating another one
+	form_id=$(selectedElement).attr('id');
 
-$('#officialPurposeSaveButton').click(function(e){
-	e.preventDefault();
-	 showLoading('#officialPurposeSaveStatus',' <span>saving . . .</span>&emsp;<span><img src="img/loading.png" class="loading-circle" width="10px"/></span>')
-		setTimeout(function(){  showLoading('#officialPurposeSaveStatus') },1000)
-	//$('#officialPurposeSaveStatus')
-})
+	bindOfficialPurposeSaveButton()
 
 });
 </script>

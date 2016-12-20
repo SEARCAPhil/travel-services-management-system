@@ -116,6 +116,8 @@ function attachClickEventToList(url,callback){
 
 		//reset count
 		passenger_count=0;
+
+
 		
 
 		//only allowed ne click for the current element	
@@ -175,6 +177,10 @@ function appendToList(callback){
 
 function showOfficialTravelList(page=1){
 	ajax_getOfficialTravelList(page,function(){
+
+		//mark the active list
+		active_list='official';
+		//append
 		appendToList(function(){
 			//attach click event
 			attachClickEventToList('travel/official/preview/',function(e){
@@ -209,9 +215,11 @@ function showOfficialTravelList(page=1){
 
 function showPersonalTravelList(page=1){
 	ajax_getPersonalTravelList(page,function(){
-		appendToList(function(data){
+		//mark the active list
+		active_list='personal';
 
-			
+		//append
+		appendToList(function(data){
 
 			//attach click event
 			attachClickEventToList('travel/personal/preview/',function(e){
@@ -364,7 +372,9 @@ $('.travel-link').click(function(e){
 		default:
 		break;
 	}
-	console.log()
+	
+	//reset page number
+	$('.list-current-page').val(1);
 	
 
 
@@ -378,7 +388,15 @@ $('.list-current-page').change(function(){
 	}else{
 		$(this).css({'background-color':'#fff','color':'#000'})
 		//next page
-		showOfficialTravelList($(this).val())
+		//official
+		if(active_list=='official') showOfficialTravelList($(this).val())
+
+		//personal
+		if(active_list=='personal') showPersonalTravelList($(this).val())
+
+		//campus
+		if(active_list=='campus') showCampusTravelList($(this).val())
+		
 	}
 })
 

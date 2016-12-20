@@ -9,6 +9,7 @@ var official_travel_custom_passenger;
 var official_travel_itenerary;
 var contextSelectedElement;
 var active_page='';
+var active_list='';
 var form_id=0; //equivelent to the tr_id
 
 function ajax_getOfficialTravelListPreview(id,callback){
