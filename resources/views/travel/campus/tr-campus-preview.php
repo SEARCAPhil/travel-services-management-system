@@ -14,9 +14,9 @@
 				<div class="profile-image profile-image-main" display-image="67.PNG" data-mode="staff" style="background: url(&quot;/profiler/profile/user.png&quot;) center center / cover no-repeat;"></div>
 			</div>
 			<div class="col col-md-9">
-				<h3>Lorem ipsum dolor sit amet</h3>
-				<p>Management Services Unit</p>
-				<p>1/17/16</p>
+				<h3 class="preview-name"></h3>
+				<p class="preview-unit">Management Services Unit</p>
+				<p class="preview-created">1/17/16</p>
 			</div>
 		</div>
 		
@@ -39,24 +39,13 @@
 
 	</div>
 
-
+<script type="text/javascript" src="js/preview.campus.js"></script>
 <script type="text/javascript">	
 
 
 $(document).ready(function(){
 
 
-//showOfficialTravelListPreview()
-//showOfficialTravelPassengerStaffPreview()
-//showOfficialTravelPassengerScholarsPreview()
-//showOfficialTravelPassengerCustomPreview()
-showOfficialTravelItenerary()
-	$('.preview-update').on('click',function(){
-		$('#editorTab').click();
-		//loading
-	    showLoading('#editor','<div><img src="img/loading.png" class="loading-circle" style="width: 80px !important;" /></div>')
-		setTimeout(function(){ $('#editor').load('travel/campus/editor/1'); },100);
-	})
 	
 });
 </script>

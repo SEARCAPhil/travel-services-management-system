@@ -17,8 +17,57 @@ class Campus extends Controller
      */
     public function index($page=1)
     {
-         $json='{"current_page":1,"total_pages":1,"data":[{"id":"8","purpose":null,"mode_of_payment":"cash","requested_by":"1","approved_by":null,"departure_date":"2016-10-29","departure_time":"03:00:00","returned_date":"0000-00-00","returned_time":"00:00:00","location":"SEARA","destination":"Tagaytay","charge_to":null,"vehicle_type":"3","date_created":"2016-10-11 09:21:39","date_modified":"2016-11-21 09:35:33","plate_no":"AXA 1341","driver_id":"141","status":"scheduled","trp_status":"2"}]}';
-        echo $json;
+         try{
+            $this->pdoObject=DB::connection()->getPdo();
+            $this->page=htmlentities(htmlspecialchars($page));
+            $this->id=16;
+            $this->page=$page>1?$page:1;
+
+            #set starting limit(page 1=10,page 2=20)
+            $start_page=$this->page<2?0:( integer)($this->page-1)*10;
+
+
+            $this->pdoObject->beginTransaction();
+
+            $sql="SELECT * FROM trc where requested_by=:id ORDER BY date_created DESC LIMIT :start, 10";
+            $sql2="SELECT count(*) as total FROM trc where requested_by=:id  ORDER BY date_created DESC";
+            $statement=$this->pdoObject->prepare($sql);
+            $statement2=$this->pdoObject->prepare($sql2);
+            $statement->bindParam(':start',$start_page,\PDO::PARAM_INT);
+            $statement->bindParam(':id',$this->id,\PDO::PARAM_INT);
+            $statement2->bindParam(':id',$this->id,\PDO::PARAM_INT);
+            $statement->execute();
+            $statement2->execute();
+            $res=Array();
+            $data=Array();
+            while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+               
+                $data[]=$row;
+            }
+            
+
+            $count=0;
+            if($row_c=$statement2->fetch(\PDO::FETCH_OBJ)){ $count=$row_c->total; }
+            #count pages
+            $no_pages=1;
+            if($count>=10){
+                    $pages=ceil(@$count/10);
+                    $no_pages=$pages;
+                    
+            }else{
+                    $no_pages=1;
+
+            }
+            #check if page request is < the actual page
+            $current_page=$this->page<=$no_pages?$this->page:$no_pages;
+
+            #return in json format
+            $res=Array('current_page'=>$current_page,'total_pages'=>$no_pages,'data'=>$data);
+                
+            $this->pdoObject->commit();
+            return json_encode($res);
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
     }
 
     /**
@@ -64,9 +113,30 @@ class Campus extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+     public function show($id)
     {
-        //
+       
+        try{
+                $this->pdoObject=DB::connection()->getPdo(); 
+                $this->id=htmlentities(htmlspecialchars($id));
+                $this->pdoObject->beginTransaction();
+                #$sql="SELECT trp.*, account_profile.* FROM trp LEFT JOIN account_profile on trp.requested_by=account_profile.id where trp.id=:id";
+
+                $sql="SELECT trc.*, account_profile.last_name,account_profile.first_name,account_profile.middle_name,account_profile.profile_name, account_profile.position, account_profile.profile_image,account_profile.department,account_profile.department_alias FROM trc LEFT JOIN account_profile on trc.requested_by=account_profile.id  where trc.id=:id";
+
+                $statement=$this->pdoObject->prepare($sql);
+                $statement->bindParam(':id',$this->id);
+                $statement->execute();
+                $res=Array();
+                while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+                    $res[]=$row;
+                }
+                $this->pdoObject->commit();
+
+                return json_encode($res);
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+        
     }
 
     /**

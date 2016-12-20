@@ -248,15 +248,35 @@ function showPersonalTravelList(page=1){
 
 function showCampusTravelList(page=1){
 	ajax_getCampusTravelList(page,function(){
-		appendToList(function(){
-			attachClickEventToList('travel/campus/preview/',function(){
-			//alert('campus')
+		//mark the active list
+		active_list='campus';
+
+		//append
+		appendToList(function(data){
+
+			//attach click event
+			attachClickEventToList('travel/campus/preview/',function(e){
+
+				//get target id
+				var targetId;
+
+				//for manual click and click on event trigger
+				if(typeof e.currentTarget.id=='undefined'){
+					targetId=e.target.id;
+				}else{
+					targetId=e.currentTarget.id;
+				}
+				//console.log(e.target.id)
+				//set active page
+				active_page='personal_preview';
+				showCampusTravelListPreview(targetId)
+				showCampusTravelItenerary(targetId)
 			})
-		});	
+		});
 	});
 	
-	
 }
+
 
 
 

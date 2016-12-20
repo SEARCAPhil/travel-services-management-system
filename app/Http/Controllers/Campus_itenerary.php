@@ -22,7 +22,7 @@ class Campus_itenerary extends Controller
                 $this->pdoObject=DB::connection()->getPdo();
                 $this->id=htmlentities(htmlspecialchars($id));
                 $this->pdoObject->beginTransaction();
-                $sql="SELECT travel.* FROM travel where tr_id=:id";
+                $sql="SELECT * FROM trc_travel where trc_id=:id";
                 $statement=$this->pdoObject->prepare($sql);
                 $statement->bindParam(':id',$this->id);
                 $statement->execute();
