@@ -64,9 +64,9 @@
 		</div>
 		
 		<div class="col col-md-12 xs-12">
-			<div class="circle done">1<span class="circle-label">Purpose<span></div>	
+			<div class="circle done">1<span class="circle-label">Itenerary<span></div>	
 			<div class="bar done"></div>	
-			<div class="circle"><span class="glyphicon glyphicon-check"></span><span class="circle-label">Finished<span></div>
+			<div class="circle finished-circle-group"><span class="glyphicon glyphicon-check"></span><span class="circle-label">Finished<span></div>
 
 		</div>
 
@@ -97,8 +97,15 @@
 
 	</div>
 
-
+<script type="text/javascript" src="js/itenerary.campus.js"></script>
 <script type="text/javascript">	
+function appendIteneraryToListPreviewCallback(data){
+	changeCircleState('.finished-circle-group')
+}
+
+
+//reset form id
+form_id=0;
 
 $(document).ready(function(){
 

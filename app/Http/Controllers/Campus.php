@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
+use Illuminate\Support\Facades\DB;
+
 class Campus extends Controller
 {
     /**
@@ -26,7 +28,23 @@ class Campus extends Controller
      */
     public function create()
     {
-        //
+         try{
+            //$uid=$request->session()->get('id');
+            $uid=16;
+
+            $this->pdoObject=DB::connection()->getPdo();
+
+            $this->pdoObject->beginTransaction();
+            $sql="INSERT INTO trc(requested_by) values (:requested_by)";
+            $statement=$this->pdoObject->prepare($sql);
+            $statement->bindParam(':requested_by',$uid);
+            $statement->execute();
+            $lastId=$this->pdoObject->lastInsertId();
+            $this->pdoObject->commit();
+
+            echo $lastId;
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
     }
 
     /**

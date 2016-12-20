@@ -222,3 +222,12 @@ Route::get('api/directory/drivers/{page?}',['uses' =>'Directory@drivers']);
 
 
 
+######################################################################################
+#Campus
+######################################################################################
+Route::post('api/travel/campus/',['uses' =>'Campus@create']);
+
+#itenerary
+Route::post('api/travel/campus/itenerary',['uses' =>'Campus_itenerary@create']);
+
+
