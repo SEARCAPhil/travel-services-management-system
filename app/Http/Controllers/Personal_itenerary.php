@@ -199,18 +199,50 @@ class Personal_itenerary extends Controller
     public function destroy($id)
     {
         try{
-                $this->pdoObject=DB::connection()->getPdo();
-                $this->id=htmlentities(htmlspecialchars($id));
-                $this->pdoObject->beginTransaction();
-                $remove_rfp_sql="DELETE FROM travel where id=:id";
-                $remove_statement=$this->pdoObject->prepare($remove_rfp_sql);
-                $remove_statement->bindParam(':id',$this->id);
-                $remove_statement->execute();
-                $this->pdoObject->commit();
 
-                return $remove_statement->rowCount()>0?$remove_statement->rowCount():0;
+            $this->pdoObject=DB::connection()->getPdo();
+            $this->tr=htmlentities(htmlspecialchars($id));
+            $this->destination='';
+            $this->from='';
+            $this->time='';
+            $this->date='';
+            $this->driver='';
+        
 
-        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+            #begin transaction
+            $this->pdoObject->beginTransaction();
+            #update to empty fields
+            $insert_sql="UPDATE trp set destination=:destination,location=:location, departure_date=:datez,departure_time=:timex,driver_id=:driver where id=:id";
+            #prepare sql first
+            $insert_statement=$this->pdoObject->prepare($insert_sql);
 
+            
+        
+            $insert_statement->bindParam(':id',$this->tr);
+         
+
+            #all param for both
+            $insert_statement->bindParam(':location',$this->from);
+            $insert_statement->bindParam(':timex',$this->time);
+            $insert_statement->bindParam(':datez',$this->date);
+            $insert_statement->bindParam(':destination',$this->destination);
+            $insert_statement->bindParam(':driver',$this->driver);
+            
+
+            
+            #exec the transaction
+            $insert_statement->execute();
+            $lastId=$this->pdoObject->lastInsertId();
+            $this->pdoObject->commit();
+            
+           
+
+           
+            echo $insert_statement->rowCount();
+            
+            
+            
+
+        }catch(Exception $e){ echo $e->getMessage();$this->pdoObject->rollback();}
     }
 }

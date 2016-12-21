@@ -57,6 +57,7 @@
 		
 		<div class="row">
 			<div class="col col-md-8 col-sm-12 col-md-offset-2 preview-sections">
+				{{csrf_field()}}
 				<p></p><div class="mini-circle"></div> <b>Purpose</b> 
 					<span class="btn btn-success btn-xs" id="officialPurposeSaveButton"><span class="glyphicon glyphicon-floppy-disk"></span></span>
 					<span id="officialPurposeSaveStatus" class="text-muted"></span>

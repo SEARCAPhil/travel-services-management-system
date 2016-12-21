@@ -76,6 +76,50 @@
 <script type="text/javascript" src="js/preview.personal.js"></script>
 <script type="text/javascript">	
 
+function bindRemoveStaff(){
+	$('.removeOfficialPassengerButton').click(function(){
+		var context=($(contextSelectedElement).attr('data-selection'));
+		removePersonalTravelPassengerStaff(context)
+	})
+}
+
+
+
+function bindRemoveItenerary(){
+	$('.removeIteneraryButton').click(function(){
+		var context=($(contextSelectedElement).attr('data-selection'));
+		removePersonalTravelItenerary(context)
+	})
+}
+
+
+
+function removePersonalTravelPassengerStaff(id){
+	$('#preview-modal').on('show.bs.modal', function (e) {
+	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
+	    	$('.modal-submit').on('click',function(){
+	    		removeContextListElement('api/travel/personal/itenerary/',id);
+	    	})
+	    })
+	});
+
+	$('#preview-modal').modal('toggle');
+	
+}
+
+
+function removePersonalTravelItenerary(id){
+	$('#preview-modal').on('show.bs.modal', function (e) {
+	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
+	    	removeContextListElement('api/travel/personal/itenerary/',id);
+	    })
+	});
+
+	$('#preview-modal').modal('toggle');
+	
+}
+
+
 
 $(document).ready(function(){
 
@@ -113,6 +157,13 @@ $(document).ready(function(){
 
 				showPersonalTravelListPreview(id)
 				showPersonalTravelPassengerStaffPreview(id)
+
+				setTimeout(function(){
+					bindRemoveStaff();
+					bindRemoveItenerary();
+				},2000)
+				
+
 
 			}); 
 

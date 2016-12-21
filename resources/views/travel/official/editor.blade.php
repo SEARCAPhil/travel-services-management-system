@@ -107,6 +107,7 @@ $(document).ready(function(){
 	form_id=$(selectedElement).attr('id');
 
 	bindOfficialPurposeSaveButton()
+	
 
 });
 </script>

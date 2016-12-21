@@ -190,12 +190,12 @@ Route::put('api/travel/personal/purpose',['uses' =>'Personal@update_purpose']);
 #itenerary
 Route::get('api/travel/personal/itenerary/{id}',['uses' =>'Personal_itenerary@index']);
 Route::post('api/travel/personal/itenerary',['uses' =>'Personal_itenerary@create']);
+Route::delete('api/travel/personal/itenerary/{id}',['uses' =>'Personal_itenerary@destroy']);
 
 
 #view staff
 Route::get('api/travel/personal/staff/{id}',['uses' =>'Personal_staff@index']);
-
-#add staff
+Route::delete('api/travel/personal/staff/{id}',['uses' =>'Personal_staff@destroy']);
 Route::post('api/directory/personal/staff/',['uses' =>'Personal_staff@create']);
 
 

@@ -115,7 +115,7 @@ class Personal_staff extends Controller
                 $this->pdoObject=DB::connection()->getPdo();
                 $this->id=htmlentities(htmlspecialchars($id));
                 $this->pdoObject->beginTransaction();
-                $remove_rfp_sql="DELETE FROM passengers where id=:id";
+                $remove_rfp_sql="DELETE FROM trp_passengers where id=:id";
                 $remove_statement=$this->pdoObject->prepare($remove_rfp_sql);
                 $remove_statement->bindParam(':id',$this->id);
                 $remove_statement->execute();
