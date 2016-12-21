@@ -131,7 +131,8 @@ function removeCampusTravelItenerary(id){
 
 
 function bindRemoveItenerary(){
-	$('.removeIteneraryButton').click(function(){
+	$('.removeIteneraryButton').off('click');
+	$('.removeIteneraryButton').on('click',function(){
 		var context=($(contextSelectedElement).attr('data-selection'));
 		removeCampusTravelItenerary(context)
 	})

@@ -89,12 +89,11 @@ class Personal_itenerary extends Controller
             
             #exec the transaction
             $insert_statement->execute();
-            $lastId=$this->pdoObject->lastInsertId();
             $this->pdoObject->commit();
             
            
 
-            $res=array('id'=>$lastId,'departure_date'=>$this->date,'location'=>$this->from,'destination'=>$this->destination,'departure_time'=>$this->time);
+            $res=array('id'=>$this->tr,'departure_date'=>$this->date,'location'=>$this->from,'destination'=>$this->destination,'departure_time'=>$this->time);
             return json_encode($res);
             
             

@@ -293,48 +293,48 @@ function removeOfficialTravelItenerary(id){
 
 function removeOfficialTravelRequest(id){
 
-	    	$('.modal-submit').on('click',function(){
+	$('.modal-submit').on('click',function(){
 
-	    		//loading
-	    		previewLoadingEffect()
-	    		
-	    		//disable onclick
-	    		$(this).attr('disabled','disabled')
+		//loading
+		previewLoadingEffect()
+		
+		//disable onclick
+		$(this).attr('disabled','disabled')
 
-	    		$(this).html('Removing . . .')
+		$(this).html('Removing . . .')
 
-	    		$.ajax({
+		$.ajax({
 
-	    			url:'api/travel/official/'+id,
-	    			method:'DELETE',
-	    			data: { _token: $("input[name=_token]").val()},
-	    			success:function(data){
-	    				if(data==1){
-	    					//ajax here
-				    		setTimeout(function(){
+			url:'api/travel/official/'+id,
+			method:'DELETE',
+			data: { _token: $("input[name=_token]").val()},
+			success:function(data){
+				if(data==1){
+					//ajax here
+		    		setTimeout(function(){
 
-				    			$('.preview-content').fadeOut()
+		    			$('.preview-content').fadeOut()
 
-				    			var nextItem=$(selectedElement).next();
-				    			$(selectedElement).remove();
+		    			var nextItem=$(selectedElement).next();
+		    			$(selectedElement).remove();
 
-				    			//select next
-				    			$(nextItem).click()
-				    			
-				    		},1000)
+		    			//select next
+		    			$(nextItem).click()
+		    			
+		    		},1000)
 
-				    		$('#preview-modal').modal('hide');
-	
-	    				}else{
-	    					alert('Oops! Something went wrong.Try to refresh the page')
-	    				}
-	    			}
-	    		})
+		    		$('#preview-modal').modal('hide');
 
-	    		
-	    		//back to original
-	    		$(this).attr('disabled','enabled')
-	    	})
+				}else{
+					alert('Oops! Something went wrong.Try to refresh the page')
+				}
+			}
+		})
+
+		
+		//back to original
+		$(this).attr('disabled','enabled')
+	})
 	
 }
 
@@ -448,13 +448,15 @@ function unbindAjaxLoad(){
 
 
 function bindRemoveStaff(){
-	$('.removeOfficialPassengerButton').click(function(){
+	$('.removeOfficialPassengerButton').off('click');
+	$('.removeOfficialPassengerButton').on('click',function(){
 		var context=($(contextSelectedElement).attr('data-selection'));
 		removeOfficialTravelPassengerStaff(context)
 	})
 }
 function bindRemoveOfficialScholar(){
-	$('.removeOfficialScholarButton').click(function(){
+	$('.removeOfficialScholarButton').off('click');
+	$('.removeOfficialScholarButton').on('click',function(){
 		var context=($(contextSelectedElement).attr('data-selection'));
 		removeOfficialTravelPassengerScholar(context)
 	})
@@ -466,7 +468,8 @@ function bindRemoveOfficialCustom(){
 	})
 }
 function bindRemoveItenerary(){
-	$('.removeIteneraryButton').click(function(){
+	$('.removeIteneraryButton').off('click');
+	$('.removeIteneraryButton').on('click',function(){
 		var context=($(contextSelectedElement).attr('data-selection'));
 		removeOfficialTravelItenerary(context)
 	})

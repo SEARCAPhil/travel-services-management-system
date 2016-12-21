@@ -29,7 +29,8 @@ function ajax_getPersonalTravelItenerary(id,callback){
 
 
 function bindRemoveStaff(){
-	$('.removeOfficialPassengerButton').click(function(){
+	$('.removeOfficialPassengerButton').off('click');
+	$('.removeOfficialPassengerButton').on('click',function(){
 		var context=($(contextSelectedElement).attr('data-selection'));
 		removePersonalTravelPassengerStaff(context)
 	})
@@ -38,7 +39,8 @@ function bindRemoveStaff(){
 
 
 function bindRemoveItenerary(){
-	$('.removeIteneraryButton').click(function(){
+	$('.removeIteneraryButton').off('click');
+	$('.removeIteneraryButton').on('click',function(){
 		var context=($(contextSelectedElement).attr('data-selection'));
 		removePersonalTravelItenerary(context)
 	})
@@ -50,7 +52,7 @@ function removePersonalTravelPassengerStaff(id){
 	$('#preview-modal').on('show.bs.modal', function (e) {
 	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
 	    	$('.modal-submit').on('click',function(){
-	    		removeContextListElement('api/travel/personal/itenerary/',id);
+	    		removeContextListElement('api/travel/personal/staff/',id);
 	    	})
 	    })
 	});
@@ -77,7 +79,7 @@ function removePersonalTravelItenerary(id){
 function showPersonalTravelPassengerStaffPreview(id){
 	ajax_getPersonalTravelPassengerStaffPreview(id,function(staff){
 
-			
+			console.log(staff)
 			for(var x=0;x<staff.length;x++){
 				passenger_count++;
 				showTotalPassengerCount()

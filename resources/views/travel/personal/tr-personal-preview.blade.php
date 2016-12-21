@@ -1,16 +1,16 @@
-
-<div class="row preview-content">
+<div class="row">
+{{csrf_field()}}
 		<div class="col col-md-12 row">
 			<ul class="list-unstyled preview-menu-li pull-right">
 				<li><strong>5691</strong></li>
-				<li class="preview-forward preview-command"><span class="glyphicon glyphicon-share-alt"></span></li>
-				<li class="preview-command"><span class="glyphicon glyphicon-print"></span></li>
-				<li class="preview-remove preview-command"><span class="glyphicon glyphicon-remove"></span></li>
-				<li class="preview-update preview-command"><span class="glyphicon glyphicon-pencil"></span></li>
+				<li><span class="glyphicon glyphicon-share-alt"></span></li>
+				<li><span class="glyphicon glyphicon-print"></span></li>
+				<li class="preview-remove"><span class="glyphicon glyphicon-remove"></span></li>
+				<li class="preview-update"><span class="glyphicon glyphicon-pencil"></span></li>
 			</ul>
 			
 		</div>
-		<div class="col col-md-12 preview-title" >
+	<div class="col col-md-12 preview-title" >
 			<div class="col col-md-3">
 				<div class="profile-image profile-image-main" display-image="67.PNG" data-mode="staff" style="background: url(&quot;/profiler/profile/user.png&quot;) center center / cover no-repeat;"></div>
 			</div>
@@ -45,12 +45,28 @@
 
 
 			<div class="col col-md-12 preview-sections">
-				<p><div class="mini-circle"></div> <span class="pull-left"><b>Itenerary</b></span> 
-				<span class="label label-success status-box status-box-mini green itenerary-count">s</span></p>
+				<p><div class="mini-circle"></div> <b>Itenerary</b></p>
 				<div class="preview-itenerary">
 
 				</div>
 				
+			</div>
+
+			<div class="col col-md-12 preview-sections">
+				<p><div class="mini-circle"></div> <b>Type of Vehicle</b></p>
+				<p class="col col-md-12">
+					<input type="radio" name="vtype" value="1" select-mobi="1" disabled="disabled" > SUV 
+					<input type="radio" name="vtype" value="2" select-mobi="2" disabled="disabled"> Van
+					<input type="radio" name="vtype" value="3" select-mobi="3" disabled="disabled"> Pick-up	
+				</p>
+			</div>
+
+			<div class="col col-md-12 preview-sections">
+				<p><div class="mini-circle"></div> <b>Mode of Payment</b></p>
+				<p class="col col-md-12">
+					<span>Cash <input type="radio" name="mode-of-payment" disabled="disabled" value="cash"></span>
+					<span>Salary Deduction <input type="radio" name="mode-of-payment" disabled="disabled" value="sd"></span>
+				</p>
 			</div>
 
 		</div>
@@ -58,7 +74,7 @@
 
 	</div>
 
-
+<script type="text/javascript" src="js/preview.personal.js"></script>
 <script type="text/javascript">	
 
 $(document).ready(function(){
@@ -69,56 +85,46 @@ $(document).ready(function(){
 //showOfficialTravelPassengerScholarsPreview()
 //showOfficialTravelPassengerCustomPreview()
 //showOfficialTravelItenerary()
+	
 
-
-$('.preview-remove').on('click',function(){
+	$('.preview-remove').off('click');
+	$('.preview-remove').on('click',function(){
 	//call custom bootstrap dialog
 		showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/remove',function(){
 			//remove
-			removeOfficialTravelRequest($(selectedElement).attr('id'))
+			removePersonalTravelRequest($(selectedElement).attr('id'))
 
 		})
 		
-})
-
-$('.preview-forward').on('click',function(){
-
-		//call custom bootstrap dialog
-		showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/forward',function(){
-			//forward
-			forwardOfficialTravelRequest()
-
-		})
-})
+	})
 
 
-$('.preview-update').on('click',function(){
+	//remove previous handler
+	$('.preview-update').off('click');
+
+
+	$('.preview-update').on('click',function(){
 		$('#editorTab').click();
 		//loading
 	    showLoading('#editor','<div><img src="img/loading.png" class="loading-circle" style="width: 80px !important;" /></div>')
 		setTimeout(function(){ 
-			$('#editor').load('travel/official/editor/'+$(selectedElement).attr('id'),function(){
+			$('#editor').load('travel/personal/editor/'+$(selectedElement).attr('id'),function(){
 				var id=$(selectedElement).attr('id');
-				showOfficialTravelListPreview(id);
-				showOfficialTravelPassengerStaffPreview(id)
-				showOfficialTravelPassengerScholarsPreview(id)
-				showOfficialTravelPassengerCustomPreview(id)
-				showOfficialTravelItenerary(id)
+
+				showPersonalTravelListPreview(id)
+				showPersonalTravelPassengerStaffPreview(id)
 
 				setTimeout(function(){
 					bindRemoveStaff();
 					bindRemoveItenerary();
-					bindRemoveOfficialScholar();
-					bindRemoveOfficialCustom();
 				},2000)
 				
+
 
 			}); 
 
 		},100);
-})
-
-
+	})
 
 	
 });

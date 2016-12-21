@@ -83,20 +83,12 @@
 				<div class="preview-itenerary"></div>
 		</div>
 
-		
-
-
-
-		
-
-		
-
 
 		</div>
 
 
 	</div>
-
+<script type="text/javascript" src="js/preview.campus.js"></script>
 <script type="text/javascript" src="js/itenerary.campus.js"></script>
 <script type="text/javascript">	
 function appendIteneraryToListPreviewCallback(data){

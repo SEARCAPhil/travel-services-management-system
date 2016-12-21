@@ -18,8 +18,16 @@ function appendIteneraryListPreviewConfirmationDone(data){
 				//enabling context
 				unbindContext();
 				context();
+
+				//enable context modal
+				setTimeout(function(){
+						bindRemoveItenerary();
+				},800);
+				
 				//calback
 				appendIteneraryToListPreviewCallback(data);
+
+
 
 			})
 

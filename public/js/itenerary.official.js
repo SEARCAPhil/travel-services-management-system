@@ -45,6 +45,11 @@ function appendIteneraryToListPreview(jsonData,func){
 
 	$('.preview-itenerary').append(htm)
 	func(data);
+
+	//enable context modal
+	setTimeout(function(){
+			bindRemoveItenerary();
+	},2000);
 	
 
 }

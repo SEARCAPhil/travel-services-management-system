@@ -25,6 +25,11 @@ function appendStaffToListPreview(jsonData){
 
 			setTimeout(function(){ unbindContext(); context(); },1000);
 
+			//enable context modal
+			setTimeout(function(){
+					bindRemoveStaff();
+				},2000)
+
 			appendStaffToListPreviewCallback(data);
 
 
@@ -40,6 +45,7 @@ function appendStaffToListPreviewCallback(data){
 	//itenerary enable button on forms
 	changeCircleState('.itenerary-circle-group')
 	changeButtonState('#iteneraryFormButton','enabled')
+
 }
 
 function appendIteneraryToListPreviewCallback(data){

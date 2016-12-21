@@ -21,7 +21,10 @@ function appendStaffToListPreview(jsonData){
 
 
 			setTimeout(function(){ unbindContext(); context(); },1000);
-
+			//enable context modal
+			setTimeout(function(){
+					bindRemoveStaff();
+			},2000);
 			appendStaffToListPreviewCallback(data);
 
 
