@@ -109,22 +109,6 @@ form_id=0;
 
 $(document).ready(function(){
 
-/*showOfficialTravelListPreview()
-showOfficialTravelPassengerStaffPreview()
-showOfficialTravelPassengerScholarsPreview()
-showOfficialTravelPassengerCustomPreview()
-showOfficialTravelItenerary()
-bindRemoveStaff();
-bindRemoveItenerary();
-bindRemoveOfficialScholar();
-bindRemoveOfficialCustom();*/
-
-$('#officialPurposeSaveButton').click(function(e){
-	e.preventDefault();
-	 showLoading('#officialPurposeSaveStatus',' <span>saving . . .</span>&emsp;<span><img src="img/loading.png" class="loading-circle" width="10px"/></span>')
-		setTimeout(function(){  showLoading('#officialPurposeSaveStatus') },1000)
-	//$('#officialPurposeSaveStatus')
-})
 
 });
 </script>

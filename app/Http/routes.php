@@ -231,6 +231,8 @@ Route::delete('api/travel/campus/{id}',['uses' =>'Campus@destroy']);
 #itenerary
 Route::post('api/travel/campus/itenerary',['uses' =>'Campus_itenerary@create']);
 Route::get('api/travel/campus/itenerary/{id}',['uses' =>'Campus_itenerary@index']);
+Route::delete('api/travel/campus/itenerary/{id}',['uses' =>'Campus_itenerary@destroy']);
+
 
 
 

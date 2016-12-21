@@ -49,9 +49,9 @@
 				<div class="profile-image profile-image-main" display-image="67.PNG" data-mode="staff" style="background: url(&quot;/profiler/profile/user.png&quot;) center center / cover no-repeat;"></div>
 			</div>
 			<div class="col col-md-9 col-xs-7">
-				<h3 class="preview-name">John Kenneth G. Abella</h3>
-				<p class="preview-unit">Info Tech Services Unit</p>
-				<p class="preview-created">2016-10-17</p>
+				<h3 class="preview-name">. . .</h3>
+				<p class="preview-unit">. . .</p>
+				<p class="preview-created">. . .</p>
 			</div>
 		</div>
 		
@@ -75,27 +75,12 @@
 
 
 	</div>
-
+<script type="text/javascript" src="js/preview.campus.js"></script>	
 <script type="text/javascript">	
 
 $(document).ready(function(){
 
-showOfficialTravelListPreview()
-showOfficialTravelPassengerStaffPreview()
-showOfficialTravelPassengerScholarsPreview()
-showOfficialTravelPassengerCustomPreview()
-showOfficialTravelItenerary()
-bindRemoveStaff();
-bindRemoveItenerary();
-bindRemoveOfficialScholar();
-bindRemoveOfficialCustom();
 
-$('#officialPurposeSaveButton').click(function(e){
-	e.preventDefault();
-	 showLoading('#officialPurposeSaveStatus',' <span>saving . . .</span>&emsp;<span><img src="img/loading.png" class="loading-circle" width="10px"/></span>')
-		setTimeout(function(){  showLoading('#officialPurposeSaveStatus') },1000)
-	//$('#officialPurposeSaveStatus')
-})
 
 });
 </script>

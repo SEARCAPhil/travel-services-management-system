@@ -54,6 +54,30 @@ $(document).ready(function(){
 		})
 		
 	})
+
+	$('.preview-update').off('click');
+	$('.preview-update').on('click',function(){
+		$('#editorTab').click();
+		//loading
+	    showLoading('#editor','<div><img src="img/loading.png" class="loading-circle" style="width: 80px !important;" /></div>')
+		setTimeout(function(){ 
+			$('#editor').load('travel/campus/editor/'+$(selectedElement).attr('id'),function(){
+				var id=$(selectedElement).attr('id');
+				showCampusTravelListPreview(id)
+				showCampusTravelItenerary(id)
+				
+
+				setTimeout(function(){
+					bindRemoveItenerary();
+				},2000)
+				
+
+
+			}); 
+
+		},100);
+	})
+
 	
 });
 </script>

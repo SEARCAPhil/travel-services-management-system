@@ -224,7 +224,7 @@ function showCampusTravelList(page=1){
 				}
 				//console.log(e.target.id)
 				//set active page
-				active_page='personal_preview';
+				active_page='campus_preview';
 				showCampusTravelListPreview(targetId)
 				showCampusTravelItenerary(targetId)
 			})

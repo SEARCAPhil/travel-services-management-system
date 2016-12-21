@@ -58,6 +58,7 @@ function showCampusTravelItenerary(id){
 			`
 
 			$('.preview-itenerary').append(htm)
+			setTimeout(function(){ context() },1000);
 		}
 
 
@@ -67,36 +68,6 @@ function showCampusTravelItenerary(id){
 	
 	
 }
-function showPersonalTravelItenerary(id){
-	ajax_getPersonalTravelItenerary(id,function(official_travel_itenerary){
-		itenerary_count=0;
-		for(var x=0; x<official_travel_itenerary.length;x++){
-			itenerary_count++;
-			showTotalIteneraryCount();
-			var htm=`<details id="official_travel_itenerary`+official_travel_itenerary[x].id+`" data-menu="iteneraryMenu" data-selection="`+official_travel_itenerary[x].id+ `" class="contextMenuSelector official_travel_itenerary`+official_travel_itenerary[x].id+` col col-md-12">
-					<summary>`+official_travel_itenerary[x].location+` - `+official_travel_itenerary[x].destination+`</summary>
-					<table class="table table-fluid" style="background:rgba(250,250,250,0.7);color:rgb(40,40,40);">
-						<thead>
-							<th>Origin</th> <th>Destination</th>  <th>Date</th> <th>Time</th>
-						</thead>
-						<tbody>
-							<tr>
-								<td>`+official_travel_itenerary[x].location+`</td>
-								<td>`+official_travel_itenerary[x].destination+`</td>
-								<td>`+official_travel_itenerary[x].departure_date+`</td>
-								<td>`+official_travel_itenerary[x].departure_time+`</td>
-							</tr>
-						</tbody>
-					</table>
-				</details>
-			`
-
-			$('.preview-itenerary').append(htm)
-		}
-
-	});	
-}
-
 
 function removeCampusTravelRequest(id){
 
@@ -144,4 +115,26 @@ function removeCampusTravelRequest(id){
 	    	})
 	
 }
+
+
+function removeCampusTravelItenerary(id){
+	$('#preview-modal').on('show.bs.modal', function (e) {
+	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
+	    	removeContextListElement('api/travel/campus/itenerary/',id);
+	    })
+	});
+
+	$('#preview-modal').modal('toggle');
+	
+}
+
+
+
+function bindRemoveItenerary(){
+	$('.removeIteneraryButton').click(function(){
+		var context=($(contextSelectedElement).attr('data-selection'));
+		removeCampusTravelItenerary(context)
+	})
+}
+
 

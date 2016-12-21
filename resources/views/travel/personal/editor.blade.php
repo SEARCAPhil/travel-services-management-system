@@ -49,9 +49,9 @@
 				<div class="profile-image profile-image-main" display-image="67.PNG" data-mode="staff" style="background: url(&quot;/profiler/profile/user.png&quot;) center center / cover no-repeat;"></div>
 			</div>
 			<div class="col col-md-9 col-xs-7">
-				<h3 class="preview-name">John Kenneth G. Abella</h3>
-				<p class="preview-unit">Info Tech Services Unit</p>
-				<p class="preview-created">2016-10-17</p>
+				<h3 class="preview-name">. . .</h3>
+				<p class="preview-unit">. . .</p>
+				<p class="preview-created">. . .</p>
 			</div>
 		</div>
 		
