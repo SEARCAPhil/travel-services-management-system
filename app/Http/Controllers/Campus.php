@@ -170,6 +170,18 @@ class Campus extends Controller
      */
     public function destroy($id)
     {
-        //
+        try{
+            $this->pdoObject=DB::connection()->getPdo();
+            $this->id=(int) htmlentities(htmlspecialchars($id));
+            $this->pdoObject->beginTransaction();
+            $remove_rfp_sql="DELETE FROM trc where id=:id";
+            $remove_statement=$this->pdoObject->prepare($remove_rfp_sql);
+            $remove_statement->bindParam(':id',$this->id);
+            $remove_statement->execute();
+            $this->pdoObject->commit();
+
+            return $remove_statement->rowCount()>0?$remove_statement->rowCount():0;
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
     }
 }

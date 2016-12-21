@@ -97,3 +97,51 @@ function showPersonalTravelItenerary(id){
 	});	
 }
 
+
+function removeCampusTravelRequest(id){
+
+	    	$('.modal-submit').on('click',function(){
+
+	    		//loading
+	    		previewLoadingEffect()
+	    		
+	    		//disable onclick
+	    		$(this).attr('disabled','disabled')
+
+	    		$(this).html('Removing . . .')
+
+	    		$.ajax({
+
+	    			url:'api/travel/campus/'+id,
+	    			method:'DELETE',
+	    			data: { _token: $("input[name=_token]").val()},
+	    			success:function(data){
+	    				if(data==1){
+	    					//ajax here
+				    		setTimeout(function(){
+
+				    			$('.preview-content').fadeOut()
+
+				    			var nextItem=$(selectedElement).next();
+				    			$(selectedElement).remove();
+
+				    			//select next
+				    			$(nextItem).click()
+				    			
+				    		},1000)
+
+				    		$('#preview-modal').modal('hide');
+	
+	    				}else{
+	    					alert('Oops! Something went wrong.Try to refresh the page')
+	    				}
+	    			}
+	    		})
+
+	    		
+	    		//back to original
+	    		$(this).attr('disabled','enabled')
+	    	})
+	
+}
+

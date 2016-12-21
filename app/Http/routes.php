@@ -227,6 +227,7 @@ Route::get('api/directory/drivers/{page?}',['uses' =>'Directory@drivers']);
 Route::post('api/travel/campus/',['uses' =>'Campus@create']);
 Route::get('api/travel/campus/preview/{id}',['uses' =>'Campus@show']);
 Route::get('/api/travel/campus/{page?}',['uses' =>'Campus@index']);
+Route::delete('api/travel/campus/{id}',['uses' =>'Campus@destroy']);
 #itenerary
 Route::post('api/travel/campus/itenerary',['uses' =>'Campus_itenerary@create']);
 Route::get('api/travel/campus/itenerary/{id}',['uses' =>'Campus_itenerary@index']);

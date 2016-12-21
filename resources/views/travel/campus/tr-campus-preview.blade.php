@@ -1,3 +1,4 @@
+{{csrf_field()}}
 <div class="row">
 		<div class="col col-md-12 row">
 			<ul class="list-unstyled preview-menu-li pull-right">
@@ -15,8 +16,8 @@
 			</div>
 			<div class="col col-md-9">
 				<h3 class="preview-name"></h3>
-				<p class="preview-unit">Management Services Unit</p>
-				<p class="preview-created">1/17/16</p>
+				<p class="preview-unit">...</p>
+				<p class="preview-created">...</p>
 			</div>
 		</div>
 		
@@ -44,8 +45,15 @@
 
 
 $(document).ready(function(){
+	$('.preview-remove').on('click',function(){
+	//call custom bootstrap dialog
+		showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/remove',function(){
+			//remove
+			removeCampusTravelRequest($(selectedElement).attr('id'))
 
-
+		})
+		
+	})
 	
 });
 </script>
