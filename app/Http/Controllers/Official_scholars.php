@@ -46,9 +46,44 @@ class Official_scholars extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+   public function create(Request $request)
     {
-        //
+        $id = $request->input('id');
+        $uid = $request->input('uid');
+        $token = $request->input('_token');
+        $type='scholar';
+
+        if(!empty($id)&&!empty($uid)&&!empty($token)){
+            
+           try{
+
+                $this->pdoObject=DB::connection()->getPdo();
+                #begin transaction
+                $this->pdoObject->beginTransaction();
+                
+                $insert_sql="INSERT INTO passengers(tr_id,uid,type)values(:tr_id,:uid,:type)";
+                $insert_statement=$this->pdoObject->prepare($insert_sql);
+        
+                #params
+                $insert_statement->bindParam(':tr_id',$id);
+                $insert_statement->bindParam(':uid',$uid);
+                $insert_statement->bindParam(':type',$type);
+  
+                #exec the transaction
+                $insert_statement->execute();
+                $lastId=$this->pdoObject->lastInsertId();
+                $this->pdoObject->commit();
+
+                #return
+                echo $lastId;
+
+            }catch(Exception $e){ echo $e->getMessage();$this->pdoObject->rollback();} 
+
+
+        }else{
+            echo 0;
+        }
+        
     }
 
     /**

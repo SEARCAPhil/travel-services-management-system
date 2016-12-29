@@ -169,9 +169,11 @@ Route::delete('api/travel/official/staff/{id}',['uses' =>'Official_staff@destroy
 
 #scholar
 Route::delete('api/travel/official/scholar/{id}',['uses' =>'Official_scholars@destroy']);
+Route::post('api/directory/scholars/',['uses' =>'Official_scholars@create']);
 
 #custom
 Route::delete('api/travel/official/custom/{id}',['uses' =>'Official_custom@destroy']);
+Route::post('api/directory/custom/',['uses' =>'Official_custom@create']);
 
 #itenerary
 Route::delete('api/travel/official/itenerary/{id}',['uses' =>'Official_itenerary@destroy']);

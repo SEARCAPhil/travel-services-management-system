@@ -38,19 +38,34 @@ function appendStaffToListPreview(jsonData){
 function appendScholarToListPreview(jsonData){
 	var data=JSON.parse(jsonData)
 
-	var htm=`<tr data-menu="scholarPassengerMenu"  context="0" data-selection="`+data.uid+`" id="official_travel_scholars_passenger_tr`+data.uid+`" class="contextMenuSelector official_travel_scholars_passenger_tr`+data.uid+`">
-						<td>
-							<div class="col col-md-3"><div class="profile-image profile-image-tr" display-image="`+data.profile_image+`" data-mode="scholars"></div></div>
-							<div class="col col-md-9"><b>`+data.full_name+`</b></div></td>
 
-						
-						<td>`+data.nationality+`</td>
-						<td>N/A</td>
-					</tr>`
-	$('.preview-passengers').append(htm)
+	//ajax here
+	$.post('api/directory/scholars',{id:$(selectedElement).attr('id'),_token:$('input[name=_token]').val(),uid:data.uid},function(res){
 
-	setTimeout(function(){ unbindContext(); context(); },1000);
-	appendScholarToListPreviewCallback(data);
+		if(res>0){
+
+
+			var htm=`<tr data-menu="scholarPassengerMenu"  context="0" data-selection="`+res+`" id="official_travel_scholars_passenger_tr`+res+`" class="contextMenuSelector official_travel_scholars_passenger_tr`+data.uid+`">
+								<td>
+									<div class="col col-md-3"><div class="profile-image profile-image-tr" display-image="`+data.profile_image+`" data-mode="scholars"></div></div>
+									<div class="col col-md-9"><b>`+data.full_name+`</b></div></td>
+
+								
+								<td>`+data.nationality+`</td>
+								<td>N/A</td>
+							</tr>`
+			$('.preview-passengers').append(htm)
+
+			setTimeout(function(){ unbindContext(); context(); bindRemoveOfficialScholar();  },1000);
+			appendScholarToListPreviewCallback(data);
+
+
+
+		}
+
+	})
+
+
 }
 
 
@@ -61,16 +76,36 @@ function appendCustomToListPreview(jsonData){
 	a.full_name='kenneth'
 	a.designation="IT Director"
 	var data=JSON.parse(JSON.stringify(jsonData))
-	var htm=`<tr data-menu="customPassengerMenu" data-selection="`+data.id+ `" id="official_travel_custom_passenger_tr`+data.id+`" class="contextMenuSelector official_travel_custom_passenger_tr`+data.id+`">
+
+
+
+	//ajax here
+	$.post('api/directory/custom',{id:$(selectedElement).attr('id'),_token:$('input[name=_token]').val(),full_name:data.full_name,designation:data.designation},function(res){
+
+		if(res>0){
+
+
+		var htm=`<tr data-menu="customPassengerMenu" data-selection="`+res+ `" id="official_travel_custom_passenger_tr`+res+`" class="contextMenuSelector official_travel_custom_passenger_tr`+data.id+`">
 						<td>
 							<div class="col col-md-3"><div class="profile-image profile-image-tr" display-image="" data-mode="custom"></div></div>
 							<div class="col col-md-9"><b>`+data.full_name+`</b></div></td>
 						<td>`+data.designation+`</td>
 						<td>N/A</td>
 					</tr>`
-	$('.preview-passengers').append(htm)
+		$('.preview-passengers').append(htm)
 
-	setTimeout(function(){ unbindContext(); context(); },1000);
+		setTimeout(function(){ unbindContext(); context(); bindRemoveOfficialCustom(); },1000);
+
+
+		}
+
+	}).fail(function(){
+		alert('Oops something went wrong.Please try again later.')
+	})
+
+
+
+	
 }
 
 

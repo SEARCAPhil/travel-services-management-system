@@ -151,7 +151,7 @@ function showOfficialTravelPassengerCustomPreview(id){
 			htm=`<tr data-menu="customPassengerMenu" data-selection="`+official_travel_custom_passenger[x].id+ `" id="official_travel_custom_passenger_tr`+official_travel_custom_passenger[x].id+`" class="contextMenuSelector official_travel_custom_passenger_tr`+official_travel_custom_passenger[x].id+`">
 								<td>
 									<div class="col col-md-3"><div class="profile-image profile-image-tr" display-image="" data-mode="custom"></div></div>
-									<div class="col col-md-9"><b>`+official_travel_custom_passenger[x].id+`</b></div></td>
+									<div class="col col-md-9"><b>`+official_travel_custom_passenger[x].full_name+`</b></div></td>
 								<td>`+official_travel_custom_passenger[x].designation+`</td>
 								<td>N/A</td>
 							</tr>`
@@ -462,7 +462,8 @@ function bindRemoveOfficialScholar(){
 	})
 }
 function bindRemoveOfficialCustom(){
-	$('.removeOfficialCustomButton').click(function(){
+	$('.removeOfficialCustomButton').off('click');
+	$('.removeOfficialCustomButton').on('click',function(){
 		var context=($(contextSelectedElement).attr('data-selection'));
 		removeOfficialTravelPassengerCustom(context)
 	})

@@ -45,10 +45,47 @@ class Official_custom extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+   public function create(Request $request)
     {
-        //
+        $id = $request->input('id');
+        $full_name = $request->input('full_name');
+        $designation = $request->input('designation');
+        $token = $request->input('_token');
+       
+
+        if(!empty($id)&&!empty($full_name)&&!empty($token)){
+            
+           try{
+
+                $this->pdoObject=DB::connection()->getPdo();
+                #begin transaction
+                $this->pdoObject->beginTransaction();
+                
+                $insert_sql="INSERT INTO cust_passengers(tr_id,full_name,designation)values(:tr_id,:full_name,:designation)";
+                $insert_statement=$this->pdoObject->prepare($insert_sql);
+        
+                #params
+                $insert_statement->bindParam(':tr_id',$id);
+                $insert_statement->bindParam(':full_name',$full_name);
+                $insert_statement->bindParam(':designation',$designation);
+  
+                #exec the transaction
+                $insert_statement->execute();
+                $lastId=$this->pdoObject->lastInsertId();
+                $this->pdoObject->commit();
+
+                #return
+                echo $lastId;
+
+            }catch(Exception $e){ echo $e->getMessage();$this->pdoObject->rollback();} 
+
+
+        }else{
+            echo 0;
+        }
+        
     }
+
 
     /**
      * Store a newly created resource in storage.
