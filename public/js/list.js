@@ -194,6 +194,7 @@ function showPersonalTravelList(page=1){
 				active_page='personal_preview';
 				showPersonalTravelListPreview(targetId)
 				showPersonalTravelPassengerStaffPreview(targetId)
+				showPersonalTravelPassengerScholarsPreview(targetId)
 			})
 		});
 	});

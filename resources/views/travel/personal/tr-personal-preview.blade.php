@@ -113,10 +113,12 @@ $(document).ready(function(){
 
 				showPersonalTravelListPreview(id)
 				showPersonalTravelPassengerStaffPreview(id)
+				showPersonalTravelPassengerScholarsPreview(id)
 
 				setTimeout(function(){
 					bindRemoveStaff();
 					bindRemoveItenerary();
+					bindRemovePersonalScholar()
 				},2000)
 				
 

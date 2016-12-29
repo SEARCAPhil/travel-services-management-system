@@ -16,6 +16,15 @@ function ajax_getPersonalTravelPassengerStaffPreview(id,callback){
 	})
 }
 
+function ajax_getPersonalTravelPassengerScholarsPreview(id,callback){
+
+	$.get('api/travel/personal/scholars/'+id,function(json){
+		scholars=JSON.parse(json)
+		callback(scholars);
+		return scholars;
+	})
+
+}
 
 function ajax_getPersonalTravelItenerary(id,callback){
 	$.get('api/travel/personal/itenerary/'+id,function(json){
@@ -35,7 +44,13 @@ function bindRemoveStaff(){
 		removePersonalTravelPassengerStaff(context)
 	})
 }
-
+function bindRemovePersonalScholar(){
+	$('.removeOfficialScholarButton').off('click');
+	$('.removeOfficialScholarButton').on('click',function(){
+		var context=($(contextSelectedElement).attr('data-selection'));
+		removePersonalTravelPassengerScholar(context)
+	})
+}
 
 
 function bindRemoveItenerary(){
@@ -53,6 +68,20 @@ function removePersonalTravelPassengerStaff(id){
 	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
 	    	$('.modal-submit').on('click',function(){
 	    		removeContextListElement('api/travel/personal/staff/',id);
+	    	})
+	    })
+	});
+
+	$('#preview-modal').modal('toggle');
+	
+}
+
+
+function removePersonalTravelPassengerScholar(id){
+	$('#preview-modal').on('show.bs.modal', function (e) {
+	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
+	    	$('.modal-submit').on('click',function(){
+	    		removeContextListElement('api/travel/personal/scholars/',id);
 	    	})
 	    })
 	});
@@ -100,6 +129,34 @@ function showPersonalTravelPassengerStaffPreview(id){
 
 	});
 }
+
+function showPersonalTravelPassengerScholarsPreview(id){
+	
+	ajax_getPersonalTravelPassengerScholarsPreview(id,function(scholars){
+		
+		for(var x=0;x<scholars.length;x++){
+			passenger_count++;
+			showTotalPassengerCount()
+			var htm=''
+			 htm=`<tr data-menu="scholarPassengerMenu"  context="0" data-selection="`+scholars[x].id+`" id="official_travel_scholars_passenger_tr`+scholars[x].id+`" class="contextMenuSelector official_travel_scholars_passenger_tr`+scholars[x].id+`">
+								<td>
+									<div class="col col-md-3"><div class="profile-image profile-image-tr" display-image="`+scholars[x].profile_image+`" data-mode="scholars"></div></div>
+									<div class="col col-md-9"><b>`+scholars[x].full_name+`</b></div></td>
+
+								
+								<td>`+scholars[x].nationality+`</td>
+								<td>`+scholars[x].office+`</td>
+							</tr>`
+			$('.preview-passengers').append(htm);
+			
+		}
+
+		
+		setTimeout(function(){ context() },2000);	
+	});
+	
+}
+
 
 function showPersonalTravelListPreview(id){
 	ajax_getPersonalTravelListPreview(id,function(json){

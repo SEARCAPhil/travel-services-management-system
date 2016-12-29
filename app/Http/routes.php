@@ -211,6 +211,11 @@ Route::put('api/travel/personal/payment',['uses' =>'Personal@payment']);
 ##remove request
 Route::delete('api/travel/personal/{id}',['uses' =>'Personal@destroy']);
 
+#scholar
+Route::get('api/travel/personal/scholars/{id}',['uses' =>'Personal_scholars@index']);
+Route::post('api/travel/personal/scholars/',['uses' =>'Personal_scholars@create']);
+Route::delete('api/travel/personal/scholars/{id}',['uses' =>'Personal_scholars@destroy']);
+
 ######################################################################################
 #Staff and scholars directory
 ######################################################################################
