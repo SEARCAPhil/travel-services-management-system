@@ -58,6 +58,27 @@ function ajax_searchOfficialTravelList(param,callback){
 }
 
 
+function ajax_searchPersonalTravelList(param,callback){
+	$.get('api/travel/personal/search/'+param,function(json){
+		travel=JSON.parse(json)
+		list= typeof travel.data!=undefined?travel.data:[];
+		callback();
+		return travel;
+	})
+
+}
+
+function ajax_searchCampusTravelList(param,callback){
+	$.get('api/travel/campus/search/'+param,function(json){
+		travel=JSON.parse(json)
+		list= typeof travel.data!=undefined?travel.data:[];
+		callback();
+		return travel;
+	})
+
+}
+
+
 
 
 
@@ -249,6 +270,43 @@ function searchOfficialTravelList(param){
 				showOfficialTravelPassengerScholarsPreview(e.currentTarget.id)
 				showOfficialTravelPassengerCustomPreview(e.currentTarget.id)
 				showOfficialTravelItenerary(e.currentTarget.id)
+
+			})
+		})
+	})
+	
+
+}
+
+
+function searchPersonalTravelList(param){
+	ajax_searchPersonalTravelList(param,function(){
+		appendToList(function(){
+			attachClickEventToList('travel/personal/preview/',function(e){
+
+				//get all necessary information of the request
+				showPersonalTravelListPreview(e.currentTarget.id)
+				showPersonalTravelPassengerStaffPreview(e.currentTarget.id)
+				showPersonalTravelPassengerScholarsPreview(e.currentTarget.id)
+				showPersonalTravelPassengerCustomPreview(e.currentTarget.id)
+				showPersonalTravelItenerary(e.currentTarget.id)
+
+			})
+		})
+	})
+	
+
+}
+
+
+function searchCampusTravelList(param){
+	ajax_searchCampusTravelList(param,function(){
+		appendToList(function(){
+			attachClickEventToList('travel/campus/preview/',function(e){
+
+				//get all necessary information of the request
+				showCampusTravelListPreview(e.currentTarget.id)
+				showCampusTravelItenerary(e.currentTarget.id)
 
 			})
 		})

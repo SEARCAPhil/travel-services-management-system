@@ -108,7 +108,13 @@ $('#searchInput').keyup(function(){
 	timeOut=setTimeout(function(){
 		//next page
 		if($(that).val().length>1)
-		searchOfficialTravelList($(that).val())
+
+			//bind search function for active list
+			if(active_list=='official') searchOfficialTravelList($(that).val())
+			if(active_list=='personal') searchPersonalTravelList($(that).val())
+			if(active_list=='campus') searchCampusTravelList($(that).val())
+
+		
 	},1000)
 		
 	

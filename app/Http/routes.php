@@ -183,7 +183,7 @@ Route::delete('api/travel/official/itenerary/{id}',['uses' =>'Official_itenerary
 ######################################################################################
 Route::get('/api/travel/personal/{page?}',['uses' =>'Personal@index']);
 Route::get('api/travel/personal/preview/{id}',['uses' =>'Personal@show']);
-
+Route::get('api/travel/personal/search/{param}',['uses' =>'Personal@search']);
 
 #purpose
 Route::post('api/travel/personal/purpose',['uses' =>'Personal@create_purpose']);
@@ -240,6 +240,7 @@ Route::get('api/directory/drivers/{page?}',['uses' =>'Directory@drivers']);
 Route::post('api/travel/campus/',['uses' =>'Campus@create']);
 Route::get('api/travel/campus/preview/{id}',['uses' =>'Campus@show']);
 Route::get('/api/travel/campus/{page?}',['uses' =>'Campus@index']);
+Route::get('api/travel/campus/search/{param}',['uses' =>'Campus@search']);
 Route::delete('api/travel/campus/{id}',['uses' =>'Campus@destroy']);
 #itenerary
 Route::post('api/travel/campus/itenerary',['uses' =>'Campus_itenerary@create']);

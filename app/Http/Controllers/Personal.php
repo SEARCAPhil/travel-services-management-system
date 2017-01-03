@@ -179,6 +179,147 @@ class Personal extends Controller
     }
 
 
+     public function search($param,$page=1){
+        $id=16;
+        return self::search_user_request($param,$id,$page);
+    }
+
+
+    public function search_admin($param,$page=1){
+        
+        try{
+
+            $this->pdoObject=DB::connection()->getPdo();
+            $this->page=htmlentities(htmlspecialchars($page));
+            $this->tr_id=htmlentities(htmlspecialchars($param));
+            $key='%'.$this->tr_id.'%';
+            $this->page=$page>1?$page:1;
+
+            #set starting limit(page 1=10,page 2=20)
+            $start_page=$this->page<2?0:( integer)($this->page-1)*10;
+
+
+            $this->pdoObject->beginTransaction();
+
+            $sql="SELECT * FROM trp where id LIKE :key1 or purpose LIKE :key2  ORDER BY date_created DESC LIMIT :start, 10";
+            $sql2="SELECT count(*) as total FROM trp where  id LIKE :key1 or purpose LIKE :key2 ORDER BY date_created DESC";
+            $statement=$this->pdoObject->prepare($sql);
+            $statement2=$this->pdoObject->prepare($sql2);
+
+            $statement->bindParam(':start',$start_page,\PDO::PARAM_INT);
+
+            
+            $statement->bindParam(':key1',$key);
+             $statement->bindParam(':key2',$key);
+            $statement2->bindParam(':key1',$key);
+            $statement2->bindParam(':key2',$key);
+
+
+
+            $statement->execute();
+            $statement2->execute();
+            $res=Array();
+            $data=Array();
+            while($row=$statement->fetch()){
+                $data[]=$row;
+            }
+            
+
+            $count=0;
+            if($row_c=$statement2->fetch(\PDO::FETCH_OBJ)){ $count=$row_c->total; }
+            #count pages
+            $no_pages=1;
+            if($count>=10){
+                    $pages=ceil(@$count/10);
+                    $no_pages=$pages;
+                    
+            }else{
+                    $no_pages=1;
+
+            }
+            #check if page request is < the actual page
+            $current_page=$this->page<=$no_pages?$this->page:$no_pages;
+
+            #return in json format
+            $res=Array('current_page'=>$this->page,'total_pages'=>$no_pages,'data'=>$data);
+                
+            $this->pdoObject->commit();
+            return json_encode($res);
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+       
+    }
+
+
+    function search_user_request($param,$id,$page=1){
+        
+        try{
+                $this->pdoObject=DB::connection()->getPdo();
+                $this->page=htmlentities(htmlspecialchars($page));
+                $this->id=(int) htmlentities(htmlspecialchars($id));
+                $this->tr_id=htmlentities(htmlspecialchars($param));
+                $key='%'.$this->tr_id.'%';
+                $this->page=$page>1?$page:1;
+
+                #set starting limit(page 1=10,page 2=20)
+                $start_page=$this->page<2?0:( integer)($this->page-1)*10;
+
+
+                $this->pdoObject->beginTransaction();
+
+                $sql="SELECT * FROM trp where requested_by=:id and id LIKE :key1 or purpose LIKE :key2  ORDER BY date_created DESC LIMIT :start, 10";
+                $sql2="SELECT count(*) as total FROM trp where requested_by=:id and id LIKE :key1 or purpose LIKE :key2  ORDER BY date_created DESC";
+                $statement=$this->pdoObject->prepare($sql);
+                $statement2=$this->pdoObject->prepare($sql2);
+                $statement2->bindParam(':id',$this->id,\PDO::PARAM_INT);
+                $statement->bindParam(':start',$start_page,\PDO::PARAM_INT);
+                $statement->bindParam(':id',$this->id,\PDO::PARAM_INT);
+
+                
+                $statement->bindParam(':key1',$key);
+                $statement->bindParam(':key2',$key);
+                $statement2->bindParam(':key1',$key);
+                $statement2->bindParam(':key2',$key);
+
+
+
+                $statement->execute();
+                $statement2->execute();
+                $res=Array();
+                $data=Array();
+                while($row=$statement->fetch()){
+                    $data[]=$row;
+                }
+                
+
+                $count=0;
+                if($row_c=$statement2->fetch(\PDO::FETCH_OBJ)){ $count=$row_c->total; }
+                #count pages
+                $no_pages=1;
+                if($count>=10){
+                        $pages=ceil(@$count/10);
+                        $no_pages=$pages;
+                        
+                }else{
+                        $no_pages=1;
+
+                }
+                #check if page request is < the actual page
+                $current_page=$this->page<=$no_pages?$this->page:$no_pages;
+
+                #return in json format
+                $res=Array('current_page'=>$this->page,'total_pages'=>$no_pages,'data'=>$data);
+                    
+                $this->pdoObject->commit();
+                return json_encode($res);
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+
+    }
+
+
+
 
     public function payment(Request $request){
 
