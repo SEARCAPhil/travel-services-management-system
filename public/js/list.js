@@ -195,6 +195,7 @@ function showPersonalTravelList(page=1){
 				showPersonalTravelListPreview(targetId)
 				showPersonalTravelPassengerStaffPreview(targetId)
 				showPersonalTravelPassengerScholarsPreview(targetId)
+				showPersonalTravelPassengerCustomPreview(targetId)
 			})
 		});
 	});

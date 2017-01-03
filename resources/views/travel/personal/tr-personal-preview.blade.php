@@ -80,12 +80,6 @@
 $(document).ready(function(){
 
 
-//showOfficialTravelListPreview()
-//showOfficialTravelPassengerStaffPreview()
-//showOfficialTravelPassengerScholarsPreview()
-//showOfficialTravelPassengerCustomPreview()
-//showOfficialTravelItenerary()
-	
 
 	$('.preview-remove').off('click');
 	$('.preview-remove').on('click',function(){
@@ -114,11 +108,13 @@ $(document).ready(function(){
 				showPersonalTravelListPreview(id)
 				showPersonalTravelPassengerStaffPreview(id)
 				showPersonalTravelPassengerScholarsPreview(id)
+				showPersonalTravelPassengerCustomPreview(id)
 
 				setTimeout(function(){
 					bindRemoveStaff();
 					bindRemoveItenerary();
 					bindRemovePersonalScholar()
+					bindRemovePersonalCustom()
 				},2000)
 				
 

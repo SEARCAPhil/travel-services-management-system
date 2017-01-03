@@ -26,6 +26,19 @@ function ajax_getPersonalTravelPassengerScholarsPreview(id,callback){
 
 }
 
+function ajax_getPersonalTravelPassengerCustomPreview(id,callback){
+
+
+	$.get('api/travel/personal/custom/'+id,function(json){
+		official_travel_custom_passenger=JSON.parse(json)
+		callback(official_travel_custom_passenger);
+		return official_travel_custom_passenger;
+	})
+
+	
+}
+
+
 function ajax_getPersonalTravelItenerary(id,callback){
 	$.get('api/travel/personal/itenerary/'+id,function(json){
 		official_travel_itenerary=JSON.parse(json)
@@ -49,6 +62,14 @@ function bindRemovePersonalScholar(){
 	$('.removeOfficialScholarButton').on('click',function(){
 		var context=($(contextSelectedElement).attr('data-selection'));
 		removePersonalTravelPassengerScholar(context)
+	})
+}
+
+function bindRemovePersonalCustom(){
+	$('.removeOfficialCustomButton').off('click');
+	$('.removeOfficialCustomButton').on('click',function(){
+		var context=($(contextSelectedElement).attr('data-selection'));
+		removePersonalTravelPassengerCustom(context)
 	})
 }
 
@@ -87,6 +108,20 @@ function removePersonalTravelPassengerScholar(id){
 	});
 
 	$('#preview-modal').modal('toggle');
+	
+}
+
+
+function removePersonalTravelPassengerCustom(id){
+	
+	$('#preview-modal').on('show.bs.modal', function (e) {
+	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
+	    	removeContextListElement('api/travel/personal/custom/',id);
+	    })
+	});
+
+	$('#preview-modal').modal('toggle');
+
 	
 }
 
@@ -156,6 +191,31 @@ function showPersonalTravelPassengerScholarsPreview(id){
 	});
 	
 }
+
+
+function showPersonalTravelPassengerCustomPreview(id){
+	ajax_getPersonalTravelPassengerCustomPreview(id,function(official_travel_custom_passenger){
+		
+		var htm='';	
+		for(var x=0;x<official_travel_custom_passenger.length;x++){
+			passenger_count++;
+			showTotalPassengerCount()
+			htm=`<tr data-menu="customPassengerMenu" data-selection="`+official_travel_custom_passenger[x].id+ `" id="official_travel_custom_passenger_tr`+official_travel_custom_passenger[x].id+`" class="contextMenuSelector official_travel_custom_passenger_tr`+official_travel_custom_passenger[x].id+`">
+								<td>
+									<div class="col col-md-3"><div class="profile-image profile-image-tr" display-image="" data-mode="custom"></div></div>
+									<div class="col col-md-9"><b>`+official_travel_custom_passenger[x].full_name+`</b></div></td>
+								<td>`+official_travel_custom_passenger[x].designation+`</td>
+								<td>N/A</td>
+							</tr>`
+
+			$('.preview-passengers').append(htm)
+		}
+		
+		setTimeout(function(){ context() },1000);
+	});
+	
+}
+
 
 
 function showPersonalTravelListPreview(id){

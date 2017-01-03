@@ -200,6 +200,12 @@ Route::get('api/travel/personal/staff/{id}',['uses' =>'Personal_staff@index']);
 Route::delete('api/travel/personal/staff/{id}',['uses' =>'Personal_staff@destroy']);
 Route::post('api/directory/personal/staff/',['uses' =>'Personal_staff@create']);
 
+#custom
+Route::get('api/travel/personal/custom/{id}',['uses' =>'Personal_custom@index']);
+Route::delete('api/travel/personal/custom/{id}',['uses' =>'Personal_custom@destroy']);
+Route::post('api/directory/personal/custom/',['uses' =>'Personal_custom@create']);
+
+
 
 #vehicle type
 Route::put('api/travel/personal/vehicle_type',['uses' =>'Personal_itenerary@vehicle_type']);
