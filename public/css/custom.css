@@ -206,8 +206,10 @@ padding: 5px;
 }
 .list-details dd.active{
 	color: rgb(10,10,10);
-	background: rgb(250,250,250);
+	background: rgba(0,100,150,0.4);
 	font-weight: bold;
+	border-left: 6px solid rgba(0,100,150,0.4);
+	transition: border 0.2s ease-in-out;
 
 
 }

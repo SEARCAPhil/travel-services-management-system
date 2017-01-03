@@ -140,6 +140,14 @@ Route::get('/authentication',function(){
 	return View::make('authentication');
 });
 
+Route::post('/authentication',function(){
+	return View::make('authentication');
+});
+
+Route::get('authentication/confirmation',['uses' =>'Authentication@index']);
+Route::post('authentication/confirmation',['uses' =>'Authentication@index']);
+
+
 /**API**/
 ######################################################################################
 #Official

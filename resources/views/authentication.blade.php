@@ -4,12 +4,13 @@
 	<section style="margin-top:20vh;">
 
 		<div class="col col-md-5 col-md-offset-4">
-			<form class="form form-horizontal" method="POST">
+			<form class="form form-horizontal" method="POST" action="/laravel/public/authentication/confirmation">
 				<img src="/mpts/model/img/SEARCA.png" width="80%">
-				<h4>Travel Services Management System</h4>
+				<h4>Travel Services Management System{{csrf_field()}}</h4>
 				<hr/>
-
-				<div class="col col-md-12 form-group">
+				
+				<div class="col col-md-12 row form-group">
+					<?php echo @$message; ?>
 					<label>Username</label>
 					<input type="text" class="form-control" name="username" />
 				</div>

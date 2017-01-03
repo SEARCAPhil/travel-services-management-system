@@ -1,15 +1,16 @@
+<?php session_start(); ?>
 @extends('automobile.page')
 @section('header')
 <script type="text/javascript" src="js/preview.official.js"></script>
 <nav class="navbar navbar-inverse top-navbar">
 		<div class="container">
 			<div class="navbar-header">
-				<div class="navbar-brand">LOGo</div>
+				<div class="navbar-brand"><span class="glyphicon glyphicon-th-large"></span></div>
 			</div>
 
 			<div class="navbar-right">
-				<div class="profile-name pull-left">Lorem Ipsum Sit dolor</div>
-				<div class="profile-picture"></div>
+				<div class="profile-name pull-left"><?php echo @$_SESSION['name']; ?></div>
+				<div class="profile-picture" style="background:url('/profiler/profile/<?php echo @$_SESSION["image"]; ?>') no-repeat center center;background-size:cover;"></div>
 			</div>
 		</div>
 	</nav>

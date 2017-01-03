@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <div class="contextMenu" id="staffPassengerMenu">
 	<ul class="list-group">		
 		<li class="list-group-item removeOfficialPassengerButton"><span class="glyphicon glyphicon-remove basket"></span> Remove</li>
@@ -50,7 +51,7 @@
 		</ul>
 
 		<div class="col col-md-2 col-sm-2">
-				<div class="profile-image profile-image-main" display-image="67.PNG" data-mode="staff" style="background: url(&quot;/profiler/profile/user.png&quot;) center center / cover no-repeat;"></div>
+				<div class="profile-image profile-image-main" display-image="67.PNG" data-mode="staff"  style="background:url('/profiler/profile/<?php echo @$_SESSION["image"]; ?>') no-repeat center center;background-size:cover;"></div>
 			</div>
 
 	</div>
