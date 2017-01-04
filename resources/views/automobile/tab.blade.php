@@ -1,4 +1,4 @@
-<?php session_start(); ?>
+<?php session_start();?>
 @extends('automobile.page')
 @section('header')
 <script type="text/javascript" src="js/preview.official.js"></script>

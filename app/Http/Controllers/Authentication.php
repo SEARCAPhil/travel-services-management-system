@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -8,18 +7,25 @@ use App\Http\Requests;
 
 use Illuminate\Support\Facades\DB;
 
+#start session
+session_start(); 
 
 class Authentication extends Controller
 {
+
+    static $redirectTo='/laravel/public/';
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index(Request $request)
     {
+
        $login=self::login($request);
-       $redirectTo='/laravel/public/';
+      
 
        if($login&&$login!=null){
             $res=json_decode($login);
@@ -40,7 +46,7 @@ class Authentication extends Controller
                 $_SESSION['name']=$res->profile_name;
                 $_SESSION['image']=$res->profile_image;
                  echo "authenticating . . .";
-                 $script='<script>setTimeout(function(){window.location="'.$redirectTo.'";},600)</script>';
+                 $script='<script>setTimeout(function(){window.location="'.self::$redirectTo.'";},600)</script>';
                  echo $script;
 
             }else{
@@ -60,7 +66,7 @@ class Authentication extends Controller
                     $_SESSION['image']=$res->profile_image;   
 
                     echo "authenticating . . .";
-                    $script='<script>setTimeout(function(){window.location="'.$redirectTo.'";},600)</script>';
+                    $script='<script>setTimeout(function(){window.location="'.self::$redirectTo.'";},600)</script>';
                     echo $script;
 
                 }
@@ -169,6 +175,18 @@ class Authentication extends Controller
                 
             }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
 
+    }
+
+
+    function logout(){
+        $_SESSION=null;
+        unset($_SESSION);
+        session_destroy();
+
+        #logout script
+        echo 'loging out . . .';
+        $script='<script>setTimeout(function(){window.location="/laravel/public/authentication";},600)</script>';
+        echo $script;
     }
 
 

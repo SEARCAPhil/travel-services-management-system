@@ -147,6 +147,9 @@ Route::post('/authentication',function(){
 Route::get('authentication/confirmation',['uses' =>'Authentication@index']);
 Route::post('authentication/confirmation',['uses' =>'Authentication@index']);
 
+#logout
+Route::get('authentication/logout',['uses' =>'Authentication@logout']);
+
 
 /**API**/
 ######################################################################################
