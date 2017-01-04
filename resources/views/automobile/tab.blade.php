@@ -2,7 +2,7 @@
 @extends('automobile.page')
 @section('header')
 <script type="text/javascript" src="js/preview.official.js"></script>
-<nav class="navbar navbar-inverse top-navbar">
+<nav class="navbar navbar-inverse navbar-fixed-top top-navbar">
 		<div class="container">
 			<div class="navbar-header">
 				<div class="navbar-brand"><span class="glyphicon glyphicon-th-large"></span></div>

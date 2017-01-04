@@ -2,7 +2,7 @@
 {{csrf_field()}}
 		<div class="col col-md-12 row">
 			<ul class="list-unstyled preview-menu-li pull-right">
-				<li><strong>5691</strong></li>
+				<li><strong class="preview-id"></strong></li>
 				<li><span class="glyphicon glyphicon-share-alt"></span></li>
 				<li><span class="glyphicon glyphicon-print"></span></li>
 				<li class="preview-remove"><span class="glyphicon glyphicon-remove"></span></li>

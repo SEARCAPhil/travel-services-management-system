@@ -3,7 +3,7 @@
 {{csrf_field()}}
 		<div class="col col-md-12 row">
 			<ul class="list-unstyled preview-menu-li pull-right">
-				<li><strong>5691</strong></li>
+				<li><strong class="preview-id"></strong></li>
 				<li class="preview-forward preview-command"><span class="glyphicon glyphicon-share-alt"></span></li>
 				<li class="preview-command"><span class="glyphicon glyphicon-print"></span></li>
 				<li class="preview-remove preview-command"><span class="glyphicon glyphicon-remove"></span></li>
@@ -30,7 +30,7 @@
 
 			<div class="col col-md-12 preview-sections">
 			
-				<p><div class="mini-circle"></div> <span class="pull-left"><b>Passengers</b></span> <span class="label label-success status-box status-box-mini green passenger-count">0</span></p>
+				<p><div class="mini-circle"></div> <span class="pull-left"><b>Passengers</b></span> <span class="label label-success status-box status-box-mini green passenger-count">?</span></p>
 				<table class="table table-striped passenger-table preview-table table-fluid" id="table-passenger" ng-show="passengersX.length>=1||passengersScholar.length>=1||passengersCustom.length>=1">
 					<thead>
 						<tr>
@@ -47,7 +47,7 @@
 
 			<div class="col col-md-12 preview-sections">
 				<p><div class="mini-circle"></div> <span class="pull-left"><b>Itenerary</b></span> 
-				<span class="label label-success status-box status-box-mini green itenerary-count">s</span></p>
+				<span class="label label-success status-box status-box-mini green itenerary-count"> ? </span></p>
 				<div class="preview-itenerary">
 
 				</div>

@@ -11,6 +11,7 @@ use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
 
 
+
 class Official extends Controller
 {
     /**
@@ -34,7 +35,14 @@ class Official extends Controller
 
     }
 
-     public function list_by_account($page=1)
+
+    /**
+     * List Official Travel Request by ID
+     * @param int $page 
+     * @return json
+     */ 
+
+    public function list_by_account($page=1)
     {
 
 
@@ -238,7 +246,7 @@ class Official extends Controller
 
             $this->id=htmlentities(htmlspecialchars($id));
             $this->pdoObject->beginTransaction();
-            $sql="SELECT * FROM tr LEFT JOIN account_profile on tr.requested_by=account_profile.id where tr.id=:id";
+            $sql="SELECT *,tr.id as tr FROM tr LEFT JOIN account_profile on tr.requested_by=account_profile.id where tr.id=:id";
             $statement=$this->pdoObject->prepare($sql);
             $statement->bindParam(':id',$this->id);
             $statement->execute();

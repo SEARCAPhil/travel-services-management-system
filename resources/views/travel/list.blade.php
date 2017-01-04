@@ -9,15 +9,15 @@
 	</ul>
 	<p class="page-header"><b>Options</b></p>
 	<div class="col col-md-12 row pull-left">
-		<div class="col col-md-1"><span class="glyphicon glyphicon-search basket" search=""></span> </div> 
-		<div class="col col-md-10">
-			<input type="text" class="form-control" placeholder="search" id="searchInput" autofocus="">
+		<div><span class="glyphicon glyphicon-search basket" search=""></span> Find</div> 
+		<div>
+			<input type="text" class="form-control" placeholder="travel request number" id="searchInput" autofocus="">
 		</div>
 	</div>
-	<div style="clear:both;"></div>
+	<div style="clear:both;"></div><!--
 	<br/>
 	<p><input type="radio" name="sort"><span id="sortBox"><a sort-list="false"> Sort up <span class="glyphicon glyphicon-chevron-up"></span></a></span></p>
-	<p><input type="radio" name="sort"><span id="sortBox"><a sort-list="true"> Sort down <span class="glyphicon glyphicon-chevron-down"></span></a></span></p>
+	<p><input type="radio" name="sort"><span id="sortBox"><a sort-list="true"> Sort down <span class="glyphicon glyphicon-chevron-down"></span></a></span></p>-->
 </div>
 
 

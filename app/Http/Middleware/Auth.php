@@ -23,7 +23,8 @@ class Auth
             #allow
             return $next($request); 
         }else{
-            $script='<script>setTimeout(function(){window.location="/laravel/public/authentication";},600)</script>';
+            $script='<script type="text/javascript">setTimeout(function(){window.location="/laravel/public/authentication";},600)</script>';
+
             echo $script;
         }
 

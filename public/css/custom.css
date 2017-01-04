@@ -205,11 +205,11 @@ padding: 5px;
 
 }
 .list-details dd.active{
-	color: rgb(10,10,10);
-	background: rgba(0,100,150,0.1);
+	border-bottom:2px solid rgb(200,0,10);
 	font-weight: bold;
-	border-left: 6px solid rgba(0,100,150,0.4);
 	transition: border 0.2s ease-in-out;
+
+	padding:5px;
 
 
 }

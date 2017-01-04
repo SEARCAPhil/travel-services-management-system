@@ -76,6 +76,7 @@ function showTotalIteneraryCount(){
 
 function showOfficialTravelListPreview(id){
 	ajax_getOfficialTravelListPreview(id,function(json){
+		$('.preview-id').html(preview[0].tr)
 		$('.preview-name').html(preview[0].profile_name)
 		$('.preview-unit').html(preview[0].department)
 		$('.preview-created').html(((preview[0].date_created).split(' '))[0])
