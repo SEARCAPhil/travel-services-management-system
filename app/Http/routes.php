@@ -14,7 +14,7 @@
 /*Route::get('/', function () {
     return view('welcome');
 });*/
-Route::get('/','Home@index');
+Route::get('/','Home@index')->middleware('auth_custom');
 Route::get('/travel',function(){
 	return View::make('travel/list');
 });
@@ -155,8 +155,8 @@ Route::get('authentication/logout',['uses' =>'Authentication@logout']);
 ######################################################################################
 #Official
 ######################################################################################
-Route::get('api/travel/official/{page?}',['uses' =>'Official@index']);
-Route::get('api/travel/official/preview/{id}',['uses' =>'Official@show']);
+Route::get('api/travel/official/{page?}',['uses' =>'Official@index'])->middleware('auth_custom');
+Route::get('api/travel/official/preview/{id}',['uses' =>'Official@show'])->middleware('auth_custom');
 Route::get('api/travel/official/staff/{id}',['uses' =>'Official_staff@index']);
 Route::get('api/travel/official/scholars/{id}',['uses' =>'Official_scholars@index']);
 Route::get('api/travel/official/custom/{id}',['uses' =>'Official_custom@index']);
@@ -192,9 +192,9 @@ Route::delete('api/travel/official/itenerary/{id}',['uses' =>'Official_itenerary
 ######################################################################################
 #Personal
 ######################################################################################
-Route::get('/api/travel/personal/{page?}',['uses' =>'Personal@index']);
-Route::get('api/travel/personal/preview/{id}',['uses' =>'Personal@show']);
-Route::get('api/travel/personal/search/{param}',['uses' =>'Personal@search']);
+Route::get('/api/travel/personal/{page?}',['uses' =>'Personal@index'])->middleware('auth_custom');
+Route::get('api/travel/personal/preview/{id}',['uses' =>'Personal@show'])->middleware('auth_custom');
+Route::get('api/travel/personal/search/{param}',['uses' =>'Personal@search'])->middleware('auth_custom');
 
 #purpose
 Route::post('api/travel/personal/purpose',['uses' =>'Personal@create_purpose']);
