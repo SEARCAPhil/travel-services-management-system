@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Authentication;
+
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -8,7 +10,7 @@ use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
 
 #start session
-session_start(); 
+@session_start(); 
 
 class Authentication extends Controller
 {
@@ -178,7 +180,15 @@ class Authentication extends Controller
     }
 
 
-    function logout(){
+    public function isAdmin(){
+        if($_SESSION['priv']==='admin'){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function logout(){
         $_SESSION=null;
         unset($_SESSION);
         session_destroy();

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Authentication;
+
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -16,13 +18,31 @@ class Official extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index($page=1)
     {
+
+        $auth=new Authentication();
+
+        if($auth->isAdmin()){
+           self::list_all($page); 
+        }else{
+            self::list_by_account($page);
+        }
+        
+
+
+    }
+
+     public function list_by_account($page=1)
+    {
+
+
             try{
                 $this->pdoObject=DB::connection()->getPdo();
                 $this->page=htmlentities(htmlspecialchars($page));
                 $this->page=$page>1?$page:1;
-                $this->id=16;
+                $this->id=$_SESSION['id'];
                 #set starting limit(page 1=10,page 2=20)
                 $start_page=$this->page<2?0:( integer)($this->page-1)*10;
 
@@ -64,6 +84,69 @@ class Official extends Controller
                 #return in json format
                 $res=Array('current_page'=>$current_page,'total_pages'=>$no_pages,'data'=>$data);
                     
+                $this->pdoObject->commit();
+                echo json_encode($res);
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+
+    }
+
+
+
+    function list_all($page=1){
+        
+        try{
+
+                $this->pdoObject=DB::connection()->getPdo();
+                $this->page=htmlentities(htmlspecialchars($page));
+                $this->page=$page>1?$page:1;
+                $this->id=$_SESSION['id'];
+                #set starting limit(page 1=10,page 2=20)
+                $start_page=$this->page<2?0:( integer)($this->page-1)*10;
+
+
+                $this->pdoObject->beginTransaction();
+
+
+                $sql="SELECT * FROM tr where status!=0 ORDER BY date_created DESC LIMIT :start, 10";
+                $statement=$this->pdoObject->prepare($sql);
+                $statement->bindParam(':start',$start_page,\PDO::PARAM_INT);
+                $statement->execute();
+
+
+                $sql2="SELECT count(*) as total FROM tr where status!=0";
+                $statement2=$this->pdoObject->prepare($sql2);
+                $statement2->execute();
+
+
+
+                $data=Array();
+                while($row=$statement->fetch()){
+                    $data[]=$row;
+                }
+                
+
+                $count=0;
+                if($row_c=$statement2->fetch(\PDO::FETCH_OBJ)){ $count=$row_c->total; }
+
+                #count pages
+                $no_pages=1;
+                if($count>=10){
+                        $pages=ceil(@$count/10);
+                        $no_pages=$pages;
+                        
+                }else{
+                        $no_pages=1;
+
+                }
+
+                #check if page request is < the actual page
+                $current_page=$this->page<=$no_pages?$this->page:$no_pages;
+
+                #return in json format
+                $res=Array('current_page'=>$current_page,'total_pages'=>$no_pages,'data'=>$data);
+
                 $this->pdoObject->commit();
                 echo json_encode($res);
 
