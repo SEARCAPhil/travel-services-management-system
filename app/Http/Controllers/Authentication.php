@@ -48,7 +48,7 @@ class Authentication extends Controller
                 $_SESSION['name']=$res->profile_name;
                 $_SESSION['image']=$res->profile_image;
                  echo "authenticating . . .";
-                 $script='<script>setTimeout(function(){window.location="'.self::$redirectTo.'";},600)</script>';
+                 $script='<script>localStorage.setItem("priv","'.$_SESSION['priv'].'");setTimeout(function(){window.location="'.self::$redirectTo.'";},600)</script>';
                  echo $script;
 
             }else{
@@ -68,7 +68,7 @@ class Authentication extends Controller
                     $_SESSION['image']=$res->profile_image;   
 
                     echo "authenticating . . .";
-                    $script='<script>setTimeout(function(){window.location="'.self::$redirectTo.'";},600)</script>';
+                    $script='<script>localStorage.setItem("priv", "'.$_SESSION['priv'].'"); setTimeout(function(){window.location="'.self::$redirectTo.'";},600)</script>';
                     echo $script;
 
                 }
@@ -195,7 +195,7 @@ class Authentication extends Controller
 
         #logout script
         echo 'loging out . . .';
-        $script='<script>setTimeout(function(){window.location="/laravel/public/authentication";},600)</script>';
+        $script='<script>localStorage.clear();setTimeout(function(){window.location="/laravel/public/authentication";},600)</script>';
         echo $script;
     }
 

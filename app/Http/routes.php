@@ -163,17 +163,18 @@ Route::get('api/travel/official/custom/{id}',['uses' =>'Official_custom@index'])
 Route::get('api/travel/official/itenerary/{id}',['uses' =>'Official_itenerary@index']);
 Route::get('api/travel/official/search/{param}',['uses' =>'Official@search']);
 
-
+#purpose
 Route::post('api/travel/official/purpose',['uses' =>'Official@create_purpose']);
 Route::put('api/travel/official/purpose',['uses' =>'Official@update_purpose']);
 
-Route::post('api/directory/staff/',['uses' =>'Official_staff@create']);
+#itenerary
 Route::post('api/travel/official/itenerary',['uses' =>'Official_itenerary@create']);
 
+#update status
+Route::put('api/travel/official/status/{id}',['uses' =>'Official@update_status']);
 
 
-
-
+Route::post('api/directory/staff/',['uses' =>'Official_staff@create']);
 Route::delete('api/travel/official/{id}',['uses' =>'Official@destroy']);
 Route::delete('api/travel/official/staff/{id}',['uses' =>'Official_staff@destroy']);
 

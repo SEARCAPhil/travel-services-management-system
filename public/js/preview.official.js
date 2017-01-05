@@ -66,6 +66,7 @@ function ajax_getOfficialTravelItenerary(id,callback){
 
 
 
+
 function showTotalPassengerCount(){
 	$('.passenger-count').html(passenger_count)
 }
@@ -82,10 +83,62 @@ function showOfficialTravelListPreview(id){
 		$('.preview-created').html(((preview[0].date_created).split(' '))[0])
 		$('.preview-purpose').html(preview[0].purpose)
 
+		//check for valid status
+		if(typeof preview[0].status!=undefined){
+
+			//initial state
+			if(preview[0].status==0){		
+				//showUntouchedStatus();
+				bindForwardOfficial()
+				
+				
+			}
+
+
+			//initial state
+			if(preview[0].status==1){
+
+				if(isAdmin()){
+					showVerifyStatusAdmin();
+
+					bindReturnOfficial()
+					bindCloseOfficial()
+
+				}else{
+					showVerifyStatus();
+				}
+			}
+
+			//returned status
+			if(preview[0].status==3){
+				showReturnStatus()
+				//allow resending
+				bindForwardOfficial()
+			}
+
+
+			//close status
+			if(preview[0].status==4){
+				showClosedStatus()
+			}
+
+			
+		}
+
+
+		
+
+
 	})
 	
 
 }
+
+function isAdmin(){
+	var priv=localStorage.getItem('priv');
+	return priv==='admin';
+}
+
 
 function showOfficialTravelPassengerStaffPreview(id){
 	ajax_getOfficialTravelPassengerStaffPreview(id,function(staff){
@@ -340,7 +393,44 @@ function removeOfficialTravelRequest(id){
 }
 
 
-function forwardOfficialTravelRequest(id){
+function forwardOfficialTravelRequest(){
+	
+	$('.modal-submit').on('click',function(){
+
+		//loading
+	    previewLoadingEffect()
+	    		
+	    //disable onclick
+	    $(this).attr('disabled','disabled')
+
+	    //ajax here
+
+	    ajax_updateTravelStatusPreview('api/travel/official/status/',$(selectedElement).attr('id'),1,function(data){
+
+	    	if(data==1){
+	    		//change status
+	    		if(isAdmin()){
+					showVerifyStatusAdmin();
+				}else{
+					showVerifyStatus();
+				}
+	    	}else{
+	    		//show error
+	    		alert('Oops!Something went wrong.Please try again later.')
+	    	}
+		})
+
+
+	    $('#preview-modal').modal('hide');
+
+	    //back to original
+	    $(this).attr('disabled','enabled')
+	})
+	
+}
+
+
+function verifyOfficialTravelRequest(id){
 	
 	$('.modal-submit').on('click',function(){
 
@@ -365,6 +455,88 @@ function forwardOfficialTravelRequest(id){
 	})
 	
 }
+
+
+function returnOfficialTravelRequest(){
+	
+	$('.modal-submit').on('click',function(){
+
+		//loading
+	    previewLoadingEffect()
+	    		
+	    //disable onclick
+	    $(this).attr('disabled','disabled')
+
+	    //ajax here
+
+	    ajax_updateTravelStatusPreview('api/travel/official/status/',$(selectedElement).attr('id'),3,function(data){
+
+	    	if(data==1){
+	    		//change status
+	    		if(isAdmin()){
+					showReturnStatusAdmin()
+
+					//hide section
+					setTimeout(function(){
+				    	$('.preview-content').fadeOut()
+				    	$(selectedElement).remove();		
+				    },1000)
+				}
+
+	    	}else{
+	    		//show error
+	    		alert('Oops!Something went wrong.Please try again later.')
+	    	}
+		})
+
+
+	    $('#preview-modal').modal('hide');
+
+	    //back to original
+	    $(this).attr('disabled','enabled')
+	})
+	
+}
+
+
+
+function closeOfficialTravelRequest(){
+	
+	$('.modal-submit').on('click',function(){
+
+		//loading
+	    previewLoadingEffect()
+	    		
+	    //disable onclick
+	    $(this).attr('disabled','disabled')
+
+	    //ajax here
+
+	    ajax_updateTravelStatusPreview('api/travel/official/status/',$(selectedElement).attr('id'),4,function(data){
+
+	    	if(data==1){
+	    		
+					showClosedStatus();
+				
+	    	}else{
+	    		//show error
+	    		alert('Oops!Something went wrong.Please try again later.')
+	    	}
+		})
+
+
+	    $('#preview-modal').modal('hide');
+
+	    //back to original
+	    $(this).attr('disabled','enabled')
+	})
+	
+}
+
+
+
+
+
 
 function showBootstrapDialog(modal,modalSection,url,callback){
 

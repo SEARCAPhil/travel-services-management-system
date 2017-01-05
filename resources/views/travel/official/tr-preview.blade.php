@@ -2,14 +2,22 @@
 <div class="row preview-content">
 {{csrf_field()}}
 		<div class="col col-md-12 row">
+
 			<ul class="list-unstyled preview-menu-li pull-right">
 				<li><strong class="preview-id"></strong></li>
-				<li class="preview-forward preview-command"><span class="glyphicon glyphicon-share-alt"></span></li>
+
 				<li class="preview-command"><span class="glyphicon glyphicon-print"></span></li>
 				<li class="preview-remove preview-command"><span class="glyphicon glyphicon-remove"></span></li>
 				<li class="preview-update preview-command"><span class="glyphicon glyphicon-pencil"></span></li>
+				<li class="text-danger preview-forward preview-command"> <span class="glyphicon glyphicon-send"></span></li>
 			</ul>
 			
+		</div>
+
+		<div class="preview-status-section">
+			
+
+
 		</div>
 		<div class="col col-md-12 preview-title" >
 			<div class="col col-md-3">
@@ -60,16 +68,12 @@
 	</div>
 
 <script type="text/javascript" src="js/preview.official.js"></script>
+<script type="text/javascript" src="js/status.official.js"></script>
 <script type="text/javascript">	
+
 
 $(document).ready(function(){
 
-
-//showOfficialTravelListPreview()
-//showOfficialTravelPassengerStaffPreview()
-//showOfficialTravelPassengerScholarsPreview()
-//showOfficialTravelPassengerCustomPreview()
-//showOfficialTravelItenerary()
 
 
 $('.preview-remove').on('click',function(){
@@ -82,15 +86,7 @@ $('.preview-remove').on('click',function(){
 		
 })
 
-$('.preview-forward').on('click',function(){
 
-		//call custom bootstrap dialog
-		showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/forward',function(){
-			//forward
-			forwardOfficialTravelRequest()
-
-		})
-})
 
 
 $('.preview-update').on('click',function(){
