@@ -1,3 +1,17 @@
+/**
+* OFFICIAL TRAVEL REQUEST FORM SCRIPT
+* Kenneth Abella <johnkennethgibasabella@gmail.com>
+*
+*/
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Bind Save purpose
+|---------------------------------------------------------------------------
+*/
+
 function bindOfficialPurposeSaveButton(){
 	$('#officialPurposeSaveButton').click(function(e){
 		e.preventDefault();

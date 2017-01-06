@@ -1,15 +1,48 @@
+/**
+* OFFICIAL TRAVEL REQUEST ITENERARY SCRIPT
+* Kenneth Abella <johnkennethgibasabella@gmail.com>
+*
+*
+*/
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Hold data for the davailable drivers
+|---------------------------------------------------------------------------
+*/
 var driverList={}
+
+
+/*
+|----------------------------------------------------------------------------
+| AJAX Drivers List
+|---------------------------------------------------------------------------
+|
+| Get drivers list from the directory
+|
+*/
+
 function ajax_getDriversList(func){
 	$.get('api/directory/drivers',function(res){
-
 		driverList=JSON.parse(res)
 		func(driverList);
 		return driverList;
 	})
-
-
 	
 }
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Show Drivers List
+|---------------------------------------------------------------------------
+|
+| Display drivers list
+|
+*/
 
 function show_driversList(){
 	ajax_getDriversList(function(driverList){
@@ -20,6 +53,17 @@ function show_driversList(){
 	})
 }
 
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Append Itenerary To preview
+|---------------------------------------------------------------------------
+|
+| Display travel list in preview page
+|
+*/
 function appendIteneraryToListPreview(jsonData,func){
 
 	var json=jsonData;
@@ -42,7 +86,6 @@ function appendIteneraryToListPreview(jsonData,func){
 					</table>
 				</details>
 			`
-
 	$('.preview-itenerary').append(htm)
 	func(data);
 
@@ -50,11 +93,23 @@ function appendIteneraryToListPreview(jsonData,func){
 	setTimeout(function(){
 			bindRemoveItenerary();
 	},2000);
-	
 
 }
 
+
+
+/*
+|----------------------------------------------------------------------------
+| Append Itenerary Confirmation
+|---------------------------------------------------------------------------
+|
+| Shows confirmation dialog efore appending item to itenerary 
+|
+*/
+
 function appendIteneraryListPreviewConfirmation(){
+
+	//dialog
 	var htm=`<h1>Are you sure you want to add this to your itenerary?</h1><div class="col col-md-12">
 		<button class="btn btn-danger" id="iteneraryConfirmationButton"><span class="glyphicon glyphicon-ok"></span>&nbsp;Yes</button> <button class="btn btn-default" id="iteneraryConfirmationButtonCancel">No</button>
 	</div>`
@@ -63,12 +118,14 @@ function appendIteneraryListPreviewConfirmation(){
 	$('#itenerary-confirmation').html(htm)
 	
 
-
+	//add event handler in confirmation button
 	$('#iteneraryConfirmationButton').click(function(){
 		
 		$(this).html('saving . . .')
 		var that=this
 
+
+		//input value
 		var origin=$('#officialTravelOrigin').val();
 		var destination=$('#officialTravelDestination').val();
 		var departure_date=$('#officialTravelDepartureDate').val();
@@ -76,14 +133,21 @@ function appendIteneraryListPreviewConfirmation(){
 		var date=new Date();
 		var date_created=date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate();
 		var driver=$('#officialTravelDriver').val();
-		//insert to view
+
+		//json data
 		var data={"id":null,"tr_id":$(selectedElement).attr('id'),"res_id":null,"location":origin,"destination":destination,"departure_time":departure_time,"actual_departure_time":"00:00:00","returned_time":"00:00:00","departure_date":departure_date,"returned_date":"0000-00-00","status":"scheduled","plate_no":null,"driver_id":"0","linked":"no","date_created":date_created,driver_id:driver,_token:$('input[name=_token]').val()}
+
+
+
+
 
 		$.post('api/travel/official/itenerary',data,function(res){
 
 			try{
 				var id=JSON.parse(res).id;
 				data.id=id;
+
+
 				//add to preview
 				appendIteneraryToListPreview(data,function(data){
 					//saved button
@@ -95,7 +159,7 @@ function appendIteneraryListPreviewConfirmation(){
 					$('#officialTravelDepartureDate').val('');
 					$('#officialTravelDepartureTime').val('');
 
-					//enabling context
+					//enabling contextmenu
 					unbindContext();
 					context();
 
@@ -125,14 +189,17 @@ function appendIteneraryListPreviewConfirmation(){
 		},900)
 	})
 
+
+
 	//cancel
 	$('#iteneraryConfirmationButtonCancel').click(function(){
 		//show form
 		setTimeout(function(){
-
 			//display default view
 			$('#itenerary-dialog-content').show();
 			$('#itenerary-confirmation').html('')
 		},900)
 	});
+
+
 }

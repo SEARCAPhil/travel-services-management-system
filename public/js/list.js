@@ -1,12 +1,47 @@
+/**
+* TRAVEL REQUEST LISTING SCRIPT
+* Kenneth Abella <johnkennethgibasabella@gmail.com>
+*
+*
+*/
 
-//travel placeholder
+
+/*
+|----------------------------------------------------------------------------
+| Hold data for travel request preview
+|---------------------------------------------------------------------------
+|
+| JSON from travel request list AJAX request 
+|
+*/
 var travel;
 var list;
+
+
+/*
+|----------------------------------------------------------------------------
+| Selected Element
+|---------------------------------------------------------------------------
+|
+| Save a copy of element on the list that is currently selected/clicked
+|
+*/
 var selectedElement;
 
-//get list
-function ajax_getOfficialTravelList(page=1,callback){
 
+
+
+/*
+|----------------------------------------------------------------------------
+| AJAX List functions
+|---------------------------------------------------------------------------
+|
+| Contains logic in geting the list of Official, Personal and Campus travel request 
+|
+|
+*/
+
+function ajax_getOfficialTravelList(page=1,callback){
 
 	$.get('api/travel/official/'+page,function(json){
 		travel=JSON.parse(json)
@@ -47,6 +82,19 @@ function ajax_getCampusTravelList(page=1,callback){
 
 
 
+
+
+
+/*
+|----------------------------------------------------------------------------
+| AJAX Search functions
+|---------------------------------------------------------------------------
+|
+| Get search items
+|
+|
+*/
+
 function ajax_searchOfficialTravelList(param,callback){
 	$.get('api/travel/official/search/'+param,function(json){
 		travel=JSON.parse(json)
@@ -82,75 +130,15 @@ function ajax_searchCampusTravelList(param,callback){
 
 
 
-
-function attachClickEventToList(url,callback){
-	$('.list-details dd').click(function(e){
-		var parent=this;
-		e.preventDefault();
-		//add selected style
-		$('.list-details dd').removeClass('active')
-		$(this).addClass('active');
-
-		//reset count
-		passenger_count=0;
-
-
-		
-
-		//only allowed ne click for the current element	
-		if(!(selectedElement==this)){
-			//clear
-			$('.preview-section').html('')
-			
-			//get preview
-			//loading
-			//previewLoadingEffect();
-			showLoading('.preview-section','<div><img src="img/loading.png" class="loading-circle" style="width: 80px !important;" /></div>')
-
-			selectedElement=this;
-			setTimeout(function(){
-				console.log($(parent).attr('id'))
-				var param=$(parent).attr('id');
-				$('.preview-section').load(url+''+param,function(){
-					callback(e);
-				});
-			},100)
-			
-			
-		}
-
-	})
-}
-
-
-function appendToList(callback){
-	$('.list-details').html('') //clear
-	$('.list-total-pages').html(travel.total_pages);
-	$('.list-current_page').val(travel.current_page);
-	var htm='';
-	for(var x=0; x<list.length; x++){
-		var purpose=list[x].purpose!=null?list[x].purpose:'';
-
-		//cut the purpose
-		if(purpose.length>100){
-			purpose=purpose.substr(0,100);
-		}
-		htm+=`<dd id="`+list[x].id+`">
-			<h4 class="page-header"><b>`+list[x].id+`</b></h4>
-			<p><small>`+purpose+`</small></p>
-		</dd>`
-	}
-
-	$('.list-details').append(htm)
-
-	callback();
-	
-	setTimeout(function(){
-		$('.list-details dd')[0].click()
-	},300)
-}
-
-
+/*
+|----------------------------------------------------------------------------
+| Show Travel request list
+|---------------------------------------------------------------------------
+|
+| Display the travel requests in the list 
+|
+|
+*/
 
 function showOfficialTravelList(page=1){
 	ajax_getOfficialTravelList(page,function(){
@@ -172,8 +160,7 @@ function showOfficialTravelList(page=1){
 					targetId=e.currentTarget.id;
 				}
 				//console.log(e.target.id)
-				//set active page
-				active_page='official_preview';
+
 				//get all necessary information of the request
 				showOfficialTravelListPreview(targetId)
 				showOfficialTravelPassengerStaffPreview(targetId)
@@ -259,6 +246,18 @@ function showCampusTravelList(page=1){
 
 
 
+
+
+/*
+|----------------------------------------------------------------------------
+| Search Travel request list
+|---------------------------------------------------------------------------
+|
+| Display search results
+|
+|
+*/
+
 function searchOfficialTravelList(param){
 	ajax_searchOfficialTravelList(param,function(){
 		appendToList(function(){
@@ -312,8 +311,144 @@ function searchCampusTravelList(param){
 		})
 	})
 	
-
 }
+
+
+
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Append Items to List
+|---------------------------------------------------------------------------
+|
+| This is used inside show travel requests functions
+| This allows to run script on success operations
+|
+|
+*/
+
+function appendToList(callback){
+
+	//clear list
+	$('.list-details').html('')
+
+	//item count and pages
+	$('.list-total-pages').html(travel.total_pages);
+	$('.list-current_page').val(travel.current_page);
+
+	//empty variable
+	var htm='';
+
+
+	for(var x=0; x<list.length; x++){
+
+		var purpose=list[x].purpose!=null?list[x].purpose:'';
+
+		//cut the purpose length if too long
+		if(purpose.length>100){
+			purpose=purpose.substr(0,100);
+		}
+
+
+		//append to the DIV
+		htm+=`<dd id="`+list[x].id+`">
+			<h4 class="page-header"><b>`+list[x].id+`</b></h4>
+			<p><small>`+purpose+`</small></p>
+		</dd>`
+
+	}
+
+
+
+	$('.list-details').append(htm)
+
+
+	//run the callback
+	callback();
+	
+	//--------------------------------------------
+	//click the first item on the list
+	//attachClickEventToList is required 
+	//--------------------------------------------
+
+	setTimeout(function(){
+		$('.list-details dd')[0].click()
+	},300)
+}
+
+
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Attach click event function on the list
+|---------------------------------------------------------------------------
+|
+| This is used inside show travel requests functions
+| This allows to run script on success operations
+|
+|
+*/
+
+function attachClickEventToList(url,callback){
+	$('.list-details dd').click(function(e){
+		var parent=this;
+		e.preventDefault();
+
+		//add selected style
+		$('.list-details dd').removeClass('active')
+		$(this).addClass('active');
+
+		//reset count
+		passenger_count=0;
+
+
+		//only allowed click for the unselected element	
+		if(!(selectedElement==this)){
+			//clear
+			$('.preview-section').html('')
+			
+			//loading effect
+			showLoading('.preview-section','<div><img src="img/loading.png" class="loading-circle" style="width: 80px !important;" /></div>')
+
+			//mark this as selected
+			selectedElement=this;
+
+
+			setTimeout(function(){
+
+				//get the current ID
+				var param=$(parent).attr('id');
+
+				//load the URL to the section
+				$('.preview-section').load(url+''+param,function(){
+					callback(e);
+				});
+
+			},100)
+			
+			
+		}
+
+	})
+}
+
+
+
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Form Navigation
+|---------------------------------------------------------------------------
+|
+| Load form within a section when an element is click
+|
+*/
 
 function bindAddFormNavigationButton(){
 	$('.add-button').off('click');
@@ -345,6 +480,7 @@ function bindAddFormNavigationButton(){
 
 		if(url.length>1){
 			$('#editor').load(url,function(){
+				//attach a form navigation to a new element inside the loaded page
 				bindAddFormNavigationButton();
 			})
 		}
@@ -353,28 +489,6 @@ function bindAddFormNavigationButton(){
 
 }
 
-function changeButtonState(target,state='disabled'){
-	console.log(state)
-	if(state=='enabled'){
-		$(target).removeAttr('disabled');
-		$(target).attr('enabled','enabled');	
-	}else{
-		$(target).attr('disabled','disabled');
-	}
-	
-}
-
-
-function changeCircleState(target,state='enabled'){
-
-	if(state=='enabled'){
-		$(target).addClass('done');	
-	
-	}else{
-		$(target).removeClass('done');
-	}
-	
-}
 
 
 

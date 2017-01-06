@@ -1,3 +1,17 @@
+/**
+* PERSONAL TRAVEL REQUEST FORM SCRIPT
+* Kenneth Abella <johnkennethgibasabella@gmail.com>
+*
+*/
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Save purpose
+|---------------------------------------------------------------------------
+*/
+
 function bindPurpose(){
 
 	$('#officialPurposeSaveButton').click(function(e){
@@ -58,6 +72,17 @@ function bindPurpose(){
 }
 
 
+
+
+/*
+|----------------------------------------------------------------------------
+| Bind Save purpose
+|---------------------------------------------------------------------------
+| 
+| Select vehicle type on form
+|
+*/
+
 function bindVehicleType(){
 	$('.vehicleTypeFormButton').on('change',function(){
 		//status
@@ -93,6 +118,16 @@ function bindVehicleType(){
 }
 
 
+
+
+/*
+|----------------------------------------------------------------------------
+| Bind Save payment
+|---------------------------------------------------------------------------
+| 
+| Change Payment type
+|
+*/
 function bindPayment(){
 	$('.paymentFormButton').on('change',function(){
 		//status

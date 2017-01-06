@@ -114,6 +114,7 @@
 
 
 </div>
+<script type="text/javascript" src="js/common.js"></script>	
 <script type="text/javascript" src="js/preview.official.js"></script>
 <script type="text/javascript" src="js/directory.js"></script>
 <script type="text/javascript" src="js/callback.official.js"></script>

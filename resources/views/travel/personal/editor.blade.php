@@ -111,6 +111,7 @@
 
 
 	</div>
+<script type="text/javascript" src="js/common.js"></script>	
 <script type="text/javascript" src="js/form.personal.js"></script>
 <script type="text/javascript" src="js/itenerary.personal.js"></script>	
 <script type="text/javascript" src="js/callback.personal.js"></script>

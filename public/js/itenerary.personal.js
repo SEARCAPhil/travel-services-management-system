@@ -1,6 +1,20 @@
-/**append iteneray to list preview but the section must be emptied first
-*Personal preview only allow only one itenerary
+/**
+* PERSONAL TRAVEL REQUEST ITENERARY SCRIPT
+* Kenneth Abella <johnkennethgibasabella@gmail.com>
+*
+*
 */
+
+
+/*
+|----------------------------------------------------------------------------
+| Append Itenerary To preview
+|---------------------------------------------------------------------------
+|
+| Display travel list in preview page
+|
+*/
+
 function appendIteneraryToListPreview(jsonData,func){
 
 	var json=jsonData;
@@ -35,21 +49,35 @@ function appendIteneraryToListPreview(jsonData,func){
 
 }
 
+
+/*
+|----------------------------------------------------------------------------
+| Append Itenerary Confirmation
+|---------------------------------------------------------------------------
+|
+| Shows confirmation dialog before appending item to itenerary 
+|
+*/
+
 function appendIteneraryListPreviewConfirmation(){
+	//dialog
 	var htm=`<br/><br/><div class="col col-md-12"><h4>Are you sure you want to add this to your itenerary?</h4>
 		<button class="btn btn-danger" id="iteneraryConfirmationButton"><span class="glyphicon glyphicon-ok"></span>&nbsp;Yes</button> <button class="btn btn-default" id="iteneraryConfirmationButtonCancel">No</button>
 	</div>`
+
 
 	$('#itenerary-dialog-content').hide();
 	$('#itenerary-confirmation').html(htm)
 	
 
-
+	//add event handler in confirmation button
 	$('#iteneraryConfirmationButton').click(function(){
 		
 		$(this).html('saving . . .')
 		var that=this
 
+
+		//input value
 		var origin=$('#officialTravelOrigin').val();
 		var destination=$('#officialTravelDestination').val();
 		var departure_date=$('#officialTravelDepartureDate').val();
@@ -57,8 +85,11 @@ function appendIteneraryListPreviewConfirmation(){
 		var date=new Date();
 		var date_created=date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate();
 		var driver=$('#officialTravelDriver').val();
-		//insert to view
+
+		//JSON data
 		var data={"id":null,"tr_id":$(selectedElement).attr('id'),"res_id":null,"location":origin,"destination":destination,"departure_time":departure_time,"actual_departure_time":"00:00:00","returned_time":"00:00:00","departure_date":departure_date,"returned_date":"0000-00-00","status":"scheduled","plate_no":null,"driver_id":"0","linked":"no","date_created":date_created,driver_id:driver,_token:$('input[name=_token]').val()}
+
+
 
 		$.post('api/travel/personal/itenerary',data,function(res){
 
@@ -76,10 +107,12 @@ function appendIteneraryListPreviewConfirmation(){
 					$('#officialTravelDepartureDate').val('');
 					$('#officialTravelDepartureTime').val('');
 
-					//enabling context
+					//enabling contextmenu
 					unbindContext();
 					context();
 
+					//Run script
+					//this could be found on the callback script
 					appendIteneraryToListPreviewCallback(data);
 
 				})
@@ -104,7 +137,10 @@ function appendIteneraryListPreviewConfirmation(){
 			$('#itenerary-dialog-content').show();
 			$('#itenerary-confirmation').html('')
 		},900)
+
 	})
+
+
 
 	//cancel
 	$('#iteneraryConfirmationButtonCancel').click(function(){
@@ -116,4 +152,6 @@ function appendIteneraryListPreviewConfirmation(){
 			$('#itenerary-confirmation').html('')
 		},900)
 	});
+
+	
 }

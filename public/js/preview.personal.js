@@ -1,3 +1,21 @@
+/**
+* @title PERSONAL TRAVEL REQUEST PREVIEW SCRIPT
+* @author Kenneth Abella <johnkennethgibasabella@gmail.com>
+*
+*
+*/
+
+
+
+/*
+|----------------------------------------------------------------------------
+| AJAX preview functions
+|---------------------------------------------------------------------------
+|
+| Contains logic in sending the data used by showPersonalTravelListPreview() function 
+|
+|
+*/
 
 function ajax_getPersonalTravelListPreview(id,callback){
 	$.get('api/travel/personal/preview/'+id,function(json){
@@ -6,6 +24,18 @@ function ajax_getPersonalTravelListPreview(id,callback){
 		return preview;
 	})
 }
+
+
+
+/*
+|----------------------------------------------------------------------------
+| AJAX passenger functions
+|---------------------------------------------------------------------------
+|
+| Contains logic in viewing pasengers of the official travel requests 
+| This is called allong with showPersonalTravelPassenger.*() functions
+|
+*/
 
 function ajax_getPersonalTravelPassengerStaffPreview(id,callback){
 
@@ -39,6 +69,17 @@ function ajax_getPersonalTravelPassengerCustomPreview(id,callback){
 }
 
 
+
+/*
+|----------------------------------------------------------------------------
+| AJAX itenerary functions
+|---------------------------------------------------------------------------
+|
+| Get the personal travel request's itenerary
+|
+|
+*/
+
 function ajax_getPersonalTravelItenerary(id,callback){
 	$.get('api/travel/personal/itenerary/'+id,function(json){
 		official_travel_itenerary=JSON.parse(json)
@@ -49,96 +90,112 @@ function ajax_getPersonalTravelItenerary(id,callback){
 
 
 
+/*
+|----------------------------------------------------------------------------
+| Count Display
+|---------------------------------------------------------------------------
+|
+| Display total count into section
+|
+|
+*/
 
-function bindRemoveStaff(){
-	$('.removeOfficialPassengerButton').off('click');
-	$('.removeOfficialPassengerButton').on('click',function(){
-		var context=($(contextSelectedElement).attr('data-selection'));
-		removePersonalTravelPassengerStaff(context)
+function showTotalPassengerCount(){
+	$('.passenger-count').html(passenger_count)
+}
+
+function showTotalIteneraryCount(){
+	$('.itenerary-count').html(itenerary_count)
+}
+
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Display preview page
+|---------------------------------------------------------------------------
+|
+| Show necessary information on the preview page including id,requestor,
+| unit,date and purpose
+|
+|
+*/
+
+
+function showPersonalTravelListPreview(id){
+	ajax_getPersonalTravelListPreview(id,function(json){
+		$('.preview-id').html(preview[0].id)
+		$('.preview-name').html(preview[0].profile_name)
+		$('.preview-unit').html(preview[0].department)
+		$('.preview-created').html(((preview[0].date_created).split(' '))[0])
+		$('.preview-purpose').html(preview[0].purpose)
+
+
+		//itenerary
+		var htm=`<details id="official_travel_itenerary`+json[0].id+`" data-menu="iteneraryMenu" data-selection="`+json[0].id+ `" class="contextMenuSelector official_travel_itenerary`+json[0].id+` col col-md-12">
+					<summary>`+json[0].location+` - `+json[0].destination+`</summary>
+					<table class="table table-fluid" style="background:rgba(250,250,250,0.7);color:rgb(40,40,40);">
+						<thead>
+							<th>Origin</th> <th>Destination</th>  <th>Date</th> <th>Time</th>
+						</thead>
+						<tbody>
+							<tr>
+								<td>`+json[0].location+`</td>
+								<td>`+json[0].destination+`</td>
+								<td>`+json[0].departure_date+`</td>
+								<td>`+json[0].departure_time+`</td>
+							</tr>
+						</tbody>
+					</table>
+				</details>
+			`
+
+		//data must no be empty before appending
+		if(json[0].destination.length>0) $('.preview-itenerary').append(htm)
+			
+
+		//vehicle type radio
+		$('input[name=vtype]').each(function(index,value){
+			if(json[0].vehicle_type==$(value).val()){
+				$(value).attr('checked','checked')
+			}
+			
+		})
+
+		//payment mode
+		$('input[name=mode-of-payment]').each(function(index,value){
+			console.log(index);
+			//check Cash
+			if(json[0].mode_of_payment=='cash'&&$(value).val()=='cash'){
+				$(value).attr('checked','checked')
+			}
+
+
+			//check Salary Deduction
+			if(json[0].mode_of_payment=='sd'&&$(value).val()=='sd'){
+				$(value).attr('checked','checked')
+			}
+
+
+			
+		})
+
 	})
 }
-function bindRemovePersonalScholar(){
-	$('.removeOfficialScholarButton').off('click');
-	$('.removeOfficialScholarButton').on('click',function(){
-		var context=($(contextSelectedElement).attr('data-selection'));
-		removePersonalTravelPassengerScholar(context)
-	})
-}
-
-function bindRemovePersonalCustom(){
-	$('.removeOfficialCustomButton').off('click');
-	$('.removeOfficialCustomButton').on('click',function(){
-		var context=($(contextSelectedElement).attr('data-selection'));
-		removePersonalTravelPassengerCustom(context)
-	})
-}
-
-
-function bindRemoveItenerary(){
-	$('.removeIteneraryButton').off('click');
-	$('.removeIteneraryButton').on('click',function(){
-		var context=($(contextSelectedElement).attr('data-selection'));
-		removePersonalTravelItenerary(context)
-	})
-}
 
 
 
-function removePersonalTravelPassengerStaff(id){
-	$('#preview-modal').on('show.bs.modal', function (e) {
-	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
-	    	$('.modal-submit').on('click',function(){
-	    		removeContextListElement('api/travel/personal/staff/',id);
-	    	})
-	    })
-	});
 
-	$('#preview-modal').modal('toggle');
-	
-}
-
-
-function removePersonalTravelPassengerScholar(id){
-	$('#preview-modal').on('show.bs.modal', function (e) {
-	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
-	    	$('.modal-submit').on('click',function(){
-	    		removeContextListElement('api/travel/personal/scholars/',id);
-	    	})
-	    })
-	});
-
-	$('#preview-modal').modal('toggle');
-	
-}
-
-
-function removePersonalTravelPassengerCustom(id){
-	
-	$('#preview-modal').on('show.bs.modal', function (e) {
-	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
-	    	removeContextListElement('api/travel/personal/custom/',id);
-	    })
-	});
-
-	$('#preview-modal').modal('toggle');
-
-	
-}
-
-
-function removePersonalTravelItenerary(id){
-	$('#preview-modal').on('show.bs.modal', function (e) {
-	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
-	    	removeContextListElement('api/travel/personal/itenerary/',id);
-	    })
-	});
-
-	$('#preview-modal').modal('toggle');
-	
-}
-
-
-
+/*
+|----------------------------------------------------------------------------
+| Display passengers
+|---------------------------------------------------------------------------
+|
+| Show all  passengers on the list.
+| DO NOT FORGET to call context() function to enable right click menu
+|
+*/
 
 function showPersonalTravelPassengerStaffPreview(id){
 	ajax_getPersonalTravelPassengerStaffPreview(id,function(staff){
@@ -218,66 +275,6 @@ function showPersonalTravelPassengerCustomPreview(id){
 
 
 
-function showPersonalTravelListPreview(id){
-	ajax_getPersonalTravelListPreview(id,function(json){
-		$('.preview-id').html(preview[0].id)
-		$('.preview-name').html(preview[0].profile_name)
-		$('.preview-unit').html(preview[0].department)
-		$('.preview-created').html(((preview[0].date_created).split(' '))[0])
-		$('.preview-purpose').html(preview[0].purpose)
-
-
-		//itenerary
-		var htm=`<details id="official_travel_itenerary`+json[0].id+`" data-menu="iteneraryMenu" data-selection="`+json[0].id+ `" class="contextMenuSelector official_travel_itenerary`+json[0].id+` col col-md-12">
-					<summary>`+json[0].location+` - `+json[0].destination+`</summary>
-					<table class="table table-fluid" style="background:rgba(250,250,250,0.7);color:rgb(40,40,40);">
-						<thead>
-							<th>Origin</th> <th>Destination</th>  <th>Date</th> <th>Time</th>
-						</thead>
-						<tbody>
-							<tr>
-								<td>`+json[0].location+`</td>
-								<td>`+json[0].destination+`</td>
-								<td>`+json[0].departure_date+`</td>
-								<td>`+json[0].departure_time+`</td>
-							</tr>
-						</tbody>
-					</table>
-				</details>
-			`
-
-		//data must no be empty before appending
-		if(json[0].destination.length>0) $('.preview-itenerary').append(htm)
-			
-
-		//vehicle type radio
-		$('input[name=vtype]').each(function(index,value){
-			if(json[0].vehicle_type==$(value).val()){
-				$(value).attr('checked','checked')
-			}
-			
-		})
-
-		//payment mode
-		$('input[name=mode-of-payment]').each(function(index,value){
-			console.log(index);
-			//check Cash
-			if(json[0].mode_of_payment=='cash'&&$(value).val()=='cash'){
-				$(value).attr('checked','checked')
-			}
-
-
-			//check Salary Deduction
-			if(json[0].mode_of_payment=='sd'&&$(value).val()=='sd'){
-				$(value).attr('checked','checked')
-			}
-
-
-			
-		})
-
-	})
-}
 
 
 
@@ -311,6 +308,17 @@ function showPersonalTravelItenerary(id){
 	});	
 }
 
+
+
+/*
+|----------------------------------------------------------------------------
+| Remove Travel Request
+|---------------------------------------------------------------------------
+|
+| Remove the whole Trave Request including passengers and itenerary.
+| DO NOT CALL THIS FUNCTION UNLESS DATA IS NOT USABLE.EFFECT OF THIS FUNCTION IS UNRECOVERABLE 
+|
+*/
 
 function removePersonalTravelRequest(id){
 
@@ -358,5 +366,132 @@ function removePersonalTravelRequest(id){
 	    	})
 	
 }
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Remove passengers
+|---------------------------------------------------------------------------
+|
+| Remove all passengers from the travel request. This functions must be called with extra caution.
+|
+*/
+
+function removePersonalTravelPassengerStaff(id){
+	$('#preview-modal').on('show.bs.modal', function (e) {
+	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
+	    	$('.modal-submit').on('click',function(){
+	    		removeContextListElement('api/travel/personal/staff/',id);
+	    	})
+	    })
+	});
+
+	$('#preview-modal').modal('toggle');
+	
+}
+
+
+function removePersonalTravelPassengerScholar(id){
+	$('#preview-modal').on('show.bs.modal', function (e) {
+	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
+	    	$('.modal-submit').on('click',function(){
+	    		removeContextListElement('api/travel/personal/scholars/',id);
+	    	})
+	    })
+	});
+
+	$('#preview-modal').modal('toggle');
+	
+}
+
+
+function removePersonalTravelPassengerCustom(id){
+	
+	$('#preview-modal').on('show.bs.modal', function (e) {
+	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
+	    	removeContextListElement('api/travel/personal/custom/',id);
+	    })
+	});
+
+	$('#preview-modal').modal('toggle');
+
+	
+}
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Remove Itenerary
+|---------------------------------------------------------------------------
+|
+| Remove the travel from the list.DO NOT USE THIS on the closed travel
+|
+*/
+
+
+
+function removePersonalTravelItenerary(id){
+	$('#preview-modal').on('show.bs.modal', function (e) {
+	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
+	    	removeContextListElement('api/travel/personal/itenerary/',id);
+	    })
+	});
+
+	$('#preview-modal').modal('toggle');
+	
+}
+
+
+
+
+
+
+
+
+/*
+|----------------------------------------------------------------------------
+| REMOVE BINDING
+|---------------------------------------------------------------------------
+|
+| Bind the function into the front end.
+|
+*/
+
+
+function bindRemoveStaff(){
+	$('.removeOfficialPassengerButton').off('click');
+	$('.removeOfficialPassengerButton').on('click',function(){
+		var context=($(contextSelectedElement).attr('data-selection'));
+		removePersonalTravelPassengerStaff(context)
+	})
+}
+function bindRemovePersonalScholar(){
+	$('.removeOfficialScholarButton').off('click');
+	$('.removeOfficialScholarButton').on('click',function(){
+		var context=($(contextSelectedElement).attr('data-selection'));
+		removePersonalTravelPassengerScholar(context)
+	})
+}
+
+function bindRemovePersonalCustom(){
+	$('.removeOfficialCustomButton').off('click');
+	$('.removeOfficialCustomButton').on('click',function(){
+		var context=($(contextSelectedElement).attr('data-selection'));
+		removePersonalTravelPassengerCustom(context)
+	})
+}
+
+
+function bindRemoveItenerary(){
+	$('.removeIteneraryButton').off('click');
+	$('.removeIteneraryButton').on('click',function(){
+		var context=($(contextSelectedElement).attr('data-selection'));
+		removePersonalTravelItenerary(context)
+	})
+}
+
+
 
 

@@ -1,16 +1,80 @@
+/**
+* OFFICIAL TRAVEL REQUEST PREVIEW SCRIPT
+* Kenneth Abella <johnkennethgibasabella@gmail.com>
+*
+*
+*/
 
-// placeholder
+/*
+|--------------------------------------------------------------------------
+| Application Settings
+|--------------------------------------------------------------------------
+|
+| Define varables used in different functions related to preview page
+| removing these variables will trigger an error when using some functions. This 
+| is also shared to other travel requests
+|
+*/
+
+
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Hold data for travel request preview
+|---------------------------------------------------------------------------
+|
+| JSON from preview page AJAX request 
+|
+*/
+
 var preview;
 var scholars;
 var staff;
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Count Variable
+|---------------------------------------------------------------------------
+|
+| Total count for passengers and itenerary 
+|
+*/
 var passenger_count=0;
 var itenerary_count=0;
 var official_travel_custom_passenger;
 var official_travel_itenerary;
-var contextSelectedElement;
-var active_page='';
-var active_list='';
-var form_id=0; //equivelent to the tr_id
+
+
+/*
+|----------------------------------------------------------------------------
+| Form Id
+|---------------------------------------------------------------------------
+|
+| This must be equivalent to Travel Request ID. This is the variable used to determine
+| if the request is coming from a form. If form is empty, form_id is equal to zer(0).
+| The value of variable must be changed to the last insert id of the previos CREATE operation
+| so that the application will know that item is already added in the database.
+|
+| This is useful if form require an UPDATE after an INSERT operation
+|
+*/
+var form_id=0;
+
+
+
+/*
+|----------------------------------------------------------------------------
+| AJAX preview functions
+|---------------------------------------------------------------------------
+|
+| Contains logic in sending the data used by showOfficialTravelListPreview() function 
+|
+|
+*/
 
 function ajax_getOfficialTravelListPreview(id,callback){
 	$.get('api/travel/official/preview/'+id,function(json){
@@ -20,6 +84,17 @@ function ajax_getOfficialTravelListPreview(id,callback){
 	})
 }
 
+
+
+/*
+|----------------------------------------------------------------------------
+| AJAX passenger functions
+|---------------------------------------------------------------------------
+|
+| Contains logic in viewing pasengers of the official travel requests 
+| This is called allong with showOfficialTravelPassenger.*() functions
+|
+*/
 
 function ajax_getOfficialTravelPassengerScholarsPreview(id,callback){
 
@@ -42,18 +117,26 @@ function ajax_getOfficialTravelPassengerStaffPreview(id,callback){
 
 function ajax_getOfficialTravelPassengerCustomPreview(id,callback){
 
-
 	$.get('api/travel/official/custom/'+id,function(json){
 		official_travel_custom_passenger=JSON.parse(json)
 		callback(official_travel_custom_passenger);
 		return official_travel_custom_passenger;
 	})
-
 	
 }
 
 
 
+
+/*
+|----------------------------------------------------------------------------
+| AJAX itenerary functions
+|---------------------------------------------------------------------------
+|
+| Get the official travel request's itenerary
+|
+|
+*/
 
 function ajax_getOfficialTravelItenerary(id,callback){
 	$.get('api/travel/official/itenerary/'+id,function(json){
@@ -66,6 +149,15 @@ function ajax_getOfficialTravelItenerary(id,callback){
 
 
 
+/*
+|----------------------------------------------------------------------------
+| Count Display
+|---------------------------------------------------------------------------
+|
+| Display total count into section
+|
+|
+*/
 
 function showTotalPassengerCount(){
 	$('.passenger-count').html(passenger_count)
@@ -75,45 +167,118 @@ function showTotalIteneraryCount(){
 	$('.itenerary-count').html(itenerary_count)
 }
 
+
+/*
+|----------------------------------------------------------------------------
+| Determine Admin privilege
+|---------------------------------------------------------------------------
+|
+| Return true if current session privilege is administrator
+|
+|
+*/
+
+function isAdmin(){
+	var priv=localStorage.getItem('priv');
+	return priv==='admin';
+}
+
+
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Display preview page
+|---------------------------------------------------------------------------
+|
+| Show necessary information on the preview page including id,requestor,
+| unit,date and purpose
+|
+|
+*/
+
 function showOfficialTravelListPreview(id){
+	//call ajax function 
 	ajax_getOfficialTravelListPreview(id,function(json){
-		$('.preview-id').html(preview[0].tr)
-		$('.preview-name').html(preview[0].profile_name)
-		$('.preview-unit').html(preview[0].department)
-		$('.preview-created').html(((preview[0].date_created).split(' '))[0])
-		$('.preview-purpose').html(preview[0].purpose)
 
-		//check for valid status
-		if(typeof preview[0].status!=undefined){
+		$('.preview-id').html(json[0].tr)
+		$('.preview-name').html(json[0].profile_name)
+		$('.preview-unit').html(json[0].department)
+		$('.preview-created').html(((json[0].date_created).split(' '))[0])
+		$('.preview-purpose').html(json[0].purpose)
 
-			//initial state
-			if(preview[0].status==0){		
-				//showUntouchedStatus();
+		//--------------------------------------
+		// Check for valid status
+		// 0 - Not yet send
+		// 1 - Sent
+		// 2 - Verified
+		// 3 - Returned to sender
+		// 4 - Closed
+		// --------------------------------------
+
+		if(typeof json[0].status!=undefined){
+
+
+			if(json[0].status==0){		
+				//allow forwarding
 				bindForwardOfficial()
-				
-				
+
+				//allow updating
+				bindUpdateOfficialPreview()
+				bindRemoveOfficialPreview()
+
+				//enable command buttons
+				enableStatusDefaultButtonCommandGroup()
+							
 			}
 
 
-			//initial state
 			if(preview[0].status==1){
 
 				if(isAdmin()){
-					showVerifyStatusAdmin();
+					//allow admin to verify or returned the request to the sender
+					showUntouchedStatusAdmin()
+					bindVerifyOfficial();
+					bindReturnOfficial();
 
+				}else{
+					//Show waiting for confirmation status
+					showVerifyStatus();
+				}
+
+			}
+
+
+			if(preview[0].status==2){
+
+				if(isAdmin()){
+					//show a close or return to sender status
+					showVerifyStatusAdmin();
 					bindReturnOfficial()
 					bindCloseOfficial()
 
 				}else{
-					showVerifyStatus();
+					//show VERIFIED status to the ordinary user
+					showVerifiedStatus();
 				}
+
 			}
+
+
+			
+
 
 			//returned status
 			if(preview[0].status==3){
+				//show returned status to both admin and user
+
+				//allow the user to update the request
 				showReturnStatus()
-				//allow resending
 				bindForwardOfficial()
+				bindUpdateOfficialPreview()
+				bindRemoveOfficialPreview()
+				enableStatusDefaultButtonCommandGroup()
 			}
 
 
@@ -121,24 +286,24 @@ function showOfficialTravelListPreview(id){
 			if(preview[0].status==4){
 				showClosedStatus()
 			}
-
-			
 		}
-
-
-		
-
 
 	})
 	
 
 }
 
-function isAdmin(){
-	var priv=localStorage.getItem('priv');
-	return priv==='admin';
-}
 
+
+/*
+|----------------------------------------------------------------------------
+| Display passengers
+|---------------------------------------------------------------------------
+|
+| Show all  passengers on the list.
+| DO NOT FORGET to call context() function to enable right click menu
+|
+*/
 
 function showOfficialTravelPassengerStaffPreview(id){
 	ajax_getOfficialTravelPassengerStaffPreview(id,function(staff){
@@ -161,10 +326,10 @@ function showOfficialTravelPassengerStaffPreview(id){
 			
 			setTimeout(function(){ context() },1000);
 
-
 	});
 	
 }
+
 
 
 function showOfficialTravelPassengerScholarsPreview(id){
@@ -195,6 +360,7 @@ function showOfficialTravelPassengerScholarsPreview(id){
 }
 
 
+
 function showOfficialTravelPassengerCustomPreview(id){
 	ajax_getOfficialTravelPassengerCustomPreview(id,function(official_travel_custom_passenger){
 		
@@ -218,6 +384,17 @@ function showOfficialTravelPassengerCustomPreview(id){
 	
 }
 
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Display travel list
+|---------------------------------------------------------------------------
+|
+| Show all itenerary related to the travel request
+|
+*/
 
 function showOfficialTravelItenerary(id){
 	ajax_getOfficialTravelItenerary(id,function(official_travel_itenerary){
@@ -246,53 +423,82 @@ function showOfficialTravelItenerary(id){
 			$('.preview-itenerary').append(htm)
 		}
 
-
-
+		setTimeout(function(){ context() },1000);
 	});
 	
-	
-	
 }
 
-function removeContextListElement(url,id){
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Remove Travel Request
+|---------------------------------------------------------------------------
+|
+| Remove the whole Trave Request including passengers and itenerary.
+| DO NOT CALL THIS FUNCTION UNLESS DATA IS NOT USABLE.EFFECT OF THIS FUNCTION IS UNRECOVERABLE 
+|
+*/
+
+function removeOfficialTravelRequest(id){
+
 	$('.modal-submit').on('click',function(){
-    		//disable onclick
-    		$(this).attr('disabled','disabled')
 
-    		//ajax here
-    		$.ajax({
+		//loading
+		previewLoadingEffect()
+		
+		//disable onclick
+		$(this).attr('disabled','disabled')
 
-    			url:url+''+id,
-    			method:'DELETE',
-    			data: { _token: $("input[name=_token]").val()},
-    			success:function(data){
-    				if(data>0){
-    					//ajax here
-			    		setTimeout(function(){	    		
-				    		//back to original
-				    		$(this).attr('disabled','enabled') 
-    						$(contextSelectedElement).fadeOut();
+		$(this).html('Removing . . .')
 
-    						$(this).attr('enabled','enabled') 
-			    			
-			    		},1000)
+		$.ajax({
+			url:'api/travel/official/'+id,
+			method:'DELETE',
+			data: { _token: $("input[name=_token]").val()},
+			success:function(data){
+				if(data==1){
+					//ajax here
+		    		setTimeout(function(){
 
-			    		$('#preview-modal').modal('hide');
+		    			$('.preview-content').fadeOut()
 
-    				}else{
-    					alert('Something went wrong.Please try again later')
-    					//back to original
-    					$(this).attr('enabled','enabled')
-    					$('#preview-modal').modal('hide');
-    				}
-    			}
-    		})
+		    			var nextItem=$(selectedElement).next();
+		    			$(selectedElement).remove();
 
+		    			//select next
+		    			$(nextItem).click()
+		    			
+		    		},1000)
 
-    })
+		    		$('#preview-modal').modal('hide');
+
+				}else{
+					alert('Oops! Something went wrong.Try to refresh the page')
+				}
+			}
+		})
+
+		
+		//back to original
+		$(this).attr('disabled','enabled')
+	})
+	
 }
 
 
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Remove passengers
+|---------------------------------------------------------------------------
+|
+| Remove all passengers from the travel request. This functions must be called with extra caution.
+|
+*/
 
 function removeOfficialTravelPassengerCustom(id){
 	
@@ -333,6 +539,18 @@ function removeOfficialTravelPassengerStaff(id){
 	
 }
 
+
+
+/*
+|----------------------------------------------------------------------------
+| Remove Itenerary
+|---------------------------------------------------------------------------
+|
+| Remove the travel from the list.DO NOT USE THIS on the closed travel
+|
+*/
+
+
 function removeOfficialTravelItenerary(id){
 	$('#preview-modal').on('show.bs.modal', function (e) {
 	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
@@ -345,280 +563,17 @@ function removeOfficialTravelItenerary(id){
 }
 
 
-function removeOfficialTravelRequest(id){
 
-	$('.modal-submit').on('click',function(){
 
-		//loading
-		previewLoadingEffect()
-		
-		//disable onclick
-		$(this).attr('disabled','disabled')
 
-		$(this).html('Removing . . .')
-
-		$.ajax({
-
-			url:'api/travel/official/'+id,
-			method:'DELETE',
-			data: { _token: $("input[name=_token]").val()},
-			success:function(data){
-				if(data==1){
-					//ajax here
-		    		setTimeout(function(){
-
-		    			$('.preview-content').fadeOut()
-
-		    			var nextItem=$(selectedElement).next();
-		    			$(selectedElement).remove();
-
-		    			//select next
-		    			$(nextItem).click()
-		    			
-		    		},1000)
-
-		    		$('#preview-modal').modal('hide');
-
-				}else{
-					alert('Oops! Something went wrong.Try to refresh the page')
-				}
-			}
-		})
-
-		
-		//back to original
-		$(this).attr('disabled','enabled')
-	})
-	
-}
-
-
-function forwardOfficialTravelRequest(){
-	
-	$('.modal-submit').on('click',function(){
-
-		//loading
-	    previewLoadingEffect()
-	    		
-	    //disable onclick
-	    $(this).attr('disabled','disabled')
-
-	    //ajax here
-
-	    ajax_updateTravelStatusPreview('api/travel/official/status/',$(selectedElement).attr('id'),1,function(data){
-
-	    	if(data==1){
-	    		//change status
-	    		if(isAdmin()){
-					showVerifyStatusAdmin();
-				}else{
-					showVerifyStatus();
-				}
-	    	}else{
-	    		//show error
-	    		alert('Oops!Something went wrong.Please try again later.')
-	    	}
-		})
-
-
-	    $('#preview-modal').modal('hide');
-
-	    //back to original
-	    $(this).attr('disabled','enabled')
-	})
-	
-}
-
-
-function verifyOfficialTravelRequest(id){
-	
-	$('.modal-submit').on('click',function(){
-
-		//loading
-	    previewLoadingEffect()
-	    		
-	    //disable onclick
-	    $(this).attr('disabled','disabled')
-
-	    //ajax here
-	    setTimeout(function(){
-
-	    	$('.preview-content').fadeOut()
-	    	$(selectedElement).remove();
-	    			
-	    },1000)
-
-	    $('#preview-modal').modal('hide');
-
-	    //back to original
-	    $(this).attr('disabled','enabled')
-	})
-	
-}
-
-
-function returnOfficialTravelRequest(){
-	
-	$('.modal-submit').on('click',function(){
-
-		//loading
-	    previewLoadingEffect()
-	    		
-	    //disable onclick
-	    $(this).attr('disabled','disabled')
-
-	    //ajax here
-
-	    ajax_updateTravelStatusPreview('api/travel/official/status/',$(selectedElement).attr('id'),3,function(data){
-
-	    	if(data==1){
-	    		//change status
-	    		if(isAdmin()){
-					showReturnStatusAdmin()
-
-					//hide section
-					setTimeout(function(){
-				    	$('.preview-content').fadeOut()
-				    	$(selectedElement).remove();		
-				    },1000)
-				}
-
-	    	}else{
-	    		//show error
-	    		alert('Oops!Something went wrong.Please try again later.')
-	    	}
-		})
-
-
-	    $('#preview-modal').modal('hide');
-
-	    //back to original
-	    $(this).attr('disabled','enabled')
-	})
-	
-}
-
-
-
-function closeOfficialTravelRequest(){
-	
-	$('.modal-submit').on('click',function(){
-
-		//loading
-	    previewLoadingEffect()
-	    		
-	    //disable onclick
-	    $(this).attr('disabled','disabled')
-
-	    //ajax here
-
-	    ajax_updateTravelStatusPreview('api/travel/official/status/',$(selectedElement).attr('id'),4,function(data){
-
-	    	if(data==1){
-	    		
-					showClosedStatus();
-				
-	    	}else{
-	    		//show error
-	    		alert('Oops!Something went wrong.Please try again later.')
-	    	}
-		})
-
-
-	    $('#preview-modal').modal('hide');
-
-	    //back to original
-	    $(this).attr('disabled','enabled')
-	})
-	
-}
-
-
-
-
-
-
-function showBootstrapDialog(modal,modalSection,url,callback){
-
-	$(modal).on('show.bs.modal', function (e) {
-	    $(modalSection).load(url,callback)
-	});
-
-	$(modal).modal('toggle');
-
-}
-
-/**context menu**/
-
-function context(fun){
-	var menuSelector=document.querySelectorAll('.contextMenuSelector');
-	var menu=document.querySelectorAll('.contextMenu');
-
-
-	for(var x=0;x<menuSelector.length;x++){
-		//menu[x].style.display="none"; //hide
-		$(menuSelector[x]).on('contextmenu',function(e){
-			e.preventDefault();
-			//mark selected
-			contextSelectedElement=this
-
-			//hide all context menu
-			$(menu).hide();
-
-			//own context menu
-			var menu_attr=$(e.currentTarget).attr('data-menu')
-			var menu_div=document.querySelector('#'+menu_attr)
-			menu_div.style.display="block";
-			menu_div.style.top=(e.clientY)+"px";
-			menu_div.style.left=(e.clientX)+"px";
-			window.onscroll=function(){
-				try{
-					menu_div.style.display="none";
-					delete menu_div;
-				}catch(e){}
-			}
-
-			window.document.onclick=function(){
-				try{
-					menu_div.style.display="none";
-					delete menu_div;
-				}catch(e){}
-			}
-
-		})
-	}
-
-	//bindRemoveStaff();
-
-}
-
-
-function ajaxLoad(){
-	$('.ajaxload').on('click',function(){
-		var target=$(this).attr('data-section')
-		var content=$(this).attr('data-content')
-		$(target).load(content,function(){
-
-		})
-	})
-}
-
-
-/*bind action to contextMenu*/
-function unbindContext(){
-	//use explicitely to remove context
-	//may be used before calling context() when adding new item 
-	var menuSelector=document.querySelectorAll('.contextMenuSelector');
-	for(var x=0;x<menuSelector.length;x++){
-		//menu[x].style.display="none"; //hide
-		$(menuSelector[x]).off('contextmenu');
-	}
-}
-
-function unbindAjaxLoad(){
-	$('.ajaxload').off('click')
-}
-
+/*
+|----------------------------------------------------------------------------
+| REMOVE BINDING
+|---------------------------------------------------------------------------
+|
+| Bind the function into the front end.
+|
+*/
 
 function bindRemoveStaff(){
 	$('.removeOfficialPassengerButton').off('click');
@@ -649,15 +604,5 @@ function bindRemoveItenerary(){
 	})
 }
 
-/*loading*/
-function showLoading(targetDiv,status){
-	var targetDiv=document.querySelectorAll(targetDiv);
-	
-	
-	if(typeof status!='undefined'){
-		$(targetDiv).prepend('<span class="loading-status">'+status+'</span>');
-	}else{
-		$('.loading-status').remove();
-	}
-}
+
 

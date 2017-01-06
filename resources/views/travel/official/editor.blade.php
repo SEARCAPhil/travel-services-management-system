@@ -96,6 +96,7 @@
 
 
 	</div>
+<script type="text/javascript" src="js/common.js"></script>	
 <script type="text/javascript" src="js/callback.official.js"></script>
 <script type="text/javascript" src="js/form.official.js"></script>
 <script type="text/javascript">	

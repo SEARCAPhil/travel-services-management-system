@@ -134,6 +134,12 @@ padding: 2px;
 .preview-dl dd{
 padding: 5px;
 }
+.preview-command.disabled{
+	color: rgb(100,100,100);
+	opacity: 0.5;
+	cursor: none;
+
+}
 
 /*backdrop modal*/
 .backdrop{

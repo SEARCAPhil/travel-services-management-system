@@ -1,3 +1,21 @@
+/**
+* @title CAMPUS TRAVEL REQUEST PREVIEW SCRIPT
+* @author Kenneth Abella <johnkennethgibasabella@gmail.com>
+*
+*
+*/
+
+
+
+/*
+|----------------------------------------------------------------------------
+| AJAX preview functions
+|---------------------------------------------------------------------------
+|
+| Contains logic in sending the data used by show  function 
+|
+|
+*/
 
 function ajax_getCampusTravelListPreview(id,callback){
 	$.get('api/travel/campus/preview/'+id,function(json){
@@ -8,6 +26,16 @@ function ajax_getCampusTravelListPreview(id,callback){
 }
 
 
+
+/*
+|----------------------------------------------------------------------------
+| AJAX itenerary functions
+|---------------------------------------------------------------------------
+|
+| Get travel request's itenerary
+|
+|
+*/
 function ajax_getCampusTravelItenerary(id,callback){
 	$.get('api/travel/campus/itenerary/'+id,function(json){
 		official_travel_itenerary=JSON.parse(json)
@@ -17,8 +45,53 @@ function ajax_getCampusTravelItenerary(id,callback){
 }
 
 
+/*
+|----------------------------------------------------------------------------
+| Count Display
+|---------------------------------------------------------------------------
+|
+| Display total count into section
+|
+|
+*/
+
+function showTotalPassengerCount(){
+	$('.passenger-count').html(passenger_count)
+}
+
+function showTotalIteneraryCount(){
+	$('.itenerary-count').html(itenerary_count)
+}
 
 
+
+/*
+|----------------------------------------------------------------------------
+| Determine Admin privilege
+|---------------------------------------------------------------------------
+|
+| Return true if current session privilege is administrator
+|
+|
+*/
+
+function isAdmin(){
+	var priv=localStorage.getItem('priv');
+	return priv==='admin';
+}
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Display preview page
+|---------------------------------------------------------------------------
+|
+| Show necessary information on the preview page including id,requestor,
+| unit and date
+|
+|
+*/
 
 function showCampusTravelListPreview(id){
 	ajax_getCampusTravelListPreview(id,function(json){
@@ -26,12 +99,23 @@ function showCampusTravelListPreview(id){
 		$('.preview-name').html(preview[0].profile_name)
 		$('.preview-unit').html(preview[0].department)
 		$('.preview-created').html(((preview[0].date_created).split(' '))[0])
-		$('.preview-purpose').html(preview[0].purpose)
+
 
 
 		
 	})
 }
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Display travel list
+|---------------------------------------------------------------------------
+|
+| Show all itenerary related to the travel request
+|
+*/
 
 
 function showCampusTravelItenerary(id){
@@ -69,6 +153,19 @@ function showCampusTravelItenerary(id){
 	
 	
 }
+
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Remove Travel Request
+|---------------------------------------------------------------------------
+|
+| Remove the whole Trave Request including passengers and itenerary.
+| DO NOT CALL THIS FUNCTION UNLESS DATA IS NOT USABLE.EFFECT OF THIS FUNCTION IS UNRECOVERABLE 
+|
+*/
 
 function removeCampusTravelRequest(id){
 
@@ -118,6 +215,17 @@ function removeCampusTravelRequest(id){
 }
 
 
+
+/*
+|----------------------------------------------------------------------------
+| Remove Itenerary
+|---------------------------------------------------------------------------
+|
+| Remove the travel from the list.DO NOT USE THIS on the closed travel
+|
+*/
+
+
 function removeCampusTravelItenerary(id){
 	$('#preview-modal').on('show.bs.modal', function (e) {
 	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
@@ -130,6 +238,17 @@ function removeCampusTravelItenerary(id){
 }
 
 
+
+
+
+/*
+|----------------------------------------------------------------------------
+| REMOVE BINDING
+|---------------------------------------------------------------------------
+|
+| Bind the function into the front end.
+|
+*/
 
 function bindRemoveItenerary(){
 	$('.removeIteneraryButton').off('click');

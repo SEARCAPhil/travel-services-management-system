@@ -1,4 +1,23 @@
+/*
+* OFFICIALL CALLBACK SCRIPT
+* Kenneth Abella <johnkennethgibasabella@gmail.com>
+*
+* Include all functions you need to override on this section
+* You should also put all the callback script to avoid conflict
+*/	
 
+
+
+/*
+|----------------------------------------------------------------------------
+| Append Items to List
+|---------------------------------------------------------------------------
+|
+| This is used inside show travel requests functions
+| This allows to run script on success operations
+|
+|
+*/
 
 function appendStaffToListPreview(jsonData){
 	var data=JSON.parse(jsonData)

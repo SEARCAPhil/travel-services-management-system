@@ -1,5 +1,23 @@
-/*callback for selecting an item from directory list
-* This must be only present on this page to avoid conflict
+/*
+* PERSONAL CALLBACK SCRIPT
+* Kenneth Abella <johnkennethgibasabella@gmail.com>
+*
+* Include all functions you need to overide on this section
+* You should also put all the callback script to avoid conflict. Al unique 
+*/	
+
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Append Items to List
+|---------------------------------------------------------------------------
+|
+| This is used inside show travel requests functions
+| This allows to run script on success operations
+|
+|
 */
 
 function appendStaffToListPreview(jsonData){
@@ -38,23 +56,6 @@ function appendStaffToListPreview(jsonData){
 
 	})
 
-}
-
-
-function appendStaffToListPreviewCallback(data){
-	//itenerary enable button on forms
-	changeCircleState('.itenerary-circle-group')
-	changeButtonState('#iteneraryFormButton','enabled')
-
-}
-
-function appendIteneraryToListPreviewCallback(data){
-	changeCircleState('.vehicle-circle-group')
-	changeButtonState('.vehicleTypeFormButton','enabled')
-
-	//include mode of payment
-	changeCircleState('.payment-circle-group')
-	changeButtonState('.paymentFormButton','enabled')
 }
 
 
@@ -132,6 +133,7 @@ function appendCustomToListPreview(jsonData){
 
 
 function appendCustomListPreviewConfirmation(){
+	//dialog
 	var htm=`<br/><br/><div class="col col-md-12"><h4>Are you sure you want to add this to the passenger list?</h4>
 		<button class="btn btn-danger" id="customPassengerConfirmationButton"><span class="glyphicon glyphicon-ok"></span>&nbsp;Yes</button> <button class="btn btn-default" id="customPassengerConfirmationButtonCancel">No</button>
 	</div>`
@@ -180,6 +182,34 @@ function appendCustomListPreviewConfirmation(){
 			$('#custom-confirmation').html('')
 		},1200)
 	});
+}
+
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Append form callbak
+|---------------------------------------------------------------------------
+|
+| Change button state on success operation
+|
+*/
+
+function appendStaffToListPreviewCallback(data){
+	//itenerary enable button on forms
+	changeCircleState('.itenerary-circle-group')
+	changeButtonState('#iteneraryFormButton','enabled')
+
+}
+
+function appendIteneraryToListPreviewCallback(data){
+	changeCircleState('.vehicle-circle-group')
+	changeButtonState('.vehicleTypeFormButton','enabled')
+
+	//include mode of payment
+	changeCircleState('.payment-circle-group')
+	changeButtonState('.paymentFormButton','enabled')
 }
 
 
