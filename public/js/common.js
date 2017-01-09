@@ -221,6 +221,125 @@ function changeCircleState(target,state='enabled'){
 }
 
 
+
+/*
+|----------------------------------------------------------------------------
+| AJAX Update status
+|---------------------------------------------------------------------------
+|
+| Update status of the travel request
+|
+|
+*/
+
+function ajax_updateTravelStatusPreview(url,id,status,callback){
+	//ajax here
+	$.ajax({
+		url:url+''+id,
+		method:'PUT',
+		data: { _token: $("input[name=_token]").val(),id:id,status:status},
+		success:function(data){
+			if(data>0){
+
+				//callback
+				callback(data)
+
+	    		$('#preview-modal').modal('hide');
+
+			}else{
+				alert('Something went wrong.Please try again later')
+				//back to original
+				$(this).attr('enabled','enabled')
+				$('#preview-modal').modal('hide');
+			}
+		}
+	})
+}
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Update status bar (ADMIN)
+|---------------------------------------------------------------------------
+|
+| Display different status of the travel request. These functions are restricted to administrator
+| and should not be exposed to ordinary user. Displaying status relies on the current status as follows
+|
+|		--------------------------------------
+|		 For Admin
+|		 0 - N/A (For ordinary user only)
+|		 1 - showUntouchedStatusAdmin()
+|		 2 - showVerifyStatusAdmin()
+|		 3 - showReturnStatusAdmin()
+|		 4 - showClosedStatus() (applies aso to ordinary user)
+|		 --------------------------------------
+*/
+
+function showUntouchedStatusAdmin(){
+	var htm=`
+
+			<div class="col col-md-12" style="background: rgb(255,60,60);color:rgb(255,255,255);margin-bottom: 20px;padding: 5px;">
+				<p>
+					This Travel Request is not yet verified. Please review before making any further actions.
+					<button class="btn btn-xs btn-danger preview-return">Return to sender <span class="glyphicon glyphicon-inbox"></span></button> Or
+					<button class="btn btn-xs btn-danger preview-verify"> Verify <span class="glyphicon glyphicon-ok"></span></button>
+				</p>
+			</div>`;
+	$('.preview-status-section').html(htm);
+}
+
+
+
+function showVerifyStatusAdmin(){
+
+	var htm=`<div class="col col-md-12" style="background: rgb(0,150,100);color:rgb(255,255,255);margin-bottom: 20px;padding: 5px;">
+				<p>
+					Travel Request Verified!
+					<button class="btn btn-xs btn-success preview-return">Return to sender <span class="glyphicon glyphicon-inbox"></span></button> Or
+					<button class="btn btn-xs btn-success preview-close">Mark as <u>Closed</u> <span class="glyphicon glyphicon-lock"></span></button> 
+				</p>
+			</div>`;
+	$('.preview-status-section').html(htm);
+}
+
+
+function showClosedStatusAdmin(){
+	var htm=`<div class="col col-md-12" style="background: rgb(0,150,100);color:rgb(255,255,255);margin-bottom: 20px;padding: 5px;">
+				<p>
+					<b>[READ-ONLY]</b> This Travel Request is already closed and only available for viewing.
+				</p>
+			</div>`;
+
+	$('.preview-status-section').html(htm);
+}
+
+
+
+function showReturnStatusAdmin(){
+	var htm=`
+
+			<div class="col col-md-12" style="background: rgb(255,60,60);color:rgb(255,255,255);margin-bottom: 20px;padding: 5px;">
+				<p>
+					This Travel Request was returned. 
+				</p>
+			</div>`;
+	$('.preview-status-section').html(htm);
+}
+
+
+
+
+function showClosedStatus(){
+	var htm=`<div class="col col-md-12" style="background: rgb(100,100,100);color:rgb(255,255,255);margin-bottom: 20px;padding: 5px;">
+				<p>
+					This Travel Request is already closed. <span class="glyphicon glyphicon-lock"></span>
+				</p>
+			</div>`;
+	$('.preview-status-section').html(htm);
+}
+
+
 /*
 |----------------------------------------------------------------------------
 | Loading status
@@ -242,6 +361,20 @@ function showLoading(targetDiv,status){
 	}
 }
 
+
+
+function showActiveBar(element){
+	var htm=`<div class="col col-md-12 text-right list-active-status-bar" style="background:rgb(150,150,150);padding:2px 5px 2px 5px;color:rgb(255,255,255);">Preview &emsp;<span class="glyphicon glyphicon-eye-open"></span></div>`
+
+	var nodes=$(element)[0].childNodes
+	console.log($(element))
+	for(var x=0;x<nodes.length; x++){
+		if($(nodes[x]).attr('class')=='list-active-status'){
+			$('.list-active-status').html('');
+			$(nodes[x]).html(htm)
+		}
+	}
+}
 
 
 

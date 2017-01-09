@@ -3,13 +3,15 @@
 		<div class="col col-md-12 row">
 			<ul class="list-unstyled preview-menu-li pull-right">
 				<li><strong class="preview-id"></strong></li>
-				<li><span class="glyphicon glyphicon-share-alt"></span></li>
-				<li><span class="glyphicon glyphicon-print"></span></li>
-				<li class="preview-remove"><span class="glyphicon glyphicon-remove"></span></li>
-				<li class="preview-update"><span class="glyphicon glyphicon-pencil"></span></li>
+
+				<li class="preview-command"><span class="glyphicon glyphicon-print"></span></li>
+				<li class="preview-remove preview-command disabled"><span class="glyphicon glyphicon-remove"></span></li>
+				<li class="preview-update preview-command disabled" ><span class="glyphicon glyphicon-pencil"></span></li>
+				<li class="text-danger preview-forward preview-command disabled"> <span class="glyphicon glyphicon-send"></span></li>
 			</ul>
 			
 		</div>
+		<div class="preview-status-section"></div>
 		<div class="col col-md-12 preview-title" >
 			<div class="col col-md-3">
 				<div class="profile-image profile-image-main" display-image="67.PNG" data-mode="staff" style="background: url(&quot;/profiler/profile/user.png&quot;) center center / cover no-repeat;"></div>
@@ -40,20 +42,10 @@
 
 	</div>
 <script type="text/javascript" src="js/common.js"></script>	
+<script type="text/javascript" src="js/status.campus.js"></script>	
 <script type="text/javascript" src="js/preview.campus.js"></script>
 <script type="text/javascript">	
-
-
-$(document).ready(function(){
-	$('.preview-remove').on('click',function(){
-	//call custom bootstrap dialog
-		showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/remove',function(){
-			//remove
-			removeCampusTravelRequest($(selectedElement).attr('id'))
-
-		})
-		
-	})
+function bindUpdateCampusPreview(){
 
 	$('.preview-update').off('click');
 	$('.preview-update').on('click',function(){
@@ -77,6 +69,28 @@ $(document).ready(function(){
 
 		},100);
 	})
+}
+
+
+
+function bindRemoveCampusPreview(){
+
+	$('.preview-remove').on('click',function(){
+	//call custom bootstrap dialog
+		showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/remove',function(){
+			//remove
+			removeCampusTravelRequest($(selectedElement).attr('id'))
+
+		})
+		
+	})
+
+}
+
+
+$(document).ready(function(){
+	
+
 
 	
 });

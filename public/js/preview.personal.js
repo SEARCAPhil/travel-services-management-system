@@ -125,11 +125,93 @@ function showTotalIteneraryCount(){
 
 function showPersonalTravelListPreview(id){
 	ajax_getPersonalTravelListPreview(id,function(json){
-		$('.preview-id').html(preview[0].id)
-		$('.preview-name').html(preview[0].profile_name)
-		$('.preview-unit').html(preview[0].department)
-		$('.preview-created').html(((preview[0].date_created).split(' '))[0])
-		$('.preview-purpose').html(preview[0].purpose)
+		$('.preview-id').html(json[0].id)
+		$('.preview-name').html(json[0].profile_name)
+		$('.preview-unit').html(json[0].department)
+		$('.preview-created').html(((json[0].date_created).split(' '))[0])
+		$('.preview-purpose').html(json[0].purpose)
+
+
+				//--------------------------------------
+		// Check for valid status
+		// 0 - Not yet send
+		// 1 - Sent
+		// 2 - Verified
+		// 3 - Returned to sender
+		// 4 - Closed
+		// --------------------------------------
+
+		if(typeof json[0].trp_status!=undefined){
+
+
+			if(json[0].trp_status==0){		
+				//allow forwarding
+				bindForwardPersonal()
+
+				//allow updating
+				bindUpdatePersonalPreview()
+				bindRemovePersonalPreview()
+
+				//enable command buttons
+				enableStatusDefaultButtonCommandGroup()
+							
+			}
+
+
+			if(json[0].trp_status==1){
+
+				if(isAdmin()){
+					//allow admin to verify or returned the request to the sender
+					showUntouchedStatusAdmin()
+					bindVerifyPersonal();
+					bindReturnPersonal();
+
+				}else{
+					//Show waiting for confirmation status
+					showVerifyStatus();
+				}
+
+			}
+
+
+			if(json[0].trp_status==2){
+
+				if(isAdmin()){
+					//show a close or return to sender status
+					showVerifyStatusAdmin();
+					bindReturnPersonal()
+					bindClosePersonal()
+
+				}else{
+					//show VERIFIED status to the ordinary user
+					showVerifiedStatus();
+				}
+
+			}
+
+
+			
+
+
+			//returned status
+			if(json[0].trp_status==3){
+				//show returned status to both admin and user
+
+				//allow the user to update the request
+				showReturnStatus()
+				bindForwardPersonal()
+				bindUpdatePersonalPreview()
+				bindRemovePersonalPreview()
+				enableStatusDefaultButtonCommandGroup()
+			}
+
+
+			//close status
+			if(json[0].trp_status==4){
+				showClosedStatus()
+			}
+		}
+
 
 
 		//itenerary
@@ -449,7 +531,6 @@ function removePersonalTravelItenerary(id){
 
 
 
-
 /*
 |----------------------------------------------------------------------------
 | REMOVE BINDING
@@ -491,6 +572,58 @@ function bindRemoveItenerary(){
 		removePersonalTravelItenerary(context)
 	})
 }
+
+
+
+function bindRemovePersonalPreview(){
+	$('.preview-remove').off('click');
+	$('.preview-remove').on('click',function(){
+	//call custom bootstrap dialog
+		showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/remove',function(){
+			//remove
+			removePersonalTravelRequest($(selectedElement).attr('id'))
+		})	
+	})
+}
+
+
+
+
+/*
+|----------------------------------------------------------------------------
+| UPDATE PREVIEW BINDING
+|---------------------------------------------------------------------------
+*/
+
+function bindUpdatePersonalPreview(){
+
+	//remove previous handler
+	$('.preview-update').off('click');
+	$('.preview-update').on('click',function(){
+		$('#editorTab').click();
+		//loading
+	    showLoading('#editor','<div><img src="img/loading.png" class="loading-circle" style="width: 80px !important;" /></div>')
+		setTimeout(function(){ 
+			$('#editor').load('travel/personal/editor/'+$(selectedElement).attr('id'),function(){
+				var id=$(selectedElement).attr('id');
+
+				showPersonalTravelListPreview(id)
+				showPersonalTravelPassengerStaffPreview(id)
+				showPersonalTravelPassengerScholarsPreview(id)
+				showPersonalTravelPassengerCustomPreview(id)
+
+				setTimeout(function(){
+					bindRemoveStaff();
+					bindRemoveItenerary();
+					bindRemovePersonalScholar()
+					bindRemovePersonalCustom()
+				},2000)
+			}); 
+		},100);
+	})
+}
+
+
 
 
 

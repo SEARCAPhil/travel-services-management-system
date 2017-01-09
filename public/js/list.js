@@ -324,7 +324,7 @@ function searchCampusTravelList(param){
 |---------------------------------------------------------------------------
 |
 | This is used inside show travel requests functions
-| This allows to run script on success operations
+| This allows to run script on success operations.
 |
 |
 */
@@ -351,12 +351,30 @@ function appendToList(callback){
 			purpose=purpose.substr(0,100);
 		}
 
+		var status_message='';
+
+
+		//get status
+		if(typeof list[x].status!='undefined'){
+
+			if(list[x].status==0) status_message='<small>[draft]</small>'
+		}
+
+
+		//get travel request personal status
+		if(typeof list[x].trp_status!='undefined'){
+			if(list[x].trp_status==0) status_message='[draft]'
+		}
 
 		//append to the DIV
 		htm+=`<dd id="`+list[x].id+`">
-			<h4 class="page-header"><b>`+list[x].id+`</b></h4>
+			<h4><b>`+list[x].id+`</b>  <small class="text-danger">`+status_message+`</small></h4>
 			<p><small>`+purpose+`</small></p>
-		</dd>`
+			<p><div class="list-active-status" style="float:left;"></div></p>
+			<div style="clear:both;"></div>
+			`
+
+			htm+=`</dd>`
 
 	}
 
@@ -401,6 +419,8 @@ function attachClickEventToList(url,callback){
 		//add selected style
 		$('.list-details dd').removeClass('active')
 		$(this).addClass('active');
+
+		showActiveBar(this);
 
 		//reset count
 		passenger_count=0;

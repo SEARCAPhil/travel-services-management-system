@@ -352,6 +352,32 @@ class Campus extends Controller
     }
 
 
+
+
+    public function update_status(Request $request){
+
+        try{
+            $id=$request->input('id');
+            $purpose=$request->input('status');
+
+            $this->pdoObject=DB::connection()->getPdo();
+
+            $this->pdoObject->beginTransaction();
+            $sql="UPDATE trc set status=:status where id=:id";
+            $statement=$this->pdoObject->prepare($sql);
+            $statement->bindParam(':status',$purpose);
+            $statement->bindParam(':id',$id);
+            $statement->execute();
+            $isUpdated=$statement->rowCount();
+            $this->pdoObject->commit();
+
+            echo $isUpdated;
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+    }
+
+
     /**
      * Show the form for editing the specified resource.
      *

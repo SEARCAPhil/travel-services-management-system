@@ -223,7 +223,7 @@ class Official extends Controller
     }
 
 
-      public function update_status(Request $request){
+    public function update_status(Request $request){
 
         try{
             $id=$request->input('id');

@@ -95,12 +95,82 @@ function isAdmin(){
 
 function showCampusTravelListPreview(id){
 	ajax_getCampusTravelListPreview(id,function(json){
-		$('.preview-id').html(preview[0].id)
-		$('.preview-name').html(preview[0].profile_name)
-		$('.preview-unit').html(preview[0].department)
-		$('.preview-created').html(((preview[0].date_created).split(' '))[0])
+		$('.preview-id').html(json[0].id)
+		$('.preview-name').html(json[0].profile_name)
+		$('.preview-unit').html(json[0].department)
+		$('.preview-created').html(((json[0].date_created).split(' '))[0])
 
 
+
+		if(typeof json[0].status!=undefined){
+
+			if(json[0].status==0){		
+				//allow forwarding
+				bindForwardCampus()
+
+				//allow updating
+				bindUpdateCampusPreview()
+				bindRemoveCampusPreview()
+
+				//enable command buttons
+				enableStatusDefaultButtonCommandGroup()
+							
+			}
+
+
+			if(json[0].status==1){
+
+				if(isAdmin()){
+					//allow admin to verify or returned the request to the sender
+					showUntouchedStatusAdmin()
+					bindVerifyCampus();
+					bindReturnCampus();
+
+				}else{
+					//Show waiting for confirmation status
+					showVerifyStatus();
+				}
+
+			}
+
+
+			if(json[0].status==2){
+
+				if(isAdmin()){
+					//show a close or return to sender status
+					showVerifyStatusAdmin();
+					bindReturnCampus()
+					bindCloseCampus()
+
+				}else{
+					//show VERIFIED status to the ordinary user
+					showVerifiedStatus();
+				}
+
+			}
+
+
+			
+
+
+			//returned status
+			if(json[0].status==3){
+				//show returned status to both admin and user
+
+				//allow the user to update the request
+				showReturnStatus()
+				bindForwardCampus()
+				bindUpdateCampusPreview()
+				bindRemoveCampusPreview()
+				enableStatusDefaultButtonCommandGroup()
+			}
+
+
+			//close status
+			if(json[0].status==4){
+				showClosedStatus()
+			}
+		}
 
 		
 	})

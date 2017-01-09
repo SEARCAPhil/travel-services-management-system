@@ -190,6 +190,14 @@ Route::post('api/directory/custom/',['uses' =>'Official_custom@create']);
 #itenerary
 Route::delete('api/travel/official/itenerary/{id}',['uses' =>'Official_itenerary@destroy']);
 
+
+
+
+
+
+
+
+
 ######################################################################################
 #Personal
 ######################################################################################
@@ -226,6 +234,11 @@ Route::put('api/travel/personal/vehicle_type',['uses' =>'Personal_itenerary@vehi
 Route::put('api/travel/personal/payment',['uses' =>'Personal@payment']);
 
 
+#update status
+Route::put('api/travel/personal/status/{id}',['uses' =>'Personal@update_status']);
+
+
+
 ##remove request
 Route::delete('api/travel/personal/{id}',['uses' =>'Personal@destroy']);
 
@@ -246,6 +259,12 @@ Route::get('api/directory/drivers/{page?}',['uses' =>'Directory@drivers']);
 
 
 
+
+
+
+
+
+
 ######################################################################################
 #Campus
 ######################################################################################
@@ -258,6 +277,10 @@ Route::delete('api/travel/campus/{id}',['uses' =>'Campus@destroy']);
 Route::post('api/travel/campus/itenerary',['uses' =>'Campus_itenerary@create']);
 Route::get('api/travel/campus/itenerary/{id}',['uses' =>'Campus_itenerary@index']);
 Route::delete('api/travel/campus/itenerary/{id}',['uses' =>'Campus_itenerary@destroy']);
+
+
+#update status
+Route::put('api/travel/campus/status/{id}',['uses' =>'Campus@update_status']);
 
 
 

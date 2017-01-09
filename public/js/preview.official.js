@@ -604,5 +604,68 @@ function bindRemoveItenerary(){
 	})
 }
 
+function bindRemoveOfficialPreview(){
+
+
+	$('.preview-remove').on('click',function(){
+		//call custom bootstrap dialog
+			showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/remove',function(){
+				//remove
+				removeOfficialTravelRequest($(selectedElement).attr('id'))
+
+			})
+			
+	})
+
+}
+
+
+
+
+/*
+|----------------------------------------------------------------------------
+| UPDATE BINDING
+|---------------------------------------------------------------------------
+|
+| Bind the function into the front end.
+|
+*/
+function bindUpdateOfficialPreview(){
+
+	$('.preview-update').on('click',function(){
+			$('#editorTab').click();
+			//loading
+		    showLoading('#editor','<div><img src="img/loading.png" class="loading-circle" style="width: 80px !important;" /></div>')
+			setTimeout(function(){ 
+				$('#editor').load('travel/official/editor/'+$(selectedElement).attr('id'),function(){
+					var id=$(selectedElement).attr('id');
+					showOfficialTravelListPreview(id);
+					showOfficialTravelPassengerStaffPreview(id)
+					showOfficialTravelPassengerScholarsPreview(id)
+					showOfficialTravelPassengerCustomPreview(id)
+					showOfficialTravelItenerary(id)
+
+					setTimeout(function(){
+						bindRemoveStaff();
+						bindRemoveItenerary();
+						bindRemoveOfficialScholar();
+						bindRemoveOfficialCustom();
+					},2000)
+					
+
+				}); 
+
+			},100);
+	})
+
+
+}
+
+
+function printOfficialTravelRequest(id){
+	window.open('http://192.168.80.53/mpts/model/print.php?id='+id);
+}
+
+
 
 
