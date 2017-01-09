@@ -10,6 +10,8 @@ use App\Http\Requests;
 
 use Illuminate\Support\Facades\DB;
 
+@session_start();
+
 class Campus extends Controller
 {
     /**
@@ -213,8 +215,14 @@ class Campus extends Controller
 
 
      public function search($param,$page=1){
-        $id=16;
-        return self::search_user_request($param,$id,$page);
+        $id=$_SESSION['id'];
+
+        $auth=new Authentication();
+        if($auth->isAdmin()){
+            return self::search_admin($param,$page);
+        }else{
+             return self::search_user_request($param,$id,$page);
+        }
     }
 
 
@@ -234,8 +242,8 @@ class Campus extends Controller
 
             $this->pdoObject->beginTransaction();
 
-            $sql="SELECT * FROM trc where id LIKE :key1 or purpose LIKE :key2  ORDER BY date_created DESC LIMIT :start, 10";
-            $sql2="SELECT count(*) as total FROM trc where  id LIKE :key1 or purpose LIKE :key2 ORDER BY date_created DESC";
+            $sql="SELECT * FROM trc where id LIKE :key1  and status!=0  ORDER BY date_created DESC LIMIT :start, 10";
+            $sql2="SELECT count(*) as total FROM trc where  id LIKE :key1  and status!=0  ORDER BY date_created DESC";
             $statement=$this->pdoObject->prepare($sql);
             $statement2=$this->pdoObject->prepare($sql2);
 
@@ -243,9 +251,7 @@ class Campus extends Controller
 
             
             $statement->bindParam(':key1',$key);
-             $statement->bindParam(':key2',$key);
             $statement2->bindParam(':key1',$key);
-            $statement2->bindParam(':key2',$key);
 
 
 

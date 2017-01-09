@@ -10,7 +10,7 @@ use App\Http\Requests;
 
 use Illuminate\Support\Facades\DB;
 
-
+@session_start();
 
 class Official extends Controller
 {
@@ -287,8 +287,18 @@ class Official extends Controller
     }
 
     public function search($param,$page=1){
-        $id=16;
-        return self::search_user_request($param,$id,$page);
+
+        $id=$_SESSION['id'];
+
+        $auth=new Authentication();
+        if($auth->isAdmin()){
+            return self::search_admin($param,$page);
+        }else{
+             return self::search_user_request($param,$id,$page);
+        }
+
+
+       
     }
 
 
@@ -308,8 +318,8 @@ class Official extends Controller
 
             $this->pdoObject->beginTransaction();
 
-            $sql="SELECT * FROM tr where id LIKE :key1 or purpose LIKE :key2  ORDER BY date_created DESC LIMIT :start, 10";
-            $sql2="SELECT count(*) as total FROM tr where  id LIKE :key1 or purpose LIKE :key2 ORDER BY date_created DESC";
+            $sql="SELECT * FROM tr where id LIKE :key1 or purpose LIKE :key2 and status!=0  ORDER BY date_created DESC LIMIT :start, 10";
+            $sql2="SELECT count(*) as total FROM tr where  id LIKE :key1 or purpose LIKE :key2 and status!=0 ORDER BY date_created DESC";
             $statement=$this->pdoObject->prepare($sql);
             $statement2=$this->pdoObject->prepare($sql2);
 

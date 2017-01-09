@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-session_start();
+@session_start();
 
 class Auth
 {
