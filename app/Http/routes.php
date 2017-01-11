@@ -146,7 +146,13 @@ Route::get('/verified',function(){
 
 
 /**RECENTLY VERIFIED TRAVEL REQUEST**/
-Route::get('travel/verified/scheduled/{page?}',['uses'=>'Trips@index']);
+Route::get('travel/verified/scheduled/{page?}',['uses'=>'Trips@show_recent']);
+Route::get('travel/verified/ongoing/{page?}',['uses'=>'Trips@show_ongoing']);
+Route::get('travel/verified/finished/{page?}',['uses'=>'Trips@show_finished']);
+
+/**RECENTLY VERIFIED TRAVEL REQUEST MARK AS**/
+Route::put('api/travel/official/verified/{id}',['uses' =>'Trips@update_status']);
+
 
 
 

@@ -447,4 +447,8 @@ vertical-align: text-bottom;
 	display: block;
 	position: relative;
 }
+.trip-list > li{
+	float: left;
+	margin-right: 15px;
+}
 

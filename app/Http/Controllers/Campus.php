@@ -394,10 +394,163 @@ class Campus extends Controller
                 $this->page=$page>1?$page:1;
                 #set starting limit(page 1=10,page 2=20)
                 $start_page=$this->page<2?0:( integer)($this->page-1)*10;
-                
+
                 $this->pdoObject->beginTransaction();
                 $sql="SELECT trc.requested_by,trc.status as trc_status,trc_travel.*,automobile.manufacturer, login_db.account_profile.last_name, login_db.account_profile.first_name FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no  LEFT JOIN login_db.account_profile on login_db.account_profile.id=driver_id LEFT JOIN trc on trc_travel.trc_id=trc.id where trc_travel.status='scheduled' and trc.status='2' and departure_date!='0000-00-00' ORDER BY departure_date  DESC LIMIT :start, 10";
                 $sql2="SELECT count(*) as total FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no LEFT JOIN trc on trc_travel.trc_id=trc.id   where trc_travel.status='scheduled'  and trc.status='2' and departure_date!='0000-00-00'";
+                $sql3="SELECT * FROM automobile_rent where travel_id=:id and travel_type='trc' ORDER BY travel_id DESC LIMIT 1 ";
+                 $sql4="SELECT * FROM account_profile where id=:id LIMIT 1 ";
+                $statement=$this->pdoObject->prepare($sql);
+                $statement2=$this->pdoObject->prepare($sql2);
+                $statement3=$this->pdoObject->prepare($sql3);
+                $statement4=$this->pdoObject->prepare($sql4);
+
+                $statement->bindParam(':start',$start_page,\PDO::PARAM_INT);
+                #$statement->bindParam(':plate_no',$this->plate_no);
+                $statement->execute();
+                $statement2->execute();
+                $res=Array();
+                $data=[];
+                $row_count=$statement2->fetch(\PDO::FETCH_OBJ);
+                $count=$row_count->total;
+                while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+
+                    //driver
+                    $driver=@$row->first_name. ' '. @$row->last_name;
+                    $statement3->bindValue(':id',$row->id,\PDO::PARAM_INT);
+                    $statement3->execute();
+
+                    while($row3=$statement3->fetch(\PDO::FETCH_OBJ)){
+                        $driver=$row3->drivers_name;    
+                    }
+
+                    //requester
+                    $statement4->bindValue(':id',$row->requested_by,\PDO::PARAM_INT);
+                    $statement4->execute();
+
+                    while($row4=$statement4->fetch(\PDO::FETCH_OBJ)){
+                        $requester=$row4->profile_name; 
+                        $image=$row4->profile_image;    
+                        $department=$row4->department_alias;
+                    }
+
+                 
+
+
+                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->trc_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'returned_date'=>$row->returned_date,'returned_time'=>$row->returned_time,'plate_no'=>$row->plate_no,'manufacturer'=>$row->manufacturer,'type'=>'campus','driver'=>$driver,'requester'=>$requester,'department'=>$department,'image'=>$image,'passengers'=>array('staff'=>null,'scholars'=>null,'custom'=>null));
+                }
+
+                $no_pages=1;
+                if($count>=10){
+                        $pages=ceil($count/10);
+                        $no_pages=$pages;
+                        
+                }else{
+                        $no_pages=1;
+
+                }
+                $data=Array('total'=>$count,'pages'=>$no_pages,'current_page'=>$start_page,'data'=>$res);
+                $this->pdoObject->commit();
+                
+                
+                #Array('total'=>$count,'current_page'=>$start_page,'data'=>$res);
+                return json_encode($data);
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+    }
+
+
+function ongoing($page=1){
+
+        try{
+
+                $this->pdoObject=DB::connection()->getPdo();
+                $this->page=htmlentities(htmlspecialchars($page));
+                $this->page=$page>1?$page:1;
+                #set starting limit(page 1=10,page 2=20)
+                $start_page=$this->page<2?0:( integer)($this->page-1)*10;
+                
+                $this->pdoObject->beginTransaction();
+                $sql="SELECT trc.requested_by,trc.status as trc_status,trc_travel.*,automobile.manufacturer, login_db.account_profile.last_name, login_db.account_profile.first_name FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no  LEFT JOIN login_db.account_profile on login_db.account_profile.id=driver_id LEFT JOIN trc on trc_travel.trc_id=trc.id where trc_travel.status='ongoing' and departure_date!='0000-00-00' ORDER BY departure_date  DESC LIMIT :start, 10";
+                $sql2="SELECT count(*) as total FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no LEFT JOIN trc on trc_travel.trc_id=trc.id   where trc_travel.status='ongoing' and departure_date!='0000-00-00'";
+                $sql3="SELECT * FROM automobile_rent where travel_id=:id and travel_type='trc' ORDER BY travel_id DESC LIMIT 1 ";
+                 $sql4="SELECT * FROM account_profile where id=:id LIMIT 1 ";
+                $statement=$this->pdoObject->prepare($sql);
+                $statement2=$this->pdoObject->prepare($sql2);
+                $statement3=$this->pdoObject->prepare($sql3);
+                $statement4=$this->pdoObject->prepare($sql4);
+
+                $statement->bindParam(':start',$start_page,\PDO::PARAM_INT);
+                #$statement->bindParam(':plate_no',$this->plate_no);
+                $statement->execute();
+                $statement2->execute();
+                $res=Array();
+                $data=[];
+                $row_count=$statement2->fetch(\PDO::FETCH_OBJ);
+                $count=$row_count->total;
+                while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+
+                    //driver
+                    $driver=@$row->first_name. ' '. @$row->last_name;
+                    $statement3->bindValue(':id',$row->id,\PDO::PARAM_INT);
+                    $statement3->execute();
+
+                    while($row3=$statement3->fetch(\PDO::FETCH_OBJ)){
+                        $driver=$row3->drivers_name;    
+                    }
+
+                    //requester
+                    $statement4->bindValue(':id',$row->requested_by,\PDO::PARAM_INT);
+                    $statement4->execute();
+
+                    while($row4=$statement4->fetch(\PDO::FETCH_OBJ)){
+                        $requester=$row4->profile_name; 
+                        $image=$row4->profile_image;    
+                        $department=$row4->department_alias;
+                    }
+
+                 
+
+
+                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->trc_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'returned_date'=>$row->returned_date,'returned_time'=>$row->returned_time,'plate_no'=>$row->plate_no,'manufacturer'=>$row->manufacturer,'type'=>'campus','driver'=>$driver,'requester'=>$requester,'department'=>$department,'image'=>$image,'passengers'=>array('staff'=>null,'scholars'=>null,'custom'=>null));
+                }
+
+                $no_pages=1;
+                if($count>=10){
+                        $pages=ceil($count/10);
+                        $no_pages=$pages;
+                        
+                }else{
+                        $no_pages=1;
+
+                }
+                $data=Array('total'=>$count,'pages'=>$no_pages,'current_page'=>$start_page,'data'=>$res);
+                $this->pdoObject->commit();
+                
+                
+                #Array('total'=>$count,'current_page'=>$start_page,'data'=>$res);
+                return json_encode($data);
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+    }
+
+
+
+    function finished($page=1){
+
+        try{
+
+                $this->pdoObject=DB::connection()->getPdo();
+                $this->page=htmlentities(htmlspecialchars($page));
+                $this->page=$page>1?$page:1;
+                #set starting limit(page 1=10,page 2=20)
+                $start_page=$this->page<2?0:( integer)($this->page-1)*10;
+                
+                $this->pdoObject->beginTransaction();
+                $sql="SELECT trc.requested_by,trc.status as trc_status,trc_travel.*,automobile.manufacturer, login_db.account_profile.last_name, login_db.account_profile.first_name FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no  LEFT JOIN login_db.account_profile on login_db.account_profile.id=driver_id LEFT JOIN trc on trc_travel.trc_id=trc.id where trc_travel.status='finished' and departure_date!='0000-00-00' ORDER BY departure_date  DESC LIMIT :start, 10";
+                $sql2="SELECT count(*) as total FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no LEFT JOIN trc on trc_travel.trc_id=trc.id   where trc_travel.status='finished' and departure_date!='0000-00-00'";
                 $sql3="SELECT * FROM automobile_rent where travel_id=:id and travel_type='trc' ORDER BY travel_id DESC LIMIT 1 ";
                  $sql4="SELECT * FROM account_profile where id=:id LIMIT 1 ";
                 $statement=$this->pdoObject->prepare($sql);

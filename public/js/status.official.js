@@ -171,7 +171,7 @@ function showUntouchedStatus(){
 
 function showVerifyStatus(){
 
-	var htm=`<div class="col col-md-12" style="background: rgb(100,100,100);color:rgb(255,255,255);margin-bottom: 20px;padding: 5px;">
+	var htm=`<div class="col col-md-12" style="background: rgb(0,150,200);color:rgb(255,255,255);margin-bottom: 20px;padding: 5px;">
 				<p>
 					This Travel Request is waiting for verification
 				</p>
@@ -194,7 +194,7 @@ function showVerifiedStatus(){
 function showReturnStatus(){
 	var htm=`
 
-			<div class="col col-md-12" style="background: rgb(255,60,60);color:rgb(255,255,255);margin-bottom: 20px;padding: 5px;">
+			<div class="col col-md-12" style="background: rgb(255,82,87);color:rgb(255,255,255);margin-bottom: 20px;padding: 5px;">
 				<p>
 					This Travel Request was returned by admin.Please review the request before resending.
 				</p>

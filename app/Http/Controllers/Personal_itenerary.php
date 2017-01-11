@@ -143,6 +143,38 @@ class Personal_itenerary extends Controller
 
 
 
+     public function update_status($id,$status){
+
+        try{
+            $id=htmlentities(htmlspecialchars($id));
+
+            $allowed_status=array('scheduled','finished','ongoing');
+
+            if(!in_array($status, $allowed_status)){
+                echo 0;
+                exit;
+            }
+            
+            $this->pdoObject=DB::connection()->getPdo();
+
+            $this->pdoObject->beginTransaction();
+            $sql="UPDATE trp set status=:status where id=:id";
+            $statement=$this->pdoObject->prepare($sql);
+            $statement->bindParam(':status',$status);
+            $statement->bindParam(':id',$id);
+            $statement->execute();
+            $isUpdated=$statement->rowCount();
+            $this->pdoObject->commit();
+
+            echo $isUpdated;
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+    } 
+
+
+
+
 
     /**
      * Store a newly created resource in storage.

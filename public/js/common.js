@@ -319,7 +319,7 @@ function showClosedStatusAdmin(){
 function showReturnStatusAdmin(){
 	var htm=`
 
-			<div class="col col-md-12" style="background: rgb(255,60,60);color:rgb(255,255,255);margin-bottom: 20px;padding: 5px;">
+			<div class="col col-md-12" style="background: rgb(255,82,87);color:rgb(255,255,255);margin-bottom: 20px;padding: 5px;">
 				<p>
 					This Travel Request was returned. 
 				</p>
