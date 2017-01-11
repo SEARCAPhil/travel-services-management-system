@@ -23,7 +23,7 @@ class Official_custom extends Controller
         try{
                 $this->pdoObject=DB::connection()->getPdo();
                 $this->id=htmlentities(htmlspecialchars($id));
-                $this->pdoObject->beginTransaction();
+       
                 $sql="SELECT * FROM cust_passengers where tr_id=:id";
                 $statement=$this->pdoObject->prepare($sql);
                 $statement->bindParam(':id',$this->id);
@@ -32,11 +32,11 @@ class Official_custom extends Controller
                 while($row=$statement->fetch()){
                     $res[]=$row;
                 }
-                $this->pdoObject->commit();
+              
 
                 return json_encode($res);
 
-        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+        }catch(Exception $e){echo $e->getMessage();}
        
     }
 

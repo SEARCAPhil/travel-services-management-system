@@ -25,7 +25,6 @@ class Personal_staff extends Controller
        try{
                 $this->pdoObject=DB::connection()->getPdo();
                 $this->id=htmlentities(htmlspecialchars($id));
-                $this->pdoObject->beginTransaction();
                 $sql="SELECT trp_passengers.id,trp_passengers.uid,login_db.account_profile.profile_name,login_db.account_profile.position,login_db.account_profile.profile_image,login_db.department.dept_name  FROM trp_passengers LEFT JOIN login_db.account_profile on login_db.account_profile.uid=trp_passengers.uid LEFT JOIN login_db.department on login_db.department.dept_id=login_db.account_profile.dept_id  where  trp_id=:id and type='staff'";
                 $statement=$this->pdoObject->prepare($sql);
                 $statement->bindParam(':id',$this->id);
@@ -34,11 +33,11 @@ class Personal_staff extends Controller
                 while($row=$statement->fetch(\PDO::FETCH_OBJ)){
                     $res[]=Array('name'=>$row->profile_name,'uid'=>$row->uid,'id'=>$row->id,'designation'=>$row->position,'office'=>$row->dept_name,'profile_image'=>$row->profile_image);
                 }
-                $this->pdoObject->commit();
+                
 
                 return json_encode($res);
 
-        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+        }catch(Exception $e){echo $e->getMessage();}
 
 
 

@@ -420,4 +420,31 @@ vertical-align: text-bottom;
 	margin-right: -20px;
 }
 
+/*verified travel*/
+.verified-travel-passenger-section{
+	padding: 10px 0 10px 0px;
+	font-size: 0.9em;
+}
+
+.verified-travel-passenger-section:nth-child(even):not(:first-child){
+	background: rgb(250,250,250);
+}
+
+/*trips section*/
+.trip-date{
+	float: left;width:50px;height:50px;background: rgb(0,200,150);color:rgb(255,255,255);font-size: 2em;
+}
+
+.trip-date.personal{
+	background: rgb(0,150,200);
+}
+
+.trip-date.campus{
+	background: rgb(200,0,150);
+}
+
+.trip-list{
+	display: block;
+	position: relative;
+}
 

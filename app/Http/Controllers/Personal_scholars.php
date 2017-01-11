@@ -25,7 +25,7 @@ class Personal_scholars extends Controller
         try{
                 $this->pdoObject=DB::connection()->getPdo();
                 $this->id=htmlentities(htmlspecialchars($id));
-                $this->pdoObject->beginTransaction();
+
                 $sql="SELECT trp_passengers.id,trp_passengers.uid,ischo_db.personal_tb.*  FROM trp_passengers LEFT JOIN ischo_db.personal_tb on ischo_db.personal_tb.pers_id=trp_passengers.uid  where trp_id=:id and type='scholar'";
                 $statement=$this->pdoObject->prepare($sql);
                 $statement->bindParam(':id',$this->id);
@@ -36,11 +36,11 @@ class Personal_scholars extends Controller
                     $full_name=strlen($full_name)<3?$row->fullname:$full_name;
                     $res[]=Array('full_name'=>$full_name,'uid'=>$row->pers_id,'id'=>$row->id,'nationality'=>$row->nationality,'profile_image'=>$row->image,'office'=>'scholar');
                 }
-                $this->pdoObject->commit();
+           
 
                 return json_encode($res);
 
-        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+        }catch(Exception $e){echo $e->getMessage();}
 
        
     }

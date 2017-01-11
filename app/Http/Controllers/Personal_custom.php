@@ -23,7 +23,6 @@ class Personal_custom extends Controller
         try{
                 $this->pdoObject=DB::connection()->getPdo();
                 $this->id=htmlentities(htmlspecialchars($id));
-                $this->pdoObject->beginTransaction();
                 $sql="SELECT * FROM trp_cust_passengers where trp_id=:id";
                 $statement=$this->pdoObject->prepare($sql);
                 $statement->bindParam(':id',$this->id);
@@ -32,8 +31,7 @@ class Personal_custom extends Controller
                 while($row=$statement->fetch()){
                     $res[]=$row;
                 }
-                $this->pdoObject->commit();
-
+               
                 return json_encode($res);
 
         }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}

@@ -42,6 +42,13 @@ Route::get('/travel/official/preview/{id}',function($id){
 	return View::make('travel/official/tr-preview',array('id'=>$id));
 });
 
+#print
+Route::get('/travel/official/print/{id}',function($id){
+	return View::make('travel/official/print',array('id'=>$id));
+});
+
+
+
 #official form
 Route::get('forms/travel/official',function(){
 	return View::make('travel/official/new_form',array('id'=>1));
@@ -129,6 +136,18 @@ Route::get('/automobile/repair',function(){
 Route::get('/status',function(){
 	return View::make('automobile/status');
 });
+
+
+/**VERIFIED TRAVEL REQUEST**/
+Route::get('/verified',function(){
+	return View::make('travel/verified');
+});
+
+
+
+/**RECENTLY VERIFIED TRAVEL REQUEST**/
+Route::get('travel/verified/scheduled/{page?}',['uses'=>'Trips@index']);
+
 
 
 

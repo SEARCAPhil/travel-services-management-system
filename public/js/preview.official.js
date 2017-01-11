@@ -663,7 +663,7 @@ function bindUpdateOfficialPreview(){
 
 
 function printOfficialTravelRequest(id){
-	window.open('http://192.168.80.53/mpts/model/print.php?id='+id);
+	window.open('travel/official/print.php?id='+id);
 }
 
 
