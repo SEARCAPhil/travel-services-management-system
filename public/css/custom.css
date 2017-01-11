@@ -452,3 +452,36 @@ vertical-align: text-bottom;
 	margin-right: 15px;
 }
 
+/*travel list in link modal*/
+.link-list{
+	padding-top: 20px;
+	padding-bottom: 20px;
+	cursor: pointer;
+	border-bottom:1px solid rgb(250,250,250);
+}
+
+
+.link-list.active{
+	background: rgb(230,230,230);
+}
+
+/*item appended to travel list*/
+.linked-section{ height: auto; /*background: rgb(253,253,253);border-radius:5px;*/ margin-top: 5px; }
+.linked-travel-item:first-child{
+	margin-top: 20px;
+}
+.linked-travel-item{
+	font-size: 0.9em !important;
+	border-bottom: 1px solid rgb(240,240,240);
+	padding-top: 20px;
+}
+.linked-travel-item:last-child{
+	border-bottom: none;
+	margin-bottom:50px;	
+}
+.linked-travel-item .trip-date{
+	width:30px;
+	height: 30px;
+	font-size: 1.5em;
+}
+

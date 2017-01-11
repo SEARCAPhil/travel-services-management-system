@@ -169,8 +169,10 @@ function appendToList(json){
 					 <small>
 					 	<ul class="list-unstyled trip-list">`;
 
-					 		if(data.type=='official'){
-								htm+=`<li><a href="#" class="travel-link pull-left" data-type="official"> Link <span class="glyphicon glyphicon-link"></span> </a> </li>`
+
+
+					 		if(data.type=='official'&&data.status=='scheduled'){
+								htm+=`<li><a href="#" class="travel-link travel-link-button pull-left" data-type="official"> Link <span class="glyphicon glyphicon-link"></span> </a> </li>`
 							}
 							
 
@@ -220,8 +222,11 @@ function appendToList(json){
 
 					<div style="clear:both"><br/></div>
 					
+
 				 	
-				 </div>`;
+				 </div>
+				 
+				 `;
 
 				var official_staff=JSON.parse(data.passengers.staff);
 				var official_scholars=JSON.parse(data.passengers.scholars);
@@ -298,7 +303,7 @@ function appendToList(json){
 				
 
 
-
+			htm+='<div class="col col-md-10 col-md-offset-1 linked-section"></div>';
 			htm+=`</div>`;
 
 
@@ -322,6 +327,7 @@ function appendToList(json){
 
 
 	bindMarkMenu()
+	bindTravelLinkButton()
 
 
 
@@ -349,6 +355,20 @@ function bindMarkMenu(){
 }
 
 
+function bindTravelLinkButton(){
+
+	$('.travel-link-button').off('click')
+	$('.travel-link-button').on('click',function(e){
+		e.preventDefault();
+		showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/link',function(){
+
+			ajax_getVerifiedTravel('travel/verified/scheduled/',1,function(json){
+				appendToListInLinkModal(json);
+			});
+		});
+	})
+}
+
 function updateVerifiedTravel(id,status,type){
 	showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/status',function(){
 
@@ -366,6 +386,95 @@ function updateVerifiedTravel(id,status,type){
 	})
 
 }
+
+
+function appendToListInLinkModal(json){
+
+		var htm='';
+
+		var json=JSON.parse(json);
+
+		//loading
+		$('.link-list-section').html('Loading . . .')
+
+		//update total pages
+		//$('.list-total-pages').html(json.pages)
+
+		for(var x=0; x<json.data.length; x++){
+			var data=json.data[x];
+
+			var departure_date=new Date(data.departure_date).getDate();
+
+			htm+=`<div class="row link-list" id="`+data.id+`">
+			 	<div class="col col-md-1 col-sm-1 col-xs-2">
+					 <div class="text-center col trip-date `+data.type+`">
+					 	`+departure_date+`
+					 </div>
+				</div>
+				 <div class="col col-md-10 col-sm-10 co-xs-10 link-list-detail">
+				 	<p>&nbsp;<b><u>`+data.location+`</u></b> - <b><u>`+data.destination+`</u></b></p>
+				 	<p>&nbsp;<b>`+data.departure_date+`</b>  - `+data.departure_time+`</p>
+				 	<p>&nbsp;<small>`+data.requester+`</small></p>
+
+				 </div>
+
+				 `;
+			htm+=`</div>`;
+
+
+
+
+		}
+		
+
+	
+	
+
+	$('.link-list-section').html(htm)
+	var selectedElement;
+	$('.link-list').on('click',function(){
+		$('.link-list').removeClass('active');
+
+		selectedElement='';
+		selectedElement=$(this);
+
+		$(this).addClass('active')
+		var id=$(this).attr('id');
+
+		$('.modal-submit').on('click',function(){
+			//hide linked item
+			$(selectedElement).slideUp();
+
+
+
+				//modify selected element
+				$(selectedElement).removeClass('active link-list') 
+
+				setTimeout(function(){
+					$('.official'+id).children('.linked-section').append(selectedElement)
+					$(selectedElement).addClass('col-md-12') 
+					$(selectedElement).addClass('linked-travel-item')
+					$(selectedElement).slideDown();
+
+					//add menu
+					var menu_htm=`<p>&nbsp;<a href="#">Unlink <span class="glyphicon glyphicon-link"></span></a></p>`;
+					$(selectedElement).children('.link-list-detail').append(menu_htm)
+
+					//clear element
+					selectedElement='';
+				},800)
+				
+			
+
+
+
+
+		});
+	})
+
+
+}
+
 
 
 
