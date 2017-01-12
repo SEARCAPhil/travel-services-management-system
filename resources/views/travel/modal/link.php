@@ -13,12 +13,3 @@
 	</div>
 
 </div>
-
-<script type="text/javascript">
-	$('.link-list').on('click',function(){
-		$('.link-list').removeClass('active');
-		$(this).addClass('active')
-
-		var id=$(this).attr('id');
-	})
-</script>

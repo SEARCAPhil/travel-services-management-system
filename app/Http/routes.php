@@ -150,6 +150,12 @@ Route::get('travel/verified/scheduled/{page?}',['uses'=>'Trips@show_recent']);
 Route::get('travel/verified/ongoing/{page?}',['uses'=>'Trips@show_ongoing']);
 Route::get('travel/verified/finished/{page?}',['uses'=>'Trips@show_finished']);
 
+/**RECENTLY VERIFIED TRAVEL REQUEST [OFFICIAL ONLY]**/
+Route::get('api/travel/official/verified/scheduled/{page}/{id}',['uses'=>'Official_itenerary@recent']);
+Route::post('api/travel/official/verified/scheduled/{id}',['uses'=>'Official_itenerary@link']);
+Route::get('api/travel/official/verified/scheduled/{id}',['uses'=>'Official_itenerary@show_linked_travel']);
+Route::delete('api/travel/official/verified/scheduled/{id}',['uses'=>'Official_itenerary@destroy_linked_travel']);
+
 /**RECENTLY VERIFIED TRAVEL REQUEST MARK AS**/
 Route::put('api/travel/official/verified/{id}',['uses' =>'Trips@update_status']);
 
