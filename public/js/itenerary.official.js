@@ -14,6 +14,13 @@
 */
 var driverList={}
 
+/*
+|----------------------------------------------------------------------------
+| Hold data for vehicle list
+|---------------------------------------------------------------------------
+*/
+var vehicleList={}
+
 
 /*
 |----------------------------------------------------------------------------
@@ -29,6 +36,26 @@ function ajax_getDriversList(func){
 		driverList=JSON.parse(res)
 		func(driverList);
 		return driverList;
+	})
+	
+}
+
+
+
+
+/*
+|----------------------------------------------------------------------------
+| AJAX Vehicle List
+|---------------------------------------------------------------------------
+|
+| Get vehicle list from the directory
+|
+*/
+function ajax_getVehiclesList(func){
+	$.get('api/directory/vehicles',function(res){
+		vehicleList=JSON.parse(res)
+		func(vehicleList);
+		return vehicleList;
 	})
 	
 }

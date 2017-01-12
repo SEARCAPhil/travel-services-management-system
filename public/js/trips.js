@@ -470,15 +470,15 @@ function appendToList(json){
 							htm+=`</ul>
 
 							</li>
-							<li class="dropdown"> <a href="#" class="travel-link pull-left dropdown-toggle" data-type="personal" data-toggle="dropdown"  data-content="`+JSON.stringify(data)+`" aria-haspopup="true" aria-expanded="true">Advance Options
+							<li class="dropdown"> <a href="#" class="travel-link advance-menu pull-left dropdown-toggle" data-type="personal" data-toggle="dropdown"  data-content='`+JSON.stringify(data)+`' aria-haspopup="true" aria-expanded="true">Advance Options
 								 <span class="glyphicon glyphicon-option-vertical"></span> </span>
 								 </a>
 								
-									<ul class="dropdown-menu advance-menu">
-										<li><a href="#">Assign <b>SEARCA</b> Vehicle</a></li>
-										<li><a href="#"><b>Rent</b> a Car</a></li>
-									    <li><a href="#">Assign Driver</a></li>
-									    <li><a href="#">Charge</a></li>
+									<ul class="dropdown-menu advance-menu-dropdpwn">
+										<li><a href="#" class="advance-menu-selector" id="vehicle">Assign <b>SEARCA</b> Vehicle</a></li>
+										<li><a href="#" class="advance-menu-selector" id="rent"><b>Rent</b> a Car</a></li>
+									    <li><a href="#" class="advance-menu-selector" id="driver">Assign Driver</a></li>
+									    <li><a href="#" class="advance-menu-selector"  id="charge">Charge</a></li>
 									  </ul>
 								
 							</li>
@@ -592,8 +592,8 @@ function appendToList(json){
 	$('.verified_travel_result').html(htm)
 
 	//mark the travel as selected
-	$('.mark-as-menu').off('click');
-	$('.mark-as-menu').on('click',function(){
+	$('.mark-as-menu , .advance-menu').off('click');
+	$('.mark-as-menu , .advance-menu').on('click',function(){
 		selectedTrips=this;
 		
 	})
@@ -602,6 +602,7 @@ function appendToList(json){
 	//bind options
 	bindMarkMenu()
 	bindTravelLinkButton()
+	bindAdvanceSelector();
 
 }
 
@@ -691,6 +692,57 @@ function bindMarkMenu(){
 		
 	})
 }
+
+function bindAdvanceSelector(){
+	$('.advance-menu-selector').off('click');
+	$('.advance-menu-selector').on('click',function(e){
+		e.preventDefault();
+		
+		var content=JSON.parse($(selectedTrips).attr('data-content'))
+		var id=content.id
+		var type=content.type
+
+		var menu=$(this).attr('id')
+		if(menu=='vehicle') advanceMenuVehicle();
+		if(menu=='driver') advanceMenuDriver();
+		if(menu=='charge') advanceMenuCharge();
+		if(menu=='rent') advanceMenuRentACar();
+
+
+	})
+}
+
+
+function advanceMenuVehicle(){
+	showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/vehicle',function(){
+
+			
+	});	
+}
+
+function advanceMenuDriver(){
+	showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/driver',function(){
+
+			
+	});	
+}
+
+function advanceMenuCharge(){
+	showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/charge',function(){
+
+			
+	});	
+}
+
+function advanceMenuRentACar(){
+	showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/rent',function(){
+
+			
+	});	
+}
+
+
+
 
 
 

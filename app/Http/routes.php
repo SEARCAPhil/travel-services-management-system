@@ -287,6 +287,7 @@ Route::get('api/directory/staff/search/{param}',['uses' =>'Directory@staff_searc
 Route::get('api/directory/scholars/{page?}',['uses' =>'Directory@scholars']);
 Route::get('api/directory/scholars/search/{param}/',['uses' =>'Directory@scholar_search']);
 Route::get('api/directory/drivers/{page?}',['uses' =>'Directory@drivers']);
+Route::get('api/directory/vehicles/{page?}',['uses' =>'Directory@vehicles']);
 
 
 

@@ -296,6 +296,34 @@ class Directory extends Controller
     }
 
 
+    function vehicles($page=1){
+
+    	try{
+	    	$this->pdoObject=DB::connection()->getPdo();
+			$this->pdoObject->beginTransaction();
+			$this->page=htmlentities(htmlspecialchars($page));
+			$this->page=$page>1?$page:1;
+
+			#set starting limit(page 1=10,page 2=20)
+			$start_page=$this->page<2?0:( integer)($this->page-1)*20;
+
+
+
+			$sql="SELECT * FROM automobile";
+			$statement=$this->pdoObject->query($sql);
+			#$statement->bindParam(':plate_no',$this->plate_no);
+			$statement->execute();
+			$res=Array();
+			while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+				$res[]=Array('id'=>$row->plate_no,'brand'=>$row->manufacturer,'color'=>$row->color,'status'=>$row->availability,'image'=>$row->image);
+			}
+			$this->pdoObject->commit();
+
+			return json_encode($res);
+		}catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+    }
+
+
 
 
 }
