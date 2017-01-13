@@ -307,6 +307,31 @@ class Official_itenerary extends Controller
 
     } 
 
+
+     public function update_driver($id,Request $request){
+
+        try{
+            $this->id=htmlentities(htmlspecialchars($id));
+            $this->token = $request->input('_token');
+            $this->driver = $request->input('driver');
+
+            $this->pdoObject=DB::connection()->getPdo();
+
+            $this->pdoObject->beginTransaction();
+            $sql="UPDATE travel set driver_id=:driver where id=:id";
+            $statement=$this->pdoObject->prepare($sql);
+            $statement->bindParam(':driver',$this->driver);
+            $statement->bindParam(':id',$this->id);
+            $statement->execute();
+            $isUpdated=$statement->rowCount();
+            $this->pdoObject->commit();
+
+            echo $isUpdated;
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+    } 
+
     /**
      * Store a newly created resource in storage.
      *

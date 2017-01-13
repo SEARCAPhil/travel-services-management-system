@@ -416,6 +416,7 @@ function appendToList(json){
 			var data=json.data[x];
 
 			var departure_date=new Date(data.departure_date).getDate();
+			var plate_no=data.plate_no!=null?data.plate_no:'N/A'
 
 			htm+=`<div class="row `+data.type+``+data.id+`" style="margin-bottom: 50px;">
 			 	<div class="col col-md-1 col-sm-1 ">
@@ -429,6 +430,28 @@ function appendToList(json){
 				 	<p><small>`+data.requester+`</small></p>
 
 				 </div>
+
+
+
+				 	<div class="col col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11">
+						<small>
+							<a href="#" class="travel-link advance-menu pull-left  travel-other-details-read-more travel-other-details-read-more-`+data.id+`" title="Read other details" data-target="travel-other-details-`+data.id+`">
+								<span class="glyphicon glyphicon-option-horizontal"></span>
+							</a>
+						</small>
+					</div>
+
+
+					<div class="col col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11 travel-other-details travel-other-details-`+data.id+`">
+						<p><label>Driver : <u class="travel-other-details-driver-`+data.id+`">`+data.driver+`</u></label> </p>
+						<p><label>Vehicle Plate Number : <u>`+plate_no+`</u></label> </p>
+						<p><label>Actual Departure Time : <u>`+data.actual_time+`</u></label> </p>
+						<p><label>Returned Date : <u>`+data.departure_date+`</u></label> </p>
+						<p><label>Returned Time : <u>`+data.departure_time+`</u></label> </p>
+						<p><hr/></p>
+					</div>
+
+
 
 				 <div class="col col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11" style="border-bottom:1px solid rgb(250,250,250);">
 					 <small>
@@ -482,11 +505,11 @@ function appendToList(json){
 									  </ul>
 								
 							</li>
+
 						</ul>
 					</small>
 
 					<div style="clear:both"><br/></div>
-					
 
 				 	
 				 </div>
@@ -596,6 +619,16 @@ function appendToList(json){
 	$('.mark-as-menu , .advance-menu').on('click',function(){
 		selectedTrips=this;
 		
+	})
+
+
+	$('.travel-other-details-read-more').off('click');
+	$('.travel-other-details-read-more').on('click',function(e){
+		e.preventDefault();
+		//hide
+		$(this).hide();
+		var target=$(this).attr('data-target');
+		$('.'+target).slideDown();
 	})
 
 

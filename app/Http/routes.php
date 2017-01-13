@@ -222,6 +222,8 @@ Route::post('api/directory/custom/',['uses' =>'Official_custom@create']);
 Route::delete('api/travel/official/itenerary/{id}',['uses' =>'Official_itenerary@destroy']);
 
 
+#driver
+Route::put('api/travel/official/driver/{id}',['uses' =>'Official_itenerary@update_driver']);
 
 
 
