@@ -225,6 +225,9 @@ Route::delete('api/travel/official/itenerary/{id}',['uses' =>'Official_itenerary
 #driver
 Route::put('api/travel/official/driver/{id}',['uses' =>'Official_itenerary@update_driver']);
 
+#plate number
+Route::put('api/travel/official/vehicle/{id}',['uses' =>'Official_itenerary@update_plate_no']);
+
 
 
 

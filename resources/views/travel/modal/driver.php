@@ -25,6 +25,7 @@
 		
 	function setActive(target,callback){
 		$(target).on('click',function(e){
+
 			$(target).removeClass('active');
 			$(this).addClass('active')
 			callback(this)
@@ -81,7 +82,7 @@
 				var driver=$(target).attr('data-mark');
 				var driver_name=$(target).attr('data-driver');
 
-				console.log($(target))
+		
 				assignDriver(id,driver,driver_name)
 
 			})
