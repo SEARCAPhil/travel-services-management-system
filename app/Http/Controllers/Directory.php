@@ -324,6 +324,54 @@ class Directory extends Controller
     }
 
 
+    public function gasoline_charge()
+    {
+
+        try{
+                $this->pdoObject=DB::connection()->getPdo();
+                $sql="SELECT * FROM tr_gc";
+                $statement=$this->pdoObject->prepare($sql);
+                $statement->execute();
+                $res=Array();
+                while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+                    $res[]=$row;
+                }
+               
+
+                echo json_encode($res);
+
+        }catch(Exception $e){echo $e->getMessage();}
+
+
+        
+    }
+
+
+ 	public function drivers_charge()
+    {
+
+        try{
+                $this->pdoObject=DB::connection()->getPdo();
+                $sql="SELECT * FROM dc";
+                $statement=$this->pdoObject->prepare($sql);
+                $statement->execute();
+                $res=Array();
+                while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+                    $res[]=$row;
+                }
+               
+
+                echo json_encode($res);
+
+        }catch(Exception $e){echo $e->getMessage();}
+
+
+        
+    }
+
+
+
+
 
 
 }

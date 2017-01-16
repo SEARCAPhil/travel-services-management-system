@@ -29,22 +29,20 @@
 
         	<div class="form-group">
         		<label>Vehicle/Gasoline Charge</label>
-           		<select class="form-control">
-   					<option value="7" class=" " selected="selected"> campus - Php 25   ( Base KM*)  </option>
+           		<select class="form-control" id="gasoline_charge">
 				</select>
 	    	</div>
 
         	<div class="form-group">
         		<label>Drivers Overtime Charge</label>
-        		<select class="form-control">
-   					<option value="3"> holiday - Php 119.54  </option>
-				</select>
+        		<select class="form-control"  id="drivers_charge"></select>
         	</div>
 
             <div class="form-group">
                 <label>Drivers Appointment</label>
                 <select class="form-control">
-                   <option value="contracted"> contracted  </option>
+                   <option value="contracted">Contracted  </option>
+                   <option value="emergency">Emergency</option>
                 </select>
             </div>
 
@@ -68,4 +66,67 @@
 
 
 <script type="text/javascript" src="js/itenerary.official.js"></script>
+<script type="text/javascript">
+
+    function ajax_getGasolineCharge(){
+        $.get('api/travel/gc',function(data){
+            var htm='';
+            var gasoline_charge=JSON.parse(data)
+         
+            for(var x=0;x<gasoline_charge.length; x++){
+                var gc=gasoline_charge[x].base!=null?gasoline_charge[x].base:'';
+                htm+='<option value="'+gasoline_charge[x].id+'">'+gasoline_charge[x].destination+'&emsp;(BASE Km *'+gc+')</option>';
+            }
+
+            $('#gasoline_charge').html(htm)
+        })
+    }
+
+
+    function ajax_getDriversCharge(){
+        $.get('api/travel/dc',function(data){
+            var htm='';
+            var drivers_charge=JSON.parse(data)
+         
+            for(var x=0;x<drivers_charge.length; x++){
+
+                htm+='<option value="'+drivers_charge[x].id+'">'+drivers_charge[x].days+'&emsp;(RATE *'+drivers_charge[x].rate+')</option>';
+            }
+
+            $('#drivers_charge').html(htm)
+        })
+    }
+
+    function ajax_postCharge(id,mileage_in,mileage_out,gasoline_charge,drivers_charge,appointment,callback){
+
+        $.post('api/travel/official/charge/'+id,{id:id,in:mileage_in,out:mileage_out,gasoline_charge:gasoline_charge,drivers_charge:drivers_charge,appointment:appointment,_token: $("input[name=_token]").val()},function(data){
+                 callback(data)
+        }).fail(function(){
+            alert('Oops Something went wrong.Please try again later');
+        })
+    }
+
+
+    ajax_getGasolineCharge()
+    ajax_getDriversCharge()
+
+
+    //bind submit
+    $('.modal-submit').off('click');
+    $('.modal-submit').on('click',function(e){
+        var id=293;
+        var mileage_in=10
+        var mileage_out=20
+        var gasoline_charge=10
+        var drivers_charge=10
+        var appointment='contractual'
+       ajax_postCharge(id,mileage_in,mileage_out,gasoline_charge,drivers_charge,appointment,function(data){
+            //open print page
+            window.open('dummy_page/travel/official/print/'+id);
+       }) 
+    });
+
+
+
+</script>
 

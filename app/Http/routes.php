@@ -228,7 +228,10 @@ Route::put('api/travel/official/driver/{id}',['uses' =>'Official_itenerary@updat
 #plate number
 Route::put('api/travel/official/vehicle/{id}',['uses' =>'Official_itenerary@update_plate_no']);
 
-
+#charge
+Route::post('api/travel/official/charge/{id}',['uses' =>'Official_itenerary@charge']);
+Route::get('api/travel/gc',['uses' =>'Directory@gasoline_charge']);
+Route::get('api/travel/dc',['uses' =>'Directory@drivers_charge']);
 
 
 

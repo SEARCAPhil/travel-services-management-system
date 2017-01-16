@@ -357,6 +357,52 @@ class Official_itenerary extends Controller
 
     } 
 
+
+     function charge($id,Request $request){
+
+            try{
+                $this->token = $request->input('_token');
+                 $this->id=htmlentities(htmlspecialchars($id));
+                $this->in=htmlentities(htmlspecialchars($request->input('in')));
+                $this->out=htmlentities(htmlspecialchars($request->input('out')));
+                $this->gasoline_charge=htmlentities(htmlspecialchars($request->input('gasoline_charge')));
+                $this->drivers_charge=htmlentities(htmlspecialchars($request->input('drivers_charge')));
+                $this->appointment=htmlentities(htmlspecialchars($request->input('appointment')));
+
+            
+            
+            
+                $this->pdoObject=DB::connection()->getPdo();
+                #begin transaction
+                $this->pdoObject->beginTransaction();
+                
+                $insert_sql="INSERT INTO tr_charge(rid,start,end,dca,gasoline_charge,drivers_charge) values (:rid,:start,:end,:dca,:gasoline_charge,:drivers_charge)";
+                $insert_statement=$this->pdoObject->prepare($insert_sql);
+        
+                #params
+                $insert_statement->bindParam(':rid',$this->id);
+                $insert_statement->bindParam(':start',$this->in);
+                $insert_statement->bindParam(':end',$this->out);
+                $insert_statement->bindParam(':dca',$this->appointment);
+                $insert_statement->bindParam(':gasoline_charge',$this->gasoline_charge);
+                $insert_statement->bindParam(':drivers_charge',$this->drivers_charge);
+               
+                
+                #exec the transaction
+                $insert_statement->execute();
+                $lastId=$this->pdoObject->lastInsertId();
+                $this->pdoObject->commit();
+
+                #return
+                echo $lastId;
+            
+
+
+        }catch(Exception $e){ echo $e->getMessage();$this->pdoObject->rollback();}
+
+
+    }
+
     /**
      * Store a newly created resource in storage.
      *
