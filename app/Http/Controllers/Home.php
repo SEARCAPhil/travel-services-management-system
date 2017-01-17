@@ -15,6 +15,7 @@ class Home extends Controller
      */
     public function index()
     {
+        
         return view('automobile/tab',array('name'=>'john'));
     }
 

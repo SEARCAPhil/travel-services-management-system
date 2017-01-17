@@ -42,11 +42,6 @@ Route::get('/travel/official/preview/{id}',function($id){
 	return View::make('travel/official/tr-preview',array('id'=>$id));
 });
 
-#print
-Route::get('/travel/official/print/{id}',function($id){
-	return View::make('travel/official/print',array('id'=>$id));
-});
-
 
 
 #official form
@@ -325,5 +320,17 @@ Route::delete('api/travel/campus/itenerary/{id}',['uses' =>'Campus_itenerary@des
 Route::put('api/travel/campus/status/{id}',['uses' =>'Campus@update_status']);
 
 
+
+
+###############################################################################################
+# PRINTABLES
+###############################################################################################
+
+//OFFICIAL
+#TR
+Route::get('/travel/official/print/travel_request/{id}',['uses'=>'Official_printables@print_travel_request']);
+
+#TT
+Route::get('/travel/official/print/trip_ticket/{id}',['uses'=>'Official_printables@print_trip_ticket']);
 
 
