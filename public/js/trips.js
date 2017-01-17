@@ -21,6 +21,7 @@
 var trips= {};
 var selectedTrips;
 
+
 /*
 |----------------------------------------------------------------------------
 | AJAX Verified travel
@@ -133,8 +134,6 @@ function ajax_unlinkOfficialTravel(id,callback){
 		}
 	})
 }
-
-
 
 
 
@@ -501,12 +500,20 @@ function appendToList(json){
 										<li><a href="#" class="advance-menu-selector" id="vehicle">Assign <b>SEARCA</b> Vehicle</a></li>
 										<li><a href="#" class="advance-menu-selector" id="rent"><b>Rent</b> a Car</a></li>
 									    <li><a href="#" class="advance-menu-selector" id="driver">Assign Driver</a></li>
-									    <li><a href="#" class="advance-menu-selector"  id="charge">Charge</a></li>
+									    <li><a href="#" class="advance-menu-selector"  id="charge" data-charge="`+data.id+`">Charge</a></li>
 									  </ul>
 								
-							</li>
+							</li>`;
 
-						</ul>
+							
+							if(data.type=='official'){
+
+								htm+=`<li> <a href="`+data.id+`" class="travel-link"><span class="glyphicon glyphicon-print"></span></a></li>`
+	
+							}
+
+
+						htm+=`</ul>
 					</small>
 
 					<div style="clear:both"><br/></div>
@@ -738,7 +745,10 @@ function bindAdvanceSelector(){
 		var menu=$(this).attr('id')
 		if(menu=='vehicle') advanceMenuVehicle();
 		if(menu=='driver') advanceMenuDriver();
-		if(menu=='charge') advanceMenuCharge();
+		if(menu=='charge'){
+			var charge=$(this).attr('data-charge')
+			advanceMenuCharge(charge);
+		} 
 		if(menu=='rent') advanceMenuRentACar();
 
 
@@ -760,8 +770,11 @@ function advanceMenuDriver(){
 	});	
 }
 
-function advanceMenuCharge(){
+function advanceMenuCharge(id){
 	showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/charge',function(){
+
+		
+
 
 			
 	});	

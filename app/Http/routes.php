@@ -159,7 +159,9 @@ Route::delete('api/travel/official/verified/scheduled/{id}',['uses'=>'Official_i
 /**RECENTLY VERIFIED TRAVEL REQUEST MARK AS**/
 Route::put('api/travel/official/verified/{id}',['uses' =>'Trips@update_status']);
 
-
+/**CHARGE**/
+Route::get('api/travel/official/verified/charges/{id}',['uses' =>'Official_itenerary@show_charges']);
+Route::put('api/travel/official/verified/charges/{id}',['uses' =>'Official_itenerary@update_charges']);
 
 
 
