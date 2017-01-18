@@ -338,3 +338,9 @@ Route::get('/travel/official/print/trip_ticket/{id}',['uses'=>'Official_printabl
 
 //PERSONAL
 Route::get('/travel/personal/print/travel_request/{id}',['uses'=>'Personal_printables@print_travel_request']);
+
+
+
+
+//CAMPUS
+Route::get('/travel/campus/print/travel_request/{id}',['uses'=>'Campus_printables@print_travel_request']);
