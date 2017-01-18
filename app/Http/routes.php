@@ -345,3 +345,4 @@ Route::get('/travel/personal/print/statement_of_account/{id}',['uses'=>'Personal
 
 //CAMPUS
 Route::get('/travel/campus/print/travel_request/{id}',['uses'=>'Campus_printables@print_travel_request']);
+Route::get('/travel/campus/print/notice_of_charges/{id}',['uses'=>'Campus_printables@print_notice_of_charges']);

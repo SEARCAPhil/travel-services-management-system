@@ -261,4 +261,228 @@ $html.='
 
 
     }
+
+
+
+   	function print_notice_of_charges($id){
+
+
+    	//get default settings from config/laravel-tcpdf.php
+   		$pdf_settings = \Config::get('laravel-tcpdf');
+
+   		$pdf = new \Elibyy\TCPDF\TCPdf('L', $pdf_settings['page_units'], array(210,297), true, 'UTF-8', false);
+   		
+
+
+   		// Custom Header
+		$pdf->setHeaderCallback(function($pdf) {
+
+			// Title
+			// set cell margins
+			$pdf->setFontSize(8);
+			$pdf->Ln(10);
+			$pdf->setFontSize(9);
+			//$this->image("../model/img/Logo Searca.png",20,'',15);
+			//$this->Cell(0, 0, '<img src="../model/img/Logo Searca.png"/>', 0, 2, 'L', 0, '', 0, false, 'T', 'B');
+			//$this->Cell(0, 0, 'Southeast Asian Ministers of Education Organization', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
+			$pdf->Cell(0, 0, 'SOUTHEAST ASIAN REGIONAL CENTER FOR GRADUATE STUDY', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
+			$pdf->Cell(0, 0, ' AND RESEARCH IN AGRICULTURE', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
+			$pdf->Cell(0, 0, 'College, Laguna, 4031, Philippines', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
+			$pdf->setFontSize(15);
+			$pdf->Cell(0, 10, 'NOTICE OF CHARGES', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
+
+
+			$foot='	<article class="col col-md-12" style="font-size:7px;">
+
+					
+					<table style="font-size:10px;">
+						<tr>
+							<td colspan="3"><hr/></td>
+						</tr>
+						<tr>
+							<td colspan="3">To be prepared in quadruplicate.</td>
+						</tr>
+						<tr>
+							<td>White-Customer </td> <td>Pink - Office/unit</td> <td>Yellow - Accounting</td> <td>Green - Cashier</td>
+						</tr>
+					</table>
+					
+				</article>';
+
+
+
+		if ($pdf->getPage() <= $pdf->getAliasNumPage()) {
+			$pdf->SetY(-30);
+			$pdf->Writehtml($foot);
+		}
+
+
+
+		});
+
+		// Custom Footer
+		$pdf->setFooterCallback(function($pdf) {
+
+			$pdf->SetY(-50);
+			// Set font
+	        $pdf->SetFont('helvetica', 'N', 9);
+
+
+
+
+
+	        // Position at 15 mm from bottom
+	        $pdf->SetY(-15);
+	       	$pdf->SetFont('helvetica', 'I', 8);
+	        // Page number
+	        $pdf->Cell(0, 10, 'Page '.$pdf->getAliasNumPage().'/'.$pdf->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+
+	       
+
+
+  	  	});
+
+
+		//settings
+		// set margins
+		$pdf->SetMargins(PDF_MARGIN_LEFT, 50, PDF_MARGIN_RIGHT);
+
+		
+
+
+
+
+
+    	// create some HTML content
+$html ='<style>
+			.passenger-table{margin-bottom:20px; }
+			.passenger-table td, .passenger-table th{padding: 0; border-right:30px solid #fff;}
+			.passenger-table td{}
+			.sa-table{margin-bottom:20px; border:3px solid black;}
+			.sa-table td,.sa-table th{margin-bottom:20px; border:1px solid rgb(20,20,20);}
+			.withLine{border-bottom:1px solid rgb(20,20,20);overflow:hidden;text-align:left;padding-bottom:10px;margin-right:50px;}
+		</style>
+
+	<article>
+
+		<table>
+			<tr>
+				<td width="400"></td><td></td><td width="100"><b>NO. 290</b></td>
+			</tr>
+
+			
+		</table>
+		<br/>
+
+		<table>
+			<tr>
+				<td width="400"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b></b></td>
+			</tr>
+			<tr>
+				<td></td><td></td><td style="text-align:center;"><b>Date</b></td>
+			</tr>
+
+			
+		</table>
+
+	</article>
+	<article>
+
+		<table cellspacing="5">
+
+			<tr>
+				<td width="50"><b>To:</b></td>
+				<td width="250" class="withLine"></td>
+				<td width="140"></td>
+				<td width="40"><b>Office:</b></td>
+				<td width="250" class="withLine"></td>
+			</tr>
+			<tr>
+				<td width="50"><b>For:</b></td>
+				<td width="250" class="withLine"></td>
+				<td width="140"></td>
+				<td width="40"><b>Month:</b></td>
+				<td width="250" class="withLine"></td>
+			</tr>
+
+			
+			
+			
+		</table>
+
+
+	</article>';
+
+$html.='
+	<br/><br/><br/>
+	<article>
+		<table class="table sa-table" style="border:none;">
+			<tr>
+				<th><b>Date</b></th>
+				<th><b>Description</b></th>
+				<th><b>Amount</b></th>
+			</tr>';
+
+			
+					
+					
+			$html.='<tr>
+				<td></td>
+				<td height="60">
+				<br/><br/>
+					<b>Total:</b>
+				</td>
+
+
+				<td><br/><br/>
+					<b>Php 3500</b><br/><br/>
+					
+				</td>
+				
+			</tr>';
+
+			$html.='<tr>
+				<td><br/><br/>
+					
+
+					Prepared by:<br/><br/>
+					<b>VAN-ALLEN S. LIMBACO</b><br/>
+					Transport Service Assistant<br/><br/>
+
+				</td>
+				<td>
+					<br/><br/>
+					<b>Certified By:</b><br/><br/>
+					<b>RICARDO A. MENORCA</b><br/>
+					HEAD, GSU
+					<br/><br/>
+
+				</td>
+
+				<td>
+					<br/><br/>
+					<b>Conforme:</b>
+
+				</td>
+				
+			</tr>';
+
+		$html.='</table>
+		
+	</article>';
+
+$html.='</section>';
+
+
+
+		
+		$pdf->setFontSize(10);	
+
+		//output
+        $pdf->AddPage('L');
+        $pdf->Writehtml($html);
+        $pdf->output('Travel Request', 'I');
+
+
+    }
 }
