@@ -202,7 +202,29 @@ $html.='	<article class="col col-md-12">
 				<td> Report to:<br/>
 				&nbsp;Destination<br/>
 				</td>
-				<td>  </td>
+
+
+				<td> 
+
+					<table>
+						<tr style="border:none;">
+							<td style="border-right:1px solid rgb(80,80,80);border-bottom:1px solid rgb(80,80,80);" width="80"></td>
+							<td style="border-right:1px solid rgb(80,80,80);border-bottom:1px solid rgb(80,80,80);" width="100"> Date</td>
+							<td style="border-bottom:1px solid rgb(80,80,80);" width="67"> Time</td>
+						</tr>
+						<tr style="border:none;">
+							<td style="border-right:1px solid rgb(80,80,80);border-bottom:1px solid rgb(80,80,80);" width="80">Departure</td>
+							<td style="border-right:1px solid rgb(80,80,80);border-bottom:1px solid rgb(80,80,80);" width="100"></td>
+							<td style="border-bottom:1px solid rgb(80,80,80);" width="67"> </td>
+						</tr>
+						<tr style="border:none;">
+							<td style="border-right:1px solid rgb(80,80,80);border-bottom:1px solid rgb(80,80,80);" width="80">Arrival</td>
+							<td style="border-right:1px solid rgb(80,80,80);border-bottom:1px solid rgb(80,80,80);" width="100"></td>
+							<td style="border-bottom:1px solid rgb(80,80,80);" width="67"></td>
+						</tr>
+					</table>
+
+				</td>
 
 			</tr>
 
@@ -764,4 +786,7 @@ $html.='<br/><br/><br/><article>
 
 
     }
+
+    
+
 }

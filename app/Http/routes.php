@@ -338,6 +338,7 @@ Route::get('/travel/official/print/trip_ticket/{id}',['uses'=>'Official_printabl
 
 //PERSONAL
 Route::get('/travel/personal/print/travel_request/{id}',['uses'=>'Personal_printables@print_travel_request']);
+Route::get('/travel/personal/print/statement_of_account/{id}',['uses'=>'Personal_printables@print_statement_of_account']);
 
 
 

@@ -333,4 +333,212 @@ $html.='<br/><br/><br/><article>
 
 
     }
+
+
+
+     function print_statement_of_account($id){
+
+
+    	//get default settings from config/laravel-tcpdf.php
+   		$pdf_settings = \Config::get('laravel-tcpdf');
+
+   		$pdf = new \Elibyy\TCPDF\TCPdf($pdf_settings['page_orientation'], $pdf_settings['page_units'], array(210,297), true, 'UTF-8', false);
+   		
+
+
+   		// Custom Header
+		$pdf->setHeaderCallback(function($pdf) {
+
+			// Title
+			// set cell margins
+			$pdf->setFontSize(8);
+			$pdf->Ln(10);
+			$pdf->setFontSize(9);
+			//$this->image("../model/img/Logo Searca.png",20,'',15);
+			//$this->Cell(0, 0, '<img src="../model/img/Logo Searca.png"/>', 0, 2, 'L', 0, '', 0, false, 'T', 'B');
+			//$this->Cell(0, 0, 'Southeast Asian Ministers of Education Organization', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
+			$pdf->Cell(0, 0, 'SOUTHEAST ASIAN REGIONAL CENTER FOR GRADUATE STUDY', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
+			$pdf->Cell(0, 0, ' AND RESEARCH IN AGRICULTURE', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
+			$pdf->Cell(0, 0, 'College, Laguna, 4031, Philippines', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
+			$pdf->setFontSize(15);
+			$pdf->Cell(0, 10, 'STATEMENT OF ACCOUNT', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
+
+
+			$foot='	<article class="col col-md-12" style="font-size:7px;">
+
+					
+					<table style="font-size:10px;">
+						<tr>
+							<td colspan="3"><hr/></td>
+						</tr>
+						<tr>
+							<td colspan="3">To be prepared in quadruplicate.</td>
+						</tr>
+						<tr>
+							<td>White-Customer </td> <td>Pink - Office/unit</td> <td>Yellow - Accounting</td> <td>Green - Cashier</td>
+						</tr>
+					</table>
+					
+				</article>';
+
+
+
+		if ($pdf->getPage() <= $pdf->getAliasNumPage()) {
+			$pdf->SetY(-30);
+			$pdf->Writehtml($foot);
+		}
+
+
+
+		});
+
+		// Custom Footer
+		$pdf->setFooterCallback(function($pdf) {
+
+			$pdf->SetY(-50);
+			// Set font
+	        $pdf->SetFont('helvetica', 'N', 9);
+
+
+
+
+
+	        // Position at 15 mm from bottom
+	        $pdf->SetY(-15);
+	       	$pdf->SetFont('helvetica', 'I', 8);
+	        // Page number
+	        $pdf->Cell(0, 10, 'Page '.$pdf->getAliasNumPage().'/'.$pdf->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+
+	       
+
+
+  	  	});
+
+
+		//settings
+		// set margins
+		$pdf->SetMargins(PDF_MARGIN_LEFT, 50, PDF_MARGIN_RIGHT);
+
+		
+
+
+
+
+
+    	// create some HTML content
+$html ='<style>
+			.passenger-table{margin-bottom:20px; }
+			.passenger-table td, .passenger-table th{padding: 0; border-right:30px solid #fff;}
+			.passenger-table td{}
+			.sa-table{margin-bottom:20px; border:3px solid black;}
+			.sa-table td,.sa-table th{margin-bottom:20px; border:1px solid rgb(20,20,20);}
+			.withLine{border-bottom:1px solid rgb(20,20,20);overflow:hidden;text-align:left;padding-bottom:10px;margin-right:50px;}
+		</style>
+
+
+	<article>
+
+		<table cellspacing="5">
+
+			<tr>
+				<td width="80"><b>Requesitioner:</b></td>
+				<td width="150" class="withLine"></td>
+				<td width="10"></td>
+				<td width="80"><b></b></td>
+				<td width="150" ><b>No.xxx</b></td>
+			</tr>
+			<tr>
+				<td width="150"><b>Office/Unit/Program/Project :</b></td>
+				<td width="150" class="withLine"></td>
+				<td width="10"></td>
+				<td width="10"><b></b></td>
+				<td width="150" class="withLine"></td>
+			</tr>
+
+			<tr>
+				<td width="150"></td>
+				<td width="150"></td>
+				<td width="10"></td>
+				<td width="10"></td>
+				<td width="150" style="text-align:center;">Date</td>
+			</tr>
+			
+			
+		</table>
+
+
+	</article>';
+
+$html.='
+	<br/><br/><br/>
+	<article>
+		<table class="table sa-table" style="border:none;">
+			<tr>
+				<th><b>Description</b></th>
+				<th><b>Amount</b></th>
+			</tr>';
+
+			
+					
+					
+			$html.='<tr>
+				<td height="100">
+				<br/><br/>
+					<b>Note:</b> Php 3500, base170 km 
+				</td>
+
+
+				<td><br/><br/>
+					<b>Php 3500</b><br/><br/>
+					<b>Charge :</b> Php 3500<br/>
+					<b>Additional Charge:</b> Php 0<br/>
+					<b>Over time :</b> 0 day(s) and 0 hour(s)<br/>
+					<b>Driver\'s Overtime Charge:</b> Php 0<br/>
+				</td>
+				
+			</tr>';
+			$html.='<tr>
+				<td><input type="date" class="dateSelector"><b>Received by: </b></td>
+				<td><input type="text" class="form-control text"><b>TOTAL : Php</b></td>
+				
+			</tr>';
+			$html.='<tr>
+				<td><br/><br/><br/><br/>
+					<b>IMPORTANT:</b> This statement is presumed correct unless otherwise notified within 7 days after date of receipt
+
+					<p>Prepared by: Van-Allen s. Limbaco</p>
+					<p>Reference: Transport Service Assistant</p><br/><br/>
+
+				</td>
+				<td>
+					<br/><br/>
+					<p><b>Certified Correct:</b></p>
+					<p>Payment not yet received</p><br/><br/>
+					<b>RICARDO A. MENORCA</b><br/>
+					HEAD, GSU
+					<br/><br/>
+
+				</td>
+				
+			</tr>';
+
+		$html.='</table>
+		
+	</article>';
+
+$html.='</section>';
+
+
+
+		
+		$pdf->setFontSize(10);	
+
+		//output
+        $pdf->AddPage();
+        $pdf->Writehtml($html);
+        $pdf->output('Travel Request', 'I');
+
+
+    }
+
 }
