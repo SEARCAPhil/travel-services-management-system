@@ -740,6 +740,8 @@ function bindMarkMenu(){
 		var set_status=$(this).attr('data-mark');
 		var type=json.type;
 		
+
+
 		updateVerifiedTravel(id,set_status,type)
 
 		
@@ -756,31 +758,69 @@ function bindAdvanceSelector(){
 		var type=content.type
 
 		var menu=$(this).attr('id')
-		if(menu=='vehicle') advanceMenuVehicle();
-		if(menu=='driver') advanceMenuDriver();
+
+		
+		
+		if(menu=='vehicle') advanceMenuVehicle(type);
+		if(menu=='driver') advanceMenuDriver(type);
 		if(menu=='charge'){
 			var charge=$(this).attr('data-charge')
-			advanceMenuCharge(charge);
+			advanceMenuCharge(charge,type);
 		} 
-		if(menu=='rent') advanceMenuRentACar();
+		if(menu=='rent') advanceMenuRentACar(type);
 
 
 	})
 }
 
 
-function advanceMenuVehicle(){
+function advanceMenuVehicle(type){
 	showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/vehicle',function(){
 
+		showVehicleList(function(){
+			assignVehicle()
+			assignVehicle()
+		})
 			
 	});	
 }
 
-function advanceMenuDriver(){
+function advanceMenuDriver(type){
 	showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/driver',function(){
 
+		showDriversList(function(){
+			setActive('.list-item-selection',function(target){
+
+				var content=$(selectedTrips).attr('data-content');
+				var json=JSON.parse(content);
+				var id=json.id;
+				var current_status=json.status;
+				var driver=$(target).attr('data-mark');
+				var driver_name=$(target).attr('data-driver');
+				//bind submit
+				$('.modal-submit').off('click');
+				$('.modal-submit').on('click',function(e){
+					
+					
+
+		
+				assignDriver(id,driver,driver_name)
+
+			})
+
+
+				if($(target).attr('data-event')=='dblclick'){
+					assignDriver(id,driver,driver_name)
+					$('#preview-modal').modal('hide');
+				}  
+
+
+			})
+
+		});
 			
 	});	
+		
 }
 
 function advanceMenuCharge(id){

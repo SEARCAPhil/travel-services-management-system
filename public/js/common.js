@@ -258,6 +258,85 @@ function ajax_updateTravelStatusPreview(url,id,status,callback){
 
 
 
+
+/*
+|----------------------------------------------------------------------------
+| Hold data for the davailable drivers
+|---------------------------------------------------------------------------
+*/
+var driverList={}
+
+/*
+|----------------------------------------------------------------------------
+| Hold data for vehicle list
+|---------------------------------------------------------------------------
+*/
+var vehicleList={}
+
+
+/*
+|----------------------------------------------------------------------------
+| AJAX Drivers List
+|---------------------------------------------------------------------------
+|
+| Get drivers list from the directory
+|
+*/
+
+function ajax_getDriversList(func){
+	$.get('api/directory/drivers',function(res){
+		driverList=JSON.parse(res)
+		func(driverList);
+		return driverList;
+	})
+	
+}
+
+
+
+
+/*
+|----------------------------------------------------------------------------
+| AJAX Vehicle List
+|---------------------------------------------------------------------------
+|
+| Get vehicle list from the directory
+|
+*/
+function ajax_getVehiclesList(func){
+	$.get('api/directory/vehicles',function(res){
+		vehicleList=JSON.parse(res)
+		func(vehicleList);
+		return vehicleList;
+	})
+	
+}
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Show Drivers List
+|---------------------------------------------------------------------------
+|
+| Display drivers list
+|
+*/
+
+function show_driversList(){
+	ajax_getDriversList(function(driverList){
+		for(x of driverList.data){
+			$('#officialTravelDriver').append('<option value="'+x.id+'">'+x.first_name+' '+x.last_name+'</option>')
+		}
+		
+	})
+}
+
+
+
+
+
+
 /*
 |----------------------------------------------------------------------------
 | Update status bar (ADMIN)

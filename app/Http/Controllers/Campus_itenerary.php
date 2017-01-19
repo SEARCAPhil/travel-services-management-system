@@ -126,6 +126,32 @@ class Campus_itenerary extends Controller
     } 
 
 
+
+    public function update_plate_no($id,Request $request){
+
+        try{
+            $this->id=htmlentities(htmlspecialchars($id));
+            $this->token = $request->input('_token');
+            $this->plate_no = $request->input('plate_no');
+
+            $this->pdoObject=DB::connection()->getPdo();
+
+            $this->pdoObject->beginTransaction();
+            $sql="UPDATE trc_travel set plate_no=:plate_no where id=:id";
+            $statement=$this->pdoObject->prepare($sql);
+            $statement->bindParam(':plate_no',$this->plate_no);
+            $statement->bindParam(':id',$this->id);
+            $statement->execute();
+            $isUpdated=$statement->rowCount();
+            $this->pdoObject->commit();
+
+            echo $isUpdated;
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+    } 
+
+
     /**
      * Store a newly created resource in storage.
      *

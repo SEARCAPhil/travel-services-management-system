@@ -285,7 +285,8 @@ Route::put('api/travel/personal/payment',['uses' =>'Personal@payment']);
 #update status
 Route::put('api/travel/personal/status/{id}',['uses' =>'Personal@update_status']);
 
-
+#plate number
+Route::put('api/travel/personal/vehicle/{id}',['uses' =>'Personal_itenerary@update_plate_no']);
 
 ##remove request
 Route::delete('api/travel/personal/{id}',['uses' =>'Personal@destroy']);
@@ -331,7 +332,8 @@ Route::delete('api/travel/campus/itenerary/{id}',['uses' =>'Campus_itenerary@des
 #update status
 Route::put('api/travel/campus/status/{id}',['uses' =>'Campus@update_status']);
 
-
+#plate number
+Route::put('api/travel/campus/vehicle/{id}',['uses' =>'Campus_itenerary@update_plate_no']);
 
 
 ###############################################################################################
