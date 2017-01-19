@@ -26,7 +26,7 @@ function bindOfficialPurposeSaveButton(){
 
 		//insert new item to db if not yet saved
 		if(form_id<1){
-			var data={_token:$('input[name=_token]').val(),purpose:$('#form-purpose').val()}
+			var data={_token:$('input[name=_token]').val(),purpose:$('#form-purpose').val(),'source_of_fund':'opf'}
 			$.post('api/travel/official/purpose',data,function(res){
 				if(res>0&&res.length<50){
 					form_id=res;

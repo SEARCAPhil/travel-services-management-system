@@ -508,7 +508,20 @@ function appendToList(json){
 							
 							if(data.type=='official'){
 
-								htm+=`<li> <a href="`+data.id+`" class="travel-link"><span class="glyphicon glyphicon-print"></span></a></li>`
+								htm+=`<li> <a href="travel/official/print/travel_request/`+data.id+`" target="_blank" class="travel-link"><span class="glyphicon glyphicon-print"></span></a></li>`
+	
+							}
+
+							if(data.type=='personal'){
+
+								htm+=`<li> <a href="travel/personal/print/travel_request/`+data.id+`" target="_blank" class="travel-link"><span class="glyphicon glyphicon-print"></span></a></li>`
+	
+							}
+
+
+							if(data.type=='campus'){
+
+								htm+=`<li> <a href="travel/campus/print/travel_request/`+data.id+`" target="_blank" class="travel-link"><span class="glyphicon glyphicon-print"></span></a></li>`
 	
 							}
 

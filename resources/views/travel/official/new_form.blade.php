@@ -70,16 +70,22 @@
 			<div class="circle passenger-circle-group">2<span class="circle-label">Passenger<span></div>
 			<div class="bar passenger-circle-group"></div>	
 			<div class="circle itenerary-circle-group">3<span class="circle-label">Itenerary<span></div>
-			<div class="bar itenerary-circle-group"></div>	
-			<div class="circle finished-circle-group"><span class="glyphicon glyphicon-check"></span><span class="circle-label">Finished<span></div>
+			<div class="bar itenerary-circle-group"></div>
+			<div class="circle cash-advance-circle-group">4<span class="circle-label">Cash Advance<span></div>
+		</div>
 
+		<div class="col col-md-12 xs-12 hidden-sm">
+			<div class="bar continuation-right  cash-advance-circle-group"></div>	
+		</div>
+		<div class="col col-md-12 xs-12 circle-pull-right">
+			<div class="circle finished-circle-group"><span class="glyphicon glyphicon-check"></span><span class="circle-label">Finished<span></div>
 		</div>
 
 
 		<div class="col col-md-12 preview-sections" >
 
 			<p class="purpose-content"  style="margin-top: 50px;"> 
-				<p><span class="mini-circle"></span><span>Purpose</span> <button class="btn btn-success btn-xs" id="officialPurposeSaveButton"><span class="glyphicon glyphicon-floppy-disk"></span></button> <span class="pull-right" id="officialPurposeSaveStatus"></span></p>
+				<p><span class="mini-circle"></span><span>Purpose</span> <button class="btn btn-success btn-xs" id="officialPurposeSaveButton"><span class="glyphicon glyphicon-floppy-disk"></span></button> <span class="" id="officialPurposeSaveStatus"></span></p>
 				<textarea class="col col-md-12 col-xs-12 	preview-purpose" id="form-purpose" rows="15" cols="10" placeholder="Type the purpose of your travel request in this section"></textarea>	
 			</p>
 
@@ -110,6 +116,26 @@
 				<div class="preview-itenerary"></div>
 		</div>
 
+
+		<div class="col col-md-12 preview-sections">
+			<p></p><div class="mini-circle"></div> <b>Cash Advance</b>
+			<br/><br/>
+			<p><b>Source of funds: <span class="" id="officialSourceOfFundSaveStatus"></span></b></p>
+			<p>
+				<select class="form-control" id="source_of_fund" disabled="disabled">
+					<option value="opf">Operating Funds</option>
+					<option value="otf" id="otf">Other Funds</option>
+					<option value="opfs">Operating Funds(Scholar)</option>
+					<option value="otfs">Other Funds(Scholar)</option>
+				</select>
+			</p>
+			<p id="otf-funding-section">
+				<select id="otf-fundings" class="form-control">
+					<option value="N/A">Select project</option>
+				</select>
+			</p>
+		</div>
+
 	</div>
 
 
@@ -134,7 +160,60 @@ function appendStaffToListPreviewCallback(data){
 
 function appendIteneraryToListPreviewCallback(data){
 	//enable finished circle on forms
-	changeCircleState('.finished-circle-group')
+	//changeCircleState('.finished-circle-group')
+
+	//enable finished circle on forms
+	changeButtonState('#source_of_fund','enabled')
+	changeCircleState('.cash-advance-circle-group')
+}
+
+
+function bindSourceOfFund(){
+	$('#source_of_fund').off('change');
+	$('#source_of_fund').on('change',function(){
+					//update
+			var data={_token:$('input[name=_token]').val(),purpose:$(this).val(),id:form_id}
+
+			$.ajax({
+				url:'api/travel/official/fund',
+				data:data,
+				method:'PUT',
+				success:function(res){
+					if(res>0&&res.length<50){
+						$('#officialSourceOfFundSaveStatus').html('<span class="glyphicon glyphicon-ok text-success"></span>');
+					}else{
+						$('#officialSourceOfFundSaveStatus').html('<span class="glyphicon glyphicon-remove text-danger"></span>');
+					}
+				}
+			});
+	});
+}
+
+
+function bindOtf(){
+	$('#otf-fundings').off('change');
+	$('#otf-fundings').on('change',function(){
+		
+			var data={_token:$('input[name=_token]').val(),project:$(this).val(),id:form_id}
+
+			$('#officialSourceOfFundSaveStatus').html('saving . . .');
+			$.ajax({
+				url:'api/travel/official/projects',
+				data:data,
+				method:'POST',
+				success:function(res){
+					if(res>0&&res.length<50){
+						$('#officialSourceOfFundSaveStatus').html('<span class="glyphicon glyphicon-ok text-success"></span>');
+							//enable finished circle on forms
+							changeCircleState('.finished-circle-group')
+					}else{
+						$('#officialSourceOfFundSaveStatus').html('<span class="glyphicon glyphicon-remove text-danger"></span>');
+					}
+				},error:function(){
+					$('#officialSourceOfFundSaveStatus').html('<span class="glyphicon glyphicon-remove text-danger"></span>');
+				}
+			});
+	});
 }
 
 
@@ -153,6 +232,27 @@ changeButtonState('#passengerFormButton','disabled')
 changeButtonState('#iteneraryFormButton','disabled')
 
 bindOfficialPurposeSaveButton()
+bindSourceOfFund()
+
+$('#source_of_fund').change(function(e){
+	if($(this).val()=='otf'){
+		$('#otf-funding-section').show();
+		$.get('api/travel/official/projects',function(json){
+			var data=JSON.parse(json);
+			var htm='<option value="N/A">Select project</option>'
+
+			for(var x=0;x<data.length;x++){
+			
+				htm+='<option>'+data[x].title+'</option>';
+			}
+
+			$('#otf-fundings').html(htm)
+			bindOtf()
+		}).fail(function(){
+			alert('failed loading project list');
+		})
+	}
+})
 
 });
 </script>

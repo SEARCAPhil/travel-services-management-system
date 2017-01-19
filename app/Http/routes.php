@@ -183,6 +183,12 @@ Route::get('authentication/logout',['uses' =>'Authentication@logout']);
 ######################################################################################
 #Official
 ######################################################################################
+
+#project
+Route::get('api/travel/official/projects',['uses' =>'Official@projects']);
+Route::post('api/travel/official/projects',['uses' =>'Official@set_project']);
+
+
 Route::get('api/travel/official/{page?}',['uses' =>'Official@index'])->middleware('auth_custom');
 Route::get('api/travel/official/preview/{id}',['uses' =>'Official@show'])->middleware('auth_custom');
 Route::get('api/travel/official/staff/{id}',['uses' =>'Official_staff@index']);
@@ -191,9 +197,15 @@ Route::get('api/travel/official/custom/{id}',['uses' =>'Official_custom@index'])
 Route::get('api/travel/official/itenerary/{id}',['uses' =>'Official_itenerary@index']);
 Route::get('api/travel/official/search/{param}',['uses' =>'Official@search']);
 
+
 #purpose
 Route::post('api/travel/official/purpose',['uses' =>'Official@create_purpose']);
 Route::put('api/travel/official/purpose',['uses' =>'Official@update_purpose']);
+
+#source of fund
+Route::put('api/travel/official/fund',['uses' =>'Official@update_source_of_fund']);
+
+
 
 #itenerary
 Route::post('api/travel/official/itenerary',['uses' =>'Official_itenerary@create']);

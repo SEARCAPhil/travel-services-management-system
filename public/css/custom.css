@@ -498,3 +498,8 @@ vertical-align: text-bottom;
 /*items in driver, vehicle modal in advance option*/
 .list-item-selection{ padding-top:20px;padding-bottom: 20px;cursor:pointer; }
 .list-item-selection.active{ background: rgba(250,250,250,0.8); }
+
+/*otf-funding-section*/
+#otf-funding-section{
+	display: none;	
+}

@@ -227,6 +227,81 @@ class Official extends Controller
     }
 
 
+    public function update_source_of_fund(Request $request){
+
+        try{
+            $id=$request->input('id');
+            $source=$request->input('source_of_fund');
+
+            $this->pdoObject=DB::connection()->getPdo();
+
+            $this->pdoObject->beginTransaction();
+            $sql="UPDATE tr set source_of_fund=:source where id=:id";
+            $statement=$this->pdoObject->prepare($sql);
+            $statement->bindParam(':source',$source);
+            $statement->bindParam(':id',$id);
+            $statement->execute();
+            $isUpdated=$statement->rowCount();
+            $this->pdoObject->commit();
+
+            echo $isUpdated;
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+    }
+
+
+     public function set_project(Request $request){
+
+        try{
+            $id=$request->input('id');
+            $project=$request->input('project');
+
+            $this->pdoObject=DB::connection()->getPdo();
+
+            $this->pdoObject->beginTransaction();
+
+            $sql="SELECT * FROM otf_projects where tr_id=:tr_id LIMIT 1";
+            $statement=$this->pdoObject->prepare($sql);
+            $statement->bindParam(':tr_id',$id);
+            $statement->execute();
+
+            $lastId=0;
+            $count=0;
+            while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+                $count++;
+
+                
+            }
+
+            if($count>0){
+                //update
+                $sql2="UPDATE otf_projects set project=:project where tr_id=:tr_id";
+                $statement2=$this->pdoObject->prepare($sql2);
+                $statement2->bindValue(':project',$project);
+                $statement2->bindValue(':tr_id',$id);
+                $statement2->execute();
+                $lastId=$statement2->rowCount();
+            }else{
+
+                    $sql2="INSERT INTO otf_projects(tr_id,project) values (:tr_id,:project)";
+                    $statement2=$this->pdoObject->prepare($sql2);
+                    $statement2->bindValue(':project',$project);
+                    $statement2->bindValue(':tr_id',$id);
+                    $statement2->execute();
+                    $lastId=$this->pdoObject->lastInsertId();
+            }
+
+            
+            $this->pdoObject->commit();
+
+            echo $lastId;
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+    }
+
+
     public function update_status(Request $request){
 
         try{
@@ -278,9 +353,27 @@ class Official extends Controller
             $statement=$this->pdoObject->prepare($sql);
             $statement->bindParam(':id',$this->id);
             $statement->execute();
+
             $res=Array();
             while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+
+                $sql2="SELECT * FROM otf_projects where tr_id=:id";
+                $statement2=$this->pdoObject->prepare($sql2);
+                $statement2->bindValue(':id',$row->tr);
+                $statement2->execute();
+                $projects=Array();
+
+                $row->projects=Array();
+
+                while($row2=$statement2->fetch(\PDO::FETCH_OBJ)){
+                    $row->projects[]=$row2;
+                }
+
+                
+
                 $res[]=$row;
+
+
             }
             $this->pdoObject->commit();
 
@@ -706,6 +799,29 @@ function ongoing($page=1){
         }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
 
     }
+
+
+    public function projects()
+    {
+        try{
+
+            $this->pdoObject=DB::connection()->getPdo();
+
+            $sql="SELECT * from project_management.project ORDER BY title ASC";
+            $statement=$this->pdoObject->prepare($sql);
+            $statement->execute();
+            $res=Array();
+            while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+                $res[]=$row;
+            }
+           
+
+            return json_encode($res);
+
+        }catch(Exception $e){echo $e->getMessage();}
+        
+    }
+
 
 
 
