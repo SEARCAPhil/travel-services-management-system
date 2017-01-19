@@ -278,6 +278,7 @@ Route::post('api/directory/personal/custom/',['uses' =>'Personal_custom@create']
 #vehicle type
 Route::put('api/travel/personal/vehicle_type',['uses' =>'Personal_itenerary@vehicle_type']);
 
+
 #payment
 Route::put('api/travel/personal/payment',['uses' =>'Personal@payment']);
 
@@ -287,6 +288,9 @@ Route::put('api/travel/personal/status/{id}',['uses' =>'Personal@update_status']
 
 #plate number
 Route::put('api/travel/personal/vehicle/{id}',['uses' =>'Personal_itenerary@update_plate_no']);
+
+#driver
+Route::put('api/travel/personal/driver/{id}',['uses' =>'Personal_itenerary@update_driver']);
 
 ##remove request
 Route::delete('api/travel/personal/{id}',['uses' =>'Personal@destroy']);
@@ -335,6 +339,8 @@ Route::put('api/travel/campus/status/{id}',['uses' =>'Campus@update_status']);
 #plate number
 Route::put('api/travel/campus/vehicle/{id}',['uses' =>'Campus_itenerary@update_plate_no']);
 
+#driver
+Route::put('api/travel/campus/driver/{id}',['uses' =>'Campus_itenerary@update_driver']);
 
 ###############################################################################################
 # PRINTABLES

@@ -779,7 +779,7 @@ function advanceMenuVehicle(type){
 
 		showVehicleList(function(){
 			assignVehicle()
-			assignVehicle()
+			
 		})
 			
 	});	
@@ -789,33 +789,7 @@ function advanceMenuDriver(type){
 	showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/driver',function(){
 
 		showDriversList(function(){
-			setActive('.list-item-selection',function(target){
-
-				var content=$(selectedTrips).attr('data-content');
-				var json=JSON.parse(content);
-				var id=json.id;
-				var current_status=json.status;
-				var driver=$(target).attr('data-mark');
-				var driver_name=$(target).attr('data-driver');
-				//bind submit
-				$('.modal-submit').off('click');
-				$('.modal-submit').on('click',function(e){
-					
-					
-
-		
-				assignDriver(id,driver,driver_name)
-
-			})
-
-
-				if($(target).attr('data-event')=='dblclick'){
-					assignDriver(id,driver,driver_name)
-					$('#preview-modal').modal('hide');
-				}  
-
-
-			})
+			assignDriver();
 
 		});
 			

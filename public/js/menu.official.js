@@ -154,7 +154,52 @@
 | Driver
 |---------------------------------------------------------------------------*/
 
-	function assignDriver(id,driver,driver_name){
+	
+	function assignDriver(){
+		setActive('.list-item-selection',function(target){
+
+			var content=$(selectedTrips).attr('data-content');
+			var json=JSON.parse(content);
+			var id=json.id;
+			var type=json.type;
+			var current_status=json.status;
+			var driver=$(target).attr('data-mark');
+			var driver_name=$(target).attr('data-driver');
+			//bind submit
+			$('.modal-submit').off('click');
+			$('.modal-submit').on('click',function(e){
+				
+				assignDriver(id,driver,driver_name)
+
+			})
+
+
+			if($(target).attr('data-event')=='dblclick'){
+
+				if(type=='official'){
+					assignOfficialDriver(id,driver,driver_name);
+				}
+
+				if(type=='personal'){
+
+					assignPersonalDriver(id,driver,driver_name);
+				}
+
+
+				if(type=='campus'){
+			
+					assignCampusDriver(id,driver,driver_name);
+				}
+
+
+				$('#preview-modal').modal('hide');
+			}  
+
+
+		})
+	}
+
+	function assignOfficialDriver(id,driver,driver_name){
 		$.ajax({
 
 			url:'api/travel/official/driver/'+id,
@@ -172,6 +217,46 @@
 			}
 		})
 	}
+
+	function assignPersonalDriver(id,driver,driver_name){
+		$.ajax({
+
+			url:'api/travel/personal/driver/'+id,
+			method:'PUT',
+			data: { _token: $("input[name=_token]").val(),id:id,driver:driver},
+			success:function(data){
+
+
+				if(data==1){
+					$('.travel-other-details-read-more-'+id).click();
+					$('.travel-other-details-driver-'+id).html(driver_name+' <span class="glyphicon glyphicon-ok text-success"></span>')
+				}else{
+					alert('Oops! Something went wrong.Try to refresh the page')
+				}
+			}
+		})
+	}
+
+
+	function assignCampusDriver(id,driver,driver_name){
+		$.ajax({
+
+			url:'api/travel/campus/driver/'+id,
+			method:'PUT',
+			data: { _token: $("input[name=_token]").val(),id:id,driver:driver},
+			success:function(data){
+
+
+				if(data==1){
+					$('.travel-other-details-read-more-'+id).click();
+					$('.travel-other-details-driver-'+id).html(driver_name+' <span class="glyphicon glyphicon-ok text-success"></span>')
+				}else{
+					alert('Oops! Something went wrong.Try to refresh the page')
+				}
+			}
+		})
+	}
+
 
 	function showDriversList(callback){
 			ajax_getDriversList(function(driverList){
