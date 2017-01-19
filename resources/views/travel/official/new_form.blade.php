@@ -168,56 +168,6 @@ function appendIteneraryToListPreviewCallback(data){
 }
 
 
-function bindSourceOfFund(){
-	$('#source_of_fund').off('change');
-	$('#source_of_fund').on('change',function(){
-					//update
-			var data={_token:$('input[name=_token]').val(),purpose:$(this).val(),id:form_id}
-
-			$.ajax({
-				url:'api/travel/official/fund',
-				data:data,
-				method:'PUT',
-				success:function(res){
-					if(res>0&&res.length<50){
-						$('#officialSourceOfFundSaveStatus').html('<span class="glyphicon glyphicon-ok text-success"></span>');
-					}else{
-						$('#officialSourceOfFundSaveStatus').html('<span class="glyphicon glyphicon-remove text-danger"></span>');
-					}
-				}
-			});
-	});
-}
-
-
-function bindOtf(){
-	$('#otf-fundings').off('change');
-	$('#otf-fundings').on('change',function(){
-		
-			var data={_token:$('input[name=_token]').val(),project:$(this).val(),id:form_id}
-
-			$('#officialSourceOfFundSaveStatus').html('saving . . .');
-			$.ajax({
-				url:'api/travel/official/projects',
-				data:data,
-				method:'POST',
-				success:function(res){
-					if(res>0&&res.length<50){
-						$('#officialSourceOfFundSaveStatus').html('<span class="glyphicon glyphicon-ok text-success"></span>');
-							//enable finished circle on forms
-							changeCircleState('.finished-circle-group')
-					}else{
-						$('#officialSourceOfFundSaveStatus').html('<span class="glyphicon glyphicon-remove text-danger"></span>');
-					}
-				},error:function(){
-					$('#officialSourceOfFundSaveStatus').html('<span class="glyphicon glyphicon-remove text-danger"></span>');
-				}
-			});
-	});
-}
-
-
-
 
 
 $(document).ready(function(){
@@ -234,25 +184,7 @@ changeButtonState('#iteneraryFormButton','disabled')
 bindOfficialPurposeSaveButton()
 bindSourceOfFund()
 
-$('#source_of_fund').change(function(e){
-	if($(this).val()=='otf'){
-		$('#otf-funding-section').show();
-		$.get('api/travel/official/projects',function(json){
-			var data=JSON.parse(json);
-			var htm='<option value="N/A">Select project</option>'
-
-			for(var x=0;x<data.length;x++){
-			
-				htm+='<option>'+data[x].title+'</option>';
-			}
-
-			$('#otf-fundings').html(htm)
-			bindOtf()
-		}).fail(function(){
-			alert('failed loading project list');
-		})
-	}
-})
+bindOtfSelection
 
 });
 </script>

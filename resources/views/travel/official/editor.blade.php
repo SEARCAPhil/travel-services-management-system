@@ -85,11 +85,32 @@
 				<span class="btn btn-success btn-xs" id="officialIteneraryButton" data-toggle="modal" data-target="#itenerary-modal"><span class="glyphicon glyphicon-map-marker"></span></span>
 					<div id="officialIteneraryStatus" class="text-muted" style="float:right;height:20px;width:250px;overflow: hidden;position:relative;"></div>
 				</p>
-				<div class="preview-itenerary">
-
+				<div class="preview-itenerary"></div>
 				
 			</div>
-				
+
+			<div class="col col-md-8  col-md-offset-2 preview-sections">
+				<p></p><div class="mini-circle"></div> <b>Cash Advance</b> <small><a href="#"><span onclick="$('#fundings').show();return false;">Change</span></a></small>
+				<div class="preview-cash-advance">
+
+				</div>
+				<br/><br/>
+				<div id="fundings" style="display:none;">
+					<p><b>Source of funds: <span class="" id="officialSourceOfFundSaveStatus"></span></b></p>
+					<p>
+						<select class="form-control" id="source_of_fund">
+							<option value="opf">Operating Funds</option>
+							<option value="otf" id="otf">Other Funds</option>
+							<option value="opfs">Operating Funds(Scholar)</option>
+							<option value="otfs">Other Funds(Scholar)</option>
+						</select>
+					</p>
+					<p id="otf-funding-section">
+						<select id="otf-fundings" class="form-control">
+							<option value="N/A">Select project</option>
+						</select>
+					</p>
+				</div>
 			</div>
 
 		</div>
@@ -108,7 +129,9 @@ $(document).ready(function(){
 	form_id=$(selectedElement).attr('id');
 
 	bindOfficialPurposeSaveButton()
-	
+	bindSourceOfFund()
+
+	bindOtfSelection();
 
 });
 </script>

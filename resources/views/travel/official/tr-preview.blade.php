@@ -58,6 +58,17 @@
 				
 			</div>
 
+
+			<div class="col col-md-12 preview-sections">
+				<p><div class="mini-circle"></div> <span class="pull-left"><b>Cash Advance</b></span></p> 
+				<div class="preview-cash-advance">
+
+				</div>
+				
+			</div>
+
+
+
 		</div>
 
 
