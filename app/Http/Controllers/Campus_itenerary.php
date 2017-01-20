@@ -177,6 +177,127 @@ class Campus_itenerary extends Controller
     } 
 
 
+    function charge($id,Request $request){
+
+            try{
+                $this->token = $request->input('_token');
+                 $this->id=htmlentities(htmlspecialchars($id));
+                $this->in=htmlentities(htmlspecialchars($request->input('in')));
+                $this->out=htmlentities(htmlspecialchars($request->input('out')));
+                $this->gasoline_charge=htmlentities(htmlspecialchars($request->input('gasoline_charge')));
+                $this->drivers_charge=htmlentities(htmlspecialchars($request->input('drivers_charge')));
+                $this->appointment=htmlentities(htmlspecialchars($request->input('appointment')));
+
+            
+            
+            
+                $this->pdoObject=DB::connection()->getPdo();
+                #begin transaction
+                $this->pdoObject->beginTransaction();
+                
+                $insert_sql="INSERT INTO trc_charge(rid,start,end,dca,gasoline_charge,drivers_charge) values (:rid,:start,:end,:dca,:gasoline_charge,:drivers_charge)";
+                $insert_statement=$this->pdoObject->prepare($insert_sql);
+        
+                #params
+                $insert_statement->bindParam(':rid',$this->id);
+                $insert_statement->bindParam(':start',$this->in);
+                $insert_statement->bindParam(':end',$this->out);
+                $insert_statement->bindParam(':dca',$this->appointment);
+                $insert_statement->bindParam(':gasoline_charge',$this->gasoline_charge);
+                $insert_statement->bindParam(':drivers_charge',$this->drivers_charge);
+               
+                
+                #exec the transaction
+                $insert_statement->execute();
+                $lastId=$this->pdoObject->lastInsertId();
+                $this->pdoObject->commit();
+
+                #return
+                echo $lastId;
+            
+
+
+        }catch(Exception $e){ echo $e->getMessage();$this->pdoObject->rollback();}
+
+
+    }
+
+
+     function show_charges($id){
+        try{
+
+            $this->id=htmlentities(htmlspecialchars($id));
+
+
+            $this->pdoObject=DB::connection()->getPdo();
+
+            $sql="SELECT * FROM trc_charge where rid=:id ORDER BY id DESC LIMIT 1";
+            $statement=$this->pdoObject->prepare($sql);
+            $statement->bindParam(':id',$this->id);
+            $statement->execute();
+
+            $res=Array();
+
+            while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+                $res[]=Array('id'=>$row->id,'trp_id'=>$row->rid,'start'=>$row->start,'end'=>$row->end,'gc'=>$row->gc,'dc'=>$row->dc,'gasoline_charge'=>$row->gasoline_charge,'drivers_charge'=>$row->drivers_charge);
+            }
+               
+
+           echo json_encode($res);
+                
+
+        }catch(Exception $e){
+            echo $e->getMessage();
+        }
+    }
+
+    function update_charges($id,Request $request){
+
+            try{
+                $this->token = $request->input('_token');
+                $this->id=htmlentities(htmlspecialchars($id));
+                $this->in=htmlentities(htmlspecialchars($request->input('in')));
+                $this->out=htmlentities(htmlspecialchars($request->input('out')));
+                $this->gasoline_charge=htmlentities(htmlspecialchars($request->input('gasoline_charge')));
+                $this->drivers_charge=htmlentities(htmlspecialchars($request->input('drivers_charge')));
+                $this->appointment=htmlentities(htmlspecialchars($request->input('appointment')));
+
+            
+            
+            
+                $this->pdoObject=DB::connection()->getPdo();
+                #begin transaction
+                $this->pdoObject->beginTransaction();
+                
+                $insert_sql="UPDATE trc_charge SET start=:start,end=:end,dca=:dca,gasoline_charge=:gasoline_charge,drivers_charge=:drivers_charge where id=:id";
+                $insert_statement=$this->pdoObject->prepare($insert_sql);
+        
+                #params
+                $insert_statement->bindParam(':id',$this->id);
+                $insert_statement->bindParam(':start',$this->in);
+                $insert_statement->bindParam(':end',$this->out);
+                $insert_statement->bindParam(':dca',$this->appointment);
+                $insert_statement->bindParam(':gasoline_charge',$this->gasoline_charge);
+                $insert_statement->bindParam(':drivers_charge',$this->drivers_charge);
+               
+                
+                #exec the transaction
+                $insert_statement->execute();
+                $lastId=$insert_statement->rowCount();
+                $this->pdoObject->commit();
+
+                #return
+                echo $lastId;
+            
+
+
+        }catch(Exception $e){ echo $e->getMessage();$this->pdoObject->rollback();}
+
+
+    }
+
+
+
     /**
      * Store a newly created resource in storage.
      *

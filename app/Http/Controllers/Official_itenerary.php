@@ -451,11 +451,11 @@ class Official_itenerary extends Controller
                 #begin transaction
                 $this->pdoObject->beginTransaction();
                 
-                $insert_sql="UPDATE tr_charge SET start=:start,end=:end,dca=:dca,gasoline_charge=:dca,gasoline_charge=:gasoline_charge,drivers_charge=:drivers_charge where rid=:rid";
+                $insert_sql="UPDATE tr_charge SET start=:start,end=:end,dca=:dca,gasoline_charge=:gasoline_charge,drivers_charge=:drivers_charge where id=:id";
                 $insert_statement=$this->pdoObject->prepare($insert_sql);
         
                 #params
-                $insert_statement->bindParam(':rid',$this->id);
+                $insert_statement->bindParam(':id',$this->id);
                 $insert_statement->bindParam(':start',$this->in);
                 $insert_statement->bindParam(':end',$this->out);
                 $insert_statement->bindParam(':dca',$this->appointment);

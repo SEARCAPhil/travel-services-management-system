@@ -154,9 +154,7 @@ Route::delete('api/travel/official/verified/scheduled/{id}',['uses'=>'Official_i
 /**RECENTLY VERIFIED TRAVEL REQUEST MARK AS**/
 Route::put('api/travel/official/verified/{id}',['uses' =>'Trips@update_status']);
 
-/**CHARGE**/
-Route::get('api/travel/official/verified/charges/{id}',['uses' =>'Official_itenerary@show_charges']);
-Route::put('api/travel/official/verified/charges/{id}',['uses' =>'Official_itenerary@update_charges']);
+
 
 
 
@@ -237,7 +235,9 @@ Route::put('api/travel/official/driver/{id}',['uses' =>'Official_itenerary@updat
 #plate number
 Route::put('api/travel/official/vehicle/{id}',['uses' =>'Official_itenerary@update_plate_no']);
 
-#charge
+/**CHARGE**/
+Route::get('api/travel/official/charges/{id}',['uses' =>'Official_itenerary@show_charges']);
+Route::put('api/travel/official/charges/{id}',['uses' =>'Official_itenerary@update_charges']);
 Route::post('api/travel/official/charge/{id}',['uses' =>'Official_itenerary@charge']);
 Route::get('api/travel/gc',['uses' =>'Directory@gasoline_charge']);
 Route::get('api/travel/dc',['uses' =>'Directory@drivers_charge']);
@@ -292,6 +292,12 @@ Route::put('api/travel/personal/vehicle/{id}',['uses' =>'Personal_itenerary@upda
 #driver
 Route::put('api/travel/personal/driver/{id}',['uses' =>'Personal_itenerary@update_driver']);
 
+#charge
+Route::post('api/travel/personal/charge/{id}',['uses' =>'Personal_itenerary@charge']);
+Route::get('api/travel/personal/charges/{id}',['uses' =>'Personal_itenerary@show_charges']);
+Route::put('api/travel/personal/charges/{id}',['uses' =>'Personal_itenerary@update_charges']);
+
+
 ##remove request
 Route::delete('api/travel/personal/{id}',['uses' =>'Personal@destroy']);
 
@@ -341,6 +347,11 @@ Route::put('api/travel/campus/vehicle/{id}',['uses' =>'Campus_itenerary@update_p
 
 #driver
 Route::put('api/travel/campus/driver/{id}',['uses' =>'Campus_itenerary@update_driver']);
+
+#charge
+Route::post('api/travel/campus/charge/{id}',['uses' =>'Campus_itenerary@charge']);
+Route::get('api/travel/campus/charges/{id}',['uses' =>'Campus_itenerary@show_charges']);
+Route::put('api/travel/campus/charges/{id}',['uses' =>'Campus_itenerary@update_charges']);
 
 ###############################################################################################
 # PRINTABLES
