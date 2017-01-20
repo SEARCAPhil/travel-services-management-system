@@ -209,6 +209,8 @@ function showOfficialTravelListPreview(id){
 		$('.preview-purpose').html(json[0].purpose)
 		$('.preview-cash-advance').html(' &emsp;&emsp;<b>'+json[0].source_of_fund+'</b>')
 
+		$('.preview-print').attr('href','travel/official/print/travel_request/'+json[0].tr)
+
 		for(var x=0;x<json[0].projects.length;x++){
 
 			$('.preview-cash-advance').append('&emsp;<p>'+json[0].projects[x].project+'</p>');

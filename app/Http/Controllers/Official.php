@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Official_staff;
 use App\Http\Controllers\Official_scholars;
 use App\Http\Controllers\Official_custom;
+use App\Http\Controllers\Directory;
 
 @session_start();
 
@@ -181,17 +182,27 @@ class Official extends Controller
     public function create_purpose(Request $request){
 
         try{
-            //$uid=$request->session()->get('id');
-            $uid=16;
+            $uid=$_SESSION['id'];
+
+            //uid saved in login_db
+            $original_uid=($_SESSION['uid']);
+            //$uid=16;
             $purpose=$request->input('purpose');
+
+            #get signatory
+            $official_signatory=new Directory();
+            $signatory=json_decode($official_signatory->signatory($original_uid));
+            
+            $approved_by=@$signatory[0]->profile_name;
 
             $this->pdoObject=DB::connection()->getPdo();
 
             $this->pdoObject->beginTransaction();
-            $sql="INSERT INTO tr(requested_by,purpose) values (:requested_by,:purpose)";
+            $sql="INSERT INTO tr(requested_by,purpose,approved_by) values (:requested_by,:purpose,:approved_by)";
             $statement=$this->pdoObject->prepare($sql);
             $statement->bindParam(':requested_by',$uid);
             $statement->bindParam(':purpose',$purpose);
+            $statement->bindParam(':approved_by',$approved_by);
             $statement->execute();
             $lastId=$this->pdoObject->lastInsertId();
             $this->pdoObject->commit();

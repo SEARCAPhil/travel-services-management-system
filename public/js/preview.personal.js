@@ -130,6 +130,7 @@ function showPersonalTravelListPreview(id){
 		$('.preview-unit').html(json[0].department)
 		$('.preview-created').html(((json[0].date_created).split(' '))[0])
 		$('.preview-purpose').html(json[0].purpose)
+		$('.preview-print').attr('href','travel/personal/print/statement_of_account/'+json[0].id)
 
 
 				//--------------------------------------

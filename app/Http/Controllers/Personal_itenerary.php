@@ -289,7 +289,7 @@ class Personal_itenerary extends Controller
             }
                
 
-           echo json_encode($res);
+           return json_encode($res);
                 
 
         }catch(Exception $e){

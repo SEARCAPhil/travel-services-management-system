@@ -99,7 +99,7 @@ function showCampusTravelListPreview(id){
 		$('.preview-name').html(json[0].profile_name)
 		$('.preview-unit').html(json[0].department)
 		$('.preview-created').html(((json[0].date_created).split(' '))[0])
-
+		$('.preview-print').attr('href','travel/campus/print/notice_of_charges/'+json[0].id)
 
 
 		if(typeof json[0].status!=undefined){

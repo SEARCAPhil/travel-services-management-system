@@ -269,7 +269,7 @@ class Official_itenerary extends Controller
 
                 $this->pdoObject->commit();
 
-                echo json_encode($data);
+                return json_encode($data);
 
         }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
 
@@ -424,7 +424,7 @@ class Official_itenerary extends Controller
             }
                
 
-           echo json_encode($res);
+           return json_encode($res);
                 
 
         }catch(Exception $e){

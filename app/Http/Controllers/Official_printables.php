@@ -6,7 +6,15 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
+use App\Http\Controllers\Official;
+use App\Http\Controllers\Official_itenerary;
+use App\Http\Controllers\Official_staff;
+use App\Http\Controllers\Official_scholars;
+use App\Http\Controllers\Official_custom;
+use App\Http\Controllers\Directory;
+
 use PDF;
+
 class Official_printables extends Controller
 {
     function print_trip_ticket($id){
@@ -79,10 +87,12 @@ class Official_printables extends Controller
 	        // Page number
 	        $pdf->Cell(0, 10, 'Page '.$pdf->getAliasNumPage().'/'.$pdf->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
 
+
 	       
 
 
   	  	});
+
 
 
 		//settings
@@ -432,7 +442,46 @@ $html.='	<article class="col col-md-12">
 
     function print_travel_request($id){
 
+    	#variables
+    	global $details;
 
+    	$itenerary=Array();
+    	$staff=Array();
+    	$scholars=Array();
+    	$custom=Array();
+    	
+
+    	#get data
+    	$official=new Official();
+    	$official_itenerary=new Official_itenerary();
+    	$official_staff=new Official_staff();
+    	$official_scholars=new Official_scholars();
+    	$official_custom=new Official_custom();
+    
+
+
+    	$data=json_decode($official->show($id));
+    	$details=$data[0];
+
+
+    	//var_dump($details);
+    	#get itenerary
+    	if(isset($details->tr)){
+    		$itenerary=json_decode($official_itenerary->index($details->tr));
+    		$staff=json_decode($official_staff->index($details->tr));
+    		$scholars=json_decode($official_scholars->index($details->tr));
+    		$custom=json_decode($official_custom->index($details->tr));
+    		
+
+    	}
+    	
+
+    	
+
+
+
+    	
+    	//var_dump($details);
     	//get default settings from config/laravel-tcpdf.php
    		$pdf_settings = \Config::get('laravel-tcpdf');
 
@@ -490,6 +539,10 @@ $html.='	<article class="col col-md-12">
 
 		// Custom Footer
 		$pdf->setFooterCallback(function($pdf) {
+			//details object
+			global $details;
+
+			
 
 			$pdf->SetY(-50);
 			// Set font
@@ -514,7 +567,7 @@ $html.='	<article class="col col-md-12">
 					<tr>
 						<td><div></div></td>
 						<td></td>
-						<td width="150"><div class="withLine"></div></td><td></td>
+						<td width="150"><div class="withLine">'.$details->profile_name.'</div></td><td></td>
 						<td></td>
 						
 					</tr>
@@ -536,7 +589,7 @@ $html.='	<article class="col col-md-12">
 							<div class="withLine" ></div>
 						</td>
 						<td width="100"></td>
-						<td width="150"><div class="withLine"></div></td>
+						<td width="150"><div class="withLine">'.$details->approved_by.'</div></td>
 						<td width="10"></td>
 						<td width="50"><div class="withLine"></div></td>
 						
@@ -565,8 +618,9 @@ $html.='	<article class="col col-md-12">
 
 			$pdf->Writehtml($sign);
 
+			
 
-
+			
 
 
 	        // Position at 15 mm from bottom
@@ -575,10 +629,12 @@ $html.='	<article class="col col-md-12">
 	        // Page number
 	        $pdf->Cell(0, 10, 'Page '.$pdf->getAliasNumPage().'/'.$pdf->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
 
-	       
+	         
 
 
   	  	});
+
+  	  
 
 
 		//settings
@@ -606,7 +662,7 @@ $html ='<style>
 
 		<table>
 			<tr>
-				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b></b></td>
+				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.$details->date_approved.'</b></td>
 			</tr>
 			<tr>
 				<td></td><td></td><td style="text-align:center;">Date</td>
@@ -630,30 +686,56 @@ $html ='<style>
 				</tr>
 			';
 
+#fetch intenerary result
+$staff_total_count=count($staff);
+$scholars_total_count=count($scholars);
+$custom_total_count=count($custom);
 
-$html.='<tr class="tr-passenger">
-					<td class="withLine">name</td>
-					<td class="withLine"></td>
-					<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;<i>Scholar</i></td>
-				</tr>';	
+$passenger_count=0;
 
-$html.='<tr class="tr-passenger">
-					<td class="withLine">name</td>
-					<td class="withLine"></td>
-					<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;<i>Scholar</i></td>
-				</tr>';	
+for($a=0;$a<$staff_total_count;$a++){
+	$passenger_count++;
+	$html.='<tr class="tr-passenger">
+			<td class="withLine">'.$staff[$a]->name.'</td>
+			<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$staff[$a]->designation.'</td>
+			<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$staff[$a]->alias.'</td>
+		</tr>';	
+}
 
-$html.='<tr class="tr-passenger">
-					<td class="withLine">name</td>
-					<td class="withLine"></td>
-					<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;<i>Scholar</i></td>
-				</tr>';	
+for($a=0;$a<$scholars_total_count;$a++){
+	$passenger_count++;
+	$html.='<tr class="tr-passenger">
+			<td class="withLine">'.$scholars[$a]->full_name.'</td>
+			<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$scholars[$a]->nationality.'</td>
+			<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;<i>Scholar</i></td>
+		</tr>';	
+}
 
-$html.='<tr class="tr-passenger">
-					<td class="withLine">name</td>
-					<td class="withLine"></td>
-					<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;<i>Scholar</i></td>
-				</tr>';	
+for($a=0;$a<$custom_total_count;$a++){
+	$passenger_count++;
+	$html.='<tr class="tr-passenger">
+			<td class="withLine">'.$custom[$a]->full_name.'</td>
+			<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$custom[$a]->designation.'</td>
+			<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;<i>N/A</i></td>
+		</tr>';	
+}
+
+
+if($passenger_count<4){
+	$remaining=5-$passenger_count;
+
+	for($a=0;$a<$remaining;$a++){
+		$html.='<tr class="tr-passenger">
+				<td class="withLine"></td>
+				<td class="withLine"></td>
+				<td class="withLine"></td>
+			</tr>';	
+	}
+}
+
+
+
+
 			
 		
 $html .= '</table>	</article>';
@@ -662,7 +744,7 @@ $html.='
 
 	<article>
 		<p><b>II. Purpose:</b></p>
-		<p class="col col-md-12"><p></p></p>
+		<p class="col col-md-12"><p>'.$details->purpose.'</p></p>
 	</article>
 	<br/>
 	<article>
@@ -672,46 +754,39 @@ $html.='
 				<th>Date</th><th>From</th><th>To</th><th>Time</th>
 			</tr>';
 
-			
-					
-					
-			$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
-				<td><input type="date" class="dateSelector"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="time" class="timeSelector"></td>
-			</tr>';
+			#fetch intenerary result
+			$itenerary_total_count=count($itenerary);
 
-			$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
-				<td><input type="date" class="dateSelector"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="time" class="timeSelector"></td>
-			</tr>';
-			$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
-				<td><input type="date" class="dateSelector"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="time" class="timeSelector"></td>
-			</tr>';
-			$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
-				<td><input type="date" class="dateSelector"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="time" class="timeSelector"></td>
-			</tr>';
-			$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
-				<td><input type="date" class="dateSelector"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="time" class="timeSelector"></td>
-			</tr>';
-			$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
-				<td><input type="date" class="dateSelector"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="time" class="timeSelector"></td>
-			</tr>';
+			for($a=0;$a<$itenerary_total_count;$a++){
+    			$html.='<tr>
+					<td>'.$itenerary[$a]->departure_date.'</td>
+					<td>'.$itenerary[$a]->location.'</td>
+					<td>'.$itenerary[$a]->destination.'</td>
+					<td>'.$itenerary[$a]->departure_time.'</td>
+				</tr>';
+    		}
+
+
+    		#get field remaining to fill up all itenerary
+    		$remaining_empty_itenerary=5-$itenerary_total_count;
+    		
+    		if($remaining_empty_itenerary>0){
+    			for($a=0;$a<$remaining_empty_itenerary;$a++){
+					$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
+							<td><input type="date" class="dateSelector"></td>
+							<td><input type="text" class="form-control text"></td>
+							<td><input type="text" class="form-control text"></td>
+							<td><input type="time" class="timeSelector"></td>
+							</tr>';
+				}
+    		}
+			
+				
+    				
+					
+					
+
+			
 			
 			
 
@@ -719,14 +794,25 @@ $html.='
 		
 	</article>';
 
+
+$projects='';
+for($a=0;$a<count($details->projects);$a++){
+
+	$projects.='<p>'.$details->projects[$a]->project.'</p>';
+}
+
+
+
 $html.='<br/><br/><br/><article>
 		<table>
 			<tr>
-				<td><b>IV. Cash Advance Requested </b></td><td style="text-align:right;">Source of Fund:</td><td class="withLine"></td>
+				<td><b>IV. Cash Advance Requested </b></td><td style="text-align:right;">Source of Fund:</td><td class="withLine">'.$details->source_of_fund.' '.$projects.'</td>
 			</tr>
-		</table>
+		</table>';
 
-		<table>
+		
+
+$html.='		<table>
 			<tr>
 				<td></td><td style="text-align:right;"></td><td></td>
 			</tr>

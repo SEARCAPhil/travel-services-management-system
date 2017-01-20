@@ -117,6 +117,96 @@ class Directory extends Controller
 		}catch(Exception $e){$this->pdoObject->rollback();}
     }
 
+
+	function signatory($id){
+		try{
+				$this->pdoObject=DB::connection()->getPdo();
+				
+				
+				//$this->limit=$limit;
+				if($id==8){
+					//for director
+					$id=9;
+						
+				}else if($id==9){
+					//for dda
+					$id=8;
+				}else{
+
+					
+				}
+				$this->id=htmlentities(htmlspecialchars($id));
+
+				//view users profile from login_db
+				$sql="SELECT login_db.account_profile.uid,login_db.department.dept_id as dept_id FROM login_db.account_profile  LEFT JOIN login_db.department on login_db.department.dept_id=login_db.account_profile.dept_id where uid=:uid LIMIT 1";
+				$statement=$this->pdoObject->prepare($sql);
+				$statement->bindParam(':uid',$this->id);
+				$statement->execute();
+
+				$res=$statement->fetch(\PDO::FETCH_OBJ);
+
+				if(isset($res->dept_id)){
+
+					
+
+					if($res->dept_id==8){
+						//for director
+						$res->dept_id=9;
+							
+					}else if($res->dept_id==9){
+						//for dda
+						$res->dept_id=8;
+					}else{
+
+						
+					}
+
+
+					$view_account_sql="SELECT login_db.account_profile.profile_name,login_db.department.dept_name,login_db.signatory.priority,login_db.signatory.uid FROM login_db.signatory LEFT JOIN login_db.account_profile on login_db.account_profile.uid=login_db.signatory.uid LEFT JOIN login_db.department on login_db.signatory.dept_id=department.dept_id where login_db.signatory.dept_id=:id ORDER BY login_db.signatory.priority DESC LIMIT 1";
+					$view_profile_statement=$this->pdoObject->prepare($view_account_sql);
+					$view_profile_statement->bindParam(':id',$res->dept_id);
+					$view_profile_statement->execute();
+					$result=NULL;
+
+					$data=NULL;
+					while ($row=$view_profile_statement->fetch(\PDO::FETCH_ASSOC)) {
+
+						#check if user id is the same with its signatory
+						#if so, the user might be the UNIT HEAD
+						#in this case,make the result NULL so it will get the default signatory
+						
+						$result[]=array('profile_name'=>$row['profile_name'],'uid'=>$row['uid']);
+						$data=json_encode($result);
+
+						if($res->uid==$row['uid']) $result=NULL;
+						
+					}
+
+					if(is_null($result)){
+						//director by default
+						$dept=0;
+						$view_profile_statement->bindParam(':id',$dept);
+						$view_profile_statement->execute();
+
+						$row=$view_profile_statement->fetch(\PDO::FETCH_OBJ);
+
+						$result[]=array('profile_name'=>$row->profile_name,'uid'=>$row->uid);
+						$data=json_encode($result);
+
+						
+					}
+					
+					
+					return $data;
+				}
+
+
+				#return $view_profile_statement->rowCount()>0?$view_profile_statement->rowCount():0;
+		}catch(Exception $e){ echo $e->getMessage(); }
+
+
+	}
+
     function staff_search($param,$page=1){
 
     		try{

@@ -13,6 +13,7 @@
 */
 
 function bindOfficialPurposeSaveButton(){
+
 	$('#officialPurposeSaveButton').click(function(e){
 		e.preventDefault();
 		//loading
@@ -22,7 +23,7 @@ function bindOfficialPurposeSaveButton(){
 
 
 		if($('#form-purpose').val().length<2) return 0;
-
+		
 
 		//insert new item to db if not yet saved
 		if(form_id<1){

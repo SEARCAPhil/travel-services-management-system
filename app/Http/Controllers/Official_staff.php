@@ -32,7 +32,7 @@ class Official_staff extends Controller
                 $statement->execute();
                 $res=Array();
                 while($row=$statement->fetch(\PDO::FETCH_OBJ)){
-                    $res[]=Array('name'=>$row->profile_name,'uid'=>$row->uid,'id'=>$row->id,'designation'=>$row->position,'office'=>$row->dept_name,'profile_image'=>$row->profile_image,'allias'=>$row->dept_alias);
+                    $res[]=Array('name'=>$row->profile_name,'uid'=>$row->uid,'id'=>$row->id,'designation'=>$row->position,'office'=>$row->dept_name,'profile_image'=>$row->profile_image,'alias'=>$row->dept_alias);
                 }
                 
                 return json_encode($res);
