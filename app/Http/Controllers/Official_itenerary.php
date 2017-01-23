@@ -368,28 +368,61 @@ class Official_itenerary extends Controller
                 $this->gasoline_charge=htmlentities(htmlspecialchars($request->input('gasoline_charge')));
                 $this->drivers_charge=htmlentities(htmlspecialchars($request->input('drivers_charge')));
                 $this->appointment=htmlentities(htmlspecialchars($request->input('appointment')));
-
+                $this->gc=null;
+                $this->dc=null;
             
             
             
                 $this->pdoObject=DB::connection()->getPdo();
                 #begin transaction
                 $this->pdoObject->beginTransaction();
+
+                //gasoline charge
+                $sql="SELECT * FROM tr_gc where id=:id";
+                $sth=$this->pdoObject->prepare($sql);
+                $sth->bindParam(':id',$this->gasoline_charge);
+                $sth->execute();
+
+                while ($gc=$sth->fetch(\PDO::FETCH_OBJ)) {
+                   $this->gc=$gc->rates;
+                }
+
+
+                //gasoline charge
+                $sql2="SELECT * FROM dc where id=:id";
+                $sth2=$this->pdoObject->prepare($sql2);
+                $sth2->bindParam(':id',$this->drivers_charge);
+                $sth2->execute();
+
+                while ($dc=$sth2->fetch(\PDO::FETCH_OBJ)) {
+                   $this->dc=$dc->rate;
+                }
+
                 
-                $insert_sql="INSERT INTO tr_charge(rid,start,end,dca,gasoline_charge,drivers_charge) values (:rid,:start,:end,:dca,:gasoline_charge,:drivers_charge)";
-                $insert_statement=$this->pdoObject->prepare($insert_sql);
-        
-                #params
-                $insert_statement->bindParam(':rid',$this->id);
-                $insert_statement->bindParam(':start',$this->in);
-                $insert_statement->bindParam(':end',$this->out);
-                $insert_statement->bindParam(':dca',$this->appointment);
-                $insert_statement->bindParam(':gasoline_charge',$this->gasoline_charge);
-                $insert_statement->bindParam(':drivers_charge',$this->drivers_charge);
-               
+
+
+                if(!is_null($this->dc)&&!is_null($this->gc)){
+
+                    $insert_sql="INSERT INTO tr_charge(rid,start,end,dca,gasoline_charge,drivers_charge,gc,dc) values (:rid,:start,:end,:dca,:gasoline_charge,:drivers_charge,:gc,:dc)";
+
+                    $insert_statement=$this->pdoObject->prepare($insert_sql);
+            
+                    #params
+                    $insert_statement->bindParam(':rid',$this->id);
+                    $insert_statement->bindParam(':start',$this->in);
+                    $insert_statement->bindParam(':end',$this->out);
+                    $insert_statement->bindParam(':dca',$this->appointment);
+                    $insert_statement->bindParam(':gasoline_charge',$this->gc);
+                    $insert_statement->bindParam(':drivers_charge',$this->dc);
+                    $insert_statement->bindParam(':gc',$this->gasoline_charge);
+                    $insert_statement->bindParam(':dc',$this->drivers_charge); 
+                    #exec the transaction
+                    $insert_statement->execute();
+                   
+                }
+
                 
-                #exec the transaction
-                $insert_statement->execute();
+
                 $lastId=$this->pdoObject->lastInsertId();
                 $this->pdoObject->commit();
 
@@ -412,7 +445,7 @@ class Official_itenerary extends Controller
 
             $this->pdoObject=DB::connection()->getPdo();
 
-            $sql="SELECT * FROM tr_charge where rid=:id ORDER BY id DESC LIMIT 1";
+            $sql="SELECT tr_charge.* FROM tr_charge where rid=:id ORDER BY id DESC LIMIT 1";
             $statement=$this->pdoObject->prepare($sql);
             $statement->bindParam(':id',$this->id);
             $statement->execute();
@@ -433,6 +466,225 @@ class Official_itenerary extends Controller
     }
 
 
+    function calculate_gasoline_charge($threshold,$mileage,$rate,$default_rate='25'){
+        $amount=$rate;
+        $additional_charges=0;
+
+        if($mileage>$threshold){
+
+            #get excess KM from threshld
+            $excess_mileage=$mileage-$threshold;
+            $additional_charges=$excess_mileage*$default_rate;
+        }
+
+        return array('amount'=>$amount,'additional'=>$additional_charges);
+
+    }
+
+
+    function calculate_excess_time($departure_date,$departure_time,$returned_date,$returned_time){
+        $excess_time=$returned_time - $departure_time;
+
+        #return 0 for negqtive value
+        $excess_time=$excess_time>0?$excess_time:0;
+
+        #get hours
+        $excess_hours=strtotime($returned_time) - strtotime($departure_time);
+        #return 0 for negqtive value
+        $excess_hours=$excess_hours>0?$excess_hours:0;
+
+        $excess_hours=date("i", $excess_hours);
+
+        #convert hpurs to minutes
+        $excess_minutes=($excess_hours/60);
+
+
+        $excess_date=date_diff(date_create($returned_date), date_create($departure_date));
+        $excess_date=(integer) $excess_date->format("%a");
+        var_dump($excess_date);
+    }
+
+
+    function preview_overall_charges($id){
+        try{
+                $this->pdoObject=DB::connection()->getPdo();
+
+                $this->id=htmlentities(htmlspecialchars($id));
+
+                $this->pdoObject->beginTransaction();
+                $sql="SELECT *,dc.rate as dc_rate,dc.days as dc_days,tr_gc.destination as tr_gc_destination,travel.destination as destination FROM travel  LEFT JOIN tr_charge on tr_charge.rid=travel.id  LEFT JOIN tr_gc on tr_charge.gc=tr_gc.id LEFT JOIN dc on dc.id=tr_charge.dc  where travel.id=:id and travel.departure_date!='0000-00-00' and travel.departure_date IS NOT NULL and travel.returned_date IS NOT NULL";
+                $statement=$this->pdoObject->prepare($sql);
+                $statement->bindParam(':id',$this->id);
+                $statement->execute();
+
+                $res=Array();
+                $gc=Array();
+                $travel=Array();
+                $charges=Array();
+                $details=Array();
+                $time;
+                $tr_id=null;
+                $drivers_charge=null;
+
+                $total=Array();
+                $total_additional=Array();
+                $total_ot=Array();
+                $total_dot=Array();
+
+                while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+                    var_dump($row);
+                    #check if item is already finished
+                    if($row->returned_date=='0000-00-00'){
+                        exit;
+                    }
+
+
+
+                    #compute displacement
+                    $displacement=($row->end - $row->start);
+
+                    #BASIC CHARGE
+                    if($row->base===null){
+                        #CAMPUS TRAVEL REQUEST has no base, Thus compute for minimum without additional charges
+                        $amount=$displacement * $row->rates; 
+                        $additional=0;
+
+                    }else{
+                        #For other travels, compute additional charges
+                        $amount=$row->rates;
+
+                        #additional charge applies for an excess of base KM
+                        #25 is the default campus charge
+
+                        $additional=$displacement<=$row->base?0:($km-$row->base)*25;
+                        $additional=$additional>0?$additional:0;
+                    }
+
+
+                    array_push($total, $amount);
+
+
+                    #compute all additional charges excluding -numbers
+                    if($additional>0){
+                        array_push($total_additional, $additional);
+                    }
+
+
+                    #compute excess time and date
+                    #must compute first the hours to get correct answer
+                    $excess_time=$row->returned_time - $row->departure_time;
+                    #get the minutes
+                    $excess_minutes=strtotime($row->returned_time) - strtotime($row->departure_time);
+                    $excess_minutes=$excess_minutes>0?$excess_minutes:0;
+                    $excess_minutes=date("i", $excess_minutes);
+                    $excess_minutes=($excess_minutes/60);
+                    $excess_minutes=(float) number_format($excess_minutes,2);
+                    
+
+
+                    $over_date=date_diff(date_create($row->returned_date), date_create($row->departure_date));
+                    $over_date=(integer) $over_date->format("%a");
+
+                    #date beyond 24hours || >=1 day
+                    $over_date=$over_date<31?$over_date:0;
+                    
+                    #OT beyond 8 hours
+                    ##this applies to **emergency driver** .contracted must deduct 9 hours a day as their regular working hours
+                    $drivers_charge_day=($over_date*24)*$row->dc_rate;
+
+                    if($excess_time>0){
+                        #$excess_time=$excess_time;
+                        
+                    }else{
+                        $excess_time=0;
+                    }
+                    #compute total travel time
+                    $count_all_time=abs($row->returned_time - $row->departure_time);
+                    
+                    #emergency driver
+                    #compute for beyond 8 hours
+                    if($row->dca==='emergency'){
+                        
+                        #compute beyond 8hours to be paid
+                        if($excess_time>8){
+                            $excess_time=$excess_time-8;
+                            $drivers_charge=$excess_time*$row->dc_rate + $drivers_charge_day + ($excess_minutes*$row->dc_rate);
+                        }else{
+                            $drivers_charge=0;
+                        }
+      
+                    }else{
+
+                        #contracted
+                        #contracted week days  ot=in<8 am and out>5pm
+                        #week ends and holidays must count evry hours
+                        if($row->dc_days==='week end'||$row->dc_days==='holiday'){
+                            
+                            $charge=$count_all_time*$row->dc_rate>0?$count_all_time*$row->dc_rate:0;
+                            $drivers_charge=$charge+$drivers_charge_day + ($excess_minutes*$row->dc_rate);
+
+                        }
+
+                        if($row->dc_days==='week day'){
+                            #driver's ot for continous day must deduct 8hours as their regular time
+                            $day=$over_date;
+                            $hours_per_day=(($day*24)-9)>0?(($day*24)-9):0;#deduct 8am-12pm
+                            $extended_day_rate=$hours_per_day*$row->rate;
+                            
+                            #bofore 8 and after 5 OT
+                            $ot_after=abs($row->returned_time-'17:00:00'>0?$row->returned_time-'17:00:00':0);
+                            $ot_before=abs('08:00:00'-$row->departure_time>0?'08:00:00'-$row->departure_time:0);
+                            $charge=($ot_before+$ot_after)*$row->rate;
+
+                            #add charge OT today + OT for 1 day(15 hours) + minutes
+                            $drivers_charge=$charge+$extended_day_rate + ($excess_minutes*$row->dc_rate);
+                            #excess time must be <in&&>out
+                            $excess_time=($ot_before+$ot_after);
+                        }
+
+
+                    }
+                    #push to drivers ot' charge
+                    if($drivers_charge>0){
+                        array_push($total_dot, $drivers_charge);    
+                    }
+
+                    #push excess time
+
+                    if($excess_time>0){
+                        array_push($total_ot, $excess_time);
+                        
+                    }
+                    
+
+                    #show metrics
+                    
+                    $metrics=$row->base===null?'per km':'base'.$row->base.' km';
+                    
+                    $tr_id=$row->rid;
+
+                    #destination's result
+                    $time=Array('actual_departure_time'=>$row->actual_departure_time,'returned_time'=>$row->returned_time,'returned_date'=>$row->returned_date,'departure_time'=>$row->departure_time,'departure_date'=>$row->departure_date);
+
+                    $gc=Array('rate'=>$row->rates,'metrics'=>$metrics,'base'=>$row->base,'km'=>$km,'total_amount'=>round($amount+$additional+$drivers_charge,2),'amount'=>round($amount,2),'driver_ot'=>round($drivers_charge,2),'additional'=>$additional,'travel_time'=>$count_all_time+($over_date*24),'over_time'=>$excess_time,'over_date'=>$over_date);
+                        
+                    $res=Array('id'=>$row->id,'start'=>$row->start,'end'=>$row->end,'dc'=>$row->dc,'dca'=>$row->dca);
+                    $details=Array('destination'=>$row->destination,'location'=>$row->location,'plate_no'=>$row->plate_no,'time'=>$time,'charges'=>$gc,'others'=>$res);
+                    $travel[]=Array('details'=>$details);
+                    
+                }
+                
+                $this->pdoObject->commit();
+
+                return json_encode(Array('trp_id'=>$tr_id,'grand_total'=>round(array_sum($total)+array_sum($total_additional)+array_sum($total_dot),2),'total_amount'=>array_sum($total),'additional_charge'=>array_sum($total_additional),'drivers_charge'=>array_sum($total_dot),'over_time'=>array_sum($total_ot),'destinations'=>$travel));
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+
+    }
+
+
+
      function update_charges($id,Request $request){
 
             try{
@@ -447,11 +699,38 @@ class Official_itenerary extends Controller
             
             
             
+                $this->gc=null;
+                $this->dc=null;
+            
+            
+            
                 $this->pdoObject=DB::connection()->getPdo();
                 #begin transaction
                 $this->pdoObject->beginTransaction();
+
+                //gasoline charge
+                $sql="SELECT * FROM tr_gc where id=:id";
+                $sth=$this->pdoObject->prepare($sql);
+                $sth->bindParam(':id',$this->gasoline_charge);
+                $sth->execute();
+
+                while ($gc=$sth->fetch(\PDO::FETCH_OBJ)) {
+                   $this->gc=$gc->rates;
+                }
+
+
+                //gasoline charge
+                $sql2="SELECT * FROM dc where id=:id";
+                $sth2=$this->pdoObject->prepare($sql2);
+                $sth2->bindParam(':id',$this->drivers_charge);
+                $sth2->execute();
+
+                while ($dc=$sth2->fetch(\PDO::FETCH_OBJ)) {
+                   $this->dc=$dc->rate;
+                }
+
                 
-                $insert_sql="UPDATE tr_charge SET start=:start,end=:end,dca=:dca,gasoline_charge=:gasoline_charge,drivers_charge=:drivers_charge where id=:id";
+                $insert_sql="UPDATE tr_charge SET start=:start,end=:end,dca=:dca,gasoline_charge=:gasoline_charge,drivers_charge=:drivers_charge,gc=:gc,dc=:dc where id=:id";
                 $insert_statement=$this->pdoObject->prepare($insert_sql);
         
                 #params
@@ -459,9 +738,10 @@ class Official_itenerary extends Controller
                 $insert_statement->bindParam(':start',$this->in);
                 $insert_statement->bindParam(':end',$this->out);
                 $insert_statement->bindParam(':dca',$this->appointment);
-                $insert_statement->bindParam(':gasoline_charge',$this->gasoline_charge);
-                $insert_statement->bindParam(':drivers_charge',$this->drivers_charge);
-               
+                $insert_statement->bindParam(':gasoline_charge',$this->gc);
+                $insert_statement->bindParam(':drivers_charge',$this->dc);
+                $insert_statement->bindParam(':gc',$this->gasoline_charge);
+                $insert_statement->bindParam(':dc',$this->drivers_charge); 
                 
                 #exec the transaction
                 $insert_statement->execute();
@@ -495,9 +775,29 @@ class Official_itenerary extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+     public function show($id)
     {
-        //
+
+        try{
+                $this->pdoObject=DB::connection()->getPdo();
+                $this->id=htmlentities(htmlspecialchars($id));
+                $this->pdoObject->beginTransaction();
+                $sql="SELECT travel.*,automobile.manufacturer,login_db.account_profile.profile_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN login_db.account_profile on login_db.account_profile.id=driver_id where travel.id=:id";
+                $statement=$this->pdoObject->prepare($sql);
+                $statement->bindParam(':id',$this->id);
+                $statement->execute();
+                $res=Array();
+                while($row=$statement->fetch()){
+                    $res[]=$row;
+                }
+                $this->pdoObject->commit();
+
+                return json_encode($res);
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+
+        
     }
 
     /**

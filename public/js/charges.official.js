@@ -189,7 +189,7 @@ function showCharges(data){
 
 
     //gasoline
-    var gasoline_charge=data[0].gasoline_charge
+    var gasoline_charge=data[0].gc
     var gasoline_charge_select=document.getElementById('gasoline_charge');
 
     setTimeout(function(){
@@ -201,7 +201,7 @@ function showCharges(data){
     },800)
 
     //driver
-    var driver_charge=data[0].drivers_charge
+    var driver_charge=data[0].dc
     var driver_charge_select=document.getElementById('drivers_charge');
 
     setTimeout(function(){

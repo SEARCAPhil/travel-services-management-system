@@ -184,7 +184,7 @@ function unlinkOfficialTravel(id,callback){
 
 function showLinkedOfficialTravel(id,callback){
 	ajax_getLinkedOfficialTravel(id,function(json){
-		callback(json);
+		callback(id,json);
 	})
 }
 
@@ -616,9 +616,10 @@ function appendToList(json){
 
 			if(data.type=='official'){
 				var parentId=data.id
-				showLinkedOfficialTravel(parentId,function(json){
 
-					appendToLinkedTravel(json,'.linked-section'+parentId)
+				showLinkedOfficialTravel(parentId,function(id,json){
+					
+					appendToLinkedTravel(json,'.linked-section'+id)
 					bindTravelUnlinkButton();
 				});
 			}

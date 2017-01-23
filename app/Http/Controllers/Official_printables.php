@@ -17,9 +17,121 @@ use PDF;
 
 class Official_printables extends Controller
 {
+	function is_exist($array,$value){
+		$is_exist=0;
+		for($x=0;$x<count($array);$x++){
+			if($array[$x]->uid==$value->uid){
+				$is_exist=1;
+			}
+		}
+
+		return $is_exist;
+	}
+
+	function is_exist_custom($array,$value){
+		$is_exist=0;
+		for($x=0;$x<count($array);$x++){
+			if($array[$x]->full_name==$value->full_name){
+				$is_exist=1;
+			}
+		}
+
+		return $is_exist;
+	}
+
     function print_trip_ticket($id){
     	
 		
+
+    	$itenerary=Array();
+    	$charges=Array();
+    	$staff=Array();
+    	$scholars=Array();
+    	$custom=Array();
+
+
+   	
+
+    	#get data
+    	$official_itenerary=new Official_itenerary();
+    	$official_travel=new Official();
+
+    	$official_staff=new Official_staff();
+    	$official_scholars=new Official_scholars();
+    	$official_custom=new Official_custom();
+
+
+
+    	$itenerary=@json_decode($official_itenerary->show($id))[0];
+    	$charges=@json_decode($official_itenerary->show_charges($id))[0];
+    	$travel_request=@json_decode($official_travel->show($itenerary->tr_id))[0];
+
+
+
+    	$staff=json_decode($official_staff->index($itenerary->tr_id));
+    	$scholars=json_decode($official_scholars->index($itenerary->tr_id));
+    	$custom=json_decode($official_custom->index($itenerary->tr_id));
+
+
+    	#charges comutation
+    	#var_dump($charges);
+    	#var_dump($official_itenerary->preview_overall_charges($id));
+
+    	#var_dump($official_itenerary->calculate_gasoline_charge(150,$charges->end-$charges->start,$charges->gasoline_charge,$default_rate='25'));
+
+    	var_dump($official_itenerary->calculate_excess_time($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time));
+
+
+    	$linked_travel=json_decode($official_itenerary->show_linked_travel($id));
+
+    	#all staff array
+    	$staff_array=Array();
+    	$scholars_array=Array();
+    	$custom_array=Array();
+    	
+    	#linked travel
+    	for($x=0; $x<count(@$linked_travel->data); $x++){
+    	
+    			$pass=json_decode($official_staff->index($linked_travel->data[$x]->tr_id));
+    			for ($i=0; $i<count($pass); $i++) {
+
+    				if(!self::is_exist($staff,$pass[$i])){
+    					array_push($staff, $pass[$i]);
+    				} 
+    				
+    			}
+
+    			$pass=json_decode($official_scholars->index($linked_travel->data[$x]->tr_id));
+    			for ($i=0; $i <count($pass); $i++) { 
+
+    				if(!self::is_exist($scholars,$pass[$i])){
+    					array_push($scholars, $pass[$i]);
+    				}
+    				
+    			}
+
+    			$pass=json_decode($official_custom->index($linked_travel->data[$x]->tr_id));
+    			for ($i=0; $i <count($pass); $i++) { 
+
+    				if(!self::is_exist_custom($custom,$pass[$i])){
+    					array_push($custom, $pass[$i]);
+    				}
+    				
+    			}	
+
+
+    	}
+
+    
+    	
+    	array_push($staff_array, $staff);
+
+    	$merged_staff=$staff_array;
+
+
+    	
+
+
     	//get default settings from config/laravel-tcpdf.php
    		$pdf_settings = \Config::get('laravel-tcpdf');
 
@@ -97,7 +209,7 @@ class Official_printables extends Controller
 
 		//settings
 		// set margins
-		$pdf->SetMargins(PDF_MARGIN_LEFT, 40, PDF_MARGIN_RIGHT);
+		$pdf->SetMargins(PDF_MARGIN_LEFT, 35, PDF_MARGIN_RIGHT);
 
 		
 
@@ -118,7 +230,7 @@ $html ='<style>
 
 		<table>
 			<tr>
-				<td width="220"></td><td></td><td width="100"><b>NO. 290</b></td>
+				<td width="220"></td><td></td><td width="100"><b>NO. '.$id.'</b></td>
 			</tr>
 
 			
@@ -139,7 +251,7 @@ $html ='<style>
 	</article>';
 	
 $html.='	<article class="col col-md-12">
-		<table class="table table-bordered sa-table "  style="font-size:0.8em;">
+		<table class="table table-bordered sa-table "  style="font-size:0.8em;" cellspacing="0">
 			<tr class="mini-tr">
 				<td>
 					<p> <input type="checkbox" checked="checked"/>UPLB and Vicinity</p>
@@ -155,8 +267,15 @@ $html.='	<article class="col col-md-12">
 
 			<!--requesting party-->
 			<tr>
-				<td> Requesting</td>
-				<td> Source of fund:</td>
+				<td> Requesting Party</td>
+				<td> Source of fund: <b>'.$travel_request->source_of_fund.'</b>'; 
+
+			if($travel_request->source_of_fund=='otf'){
+				$html.='<br/><br/><b>'.@$travel_request->projects[0]->project.'</b><br/>';
+			}
+					
+
+	$html.='			</td>
 
 			</tr>
 
@@ -173,48 +292,82 @@ $html.='	<article class="col col-md-12">
 							</tr>
 					';
 
+	#fetch intenerary result
+	$staff_total_count=count($staff);
+	$scholars_total_count=count($scholars);
+	$custom_total_count=count($custom);
 
-					$html.='<tr class="tr-passenger">
-										<td class="withLine">name</td>
-										<td class="withLine"></td>
-										<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;<i>Scholar</i></td>
-									</tr>';	
+	$passenger_count=0;
 
-					$html.='<tr class="tr-passenger">
-										<td class="withLine">name</td>
-										<td class="withLine"></td>
-										<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;<i>Scholar</i></td>
-									</tr>';	
 
-					$html.='<tr class="tr-passenger">
-										<td class="withLine">name</td>
-										<td class="withLine"></td>
-										<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;<i>Scholar</i></td>
-									</tr>';	
+	for($a=0;$a<$staff_total_count;$a++){
+		$passenger_count++;
+		$html.='<tr class="tr-passenger">
+				<td class="withLine">'.$staff[$a]->name.'</td>
+				<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$staff[$a]->designation.'</td>
+				<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$staff[$a]->alias.'</td>
+			</tr>';	
+	}
 
-					$html.='<tr class="tr-passenger">
-										<td class="withLine">name</td>
-										<td class="withLine"></td>
-										<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;<i>Scholar</i></td>
-									</tr>';	
+
+
+
+	for($a=0;$a<$scholars_total_count;$a++){
+		$passenger_count++;
+		$html.='<tr class="tr-passenger">
+				<td class="withLine">'.$scholars[$a]->full_name.'</td>
+				<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$scholars[$a]->nationality.'</td>
+				<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;<i>Scholar</i></td>
+			</tr>';	
+	}
+
+	for($a=0;$a<$custom_total_count;$a++){
+		$passenger_count++;
+		$html.='<tr class="tr-passenger">
+				<td class="withLine">'.$custom[$a]->full_name.'</td>
+				<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$custom[$a]->designation.'</td>
+				<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;<i>N/A</i></td>
+			</tr>';	
+	}
+
+
+	if($passenger_count<4){
+		$remaining=5-$passenger_count;
+
+		for($a=0;$a<$remaining;$a++){
+			$html.='<tr class="tr-passenger">
+					<td class="withLine"></td>
+					<td class="withLine"></td>
+					<td class="withLine"></td>
+				</tr>';	
+		}
+	}
+
+
+
+
+
+
+								
 					
 				
 		$html .= '</table><br/><br/>';
 
 			$html .= '	</td>
-				<td> Purposes/Places to be visited: </td>
+				<td> Purposes/Places to be visited: <b>'.htmlspecialchars($travel_request->purpose).'</b>
+				</td>
 
 			</tr>
 
 
 			<!--destination-->
 			<tr>
-				<td> Report to:<br/>
-				&nbsp;Destination<br/>
+				<td> Report to: <b>'.$itenerary->location.'</b><br/>
+				&nbsp;Destination: <b>'.$itenerary->destination.'</b><br/>
 				</td>
 
 
-				<td> 
+				<td style="margin:0;padding:0;cellspacing:0;"> 
 
 					<table>
 						<tr style="border:none;">
@@ -224,13 +377,13 @@ $html.='	<article class="col col-md-12">
 						</tr>
 						<tr style="border:none;">
 							<td style="border-right:1px solid rgb(80,80,80);border-bottom:1px solid rgb(80,80,80);" width="80">Departure</td>
-							<td style="border-right:1px solid rgb(80,80,80);border-bottom:1px solid rgb(80,80,80);" width="100"></td>
-							<td style="border-bottom:1px solid rgb(80,80,80);" width="67"> </td>
+							<td style="border-right:1px solid rgb(80,80,80);border-bottom:1px solid rgb(80,80,80);" width="100"> <b>'.$itenerary->departure_date.'</b></td>
+							<td style="border-bottom:1px solid rgb(80,80,80);" width="67"> <b>'.$itenerary->departure_time.'</b> </td>
 						</tr>
 						<tr style="border:none;">
 							<td style="border-right:1px solid rgb(80,80,80);border-bottom:1px solid rgb(80,80,80);" width="80">Arrival</td>
-							<td style="border-right:1px solid rgb(80,80,80);border-bottom:1px solid rgb(80,80,80);" width="100"></td>
-							<td style="border-bottom:1px solid rgb(80,80,80);" width="67"></td>
+							<td style="border-right:1px solid rgb(80,80,80);border-bottom:1px solid rgb(80,80,80);" width="100"> <b>'.$itenerary->returned_date.'</b></td>
+							<td style="border-bottom:1px solid rgb(80,80,80);" width="67"> <b>'.$itenerary->returned_time.'</b></td>
 						</tr>
 					</table>
 
@@ -241,10 +394,10 @@ $html.='	<article class="col col-md-12">
 
 			<!--Vehicle Plate-->
 			<tr>
-				<td> Vehicle/Plate no.:
+				<td> Vehicle/Plate no.:  <b>'.@$itenerary->manufacturer.'</b> <b>'.@$itenerary->plate_no.'</b>
 			
 				</td>
-				<td> Assigned Driver:  </td>
+				<td> Assigned Driver: <b>'.@$itenerary->profile_name.'</b> </td>
 
 			</tr>
 
@@ -348,18 +501,18 @@ $html.='	<article class="col col-md-12">
 				<table>
 					<tr>
 						<td width="80">Date</td>
-						<td width="100"></td>
-						<td></td>
+						<td width="100"><b>'.$itenerary->departure_date.'</b></td>
+						<td><b>'.$itenerary->returned_date.'</b></td>
 					</tr>
 					<tr>
 						<td width="80">Time</td>
-						<td width="100"></td>
-						<td></td>
+						<td width="100"><b>'.$itenerary->departure_time.'</b></td>
+						<td><b>'.$itenerary->returned_time.'</b></td>
 					</tr>
 					<tr>
-						<td width="80">Mileage Readind</td>
-						<td width="100"></td>
-						<td></td>
+						<td width="80">Mileage Reading</td>
+						<td width="100">'.@$charges->start.'</td>
+						<td>'.@$charges->end.'</td>
 					</tr>
 					<tr>
 						<td width="80">Signature of driver</td>
@@ -408,8 +561,8 @@ $html.='	<article class="col col-md-12">
 			
 				</td>
 				<td> <b>For Motorpool Unit\'s Use:</b><br/><br/>
-				 &nbsp; No. of kms. :<br/>
-				 &nbsp; Rate/km :<br/>
+				 &nbsp; No. of kms. : <b>'.@($charges->end-$charges->start).' km/s </b><br/>
+				 &nbsp; Rate/km : <b>'.@($charges->gasoline_charge).'</b><br/>
 				 &nbsp;Amount :<br/>   
 				</td>
 
@@ -806,7 +959,8 @@ for($a=0;$a<count($details->projects);$a++){
 $html.='<br/><br/><br/><article>
 		<table>
 			<tr>
-				<td><b>IV. Cash Advance Requested </b></td><td style="text-align:right;">Source of Fund:</td><td class="withLine">'.$details->source_of_fund.' '.$projects.'</td>
+				<td><b>IV. Cash Advance Requested </b></td><td style="text-align:right;">Source of Fund:</td>
+				<td class="withLine">'.$details->source_of_fund.' '.$projects.'</td>
 			</tr>
 		</table>';
 
