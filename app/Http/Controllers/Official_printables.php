@@ -75,12 +75,23 @@ class Official_printables extends Controller
 
     	#charges comutation
     	#var_dump($charges);
-    	#var_dump($official_itenerary->preview_overall_charges($id));
+    	
+    	$gasoline_charge=$official_itenerary->calculate_gasoline_charge($charges->base,$charges->end-$charges->start,$charges->gasoline_charge,$default_rate='25');
+    	
 
-    	#var_dump($official_itenerary->calculate_gasoline_charge(150,$charges->end-$charges->start,$charges->gasoline_charge,$default_rate='25'));
+    	if($charges->appointment=='emergency'){
+    		$drivers_charge=($official_itenerary->calculate_emergency_drivers_charge($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time,$charges->drivers_charge));
+    	}else{
+			$drivers_charge=($official_itenerary->calculate_contracted_drivers_charge($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time,$charges->drivers_charge,$charges->days));
+    	}
 
-    	var_dump($official_itenerary->calculate_excess_time($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time));
+    	$overall_gasoline_charge=@array_sum($gasoline_charge);
+    	$overall_charge=$overall_gasoline_charge+$drivers_charge;
+    	
 
+
+    	
+    	
 
     	$linked_travel=json_decode($official_itenerary->show_linked_travel($id));
 
@@ -563,7 +574,7 @@ $html.='	<article class="col col-md-12">
 				<td> <b>For Motorpool Unit\'s Use:</b><br/><br/>
 				 &nbsp; No. of kms. : <b>'.@($charges->end-$charges->start).' km/s </b><br/>
 				 &nbsp; Rate/km : <b>'.@($charges->gasoline_charge).'</b><br/>
-				 &nbsp;Amount :<br/>   
+				 &nbsp;Amount : <b>'.@$overall_charge.'</b><br/>   
 				</td>
 
 			</tr>

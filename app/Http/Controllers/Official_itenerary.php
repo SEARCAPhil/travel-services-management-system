@@ -445,7 +445,7 @@ class Official_itenerary extends Controller
 
             $this->pdoObject=DB::connection()->getPdo();
 
-            $sql="SELECT tr_charge.* FROM tr_charge where rid=:id ORDER BY id DESC LIMIT 1";
+            $sql="SELECT tr_charge.*,tr_gc.base,dc.days,dc.rate FROM tr_charge LEFT JOIN tr_gc on tr_charge.gc=tr_gc.id LEFT JOIN dc on dc.id=tr_charge.dc where rid=:id ORDER BY id DESC LIMIT 1";
             $statement=$this->pdoObject->prepare($sql);
             $statement->bindParam(':id',$this->id);
             $statement->execute();
@@ -453,7 +453,7 @@ class Official_itenerary extends Controller
             $res=Array();
 
             while($row=$statement->fetch(\PDO::FETCH_OBJ)){
-                $res[]=Array('id'=>$row->id,'trp_id'=>$row->rid,'start'=>$row->start,'end'=>$row->end,'gc'=>$row->gc,'dc'=>$row->dc,'gasoline_charge'=>$row->gasoline_charge,'drivers_charge'=>$row->drivers_charge);
+                $res[]=Array('id'=>$row->id,'trp_id'=>$row->rid,'start'=>$row->start,'end'=>$row->end,'gc'=>$row->gc,'dc'=>$row->dc,'gasoline_charge'=>$row->gasoline_charge,'drivers_charge'=>$row->drivers_charge,'appointment'=>$row->dca,'base'=>$row->base,'days'=>$row->days);
             }
                
 
@@ -464,6 +464,7 @@ class Official_itenerary extends Controller
             echo $e->getMessage();
         }
     }
+
 
 
     function calculate_gasoline_charge($threshold,$mileage,$rate,$default_rate='25'){
@@ -483,205 +484,157 @@ class Official_itenerary extends Controller
 
 
     function calculate_excess_time($departure_date,$departure_time,$returned_date,$returned_time){
-        $excess_time=$returned_time - $departure_time;
 
-        #return 0 for negqtive value
-        $excess_time=$excess_time>0?$excess_time:0;
+        $date_difference=date_diff(date_create($departure_date.' '.$departure_time),date_create($returned_date.' '.$returned_time));
 
-        #get hours
-        $excess_hours=strtotime($returned_time) - strtotime($departure_time);
-        #return 0 for negqtive value
-        $excess_hours=$excess_hours>0?$excess_hours:0;
+        
+        $days=$date_difference->days;
+        $months=$date_difference->m;
+        $hours=$date_difference->h;
+        $minutes=$date_difference->i;
+        $seconds=$date_difference->s;
 
-        $excess_hours=date("i", $excess_hours);
+        #get day and time only
+        return array('days'=>$days,'hours'=>$hours,'minutes'=>$minutes);
 
-        #convert hpurs to minutes
-        $excess_minutes=($excess_hours/60);
-
-
-        $excess_date=date_diff(date_create($returned_date), date_create($departure_date));
-        $excess_date=(integer) $excess_date->format("%a");
-        var_dump($excess_date);
     }
 
 
-    function preview_overall_charges($id){
-        try{
-                $this->pdoObject=DB::connection()->getPdo();
 
-                $this->id=htmlentities(htmlspecialchars($id));
+    function calculate_emergency_drivers_charge($departure_date,$departure_time,$returned_date,$returned_time,$rate){
 
-                $this->pdoObject->beginTransaction();
-                $sql="SELECT *,dc.rate as dc_rate,dc.days as dc_days,tr_gc.destination as tr_gc_destination,travel.destination as destination FROM travel  LEFT JOIN tr_charge on tr_charge.rid=travel.id  LEFT JOIN tr_gc on tr_charge.gc=tr_gc.id LEFT JOIN dc on dc.id=tr_charge.dc  where travel.id=:id and travel.departure_date!='0000-00-00' and travel.departure_date IS NOT NULL and travel.returned_date IS NOT NULL";
-                $statement=$this->pdoObject->prepare($sql);
-                $statement->bindParam(':id',$this->id);
-                $statement->execute();
+        $calculated_excess_time=self::calculate_excess_time($departure_date,$departure_time,$returned_date,$returned_time);
 
-                $res=Array();
-                $gc=Array();
-                $travel=Array();
-                $charges=Array();
-                $details=Array();
-                $time;
-                $tr_id=null;
-                $drivers_charge=null;
+        $days=$calculated_excess_time['days'];
+        $hours=$calculated_excess_time['hours'];
+        $minutes=$calculated_excess_time['minutes'];
 
-                $total=Array();
-                $total_additional=Array();
-                $total_ot=Array();
-                $total_dot=Array();
-
-                while($row=$statement->fetch(\PDO::FETCH_OBJ)){
-                    var_dump($row);
-                    #check if item is already finished
-                    if($row->returned_date=='0000-00-00'){
-                        exit;
-                    }
+        #89 hours to subtract every day 
+        $regular_hours=$days*8;
 
 
 
-                    #compute displacement
-                    $displacement=($row->end - $row->start);
-
-                    #BASIC CHARGE
-                    if($row->base===null){
-                        #CAMPUS TRAVEL REQUEST has no base, Thus compute for minimum without additional charges
-                        $amount=$displacement * $row->rates; 
-                        $additional=0;
-
-                    }else{
-                        #For other travels, compute additional charges
-                        $amount=$row->rates;
-
-                        #additional charge applies for an excess of base KM
-                        #25 is the default campus charge
-
-                        $additional=$displacement<=$row->base?0:($km-$row->base)*25;
-                        $additional=$additional>0?$additional:0;
-                    }
+        #basic pay for excess days
+        #deduct 8 hours every exceeding days
+        $drivers_charge_per_day=(($days*24)-$regular_hours)*$rate;
 
 
-                    array_push($total, $amount);
 
+        $additional_charge=0;
 
-                    #compute all additional charges excluding -numbers
-                    if($additional>0){
-                        array_push($total_additional, $additional);
-                    }
+    
+            #calculate the payment per day
 
+            #convert hours to minutes
+            $hours_to_min=($hours*60);
 
-                    #compute excess time and date
-                    #must compute first the hours to get correct answer
-                    $excess_time=$row->returned_time - $row->departure_time;
-                    #get the minutes
-                    $excess_minutes=strtotime($row->returned_time) - strtotime($row->departure_time);
-                    $excess_minutes=$excess_minutes>0?$excess_minutes:0;
-                    $excess_minutes=date("i", $excess_minutes);
-                    $excess_minutes=($excess_minutes/60);
-                    $excess_minutes=(float) number_format($excess_minutes,2);
-                    
+            #calculate overall minutes
+            $minutes=$hours_to_min+$minutes; 
 
+            #convert to hour
+            $min_to_hour=($minutes)/60;
 
-                    $over_date=date_diff(date_create($row->returned_date), date_create($row->departure_date));
-                    $over_date=(integer) $over_date->format("%a");
+            
+            if($min_to_hour>8){ 
+                #additional charge only applies for beyond 8 working hours.
+                $excess_hours=$min_to_hour-8;
 
-                    #date beyond 24hours || >=1 day
-                    $over_date=$over_date<31?$over_date:0;
-                    
-                    #OT beyond 8 hours
-                    ##this applies to **emergency driver** .contracted must deduct 9 hours a day as their regular working hours
-                    $drivers_charge_day=($over_date*24)*$row->dc_rate;
-
-                    if($excess_time>0){
-                        #$excess_time=$excess_time;
-                        
-                    }else{
-                        $excess_time=0;
-                    }
-                    #compute total travel time
-                    $count_all_time=abs($row->returned_time - $row->departure_time);
-                    
-                    #emergency driver
-                    #compute for beyond 8 hours
-                    if($row->dca==='emergency'){
-                        
-                        #compute beyond 8hours to be paid
-                        if($excess_time>8){
-                            $excess_time=$excess_time-8;
-                            $drivers_charge=$excess_time*$row->dc_rate + $drivers_charge_day + ($excess_minutes*$row->dc_rate);
-                        }else{
-                            $drivers_charge=0;
-                        }
-      
-                    }else{
-
-                        #contracted
-                        #contracted week days  ot=in<8 am and out>5pm
-                        #week ends and holidays must count evry hours
-                        if($row->dc_days==='week end'||$row->dc_days==='holiday'){
-                            
-                            $charge=$count_all_time*$row->dc_rate>0?$count_all_time*$row->dc_rate:0;
-                            $drivers_charge=$charge+$drivers_charge_day + ($excess_minutes*$row->dc_rate);
-
-                        }
-
-                        if($row->dc_days==='week day'){
-                            #driver's ot for continous day must deduct 8hours as their regular time
-                            $day=$over_date;
-                            $hours_per_day=(($day*24)-9)>0?(($day*24)-9):0;#deduct 8am-12pm
-                            $extended_day_rate=$hours_per_day*$row->rate;
-                            
-                            #bofore 8 and after 5 OT
-                            $ot_after=abs($row->returned_time-'17:00:00'>0?$row->returned_time-'17:00:00':0);
-                            $ot_before=abs('08:00:00'-$row->departure_time>0?'08:00:00'-$row->departure_time:0);
-                            $charge=($ot_before+$ot_after)*$row->rate;
-
-                            #add charge OT today + OT for 1 day(15 hours) + minutes
-                            $drivers_charge=$charge+$extended_day_rate + ($excess_minutes*$row->dc_rate);
-                            #excess time must be <in&&>out
-                            $excess_time=($ot_before+$ot_after);
-                        }
-
-
-                    }
-                    #push to drivers ot' charge
-                    if($drivers_charge>0){
-                        array_push($total_dot, $drivers_charge);    
-                    }
-
-                    #push excess time
-
-                    if($excess_time>0){
-                        array_push($total_ot, $excess_time);
-                        
-                    }
-                    
-
-                    #show metrics
-                    
-                    $metrics=$row->base===null?'per km':'base'.$row->base.' km';
-                    
-                    $tr_id=$row->rid;
-
-                    #destination's result
-                    $time=Array('actual_departure_time'=>$row->actual_departure_time,'returned_time'=>$row->returned_time,'returned_date'=>$row->returned_date,'departure_time'=>$row->departure_time,'departure_date'=>$row->departure_date);
-
-                    $gc=Array('rate'=>$row->rates,'metrics'=>$metrics,'base'=>$row->base,'km'=>$km,'total_amount'=>round($amount+$additional+$drivers_charge,2),'amount'=>round($amount,2),'driver_ot'=>round($drivers_charge,2),'additional'=>$additional,'travel_time'=>$count_all_time+($over_date*24),'over_time'=>$excess_time,'over_date'=>$over_date);
-                        
-                    $res=Array('id'=>$row->id,'start'=>$row->start,'end'=>$row->end,'dc'=>$row->dc,'dca'=>$row->dca);
-                    $details=Array('destination'=>$row->destination,'location'=>$row->location,'plate_no'=>$row->plate_no,'time'=>$time,'charges'=>$gc,'others'=>$res);
-                    $travel[]=Array('details'=>$details);
-                    
-                }
                 
-                $this->pdoObject->commit();
+                $additional_charge=$excess_hours*$rate;
 
-                return json_encode(Array('trp_id'=>$tr_id,'grand_total'=>round(array_sum($total)+array_sum($total_additional)+array_sum($total_dot),2),'total_amount'=>array_sum($total),'additional_charge'=>array_sum($total_additional),'drivers_charge'=>array_sum($total_dot),'over_time'=>array_sum($total_ot),'destinations'=>$travel));
+            }else{
+               $additional_charge=$min_to_hour*$rate; 
+            }
 
-        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+          
 
 
+             return $drivers_charge_per_day+$additional_charge;
     }
+
+
+
+    function calculate_contracted_drivers_charge($departure_date,$departure_time,$returned_date,$returned_time,$rate,$daily_rate='week day'){
+
+        $calculated_excess_time=self::calculate_excess_time($departure_date,$departure_time,$returned_date,$returned_time);
+
+        $days=$calculated_excess_time['days'];
+        $hours=$calculated_excess_time['hours'];
+        $minutes=$calculated_excess_time['minutes'];
+
+
+
+        #basic pay for excess days
+        $drivers_charge_per_day=($days*24)*$rate;
+        $additional_charge=0;
+
+        #contracted week days  ot=in<8 am and out>5pm
+        
+        if($daily_rate=='week end'||$daily_rate=='holiday'){
+            
+
+            #calculate the payment per day,because dirvers rate is per day
+
+            #convert hours to minutes
+            $hours_to_min=($hours*60);
+
+            #calculate overall minutes
+            $minutes=$hours_to_min+$minutes; 
+
+            #convert to hour
+            $min_to_hour=($minutes)/60;
+
+            #week ends and holidays must count every hour    
+            $additional_charge=$drivers_charge_per_day+($min_to_hour*$rate);
+
+        }
+
+
+        if($daily_rate=='week day'){
+
+            #driver's ot for continous day must deduct 8hours as their regular time
+
+            #convert days  to hour
+            $days_to_hours=$days/24;
+
+            # 9 hours to subtract every day (including lunch)
+            $regular_hours=$days*9;
+
+
+            $hours_per_day=($days_to_hours-$regular_hours)>0?($days_to_hours-$regular_hours):0;#deduct 8am-12pm
+
+
+            
+            #before 8 and after 5 OT
+            $ot_after=abs($returned_time-'17:00:00'>0?$returned_time-'17:00:00':0);
+            $ot_before=abs('08:00:00'-$departure_time>0?'08:00:00'-$departure_time:0);
+            $overtime_charge=($ot_before+$ot_after)*$rate;
+
+
+            #convert hours to minutes
+            $hours_to_min=($hours_per_day*60);
+
+            #calculate overall minutes
+            $minutes=$hours_to_min+$overtime_charge; 
+
+            #convert to hour
+            $min_to_hour=($minutes)/60;
+
+            #week ends and holidays must count every hour    
+            $additional_charge=$drivers_charge_per_day+($min_to_hour*$rate);
+
+        }
+
+
+
+        return $additional_charge;
+        
+    }
+
+
+
+
+    
 
 
 
