@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
+use App\Http\Controllers\Campus;
+use App\Http\Controllers\Campus_itenerary;
+use App\Http\Controllers\Charge;
+
 use PDF;
 class Campus_printables extends Controller
 {
@@ -264,7 +268,39 @@ $html.='
 
 
 
-   	function print_notice_of_charges($id){
+function print_notice_of_charges($id){
+
+	
+	#get data
+	$campus_itenerary=new Campus_itenerary();
+	$campus_travel=new Campus();
+	$charge_computation_module=new Charge();
+
+
+
+	$itenerary=@json_decode($campus_itenerary->show($id))[0];
+	$charges=@json_decode($campus_itenerary->show_charges($id))[0];
+	$travel_request=@json_decode($campus_travel->show($itenerary->trc_id))[0];
+
+
+
+	$gasoline_charge=$charge_computation_module->calculate_gasoline_charge($charges->base,$charges->end-$charges->start,$charges->gasoline_charge,$default_rate='25');
+	
+
+	if($charges->appointment=='emergency'){
+		$drivers_charge=($charge_computation_module->calculate_emergency_drivers_charge($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time,$charges->drivers_charge));
+	}else{
+		$drivers_charge=($charge_computation_module->calculate_contracted_drivers_charge($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time,$charges->drivers_charge,$charges->days));
+	}
+
+	$overall_gasoline_charge=@array_sum($gasoline_charge);
+	$overall_charge=$overall_gasoline_charge+$drivers_charge;
+
+
+
+
+
+
 
 
     	//get default settings from config/laravel-tcpdf.php
@@ -290,24 +326,6 @@ $html.='
 			$pdf->Cell(0, 0, 'College, Laguna, 4031, Philippines', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
 			$pdf->setFontSize(15);
 			$pdf->Cell(0, 10, 'NOTICE OF CHARGES', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
-
-
-			$foot='	<article class="col col-md-12" style="font-size:7px;">
-
-					
-					<table style="font-size:10px;">
-						<tr>
-							<td colspan="3"><hr/></td>
-						</tr>
-						<tr>
-							<td colspan="3">To be prepared in quadruplicate.</td>
-						</tr>
-						<tr>
-							<td>White-Customer </td> <td>Pink - Office/unit</td> <td>Yellow - Accounting</td> <td>Green - Cashier</td>
-						</tr>
-					</table>
-					
-				</article>';
 
 
 
@@ -367,7 +385,7 @@ $html ='<style>
 
 		<table>
 			<tr>
-				<td width="400"></td><td></td><td width="100"><b>NO. 290</b></td>
+				<td width="400"></td><td></td><td width="100"><b>NO. '.$itenerary->trc_id.'</b></td>
 			</tr>
 
 			
@@ -391,11 +409,11 @@ $html ='<style>
 		<table cellspacing="5">
 
 			<tr>
-				<td width="50"><b>To:</b></td>
-				<td width="250" class="withLine"></td>
+				<td width="50"><b>To: </b></td>
+				<td width="250" class="withLine">'.$travel_request->profile_name.'</td>
 				<td width="140"></td>
 				<td width="40"><b>Office:</b></td>
-				<td width="250" class="withLine"></td>
+				<td width="250" class="withLine">'.$travel_request->department.'</td>
 			</tr>
 			<tr>
 				<td width="50"><b>For:</b></td>
@@ -435,7 +453,7 @@ $html.='
 
 
 				<td><br/><br/>
-					<b>Php 3500</b><br/><br/>
+					<b>Php '.$overall_charge.'</b><br/><br/>
 					
 				</td>
 				

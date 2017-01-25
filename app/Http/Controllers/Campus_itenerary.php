@@ -266,19 +266,19 @@ class Campus_itenerary extends Controller
 
             $this->pdoObject=DB::connection()->getPdo();
 
-            $sql="SELECT * FROM trc_charge where rid=:id ORDER BY id DESC LIMIT 1";
+           $sql="SELECT trc_charge.*,tr_gc.base,dc.days,dc.rate FROM trc_charge LEFT JOIN tr_gc on trc_charge.gc=tr_gc.id LEFT JOIN dc on dc.id=trc_charge.dc where rid=:id ORDER BY id DESC LIMIT 1";
             $statement=$this->pdoObject->prepare($sql);
             $statement->bindParam(':id',$this->id);
             $statement->execute();
 
             $res=Array();
 
-            while($row=$statement->fetch(\PDO::FETCH_OBJ)){
-                $res[]=Array('id'=>$row->id,'trp_id'=>$row->rid,'start'=>$row->start,'end'=>$row->end,'gc'=>$row->gc,'dc'=>$row->dc,'gasoline_charge'=>$row->gasoline_charge,'drivers_charge'=>$row->drivers_charge);
+           while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+                $res[]=Array('id'=>$row->id,'trp_id'=>$row->rid,'start'=>$row->start,'end'=>$row->end,'gc'=>$row->gc,'dc'=>$row->dc,'gasoline_charge'=>$row->gasoline_charge,'drivers_charge'=>$row->drivers_charge,'appointment'=>$row->dca,'base'=>$row->base,'days'=>$row->days);
             }
                
 
-           echo json_encode($res);
+           return json_encode($res);
                 
 
         }catch(Exception $e){
@@ -350,9 +350,29 @@ class Campus_itenerary extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+     public function show($id)
     {
-        //
+
+        try{
+                $this->pdoObject=DB::connection()->getPdo();
+                $this->id=htmlentities(htmlspecialchars($id));
+                $this->pdoObject->beginTransaction();
+                $sql="SELECT trc_travel.*,automobile.manufacturer,login_db.account_profile.profile_name FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no LEFT JOIN login_db.account_profile on login_db.account_profile.id=driver_id where trc_travel.id=:id";
+                $statement=$this->pdoObject->prepare($sql);
+                $statement->bindParam(':id',$this->id);
+                $statement->execute();
+                $res=Array();
+                while($row=$statement->fetch()){
+                    $res[]=$row;
+                }
+                $this->pdoObject->commit();
+
+                return json_encode($res);
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+
+        
     }
 
     /**
