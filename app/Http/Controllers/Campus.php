@@ -37,7 +37,7 @@ class Campus extends Controller
         try{
             $this->pdoObject=DB::connection()->getPdo();
             $this->page=htmlentities(htmlspecialchars($page));
-            $this->id=16;
+            $this->id=$_SESSION['id'];
             $this->page=$page>1?$page:1;
 
             #set starting limit(page 1=10,page 2=20)
@@ -153,7 +153,7 @@ class Campus extends Controller
     {
          try{
             //$uid=$request->session()->get('id');
-            $uid=16;
+            $uid=$_SESSION['id'];
 
             $this->pdoObject=DB::connection()->getPdo();
 
@@ -216,7 +216,6 @@ class Campus extends Controller
 
      public function search($param,$page=1){
         $id=$_SESSION['id'];
-
         $auth=new Authentication();
         if($auth->isAdmin()){
             return self::search_admin($param,$page);

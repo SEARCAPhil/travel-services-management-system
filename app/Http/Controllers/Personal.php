@@ -42,6 +42,8 @@ class Personal extends Controller
             $this->id=$_SESSION['id'];
             $this->page=$page>1?$page:1;
 
+           
+
             #set starting limit(page 1=10,page 2=20)
             $start_page=$this->page<2?0:( integer)($this->page-1)*10;
 
@@ -167,7 +169,7 @@ class Personal extends Controller
 
         try{
             //$uid=$request->session()->get('id');
-            $uid=16;
+            $uid=$_SESSION['id'];
             $purpose=$request->input('purpose');
 
             $this->pdoObject=DB::connection()->getPdo();

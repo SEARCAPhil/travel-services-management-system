@@ -501,6 +501,7 @@ function appendToList(json){
 										<li><a href="#" class="advance-menu-selector" id="rent"><b>Rent</b> a Car</a></li>
 									    <li><a href="#" class="advance-menu-selector" id="driver">Assign Driver</a></li>
 									    <li><a href="#" class="advance-menu-selector"  id="charge" data-charge="`+data.id+`">Charge</a></li>
+									    <li><a href="#" class="advance-menu-selector"  id="charge_advance" data-charge="`+data.id+`">Advance Charging</a></li>
 									  </ul>
 								
 							</li>`;
@@ -768,6 +769,12 @@ function bindAdvanceSelector(){
 			var charge=$(this).attr('data-charge')
 			advanceMenuCharge(charge,type);
 		} 
+
+		if(menu=='charge_advance'){
+			var charge=$(this).attr('data-charge')
+			advanceMenuChargeOverride(charge,type);
+		} 
+
 		if(menu=='rent') advanceMenuRentACar(type);
 
 
@@ -807,6 +814,15 @@ function advanceMenuCharge(id){
 			
 	});	
 }
+
+function advanceMenuChargeOverride(id){
+	showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/charge_advance',function(){
+
+		
+			
+	});	
+}
+
 
 function advanceMenuRentACar(){
 	showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/rent',function(){

@@ -22,8 +22,13 @@
 function appendStaffToListPreview(jsonData){
 	var data=JSON.parse(jsonData)
 
+	var id=form_id
+	if(typeof $(selectedElement).attr('id')!='undefined'){
+		id=$(selectedElement).attr('id')
+	}
+
 	//ajax here
-	$.post('api/directory/staff',{id:$(selectedElement).attr('id'),_token:$('input[name=_token]').val(),uid:data.uid},function(res){
+	$.post('api/directory/staff',{id:id,_token:$('input[name=_token]').val(),uid:data.uid},function(res){
 
 		if(res>0){
 
@@ -57,9 +62,13 @@ function appendStaffToListPreview(jsonData){
 function appendScholarToListPreview(jsonData){
 	var data=JSON.parse(jsonData)
 
+	var id=form_id
+	if(typeof $(selectedElement).attr('id')!='undefined'){
+		id=$(selectedElement).attr('id')
+	}
 
 	//ajax here
-	$.post('api/directory/scholars',{id:$(selectedElement).attr('id'),_token:$('input[name=_token]').val(),uid:data.uid},function(res){
+	$.post('api/directory/scholars',{id:id,_token:$('input[name=_token]').val(),uid:data.uid},function(res){
 
 		if(res>0){
 
@@ -96,10 +105,13 @@ function appendCustomToListPreview(jsonData){
 	a.designation="IT Director"
 	var data=JSON.parse(JSON.stringify(jsonData))
 
-
+	var id=form_id
+	if(typeof $(selectedElement).attr('id')!='undefined'){
+		id=$(selectedElement).attr('id')
+	}
 
 	//ajax here
-	$.post('api/directory/custom',{id:$(selectedElement).attr('id'),_token:$('input[name=_token]').val(),full_name:data.full_name,designation:data.designation},function(res){
+	$.post('api/directory/custom',{id:id,_token:$('input[name=_token]').val(),full_name:data.full_name,designation:data.designation},function(res){
 
 		if(res>0){
 

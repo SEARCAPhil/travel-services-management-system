@@ -338,9 +338,18 @@ function appendToList(callback){
 	$('.list-total-pages').html(travel.total_pages);
 	$('.list-current_page').val(travel.current_page);
 
+	//NO CONTENT MESSAGE
+	var no_content_message=`<center id="no-content-message" style="margin-top:50px;"><img src="img/no-content.png" width="40%"/><h1>No available content to load</h1><p>Please try to refresh the page<p></center>`;
+
 	//empty variable
 	var htm='';
 
+	if(list.length<1){
+		$('.list-section').hide();
+		$('.preview-section').html(no_content_message)
+	}else{
+		$('.list-section').show();
+	}
 
 	for(var x=0; x<list.length; x++){
 
@@ -392,7 +401,7 @@ function appendToList(callback){
 	//--------------------------------------------
 
 	setTimeout(function(){
-		$('.list-details dd')[0].click()
+		try{ $('.list-details dd')[0].click(); }catch(e){}
 	},300)
 }
 

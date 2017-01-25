@@ -38,6 +38,7 @@
 </div>
 
 <div class="row preview-content">
+{{csrf_field()}}
 
 
 

@@ -37,7 +37,7 @@
 </div>
 
 
-<div class="col col-md-6 col-md-offset-1 col-sm-9 pull-right preview-section">
+<div class="col col-md-6 col-md-offset-1 col-sm-9 preview-section">
 	
 </div>
 
