@@ -223,7 +223,9 @@ class Personal_itenerary extends Controller
     } 
 
 
-    function charge($id,Request $request){
+
+
+     function charge($id,Request $request){
 
             try{
                 $this->token = $request->input('_token');
@@ -233,28 +235,61 @@ class Personal_itenerary extends Controller
                 $this->gasoline_charge=htmlentities(htmlspecialchars($request->input('gasoline_charge')));
                 $this->drivers_charge=htmlentities(htmlspecialchars($request->input('drivers_charge')));
                 $this->appointment=htmlentities(htmlspecialchars($request->input('appointment')));
-
+                $this->gc=null;
+                $this->dc=null;
             
             
             
                 $this->pdoObject=DB::connection()->getPdo();
                 #begin transaction
                 $this->pdoObject->beginTransaction();
+
+                //gasoline charge
+                $sql="SELECT * FROM tr_gc where id=:id";
+                $sth=$this->pdoObject->prepare($sql);
+                $sth->bindParam(':id',$this->gasoline_charge);
+                $sth->execute();
+
+                while ($gc=$sth->fetch(\PDO::FETCH_OBJ)) {
+                   $this->gc=$gc->rates;
+                }
+
+
+                //gasoline charge
+                $sql2="SELECT * FROM dc where id=:id";
+                $sth2=$this->pdoObject->prepare($sql2);
+                $sth2->bindParam(':id',$this->drivers_charge);
+                $sth2->execute();
+
+                while ($dc=$sth2->fetch(\PDO::FETCH_OBJ)) {
+                   $this->dc=$dc->rate;
+                }
+
                 
-                $insert_sql="INSERT INTO trp_charge(rid,start,end,dca,gasoline_charge,drivers_charge) values (:rid,:start,:end,:dca,:gasoline_charge,:drivers_charge)";
-                $insert_statement=$this->pdoObject->prepare($insert_sql);
-        
-                #params
-                $insert_statement->bindParam(':rid',$this->id);
-                $insert_statement->bindParam(':start',$this->in);
-                $insert_statement->bindParam(':end',$this->out);
-                $insert_statement->bindParam(':dca',$this->appointment);
-                $insert_statement->bindParam(':gasoline_charge',$this->gasoline_charge);
-                $insert_statement->bindParam(':drivers_charge',$this->drivers_charge);
-               
+
+
+                if(!is_null($this->dc)&&!is_null($this->gc)){
+
+                    $insert_sql="INSERT INTO trp_charge(rid,start,end,dca,gasoline_charge,drivers_charge,gc,dc) values (:rid,:start,:end,:dca,:gasoline_charge,:drivers_charge,:gc,:dc)";
+
+                    $insert_statement=$this->pdoObject->prepare($insert_sql);
+            
+                    #params
+                    $insert_statement->bindParam(':rid',$this->id);
+                    $insert_statement->bindParam(':start',$this->in);
+                    $insert_statement->bindParam(':end',$this->out);
+                    $insert_statement->bindParam(':dca',$this->appointment);
+                    $insert_statement->bindParam(':gasoline_charge',$this->gc);
+                    $insert_statement->bindParam(':drivers_charge',$this->dc);
+                    $insert_statement->bindParam(':gc',$this->gasoline_charge);
+                    $insert_statement->bindParam(':dc',$this->drivers_charge); 
+                    #exec the transaction
+                    $insert_statement->execute();
+                   
+                }
+
                 
-                #exec the transaction
-                $insert_statement->execute();
+
                 $lastId=$this->pdoObject->lastInsertId();
                 $this->pdoObject->commit();
 
@@ -277,7 +312,7 @@ class Personal_itenerary extends Controller
 
             $this->pdoObject=DB::connection()->getPdo();
 
-            $sql="SELECT * FROM trp_charge where rid=:id ORDER BY id DESC LIMIT 1";
+            $sql="SELECT trp_charge.*,tr_gc.base,dc.days,dc.rate FROM trp_charge LEFT JOIN tr_gc on trp_charge.gc=tr_gc.id LEFT JOIN dc on dc.id=trp_charge.dc where rid=:id ORDER BY id DESC LIMIT 1";
             $statement=$this->pdoObject->prepare($sql);
             $statement->bindParam(':id',$this->id);
             $statement->execute();
@@ -285,7 +320,7 @@ class Personal_itenerary extends Controller
             $res=Array();
 
             while($row=$statement->fetch(\PDO::FETCH_OBJ)){
-                $res[]=Array('id'=>$row->id,'trp_id'=>$row->rid,'start'=>$row->start,'end'=>$row->end,'gc'=>$row->gc,'dc'=>$row->dc,'gasoline_charge'=>$row->gasoline_charge,'drivers_charge'=>$row->drivers_charge);
+                $res[]=Array('id'=>$row->id,'trp_id'=>$row->rid,'start'=>$row->start,'end'=>$row->end,'gc'=>$row->gc,'dc'=>$row->dc,'gasoline_charge'=>$row->gasoline_charge,'drivers_charge'=>$row->drivers_charge,'appointment'=>$row->dca,'base'=>$row->base,'days'=>$row->days);
             }
                
 

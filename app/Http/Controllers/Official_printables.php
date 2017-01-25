@@ -12,9 +12,11 @@ use App\Http\Controllers\Official_staff;
 use App\Http\Controllers\Official_scholars;
 use App\Http\Controllers\Official_custom;
 use App\Http\Controllers\Directory;
+use App\Http\Controllers\Charge;
 
 use PDF;
 
+#error_reporting(0);
 class Official_printables extends Controller
 {
 	function is_exist($array,$value){
@@ -55,6 +57,7 @@ class Official_printables extends Controller
     	#get data
     	$official_itenerary=new Official_itenerary();
     	$official_travel=new Official();
+    	$charge_travel=new Charge();
 
     	$official_staff=new Official_staff();
     	$official_scholars=new Official_scholars();
@@ -76,13 +79,13 @@ class Official_printables extends Controller
     	#charges comutation
     	#var_dump($charges);
     	
-    	$gasoline_charge=$official_itenerary->calculate_gasoline_charge($charges->base,$charges->end-$charges->start,$charges->gasoline_charge,$default_rate='25');
+    	$gasoline_charge=$charge_travel->calculate_gasoline_charge($charges->base,$charges->end-$charges->start,$charges->gasoline_charge,$default_rate='25');
     	
 
     	if($charges->appointment=='emergency'){
-    		$drivers_charge=($official_itenerary->calculate_emergency_drivers_charge($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time,$charges->drivers_charge));
+    		$drivers_charge=($charge_travel->calculate_emergency_drivers_charge($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time,$charges->drivers_charge));
     	}else{
-			$drivers_charge=($official_itenerary->calculate_contracted_drivers_charge($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time,$charges->drivers_charge,$charges->days));
+			$drivers_charge=($charge_travel->calculate_contracted_drivers_charge($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time,$charges->drivers_charge,$charges->days));
     	}
 
     	$overall_gasoline_charge=@array_sum($gasoline_charge);

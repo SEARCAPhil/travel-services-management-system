@@ -6,6 +6,14 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
+use App\Http\Controllers\Personal;
+use App\Http\Controllers\Personal_itenerary;
+use App\Http\Controllers\Personal_staff;
+use App\Http\Controllers\Personal_scholars;
+use App\Http\Controllers\Personal_custom;
+use App\Http\Controllers\Directory;
+use App\Http\Controllers\Charge;
+
 use PDF;
 class Personal_printables extends Controller
 {
@@ -336,8 +344,42 @@ $html.='<br/><br/><br/><article>
 
 
 
-     function print_statement_of_account($id){
+function print_statement_of_account($id){
+     	#get data
+    	$personal_travel=new Personal();
+     	$itenerary=@json_decode($personal_travel->show($id))[0];
+     	$personal_itenerary=new Personal_itenerary();
 
+     	$charge_computation_module=new Charge();
+
+    	$charges=@json_decode($personal_itenerary->show_charges($id))[0];
+
+
+    	$gasoline_charge=$charge_computation_module->calculate_gasoline_charge($charges->base,$charges->end-$charges->start,$charges->gasoline_charge,$default_rate='25');
+    	
+
+    	if($charges->appointment=='emergency'){
+    		$drivers_charge=($charge_computation_module->calculate_emergency_drivers_charge($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time,$charges->drivers_charge));
+    	}else{
+			$drivers_charge=($charge_computation_module->calculate_contracted_drivers_charge($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time,$charges->drivers_charge,$charges->days));
+    	}
+
+    	$overall_gasoline_charge=@array_sum($gasoline_charge);
+    	$overall_charge=$overall_gasoline_charge+$drivers_charge;
+
+
+    	#prevent wrong calculation if returned date is < departure_date
+        if($itenerary->departure_date<$itenerary->returned_date){
+            $calculated_excess_time=$charge_computation_module->calculate_excess_time($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time);
+        }
+
+    	
+
+    	#var_dump($calculated_excess_time);
+
+    	#var_dump($drivers_charge);
+
+     	#var_dump($itenerary);
 
     	//get default settings from config/laravel-tcpdf.php
    		$pdf_settings = \Config::get('laravel-tcpdf');
@@ -362,25 +404,6 @@ $html.='<br/><br/><br/><article>
 			$pdf->Cell(0, 0, 'College, Laguna, 4031, Philippines', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
 			$pdf->setFontSize(15);
 			$pdf->Cell(0, 10, 'STATEMENT OF ACCOUNT', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
-
-
-			$foot='	<article class="col col-md-12" style="font-size:7px;">
-
-					
-					<table style="font-size:10px;">
-						<tr>
-							<td colspan="3"><hr/></td>
-						</tr>
-						<tr>
-							<td colspan="3">To be prepared in quadruplicate.</td>
-						</tr>
-						<tr>
-							<td>White-Customer </td> <td>Pink - Office/unit</td> <td>Yellow - Accounting</td> <td>Green - Cashier</td>
-						</tr>
-					</table>
-					
-				</article>';
-
 
 
 		if ($pdf->getPage() <= $pdf->getAliasNumPage()) {
@@ -442,14 +465,14 @@ $html ='<style>
 
 			<tr>
 				<td width="80"><b>Requesitioner:</b></td>
-				<td width="150" class="withLine"></td>
+				<td width="150" class="withLine">'.$itenerary->profile_name.'</td>
 				<td width="10"></td>
 				<td width="80"><b></b></td>
-				<td width="150" ><b>No.xxx</b></td>
+				<td width="150" ><b>No. '.$itenerary->id.'</b></td>
 			</tr>
 			<tr>
 				<td width="150"><b>Office/Unit/Program/Project :</b></td>
-				<td width="150" class="withLine"></td>
+				<td width="150" class="withLine">'.$itenerary->department_alias.'</td>
 				<td width="10"></td>
 				<td width="10"><b></b></td>
 				<td width="150" class="withLine"></td>
@@ -484,22 +507,22 @@ $html.='
 			$html.='<tr>
 				<td height="100">
 				<br/><br/>
-					<b>Note:</b> Php 3500, base170 km 
+					<b>Note:</b> Php '.$charges->gasoline_charge.', base'.$charges->base.' km 
 				</td>
 
 
 				<td><br/><br/>
-					<b>Php 3500</b><br/><br/>
-					<b>Charge :</b> Php 3500<br/>
-					<b>Additional Charge:</b> Php 0<br/>
-					<b>Over time :</b> 0 day(s) and 0 hour(s)<br/>
-					<b>Driver\'s Overtime Charge:</b> Php 0<br/>
+					<b>Php '.$gasoline_charge['amount'].'</b><br/><br/>
+					<b>Charge :</b> Php '.$gasoline_charge['amount'].'<br/>
+					<b>Additional Charge:</b> Php '.$gasoline_charge['additional'].'<br/>
+					<b>Over time :</b> '.@$calculated_excess_time['days'].' day(s) and '.@$calculated_excess_time['hours'].' hour(s)<br/>
+					<b>Driver\'s Overtime Charge:</b> Php '.$drivers_charge.'<br/>
 				</td>
 				
 			</tr>';
 			$html.='<tr>
 				<td><input type="date" class="dateSelector"><b>Received by: </b></td>
-				<td><input type="text" class="form-control text"><b>TOTAL : Php</b></td>
+				<td><input type="text" class="form-control text"><b>TOTAL : Php '.$overall_charge.'</b></td>
 				
 			</tr>';
 			$html.='<tr>
