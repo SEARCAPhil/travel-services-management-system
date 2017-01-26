@@ -43,7 +43,6 @@ function ajax_updateTravelStatusPreview(url,id,status,callback){
 }
 
 
-
 /*
 |----------------------------------------------------------------------------
 | Update status bar (ADMIN)
@@ -64,8 +63,12 @@ function ajax_updateTravelStatusPreview(url,id,status,callback){
 
 function showUntouchedStatusAdmin(){
 	var htm=`
-
-			<div class="col col-md-12" style="background: rgb(255,60,60);color:rgb(255,255,255);margin-bottom: 20px;padding: 5px;">
+			<div class="col col-md-1">
+				<div class="status-markings">
+					 <span class="glyphicon glyphicon-warning-sign"></span>
+				</div>
+			</div>
+			<div class="col col-md-11">
 				<p>
 					This Travel Request is not yet verified. Please review before making any further actions.
 					<button class="btn btn-xs btn-danger preview-return">Return to sender <span class="glyphicon glyphicon-inbox"></span></button> Or
@@ -79,12 +82,18 @@ function showUntouchedStatusAdmin(){
 
 function showVerifyStatusAdmin(){
 
-	var htm=`<div class="col col-md-12" style="background: rgb(0,150,100);color:rgb(255,255,255);margin-bottom: 20px;padding: 5px;">
+	var htm=`<div class="col col-md-1">
+				<div class="status-markings green">
+					<span class="glyphicon glyphicon-ok"></span>
+				</div>
+			</div>
+			<div class="col col-md-11 text-muted">
 				<p>
 					Travel Request Verified!
-					<button class="btn btn-xs btn-success preview-return">Return to sender <span class="glyphicon glyphicon-inbox"></span></button> Or
-					<button class="btn btn-xs btn-success preview-close">Mark as <u>Closed</u> <span class="glyphicon glyphicon-lock"></span></button> 
+					<button class="btn btn-xs btn-danger preview-return">Return to sender <span class="glyphicon glyphicon-inbox"></span></button> Or
+					<button class="btn btn-xs btn-danger preview-close">Mark as <u>Closed</u> <span class="glyphicon glyphicon-lock"></span></button> 
 				</p>
+				<hr/>
 			</div>`;
 	$('.preview-status-section').html(htm);
 }
@@ -104,8 +113,12 @@ function showClosedStatusAdmin(){
 
 function showReturnStatusAdmin(){
 	var htm=`
-
-			<div class="col col-md-12" style="background: rgb(255,60,60);color:rgb(255,255,255);margin-bottom: 20px;padding: 5px;">
+			<div class="col col-md-1">
+				<div class="status-markings">
+					<span class="glyphicon glyphicon-pushpin"></span>
+				</div>
+			</div>
+			<div class="col col-md-11">
 				<p>
 					This Travel Request was returned. 
 				</p>
@@ -117,10 +130,17 @@ function showReturnStatusAdmin(){
 
 
 function showClosedStatus(){
-	var htm=`<div class="col col-md-12" style="background: rgb(100,100,100);color:rgb(255,255,255);margin-bottom: 20px;padding: 5px;">
+	var htm=`<div class="col col-md-1">
+				<div class="status-markings gray">
+					 <span class="glyphicon glyphicon-lock"></span>
+				</div>
+			</div>
+
+			<div class="col col-md-11 text-muted">
 				<p>
-					This Travel Request is already closed. <span class="glyphicon glyphicon-lock"></span>
+					This Travel Request is already closed.
 				</p>
+				<hr/>
 			</div>`;
 	$('.preview-status-section').html(htm);
 }
@@ -170,20 +190,33 @@ function showUntouchedStatus(){
 
 function showVerifyStatus(){
 
-	var htm=`<div class="col col-md-12" style="background: rgb(100,100,100);color:rgb(255,255,255);margin-bottom: 20px;padding: 5px;">
+	var htm=`<div class="col col-md-1">
+				<div class="status-markings">
+					<span class="glyphicon glyphicon-flag"></span>
+				</div>
+			</div>
+			<div class="col col-md-11">
 				<p>
 					This Travel Request is waiting for verification
 				</p>
+				<hr/>
 			</div>`;
 	$('.preview-status-section').html(htm);
 }
 
 function showVerifiedStatus(){
 
-	var htm=`<div class="col col-md-12" style="background: rgb(0,150,100);color:rgb(255,255,255);margin-bottom: 20px;padding: 5px;">
+	var htm=`<div class="col col-md-1">
+				<div class="status-markings green">
+					<span class="glyphicon glyphicon-pushpin"></span>
+				</div>
+			</div>
+
+			<div class="col col-md-11 text-muted">
 				<p>
-					This Travel Request has been verified. <span class="glyphicon glyphicon-ok"></span>
+					This Travel Request has been verified.
 				</p>
+				<hr/>
 			</div>`;
 	$('.preview-status-section').html(htm);
 }
@@ -192,14 +225,22 @@ function showVerifiedStatus(){
 
 function showReturnStatus(){
 	var htm=`
+			<div class="col col-md-1">
+				<div class="status-markings">
+					<span class="glyphicon glyphicon-pushpin"></span>
+				</div>
+			</div>
+			<div class="col col-md-11" style="margin-bottom: 20px;padding: 5px;">
 
-			<div class="col col-md-12" style="background: rgb(255,60,60);color:rgb(255,255,255);margin-bottom: 20px;padding: 5px;">
-				<p>
+				<p class="text-muted">
 					This Travel Request was returned by admin.Please review the request before resending.
 				</p>
+				<hr/>
 			</div>`;
 	$('.preview-status-section').html(htm);
 }
+
+
 
 
 

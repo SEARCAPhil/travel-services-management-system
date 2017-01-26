@@ -211,7 +211,20 @@ function showCharges(data){
             }
         }
     },800)
-            
+    
+
+    //appointment
+    var appointment=data[0].appointment
+    var appointment_select=document.getElementById('appointment'); 
+
+    setTimeout(function(){
+        for(var y=0;y<appointment_select.options.length;y++){
+            if(appointment_select.options[y].value==appointment){
+                appointment_select.options[y].setAttribute('selected','selected')
+            }
+        }
+    },800)
+
                 
             
 }
@@ -301,7 +314,7 @@ function bindGasolineCharge(type){
                 //insert
                 ajax_putCharge(action,mileage_in,mileage_out,gasoline_charge,drivers_charge,appointment,function(data){
                     //open print page
-                   window.open('travel/official/print/'+id);
+                   window.open('travel/official/print/trip_ticket/'+id);
                  })
             }
 
@@ -331,7 +344,7 @@ function bindGasolineCharge(type){
             if(type=='official'){
                 ajax_postCharge(id,mileage_in,mileage_out,gasoline_charge,drivers_charge,appointment,function(data){
                     //open print page
-                   window.open('travel/official/print/'+id);
+                   window.open('travel/official/print/trip_ticket/'+id);
                  })
             }
 

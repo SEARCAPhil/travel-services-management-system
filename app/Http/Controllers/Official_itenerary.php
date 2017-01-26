@@ -52,7 +52,7 @@ class Official_itenerary extends Controller
         $destination = $request->input('destination');
         $departure_date = $request->input('departure_date');
         $departure_time= $request->input('departure_time');
-        $driver=$request->input('driver');
+        $driver=$request->input('driver_id');
         $tr=$request->input('tr_id');
 
          try{
@@ -68,7 +68,7 @@ class Official_itenerary extends Controller
             #begin transaction
             $this->pdoObject->beginTransaction();
             #if action is create
-            $insert_sql="INSERT INTO travel(tr_id,location,destination,departure_time,departure_date)values(:tr_id,:location,:destination,:time,:datez)";
+            $insert_sql="INSERT INTO travel(tr_id,location,destination,departure_time,departure_date,driver_id)values(:tr_id,:location,:destination,:time,:datez,:driver_id)";
             #prepare sql first
             $insert_statement=$this->pdoObject->prepare($insert_sql);
 
@@ -82,6 +82,7 @@ class Official_itenerary extends Controller
                 $insert_statement->bindParam(':time',$this->time);
                 $insert_statement->bindParam(':datez',$this->date);
                 $insert_statement->bindParam(':destination',$this->destination);
+                $insert_statement->bindParam(':driver_id',$driver);
             
 
             

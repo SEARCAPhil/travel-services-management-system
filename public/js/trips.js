@@ -498,7 +498,7 @@ function appendToList(json){
 								
 									<ul class="dropdown-menu advance-menu-dropdpwn">
 										<li><a href="#" class="advance-menu-selector" id="vehicle">Assign <b>SEARCA</b> Vehicle</a></li>
-										<li><a href="#" class="advance-menu-selector" id="rent"><b>Rent</b> a Car</a></li>
+										<!--<li><a href="#" class="advance-menu-selector" id="rent"><b>Rent</b> a Car</a></li>-->
 									    <li><a href="#" class="advance-menu-selector" id="driver">Assign Driver</a></li>
 									    <li><a href="#" class="advance-menu-selector"  id="charge" data-charge="`+data.id+`">Charge</a></li>
 									    <li><a href="#" class="advance-menu-selector"  id="charge_advance" data-charge="`+data.id+`">Advance Charging</a></li>

@@ -40,7 +40,7 @@
 <div class="row preview-content">
 		<div class="col col-md-5 col-md-offset-2">
 			<ul class="list-unstyled preview-menu-li">
-				<li><strong>5691</strong>&emsp;<small>[R/W Mode]</small></li>
+				<li><strong></strong>&emsp;<small>[R/W Mode]</small></li>
 			</ul>
 			
 		</div>

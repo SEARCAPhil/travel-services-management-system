@@ -63,9 +63,9 @@ function appendIteneraryToListPreview(jsonData,func){
 function appendIteneraryListPreviewConfirmation(){
 
 	//dialog
-	var htm=`<h3>Are you sure you want to add this to your itenerary?</h3><div class="col col-md-12">
+	var htm=`<h3>Travel</h3><p>Are you sure you want to add this to your itenerary?</p>
 		<button class="btn btn-danger" id="iteneraryConfirmationButton"><span class="glyphicon glyphicon-ok"></span>&nbsp;Yes</button> <button class="btn btn-default" id="iteneraryConfirmationButtonCancel">No</button>
-	</div>`
+`
 
 	$('#itenerary-dialog-content').hide();
 	$('#itenerary-confirmation').html(htm)

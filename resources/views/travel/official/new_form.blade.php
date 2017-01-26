@@ -184,7 +184,7 @@ changeButtonState('#iteneraryFormButton','disabled')
 bindOfficialPurposeSaveButton()
 bindSourceOfFund()
 
-bindOtfSelection
+bindOtfSelection();
 
 });
 </script>

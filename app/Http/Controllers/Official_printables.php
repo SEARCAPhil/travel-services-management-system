@@ -16,7 +16,7 @@ use App\Http\Controllers\Charge;
 
 use PDF;
 
-#error_reporting(0);
+error_reporting(0);
 class Official_printables extends Controller
 {
 	function is_exist($array,$value){

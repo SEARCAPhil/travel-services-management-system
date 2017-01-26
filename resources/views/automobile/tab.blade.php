@@ -8,9 +8,16 @@
 				<div class="navbar-brand"><span class="glyphicon glyphicon-th-large"></span></div>
 			</div>
 
-			<div class="navbar-right">
+			<div class="navbar-right dropdown">
+
 				<div class="profile-name pull-left"><?php echo @$_SESSION['name']; ?></div>
-				<div class="profile-picture" style="background:url('/profiler/profile/<?php echo @$_SESSION["image"]; ?>') no-repeat center center;background-size:cover;"></div>
+				<div class="profile-picture dropdown-toggle" data-toggle="dropdown" style="background:url('/profiler/profile/<?php echo @$_SESSION["image"]; ?>') no-repeat center center;background-size:cover;"></div>
+
+					<!--account-menu-->
+					<ul class="dropdown-menu"  id="account_menu">
+					    <li><a href="authentication/logout">Logout</a></li>
+				
+					</ul>
 			</div>
 		</div>
 	</nav>
@@ -46,11 +53,25 @@
 	  <div class="col col-md-4 col-sm-4 col-xs-4" style="padding-right:0;"><div class="tab-line">&nbsp;</div></div>
 	  
 		  <ul class="nav nav-tabs col col-md-8 col-sm-8 col-xs-8 tablist" role="tablist">
-		  <li role="presentation" class="active"><a href="#status" aria-controls="status" role="tab" data-toggle="tab" class="automobile-tab" data-page="status">Status</a></li>
-		    <li role="presentation"><a href="#home" aria-controls="home" role="tab" data-toggle="tab" class="automobile-tab" data-page="automobile">Automobile</a></li>
+
+		   <?php if(@$_SESSION["priv"]=='admin'): ?>
+		 	 <li role="presentation" class="active"><a href="#status" aria-controls="status" role="tab" data-toggle="tab" class="automobile-tab" data-page="status">Status</a></li>
+		  <?php endif; ?> 
+
+		   <?php if(@$_SESSION["priv"]=='admin'): ?>
+		   		<li role="presentation"><a href="#home" aria-controls="home" role="tab" data-toggle="tab" class="automobile-tab" data-page="automobile">Automobile</a></li>
+		   	<?php endif; ?>
+
+	
 		    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"  class="automobile-tab" data-page="calendar">Calendar</a></li>
+		   
+
 		    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab" data-page="travel">Travel</a></li>
-		    <li role="presentation"><a href="#verified" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab" data-page="verified">Verified</a></li>
+
+		    <?php if(@$_SESSION["priv"]=='admin'): ?>
+		   		<li role="presentation"><a href="#verified" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab" data-page="verified">Verified</a></li>
+		   	<?php endif; ?>
+
 		    <li role="presentation"><a href="#editor" aria-controls="messages" role="tab" data-toggle="tab"  data-page="travel/official/editor" id="editorTab" style="display:none;">Editor</a></li>
 		    <li role="presentation"><a href="#editor" aria-controls="messages" role="tab" data-toggle="tab"  data-page="travel/official/editor" id="insertTab" style="display:none;">&nbsp;</a></li>
 		  </ul>

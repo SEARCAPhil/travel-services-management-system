@@ -1,14 +1,17 @@
 {{csrf_field()}}
 <div class="row">
 		<div class="col col-md-12 row">
-			<ul class="list-unstyled preview-menu-li pull-right">
-				<li><strong class="preview-id"></strong></li>
+			<small>
+				<ul class="list-unstyled preview-menu-li pull-right">
 
-				<li class="preview-command" title="print"><a href="#" target="_blank" class="preview-print"><span class="glyphicon glyphicon-print"></span></a></li>
-				<li class="preview-remove preview-command disabled" title="remove"><span class="glyphicon glyphicon-remove"></span></li>
-				<li class="preview-update preview-command disabled" title="update" ><span class="glyphicon glyphicon-pencil"></span></li>
-				<li class="text-danger preview-forward preview-command disabled" title="send"> <span class="glyphicon glyphicon-send"></span></li>
-			</ul>
+					
+					<li class="preview-command"><a href="#" target="_blank" class="preview-print" title="print"><span class="glyphicon glyphicon-print"></span> Print</a></li>
+					<li class="preview-remove preview-command disabled" title="remove"><span class="glyphicon glyphicon-remove"></span> Remove</li>
+					<li class="preview-update preview-command disabled" title="update"><span class="glyphicon glyphicon-pencil"></span> Update</li>
+					<li class="text-danger preview-forward preview-command disabled" title="send"> <span class="glyphicon glyphicon-send"></span> Send</li>
+
+				</ul>
+			</small>
 			
 		</div>
 		<div class="preview-status-section"></div>

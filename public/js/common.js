@@ -326,7 +326,7 @@ function ajax_getVehiclesList(func){
 function show_driversList(){
 	ajax_getDriversList(function(driverList){
 		for(x of driverList.data){
-			$('#officialTravelDriver').append('<option value="'+x.id+'">'+x.first_name+' '+x.last_name+'</option>')
+			$('#officialTravelDriver').append('<option value="'+x.profile_id+'">'+x.first_name+' '+x.last_name+'</option>')
 		}
 		
 	})

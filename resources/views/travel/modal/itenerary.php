@@ -55,7 +55,7 @@
 			            </form> 
 		            </div>
 		        </div>
-	            <div class="col col-md-12" id="itenerary-confirmation"></div>
+	            <div class="col col-md-12 text-left" id="itenerary-confirmation"></div>
 
 		    </div>
 	   	</div>
