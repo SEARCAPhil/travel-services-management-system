@@ -38,9 +38,10 @@
 </div>
 
 <div class="row preview-content">
+{{csrf_field()}}
 		<div class="col col-md-5 col-md-offset-2">
 			<ul class="list-unstyled preview-menu-li">
-				<li><strong>5691</strong>&emsp;<small>[R/W Mode]</small></li>
+				<li><strong></strong>&emsp;<small>[R/W Mode]</small></li>
 			</ul>
 			
 		</div>
@@ -77,10 +78,13 @@
 	</div>
 <script type="text/javascript" src="js/common.js"></script>	
 <script type="text/javascript" src="js/preview.campus.js"></script>	
+<script type="text/javascript" src="js/itenerary.campus.js"></script>
 <script type="text/javascript">	
 
 $(document).ready(function(){
-
+	//modify form id to assume that editor is also running inside form page
+	//this will update the purpose instead of creating another one
+	form_id=$(selectedElement).attr('id');
 
 
 });
