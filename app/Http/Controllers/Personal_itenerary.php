@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 
 use App\Http\Requests;
 
+use App\Http\Controllers\Charge;
+
 class Personal_itenerary extends Controller
 {
     /**
@@ -235,8 +237,11 @@ class Personal_itenerary extends Controller
                 $this->gasoline_charge=htmlentities(htmlspecialchars($request->input('gasoline_charge')));
                 $this->drivers_charge=htmlentities(htmlspecialchars($request->input('drivers_charge')));
                 $this->appointment=htmlentities(htmlspecialchars($request->input('appointment')));
-                $this->gc=null;
+                 $this->gc=null;
                 $this->dc=null;
+                $this->base=null;
+                $this->drivers_day_rate=null;
+                $this->rid=null;
             
             
             
@@ -252,6 +257,7 @@ class Personal_itenerary extends Controller
 
                 while ($gc=$sth->fetch(\PDO::FETCH_OBJ)) {
                    $this->gc=$gc->rates;
+                    $this->base=$gc->base;
                 }
 
 
@@ -263,6 +269,7 @@ class Personal_itenerary extends Controller
 
                 while ($dc=$sth2->fetch(\PDO::FETCH_OBJ)) {
                    $this->dc=$dc->rate;
+                    $this->drivers_day_rate=$dc->days;
                 }
 
                 
@@ -270,7 +277,7 @@ class Personal_itenerary extends Controller
 
                 if(!is_null($this->dc)&&!is_null($this->gc)){
 
-                    $insert_sql="INSERT INTO trp_charge(rid,start,end,dca,gasoline_charge,drivers_charge,gc,dc) values (:rid,:start,:end,:dca,:gasoline_charge,:drivers_charge,:gc,:dc)";
+                    $insert_sql="INSERT INTO trp_charge(rid,start,end,dca,gasoline_charge,drivers_charge,gc,dc,base_km,drivers_day_rate) values (:rid,:start,:end,:dca,:gasoline_charge,:drivers_charge,:gc,:dc,:base_km,:drivers_day_rate)";
 
                     $insert_statement=$this->pdoObject->prepare($insert_sql);
             
@@ -282,7 +289,9 @@ class Personal_itenerary extends Controller
                     $insert_statement->bindParam(':gasoline_charge',$this->gc);
                     $insert_statement->bindParam(':drivers_charge',$this->dc);
                     $insert_statement->bindParam(':gc',$this->gasoline_charge);
-                    $insert_statement->bindParam(':dc',$this->drivers_charge); 
+                    $insert_statement->bindParam(':dc',$this->drivers_charge);
+                    $insert_statement->bindParam(':base_km',$this->base); 
+                    $insert_statement->bindParam(':drivers_day_rate',$this->drivers_day_rate);  
                     #exec the transaction
                     $insert_statement->execute();
                    
@@ -291,6 +300,48 @@ class Personal_itenerary extends Controller
                 
 
                 $lastId=$this->pdoObject->lastInsertId();
+
+                $personal_travel=new Personal();
+                #charge computation module
+                $charge_travel=new Charge();
+
+
+                $itenerary=@json_decode($personal_travel->show($this->id))[0];
+
+                
+                $gasoline_charge=$charge_travel->calculate_gasoline_charge($this->base,$this->out-$this->in,$this->gc,$default_rate='25');
+        
+
+                if($this->appointment=='emergency'){
+                    $drivers_charge=($charge_travel->calculate_emergency_drivers_charge($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time,$this->dc));
+                }else{
+                    $drivers_charge=($charge_travel->calculate_contracted_drivers_charge($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time,$this->dc,$this->drivers_day_rate));
+                }
+
+                $overall_gasoline_charge=@array_sum($gasoline_charge);
+                $overall_charge=$overall_gasoline_charge+$drivers_charge;
+
+                $total_execess_time=0;
+                #prevent wrong calculation if returned date is < departure_date
+                if($itenerary->departure_date<$itenerary->returned_date){
+                    $calculated_excess_time=$charge_travel->calculate_excess_time($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time);
+
+                    #convert to overall hours
+                    $days_to_hours=$calculated_excess_time['days']*24;
+                    $hours=$calculated_excess_time['hours'];
+                    $minutes_to_hour=$calculated_excess_time['minutes']/60;
+
+                    $total_execess_time=$days_to_hours+$hours+$minutes_to_hour;
+
+                }
+
+
+                
+                self::create_charge_breakdown($lastId,$gasoline_charge['amount'],$gasoline_charge['additional'],$drivers_charge,$total_execess_time,$overall_charge);
+
+
+
+
                 $this->pdoObject->commit();
 
                 #return
@@ -345,13 +396,59 @@ class Personal_itenerary extends Controller
             $this->appointment=htmlentities(htmlspecialchars($request->input('appointment')));
 
         
-        
-        
+             
+            
+            $this->gc=null;
+            $this->dc=null;
+            $this->base=null;
+            $this->drivers_day_rate=null;
+            $this->rid=null;
+
+                    
             $this->pdoObject=DB::connection()->getPdo();
             #begin transaction
             $this->pdoObject->beginTransaction();
+
+            //gasoline charge
+            $sql="SELECT * FROM tr_gc where id=:id";
+            $sth=$this->pdoObject->prepare($sql);
+            $sth->bindParam(':id',$this->gasoline_charge);
+            $sth->execute();
+
+            while ($gc=$sth->fetch(\PDO::FETCH_OBJ)) {
+               $this->gc=$gc->rates;
+               $this->base=$gc->base;
+            }
+
+
+            //drivers charge
+            $sql2="SELECT * FROM dc where id=:id";
+            $sth2=$this->pdoObject->prepare($sql2);
+            $sth2->bindParam(':id',$this->drivers_charge);
+            $sth2->execute();
+
+            while ($dc=$sth2->fetch(\PDO::FETCH_OBJ)) {
+                $this->dc=$dc->rate;
+                $this->drivers_day_rate=$dc->days;
+            }
+
+
+            #get rid form preview
+            //drivers charge
+            $sql3="SELECT rid FROM trp_charge where id=:id";
+            $sth3=$this->pdoObject->prepare($sql3);
+            $sth3->bindParam(':id',$this->id);
+            $sth3->execute();
+
+            while ($preview=$sth3->fetch(\PDO::FETCH_OBJ)) {
+                $this->rid=$preview->rid;
             
-            $insert_sql="UPDATE trp_charge SET start=:start,end=:end,dca=:dca,gasoline_charge=:gasoline_charge,drivers_charge=:drivers_charge where id=:id";
+            }
+
+
+
+            
+            $insert_sql="UPDATE trp_charge SET start=:start,end=:end,dca=:dca,gasoline_charge=:gasoline_charge,drivers_charge=:drivers_charge,gc=:gc,dc=:dc,base_km=:base,drivers_day_rate=:day where id=:id";
             $insert_statement=$this->pdoObject->prepare($insert_sql);
     
             #params
@@ -361,11 +458,64 @@ class Personal_itenerary extends Controller
             $insert_statement->bindParam(':dca',$this->appointment);
             $insert_statement->bindParam(':gasoline_charge',$this->gasoline_charge);
             $insert_statement->bindParam(':drivers_charge',$this->drivers_charge);
+            $insert_statement->bindParam(':gc',$this->gasoline_charge);
+            $insert_statement->bindParam(':dc',$this->drivers_charge); 
+            $insert_statement->bindParam(':base',$this->base);
+            $insert_statement->bindParam(':day',$this->drivers_day_rate); 
+                
            
             
             #exec the transaction
             $insert_statement->execute();
             $lastId=$insert_statement->rowCount();
+
+
+            $personal_travel=new Personal();
+            #charge computation module
+            $charge_travel=new Charge();
+
+
+
+
+            #get ravel details
+            $itenerary=@json_decode($personal_travel->show($this->rid))[0];
+
+            
+            $gasoline_charge=$charge_travel->calculate_gasoline_charge($this->base,$this->out-$this->in,$this->gc,$default_rate='25');
+    
+
+            if($this->appointment=='emergency'){
+                $drivers_charge=($charge_travel->calculate_emergency_drivers_charge($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time,$this->dc));
+            }else{
+                $drivers_charge=($charge_travel->calculate_contracted_drivers_charge($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time,$this->dc,$this->drivers_day_rate));
+            }
+
+            $overall_gasoline_charge=@array_sum($gasoline_charge);
+            $overall_charge=$overall_gasoline_charge+$drivers_charge;
+
+            $total_execess_time=0;
+            #prevent wrong calculation if returned date is < departure_date
+            if($itenerary->departure_date<$itenerary->returned_date){
+                $calculated_excess_time=$charge_travel->calculate_excess_time($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time);
+
+                #convert to overall hours
+                $days_to_hours=$calculated_excess_time['days']*24;
+                $hours=$calculated_excess_time['hours'];
+                $minutes_to_hour=$calculated_excess_time['minutes']/60;
+
+                $total_execess_time=$days_to_hours+$hours+$minutes_to_hour;
+
+            }
+
+
+
+           
+
+            $charge_result=self::update_charge_breakdown($id,$gasoline_charge['amount'],$gasoline_charge['additional'],$drivers_charge,$total_execess_time,$overall_charge);
+
+
+
+
             $this->pdoObject->commit();
 
             #return
@@ -377,6 +527,96 @@ class Personal_itenerary extends Controller
 
 
     }
+
+
+    function create_charge_breakdown($charge_id,$charge,$additional_charge,$drivers_overtime_charge,$overtime,$total){
+
+            try{
+             
+                $this->charge_id=htmlentities(htmlspecialchars($charge_id));
+                $this->charge=htmlentities(htmlspecialchars($charge));
+                $this->additional_charge=htmlentities(htmlspecialchars($additional_charge));
+                $this->drivers_overtime_charge=htmlentities(htmlspecialchars($drivers_overtime_charge));
+                $this->overtime=htmlentities(htmlspecialchars($overtime));
+                $this->total=htmlentities(htmlspecialchars($total));
+
+            
+            
+            
+                $this->pdoObject=DB::connection()->getPdo();
+                #begin transaction   
+                $insert_sql="INSERT INTO trp_charge_breakdown(charge_id,charge,additional_charge,drivers_overtime_charge,overtime,total)values(:charge_id,:charge,:additional_charge,:drivers_overtime_charge,:overtime,:total)";
+
+                $insert_statement=$this->pdoObject->prepare($insert_sql);
+        
+                #params
+                $insert_statement->bindParam(':charge_id',$this->charge_id);
+                $insert_statement->bindParam(':charge',$this->charge);
+                $insert_statement->bindParam(':additional_charge',$this->additional_charge);
+                $insert_statement->bindParam(':drivers_overtime_charge',$this->drivers_overtime_charge);
+                $insert_statement->bindParam(':overtime',$this->overtime);
+                $insert_statement->bindParam(':total',$this->total);
+                
+                #exec the transaction
+                $insert_statement->execute();
+                $lastId=$this->pdoObject->lastInsertId();
+             
+
+                #return
+                return $lastId;
+            
+
+
+        }catch(Exception $e){ echo $e->getMessage();}
+
+
+    }
+
+
+     function update_charge_breakdown($charge_id,$charge,$additional_charge,$drivers_overtime_charge,$overtime,$total){
+
+            try{
+             
+                $this->charge_id=htmlentities(htmlspecialchars($charge_id));
+                $this->charge=htmlentities(htmlspecialchars($charge));
+                $this->additional_charge=htmlentities(htmlspecialchars($additional_charge));
+                $this->drivers_overtime_charge=htmlentities(htmlspecialchars($drivers_overtime_charge));
+                $this->overtime=htmlentities(htmlspecialchars($overtime));
+                $this->total=htmlentities(htmlspecialchars($total));
+
+            
+            
+            
+                $this->pdoObject=DB::connection()->getPdo();
+                #begin transaction   
+                $insert_sql="UPDATE trp_charge_breakdown set charge=:charge,additional_charge=:additional_charge,drivers_overtime_charge=:drivers_overtime_charge,overtime=:overtime,total=:total where charge_id=:charge_id";
+
+                $insert_statement=$this->pdoObject->prepare($insert_sql);
+        
+                #params
+                $insert_statement->bindParam(':charge_id',$this->charge_id);
+                $insert_statement->bindParam(':charge',$this->charge);
+                $insert_statement->bindParam(':additional_charge',$this->additional_charge);
+                $insert_statement->bindParam(':drivers_overtime_charge',$this->drivers_overtime_charge);
+                $insert_statement->bindParam(':overtime',$this->overtime);
+                $insert_statement->bindParam(':total',$this->total);
+                
+                #exec the transaction
+                $insert_statement->execute();
+                $is_updated=$insert_statement->rowCount();
+             
+
+                #return
+                return  $is_updated;
+            
+
+
+        }catch(Exception $e){ echo $e->getMessage();}
+
+
+    }
+
+
 
 
 

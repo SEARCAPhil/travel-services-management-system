@@ -563,7 +563,7 @@ class Official_itenerary extends Controller
 
                
 
-                self::create_charge_breakdown($this->id,$gasoline_charge['amount'],$gasoline_charge['additional'],$drivers_charge,$total_execess_time,$overall_charge);
+                self::create_charge_breakdown($lastId,$gasoline_charge['amount'],$gasoline_charge['additional'],$drivers_charge,$total_execess_time,$overall_charge);
 
 
 
@@ -624,7 +624,7 @@ class Official_itenerary extends Controller
                 $this->appointment=htmlentities(htmlspecialchars($request->input('appointment')));
 
             
-            
+               
             
                 $this->gc=null;
                 $this->dc=null;
@@ -733,9 +733,10 @@ class Official_itenerary extends Controller
                 }
 
 
+
                
 
-                $charge_result=self::update_charge_breakdown($this->id,$gasoline_charge['amount'],$gasoline_charge['additional'],$drivers_charge,$total_execess_time,$overall_charge);
+                $charge_result=self::update_charge_breakdown($id,$gasoline_charge['amount'],$gasoline_charge['additional'],$drivers_charge,$total_execess_time,$overall_charge);
 
                 $this->pdoObject->commit();
                 #return

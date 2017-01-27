@@ -264,7 +264,7 @@ class Personal extends Controller
         try{
                 $this->pdoObject=DB::connection()->getPdo(); 
                 $this->id=htmlentities(htmlspecialchars($id));
-                $this->pdoObject->beginTransaction();
+               
                 #$sql="SELECT trp.*, account_profile.* FROM trp LEFT JOIN account_profile on trp.requested_by=account_profile.id where trp.id=:id";
 
                 $sql="SELECT trp.*, account_profile.last_name,account_profile.first_name,account_profile.middle_name,account_profile.profile_name, account_profile.position, account_profile.profile_image,account_profile.department,account_profile.department_alias FROM trp LEFT JOIN account_profile on trp.requested_by=account_profile.id  where trp.id=:id";
@@ -276,11 +276,11 @@ class Personal extends Controller
                 while($row=$statement->fetch(\PDO::FETCH_OBJ)){
                     $res[]=$row;
                 }
-                $this->pdoObject->commit();
+              
 
                 return json_encode($res);
 
-        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+        }catch(Exception $e){echo $e->getMessage();}
         
     }
 
