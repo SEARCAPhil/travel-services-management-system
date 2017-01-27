@@ -375,6 +375,49 @@ class Campus_itenerary extends Controller
     }
 
 
+    function scheduled_per_user($date,$id){
+
+        try{
+                $this->pdoObject=DB::connection()->getPdo();
+               
+                $this->datez=htmlentities(htmlspecialchars($date));
+                $this->id=htmlentities(htmlspecialchars($id));
+                
+                $this->pdoObject->beginTransaction();
+                
+
+                  $sql="SELECT trc.requested_by,trc.status as trc_status,trc_travel.*,automobile.manufacturer, login_db.account_profile.last_name, login_db.account_profile.first_name FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no  LEFT JOIN login_db.account_profile on login_db.account_profile.id=driver_id LEFT JOIN trc on trc_travel.trc_id=trc.id where trc.requested_by=:id and departure_date>= :datez1  and departure_date< (:datez2 +INTERVAL 1 MONTH)   and trc.status>0 ORDER BY departure_date DESC";
+
+
+                $sql3="SELECT * FROM automobile_rent where travel_id=:id and travel_type='tr' ORDER BY travel_id DESC LIMIT 1 ";
+                $statement=$this->pdoObject->prepare($sql);
+                $statement3=$this->pdoObject->prepare($sql3);
+                $statement->bindParam(':datez1',$this->datez);
+                $statement->bindParam(':datez2',$this->datez);
+                $statement->bindParam(':id',$this->id);
+                $statement->execute();
+                $res=Array();
+                while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+                    //driver
+                    $driver=@$row->first_name. ' '. @$row->last_name;
+                    $statement3->bindValue(':id',$row->id,\PDO::PARAM_INT);
+                    $statement3->execute();
+
+                    while($row3=$statement3->fetch(\PDO::FETCH_OBJ)){
+                        $driver=$row3->drivers_name;    
+                    }
+
+                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->tr_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'returned_time'=>$row->returned_time,'plate_no'=>$row->plate_no,'driver'=>$driver,'type'=>'travel');
+                }
+                $this->pdoObject->commit();
+
+                return json_encode($res);
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+    }
+
+
 
     /**
      * Store a newly created resource in storage.
