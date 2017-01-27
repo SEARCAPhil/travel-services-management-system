@@ -9,9 +9,16 @@
 			</div>
 
 			<div class="navbar-right dropdown">
+			<?php 
+				/*check image*/
+				$image=@$_SESSION["image"];
+				if(is_null($image)||empty($image)){
+					$image='user.png';
+				}
 
+			?>
 				<div class="profile-name pull-left"><?php echo @$_SESSION['name']; ?></div>
-				<div class="profile-picture dropdown-toggle" data-toggle="dropdown" style="background:url('/profiler/profile/<?php echo @$_SESSION["image"]; ?>') no-repeat center center;background-size:cover;"></div>
+				<div class="profile-picture dropdown-toggle" data-toggle="dropdown" style="background:url('/profiler/profile/<?php echo $image; ?>') no-repeat center center;background-size:cover;"></div>
 
 					<!--account-menu-->
 					<ul class="dropdown-menu"  id="account_menu">

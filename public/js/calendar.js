@@ -84,7 +84,7 @@
 		var rd=new Date(calendar.year,calendar.month,1).getDay();
 		var dayPointer=0;
 
-		var htm='<center style="margin-top:-50px;"><h3><b>'+calendar.monthLabels[calendar.month]+'</b></h3></center>'
+		var htm='<center style="margin-top:-50px;"><h3><b>'+calendar.monthLabels[calendar.month]+' '+calendar.year+'</b></h3></center>'
 		htm+='<table class="table table-bordered table-striped">'
 		var limits
 
