@@ -445,8 +445,8 @@ function appendToList(json){
 						<p><label>Driver : <u class="travel-other-details-driver-`+data.id+`">`+data.driver+`</u></label> </p>
 						<p><label>Vehicle Plate Number : <u class="travel-other-details-vehicle-`+data.id+`">`+plate_no+`</u></label> </p>
 						<p><label>Departure Time(Actual) : <u>`+data.actual_time+`</u></label> </p>
-						<p><label>Returned Date : <u>`+data.departure_date+`</u></label> </p>
-						<p><label>Returned Time : <u>`+data.departure_time+`</u></label> </p>
+						<p><label>Returned Date : <u>`+data.returned_date+`</u></label> </p>
+						<p><label>Returned Time : <u>`+data.returned_time+`</u></label> </p>
 						<p><hr/></p>
 					</div>
 

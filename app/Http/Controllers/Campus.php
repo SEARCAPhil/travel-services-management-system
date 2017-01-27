@@ -436,7 +436,7 @@ class Campus extends Controller
                  
 
 
-                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->trc_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'returned_date'=>$row->returned_date,'returned_time'=>$row->returned_time,'plate_no'=>$row->plate_no,'manufacturer'=>$row->manufacturer,'type'=>'campus','driver'=>$driver,'requester'=>$requester,'department'=>$department,'image'=>$image,'passengers'=>array('staff'=>null,'scholars'=>null,'custom'=>null));
+                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->trc_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'returned_date'=>$row->returned_date,'returned_time'=>$row->returned_time,'actual_time'=>$row->actual_departure_time,'plate_no'=>$row->plate_no,'manufacturer'=>$row->manufacturer,'type'=>'campus','driver'=>$driver,'requester'=>$requester,'department'=>$department,'image'=>$image,'passengers'=>array('staff'=>null,'scholars'=>null,'custom'=>null));
                 }
 
                 $no_pages=1;
@@ -515,7 +515,7 @@ function ongoing($page=1){
                  
 
 
-                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->trc_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'returned_date'=>$row->returned_date,'returned_time'=>$row->returned_time,'plate_no'=>$row->plate_no,'manufacturer'=>$row->manufacturer,'type'=>'campus','driver'=>$driver,'requester'=>$requester,'department'=>$department,'image'=>$image,'passengers'=>array('staff'=>null,'scholars'=>null,'custom'=>null));
+                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->trc_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'returned_date'=>$row->returned_date,'returned_time'=>$row->returned_time,'actual_time'=>$row->actual_departure_time,'plate_no'=>$row->plate_no,'manufacturer'=>$row->manufacturer,'type'=>'campus','driver'=>$driver,'requester'=>$requester,'department'=>$department,'image'=>$image,'passengers'=>array('staff'=>null,'scholars'=>null,'custom'=>null));
                 }
 
                 $no_pages=1;
@@ -592,7 +592,7 @@ function ongoing($page=1){
                  
 
 
-                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->trc_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'returned_date'=>$row->returned_date,'returned_time'=>$row->returned_time,'plate_no'=>$row->plate_no,'manufacturer'=>$row->manufacturer,'type'=>'campus','driver'=>$driver,'requester'=>$requester,'department'=>$department,'image'=>$image,'passengers'=>array('staff'=>null,'scholars'=>null,'custom'=>null));
+                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->trc_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'returned_date'=>$row->returned_date,'returned_time'=>$row->returned_time,'actual_time'=>$row->actual_departure_time,'plate_no'=>$row->plate_no,'manufacturer'=>$row->manufacturer,'type'=>'campus','driver'=>$driver,'requester'=>$requester,'department'=>$department,'image'=>$image,'passengers'=>array('staff'=>null,'scholars'=>null,'custom'=>null));
                 }
 
                 $no_pages=1;

@@ -323,7 +323,7 @@ function bindGasolineCharge(type){
                 //insert
                 ajax_putChargePersonal(action,mileage_in,mileage_out,gasoline_charge,drivers_charge,appointment,function(data){
                     //open print page
-                   window.open('travel/official/print/'+id);
+                   window.open('travel/personal/print/statement_of_account/'+id);
                  })
             }
 
@@ -333,7 +333,7 @@ function bindGasolineCharge(type){
                 //insert
                 ajax_putChargeCampus(action,mileage_in,mileage_out,gasoline_charge,drivers_charge,appointment,function(data){
                     //open print page
-                   window.open('travel/official/print/'+id);
+                   window.open('travel/campus/print/notice_of_charges/'+id);
                  })
             }
 
