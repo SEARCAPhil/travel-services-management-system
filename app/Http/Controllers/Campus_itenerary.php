@@ -314,16 +314,15 @@ class Campus_itenerary extends Controller
 
 
             $this->pdoObject=DB::connection()->getPdo();
-
-           $sql="SELECT trc_charge.*,tr_gc.base,dc.days,dc.rate FROM trc_charge LEFT JOIN tr_gc on trc_charge.gc=tr_gc.id LEFT JOIN dc on dc.id=trc_charge.dc where rid=:id ORDER BY id DESC LIMIT 1";
+            $sql="SELECT trc_charge.*,trc_charge_breakdown.charge,trc_charge_breakdown.additional_charge,trc_charge_breakdown.charge,trc_charge_breakdown.drivers_overtime_charge,trc_charge_breakdown.overtime,trc_charge_breakdown.total FROM trc_charge LEFT JOIN trc_charge_breakdown on trc_charge_breakdown.charge_id=trc_charge.id where rid=:id ORDER BY id DESC LIMIT 1";
             $statement=$this->pdoObject->prepare($sql);
             $statement->bindParam(':id',$this->id);
             $statement->execute();
 
             $res=Array();
 
-           while($row=$statement->fetch(\PDO::FETCH_OBJ)){
-                $res[]=Array('id'=>$row->id,'trp_id'=>$row->rid,'start'=>$row->start,'end'=>$row->end,'gc'=>$row->gc,'dc'=>$row->dc,'gasoline_charge'=>$row->gasoline_charge,'drivers_charge'=>$row->drivers_charge,'appointment'=>$row->dca,'base'=>$row->base,'days'=>$row->days);
+            while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+                $res[]=Array('id'=>$row->id,'trp_id'=>$row->rid,'start'=>$row->start,'end'=>$row->end,'gc'=>$row->gc,'dc'=>$row->dc,'charge'=>$row->charge,'gasoline_charge'=>$row->gasoline_charge,'drivers_charge'=>$row->drivers_charge,'additional_charge'=>$row->additional_charge,'drivers_overtime_charge'=>$row->drivers_overtime_charge,'overtime'=>$row->overtime,'appointment'=>$row->dca,'base'=>$row->base_km,'days'=>$row->drivers_day_rate,'total'=>$row->total);
             }
                
 

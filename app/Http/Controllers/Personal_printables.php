@@ -354,7 +354,7 @@ function print_statement_of_account($id){
 
     	$charges=@json_decode($personal_itenerary->show_charges($id))[0];
 
-
+    	/*
     	$gasoline_charge=$charge_computation_module->calculate_gasoline_charge($charges->base,$charges->end-$charges->start,$charges->gasoline_charge,$default_rate='25');
     	
 
@@ -371,13 +371,17 @@ function print_statement_of_account($id){
     	#prevent wrong calculation if returned date is < departure_date
         if($itenerary->departure_date<$itenerary->returned_date){
             $calculated_excess_time=$charge_computation_module->calculate_excess_time($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time);
-        }
+        }*/
 
     	
 
     	#var_dump($calculated_excess_time);
 
-    	#var_dump($drivers_charge);
+        $overtime_original=$charges->overtime/24;
+        $overtime=explode('.', $overtime_original);
+        $overtime_days=$overtime[0];
+        $overtime_hours='0.'.@$overtime[1];
+    	$overtime_hours=@($overtime_hours*24);
 
      	#var_dump($itenerary);
 
@@ -512,17 +516,17 @@ $html.='
 
 
 				<td><br/><br/>
-					<b>Php '.$gasoline_charge['amount'].'</b><br/><br/>
-					<b>Charge :</b> Php '.$gasoline_charge['amount'].'<br/>
-					<b>Additional Charge:</b> Php '.$gasoline_charge['additional'].'<br/>
-					<b>Over time :</b> '.@$calculated_excess_time['days'].' day(s) and '.@$calculated_excess_time['hours'].' hour(s)<br/>
-					<b>Driver\'s Overtime Charge:</b> Php '.$drivers_charge.'<br/>
+					<b>Php '.$charges->charge.'</b><br/><br/>
+					<b>Charge :</b> Php '.$charges->charge.'<br/>
+					<b>Additional Charge:</b> Php '.$charges->additional_charge.'<br/>
+					<b>Over time :</b> '.@$overtime_days.' day(s) and '.@@$overtime_hours.' hour(s)<br/>
+					<b>Driver\'s Overtime Charge:</b> Php '.round($charges->drivers_overtime_charge,2).'<br/>
 				</td>
 				
 			</tr>';
 			$html.='<tr>
 				<td><input type="date" class="dateSelector"><b>Received by: </b></td>
-				<td><input type="text" class="form-control text"><b>TOTAL : Php '.$overall_charge.'</b></td>
+				<td><input type="text" class="form-control text"><b>TOTAL : Php '.round($charges->total,2).'</b></td>
 				
 			</tr>';
 			$html.='<tr>

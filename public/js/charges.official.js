@@ -351,7 +351,7 @@ function bindGasolineCharge(type){
             if(type=='personal'){
                 ajax_postChargePersonal(id,mileage_in,mileage_out,gasoline_charge,drivers_charge,appointment,function(data){
                     //open print page
-                   window.open('travel/official/print/'+id);
+                    window.open('travel/personal/print/statement_of_account/'+id);
                  })
             }
 
@@ -359,7 +359,7 @@ function bindGasolineCharge(type){
             if(type=='campus'){
                 ajax_postChargeCampus(id,mileage_in,mileage_out,gasoline_charge,drivers_charge,appointment,function(data){
                     //open print page
-                   window.open('travel/official/print/'+id);
+                   window.open('travel/campus/print/notice_of_charges/'+id);
                  })
             }
 

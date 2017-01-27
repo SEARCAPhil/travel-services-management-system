@@ -589,7 +589,7 @@ class Official_itenerary extends Controller
 
             $this->pdoObject=DB::connection()->getPdo();
 
-            $sql="SELECT tr_charge.*,tr_gc.base,dc.days,dc.rate FROM tr_charge LEFT JOIN tr_gc on tr_charge.gc=tr_gc.id LEFT JOIN dc on dc.id=tr_charge.dc where rid=:id ORDER BY id DESC LIMIT 1";
+            $sql="SELECT tr_charge.*,tr_charge_breakdown.charge,tr_charge_breakdown.additional_charge,tr_charge_breakdown.drivers_overtime_charge,tr_charge_breakdown.overtime,tr_charge_breakdown.total FROM tr_charge LEFT JOIN tr_charge_breakdown on tr_charge_breakdown.charge_id=tr_charge.id where rid=:id ORDER BY id DESC LIMIT 1";
             $statement=$this->pdoObject->prepare($sql);
             $statement->bindParam(':id',$this->id);
             $statement->execute();
@@ -597,7 +597,7 @@ class Official_itenerary extends Controller
             $res=Array();
 
             while($row=$statement->fetch(\PDO::FETCH_OBJ)){
-                $res[]=Array('id'=>$row->id,'trp_id'=>$row->rid,'start'=>$row->start,'end'=>$row->end,'gc'=>$row->gc,'dc'=>$row->dc,'gasoline_charge'=>$row->gasoline_charge,'drivers_charge'=>$row->drivers_charge,'appointment'=>$row->dca,'base'=>$row->base,'days'=>$row->days);
+                $res[]=Array('id'=>$row->id,'trp_id'=>$row->rid,'start'=>$row->start,'end'=>$row->end,'gc'=>$row->gc,'dc'=>$row->dc,'gasoline_charge'=>$row->gasoline_charge,'drivers_charge'=>$row->drivers_charge,'additional_charge'=>$row->additional_charge,'appointment'=>$row->dca,'base'=>$row->base_km,'days'=>$row->drivers_day_rate,'total'=>$row->total);
             }
                
 

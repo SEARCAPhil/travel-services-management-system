@@ -283,7 +283,7 @@ function print_notice_of_charges($id){
 	$travel_request=@json_decode($campus_travel->show($itenerary->trc_id))[0];
 
 
-
+/*
 	$gasoline_charge=$charge_computation_module->calculate_gasoline_charge($charges->base,$charges->end-$charges->start,$charges->gasoline_charge,$default_rate='25');
 	
 
@@ -295,7 +295,7 @@ function print_notice_of_charges($id){
 
 	$overall_gasoline_charge=@array_sum($gasoline_charge);
 	$overall_charge=$overall_gasoline_charge+$drivers_charge;
-
+*/
 
 
 
@@ -453,7 +453,7 @@ $html.='
 
 
 				<td><br/><br/>
-					<b>Php '.$overall_charge.'</b><br/><br/>
+					<b>Php '.@round($charges->total,2).'</b><br/><br/>
 					
 				</td>
 				

@@ -77,7 +77,7 @@ class Official_printables extends Controller
 
 
     	#charges comutation
-    	#var_dump($charges);
+    	/*var_dump($charges);
     	
     	$gasoline_charge=$charge_travel->calculate_gasoline_charge($charges->base,$charges->end-$charges->start,$charges->gasoline_charge,$default_rate='25');
     	
@@ -89,7 +89,7 @@ class Official_printables extends Controller
     	}
 
     	$overall_gasoline_charge=@array_sum($gasoline_charge);
-    	$overall_charge=$overall_gasoline_charge+$drivers_charge;
+    	$overall_charge=$overall_gasoline_charge+$drivers_charge;*/
     	
 
 
@@ -577,7 +577,7 @@ $html.='	<article class="col col-md-12">
 				<td> <b>For Motorpool Unit\'s Use:</b><br/><br/>
 				 &nbsp; No. of kms. : <b>'.@($charges->end-$charges->start).' km/s </b><br/>
 				 &nbsp; Rate/km : <b>'.@($charges->gasoline_charge).'</b><br/>
-				 &nbsp;Amount : <b>'.@$overall_charge.'</b><br/>   
+				 &nbsp;Amount : <b>'.@$charges->total.'</b><br/>   
 				</td>
 
 			</tr>
