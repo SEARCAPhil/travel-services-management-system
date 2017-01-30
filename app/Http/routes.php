@@ -399,3 +399,6 @@ Route::post('/automobile/repair/{id}',['uses'=>'Automobile@create_repair_parts']
 
 #oil
 Route::post('/automobile/oil/{id}',['uses'=>'Automobile@create_oil']);
+
+#gasoline
+Route::post('/automobile/gasoline/{id}',['uses'=>'Automobile@create_gasoline']);

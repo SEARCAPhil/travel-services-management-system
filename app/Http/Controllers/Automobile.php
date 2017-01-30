@@ -115,4 +115,42 @@ class Automobile extends Controller
 
 	}
 
+
+	function create_gasoline(Request $request,$id){
+		
+		try{
+
+				
+				$this->pdoObject=DB::connection()->getPdo();
+				$token = $request->input('_token');
+		        $plate_no = $request->input('plate_no');
+		        $liters=$request->input('liters');
+		        $amount = $request->input('amount');
+		        $receipt=$request->input('receipt');
+		        $station=$request->input('station');
+
+
+				$sql="INSERT INTO automobile_refuel(plate_no,liters,amount,receipt,station)values(:plate_no,:liters,:amount,:receipt,:station)";
+				$statement=$this->pdoObject->prepare($sql);
+
+				$statement->bindParam(':plate_no',$plate_no);
+				$statement->bindParam(':liters',$liters);
+				$statement->bindParam(':amount',$amount);
+				$statement->bindParam(':receipt',$receipt);
+				$statement->bindParam(':station',$station);
+				
+
+
+				$statement->execute();
+
+				$lastInsertId=$this->pdoObject->lastInsertId();
+				$res=Array();
+			
+				return $lastInsertId;
+
+		}catch(Exception $e){echo $e->getMessage();}
+
+
+	}
+
 }
