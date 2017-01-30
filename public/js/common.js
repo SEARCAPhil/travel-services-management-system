@@ -21,12 +21,12 @@ var active_page='';
 */
 
 
-function ajaxLoad(){
+function ajaxLoad(callback){
 	$('.ajaxload').on('click',function(){
 		var target=$(this).attr('data-section')
 		var content=$(this).attr('data-content')
 		$(target).load(content,function(){
-
+			callback(content)
 		})
 	})
 }

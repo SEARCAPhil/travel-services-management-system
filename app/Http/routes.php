@@ -381,3 +381,21 @@ Route::get('/travel/campus/print/notice_of_charges/{id}',['uses'=>'Campus_printa
 
 #CALENDAR
 Route::get('api/travel/calendar/{date}',['uses'=>'Calendar@index']);
+
+
+
+###############################################################################################
+# AUTMOBILE
+###############################################################################################
+#list
+Route::get('/automobile/{id}',['uses'=>'Automobile@index']);
+
+
+#replace parts
+Route::post('/automobile/replace/{id}',['uses'=>'Automobile@create_replace_parts']);
+
+#repair parts
+Route::post('/automobile/repair/{id}',['uses'=>'Automobile@create_repair_parts']);
+
+#oil
+Route::post('/automobile/oil/{id}',['uses'=>'Automobile@create_oil']);

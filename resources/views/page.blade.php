@@ -90,6 +90,7 @@ sdsdsds
 @endsection
 
 @section('page-script')
+
 <script type="text/javascript" src="js/Chart.min.js"></script>
 <script>
 var ctx = document.getElementById("myChart");
