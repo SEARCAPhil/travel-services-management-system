@@ -4,7 +4,7 @@
 
 <div class="backdrop">
 		<div class="modalx">
-			@includeif('layouts/automobile-preview')
+			
 		</div>
 	</div>
 <script type="text/javascript" src="js/common.js"></script>	
@@ -13,6 +13,15 @@
 var selectedAutomobile;
 function modalOpen(target){
 	selectedAutomobile=target;
+
+	$('.modalx').load('automobile-preview/'+1,function(){
+		//add menu event
+		$('.vehicle-menu dd a').click(function(){
+			$('.modal-subcontent').load($(this).attr('data-content'))
+		})
+
+		console.log($('#preview-vehicle-info').click())
+	});
 	$("body").css("overflow", "hidden");
 	$('.backdrop').css({marginTop:0}).click(function(e){
 		if(this==e.target){
@@ -43,13 +52,16 @@ $(document).ready(function(){
 		for(var x=0;x<auto.length;x++){
 				console.log(auto[x].brand)
 				var brand=auto[x].brand.length>1?auto[x].brand:'<br/>';
+				var is_unavailable=auto[x].status=='in_use'||auto[x].status=='under_maintenance'?'active':'';
 				var htm=`<div class="col col-md-3 col-sm-4 col-xs-6 " onclick="modalOpen(this)" data-content="`+auto[x].id+`"><div class="automobile-list-item">
 				    					<img src="/laravel/public/uploads/automobile/`+auto[x].image+`" onerror="this.src='/laravel/public/img/no-photo-available.jpg'"/>
 				    					<div class="col col-md-12">
 				    						<h4 class="page-header">`+brand+`</h4>
-				    						<p><div class="marker marker-danger">`+auto[x].id+`</div></p>`
-				   if(auto[x].status=='in_use'){
-				   	htm+=`<p><center class="text-muted"><b>Unavailable</b></ceter></p>`
+
+				    						<p><div class="marker marker-danger `+is_unavailable+`">`+auto[x].id+`</div></p>`
+
+				   if(auto[x].status=='in_use'||auto[x].status=='under_maintenance'){
+				   		htm+=`<p><center class="text-muted"><b>Unavailable</b></ceter></p>`
 				   }
 				    						
 				htm+=`

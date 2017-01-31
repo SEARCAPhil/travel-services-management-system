@@ -155,7 +155,7 @@ $(document).ready(function(){
 		    labels:['Total number of automobile','Available','Unavailable'],
 		    datasets: [
 		        {
-		            data: [total_automobile, available_automobile, under_maintenance_automobile],
+		            data: [total_automobile, available_automobile,in_use_automobile],
 		            backgroundColor: [
 		                "rgb(32,122,199)",
 		                "rgb(32,199,150)",
@@ -180,7 +180,7 @@ $(document).ready(function(){
 		//status box
 		$('.status-box.blue').html(total_automobile)
 		$('.status-box.green').html(available_automobile)
-		$('.status-box.red').html(under_maintenance_automobile)
+		$('.status-box.red').html(in_use_automobile)
 
 	});
 

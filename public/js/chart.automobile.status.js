@@ -13,8 +13,8 @@ function getautomobileStatus(callback){
 		available_automobile=0;
 
 		for(var x=0;x<data.length;x++){
-			if(data[x].status=='in_use') in_use_automobile++;
-			if(data[x].status=='under_maintenance') under_maintenance_automobile++;
+			if(data[x].status=='in_use'||data[x].status=='under_maintenance') in_use_automobile++;
+			//if(data[x].status=='under_maintenance') under_maintenance_automobile++;
 			if(data[x].status=='available') available_automobile++;
 		}
 

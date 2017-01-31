@@ -42,6 +42,11 @@ Route::get('/travel/official/preview/{id}',function($id){
 	return View::make('travel/official/tr-preview',array('id'=>$id));
 });
 
+#preview
+Route::get('/automobile-preview/{id}',function($id){
+	return View::make('layouts/automobile-preview',array('id'=>$id));
+});
+
 
 
 #official form

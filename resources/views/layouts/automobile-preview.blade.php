@@ -8,7 +8,7 @@
 	<div class="col col-md-4 col-sm-5 col-xs-12">
 		<dl class="dl-horizontal preview-dl vehicle-menu">
 			<dt><b>Menu</b></dt>
-			<dd><a href="#" data-content="automobile/info" onload="event.click();">Vehicle Information</a></dd>
+			<dd><a href="#" data-content="automobile/info" id="preview-vehicle-info">Vehicle Information</a></dd>
 			<dd><a href="#" data-content="automobile/gasoline">Gasoline</a></dd>
 			<dd><a href="#" data-content="automobile/maintenance">Maintenance</a></dd>
 			<dd><a href="#" data-content="automobile/ledger">Maintenance Ledger</a></dd>
@@ -22,10 +22,3 @@
 	<div class="col col-md-8 col-sm-7 col-xs-12 modal-subcontent"></div>
 </div>
 
-<script type="text/javascript">
-$(document).ready(function(){
-	$('.vehicle-menu dd a').click(function(){
-		$('.modal-subcontent').load($(this).attr('data-content'))
-	})
-})
-</script>
