@@ -16,6 +16,7 @@
 */
 var staff_list={};
 var scholar_list={};
+var car_list={};
 
 
 
@@ -49,6 +50,16 @@ function ajax_getScholarList(page=1,callback){
 	})
 
 }
+
+
+function ajax_getAutmobileList(page=1,callback){
+
+	$.get('automobile/'+page,function(json){
+		car_list=JSON.parse(json);
+		callback(json)
+	})
+}
+
 
 
 
@@ -85,6 +96,9 @@ function ajax_searchScholarList(param,page=1,callback){
 	})
 
 }
+
+
+
 
 
 

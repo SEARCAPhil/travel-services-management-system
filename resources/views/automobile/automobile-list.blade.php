@@ -8,6 +8,7 @@
 		</div>
 	</div>
 <script type="text/javascript" src="js/common.js"></script>	
+<script type="text/javascript" src="js/directory.js"></script>	
 <script type="text/javascript">
 var selectedAutomobile;
 function modalOpen(target){
@@ -28,12 +29,6 @@ function modalClose(){
 	return this;
 }
 
-function ajax_getAutmobileList(page=1,callback){
-
-	$.get('automobile/'+page,function(json){
-		callback(json)
-	})
-}
 
 $(document).ready(function(){
 

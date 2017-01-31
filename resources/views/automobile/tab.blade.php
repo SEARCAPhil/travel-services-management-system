@@ -39,9 +39,9 @@
 			</center>
 			<div class="col col-md-10 col-sm-10 col-xs-10 col-md-offset-2 col-sm-offset-2 col-xs-offset-2 "><br/>
 				<ul class="list-unstyled status-indicator">
-					<li class="col col-md-4"><div class="status-box blue">20</div>Automobile</li>
-					<li class="col col-md-4"><div class="status-box green">5</div>Available Cars</li>
-					<li class="col col-md-4"><div class="status-box red">30</div>Unavailable</li>
+					<li class="col col-md-4"><div class="status-box blue"></div>Automobile</li>
+					<li class="col col-md-4"><div class="status-box green"></div>Available Cars</li>
+					<li class="col col-md-4"><div class="status-box red"></div>Unavailable</li>
 				</ul>
 			</div>
 		</div>
@@ -135,42 +135,9 @@
 @section('script')
 
 <script type="text/javascript" src="js/Chart.min.js"></script>
-<script>
-//global function
-function previewLoadingEffect(){
-	$('.preview-content').css({opacity:'0.3','user-select':'none'});
-	$('.preview-content').append('<img src="img/loading.png" class="loading-circle" style="width: 80px !important;top:20%;" />');
-}
+<script type="text/javascript" src="js/directory.js"></script>
+<script type="text/javascript" src="js/chart.automobile.status.js"></script>
 
-function previewLoadingEffect(panel){
-	$(panel).css({opacity:'0.3','user-select':'none'});
-	$(panel).append('<img src="img/loading.png" class="loading-circle" style="width: 80px !important;top:50%;" />');
-}
-
-function previewLoadingEffectFade(panel){
-	$(panel).css({opacity:'1','user-select':'auto'});
-}
-
-$(document).ready(function(){
-	 $(".automobile-tab").on('click',function(){
-	 	var target=$(this).attr('href');
-
-	 	var panel=document.querySelector(target);
-	 	previewLoadingEffect(panel)
-	 	$(panel).load($(this).attr('data-page'),function(){
-	 		previewLoadingEffectFade(panel)
-	 	})
-
-	 	
-	 })
-
-
-	 //preselect first child
-	 $('.automobile-tab')[0].click()
-})
-
-
-</script>
 
 @stop
 
@@ -178,32 +145,49 @@ $(document).ready(function(){
 @section('status-script')
 
 	<script>
-	var ctx = document.getElementById("myChart");
-	 Chart.defaults.global.legend.display = false;
-	var data = {
-	    labels:['Total number of automobile','Available','Unavailable'],
-	    datasets: [
-	        {
-	            data: [300, 50, 100],
-	            backgroundColor: [
-	                "rgb(32,122,199)",
-	                "rgb(32,199,150)",
-	                "rgb(255,82,87)"
-	            ],
-	            hoverBackgroundColor: [
-	                "#FF6384",
-	                "#36A2EB",
-	                "#FFCE56"
-	            ]
-	        }]
-	};
+$(document).ready(function(){
 
-	// And for a doughnut chart
-	var myDoughnutChart = new Chart(ctx, {
-	    type: 'doughnut',
-	    data: data,
-	   
+
+	getautomobileStatus(function(){
+		var ctx = document.getElementById("myChart");
+		Chart.defaults.global.legend.display = false;
+		var data = {
+		    labels:['Total number of automobile','Available','Unavailable'],
+		    datasets: [
+		        {
+		            data: [total_automobile, available_automobile, under_maintenance_automobile],
+		            backgroundColor: [
+		                "rgb(32,122,199)",
+		                "rgb(32,199,150)",
+		                "rgb(255,82,87)"
+		            ],
+		            hoverBackgroundColor: [
+		                "#FF6384",
+		                "#36A2EB",
+		                "#FFCE56"
+		            ]
+		        }]
+		};
+
+		// And for a doughnut chart
+		var myDoughnutChart = new Chart(ctx, {
+		    type: 'doughnut',
+		    data: data,
+		   
+		});
+
+
+		//status box
+		$('.status-box.blue').html(total_automobile)
+		$('.status-box.green').html(available_automobile)
+		$('.status-box.red').html(under_maintenance_automobile)
+
 	});
+
+
+
+	
+})
 
 	</script>
 @stop
