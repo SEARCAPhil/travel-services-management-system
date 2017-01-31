@@ -402,3 +402,8 @@ Route::post('/automobile/oil/{id}',['uses'=>'Automobile@create_oil']);
 
 #gasoline
 Route::post('/automobile/gasoline/{id}',['uses'=>'Automobile@create_gasoline']);
+Route::get('/automobile/gasoline/ledger/{id}/{year}/{month}',['uses'=>'Automobile@view_gasoline_ledger']);
+
+#ledger
+Route::get('/automobile/maintenance/ledger/{id}/{year}/{month}',['uses'=>'Automobile@view_ledger']);
+

@@ -1,35 +1,52 @@
 	<div>
 		<h1 style="color:#ff9933"><span class="glyphicon glyphicon-menu-right"></span>Ledger</h1>
 		<div class="col col-md-12 ">
-			<h3 class="pull-right">
-				<span class="text-muted">
-					<span prev-year=""><span class="glyphicon glyphicon-menu-left"></span></span>
-				</span> 
-				<span class="text-muted ng-binding"  next-year=""><span class="glyphicon glyphicon-calendar"></span> 2016 </span>
+			<div class="col col-md-3">
+				<select class="form-control" id="ledger-date">
+					<option>2017</option>
+					<option>2016</option>
+					<option>2015</option>
+					<option>2014</option>
 
-				<span class="text-muted">
-					<span next-year=""> <span class="glyphicon glyphicon-menu-right"></span></span>
-				</span>
-			</h3>
+				</select>
+			</div>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
 		</div>
+		<div class="col col-md-12 "><br/><div style="border:1px solid rgb(45,45,45)"></div><br/></div>
 
-		<section class="col col-md-11 ng-scope" ng-repeat="(key,value) in months" ledger="6" data-year="2016" style="display: block;">
-			<h2 class="page-header ng-binding"  style="color:#ff9933">June</h2>
-			<div class="ledgerContent ng-scope"><div class="table-fluid">
-				<table class="ledgerContentTable table table-striped gasSpan ">
-					<thead><tr><th>Date</th><th>Automobile</th> <th>PARTICULARS (work done)</th> <th>Details</th> <th>Amount</th><th>Repair Shop/Gasoline Station</th></tr></thead>
-					<tbody>
-						<!-- ngRepeat: item in ledger[6].items -->
-						<tr ng-repeat="item in ledger[6].items" context="9" data-selection="repair" data-menu="listMenu" class="ng-scope"><td class="ng-binding">2016-06-08 15:17:34</td>
-							<td><a href="#/sys/mobile/cust/1598fd/info" class="ng-binding">1598fd</a></td> 
-							<td class="ng-binding">horn</td> 
-							<td class="ng-binding">not working</td> 
-							<td class="ng-binding">Php 5,000.00</td> 
-							<td class="ng-binding"></td>
-						</tr>
-					</tbody>
-				</table>
-				<span class="pull-right"> &nbsp;&nbsp; <span class="btn btn-sm btn-default" print-ledger="6"><span class="glyphicon glyphicon-print"></span> print </span></span> <p class="pull-right ng-binding"> Total amount : Php 10,850.00 </p></div></div>
+		<section class="col col-md-11 monthly-ledger January"  style="display: block;" id="1"></section>
+		<section class="col col-md-11 monthly-ledger February"  style="display: block;" id="2"></section>
+		<section class="col col-md-11 monthly-ledger March"  style="display: block;" id="3"></section>
+		<section class="col col-md-11 monthly-ledger April"  style="display: block;" id="4"></section>
+		<section class="col col-md-11 monthly-ledger May"  style="display: block;" id="5"></section>
+		<section class="col col-md-11 monthly-ledger June"  style="display: block;" id="6"></section>
+		<section class="col col-md-11 monthly-ledger July"  style="display: block;" id="7"></section>
+		<section class="col col-md-11 monthly-ledger August"  style="display: block;" id="8"></section>
+		<section class="col col-md-11 monthly-ledger September"  style="display: block;" id="9"></section>
+		<section class="col col-md-11 monthly-ledger October"  style="display: block;" id="10"></section>
+		<section class="col col-md-11 monthly-ledger November"  style="display: block;" id="11"></section>
+		<section class="col col-md-11 monthly-ledger December"  style="display: block;" id="11"></section>
+
+		<section class="col col-md-11"  style="display: block;">
+
+
+
+
+
 		</section>
 
 	</div>
+<script type="text/javascript" src="js/ledger.maintenance.js"></script>	
+<script type="text/javascript">
+
+$(document).ready(function(){
+	var plate_no=($(selectedAutomobile).attr('data-content'))
+
+	bindMaintenanceLedger(plate_no,new Date().getFullYear())
+
+	$('#ledger-date').change(function(){
+		bindMaintenanceLedger(plate_no,$(this).val())
+	})
+})	
+</script>
+

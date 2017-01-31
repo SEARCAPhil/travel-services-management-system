@@ -153,4 +153,118 @@ class Automobile extends Controller
 
 	}
 
+
+	function view_ledger($plate_no,$year=' ',$month=''){
+
+
+ 		try{
+
+ 			$this->pdoObject=DB::connection()->getPdo();
+ 			$this->plate_no=htmlentities(htmlspecialchars($plate_no));
+ 			$this->month=htmlentities(htmlspecialchars($month));
+ 			$this->year=htmlentities(htmlspecialchars($year))==' '?date('Y'):htmlentities(htmlspecialchars($year));
+ 			
+ 		
+			#for update only
+						
+			$insert_sql="SELECT *  FROM automobile_repair where plate_no=:plate_no and DATE_FORMAT(date_created,'%c')=:month and DATE_FORMAT(date_created,'%Y')=:year  ORDER BY date_created";
+			$sql="SELECT *  FROM automobile_oil where plate_no=:plate_no and DATE_FORMAT(date_created,'%c')=:month and DATE_FORMAT(date_created,'%Y')=:year  ORDER BY date_created";
+			
+			#prepare sql first
+			$insert_statement=$this->pdoObject->prepare($insert_sql);
+			$insert_statement->bindParam(':plate_no',$this->plate_no);
+			$insert_statement->bindParam(':month',$this->month);
+			$insert_statement->bindParam(':year',$this->year);
+			
+			#prepare sql first
+			$sth=$this->pdoObject->prepare($sql);
+			$sth->bindParam(':plate_no',$this->plate_no);
+			$sth->bindParam(':month',$this->month);
+			$sth->bindParam(':year',$this->year);
+
+			#exec the transaction
+			$insert_statement->execute();
+			$sth->execute();
+
+			$res=Array();
+			$item=$item2=Array();
+			$amount=$amount2=0;
+			while($row=$insert_statement->fetch(\PDO::FETCH_OBJ)){
+				$item[]=Array('date_created'=>$row->date_created,'item'=>$row->item,'amount'=>number_format($row->amount,2,'.',','),'details'=>$row->details,'id'=>$row->id,'type'=>'repair','plate_no'=>$row->plate_no,'station'=>$row->station);
+				$amount+=$row->amount;
+				
+			}
+
+			while($row2=$sth->fetch(\PDO::FETCH_OBJ)){
+				$item2[]=Array('date_created'=>$row2->date_created,'item'=>'change oil : '.$row2->oil_type,'amount'=>number_format($row2->amount,2,'.',','),'details'=>$row2->mileage.' km','id'=>$row2->id,'type'=>'oil','plate_no'=>$row2->plate_no,'station'=>$row2->station);
+				$amount2+=$row2->amount;
+				
+			}
+
+			$itemMerged=array_merge($item,$item2);
+			$totalAmount=$amount+$amount2;
+
+
+			$res[]=Array('grand_total'=>number_format($totalAmount,2,'.',','),'items'=>$itemMerged);
+			
+	
+
+			#return
+			return json_encode($res);
+			
+
+
+		}catch(Exception $e){ echo $e->getMessage();}
+
+
+
+	}
+
+	function view_gasoline_ledger($plate_no,$year=' ',$month=''){
+
+		
+
+ 		try{
+ 			$this->pdoObject=DB::connection()->getPdo();
+ 			$this->plate_no=htmlentities(htmlspecialchars($plate_no));
+ 			$this->month=htmlentities(htmlspecialchars($month));
+ 			$this->year=htmlentities(htmlspecialchars($year))==' '?date('Y'):htmlentities(htmlspecialchars($year));
+
+			
+			$insert_sql="SELECT * FROM automobile_refuel where plate_no=:plate_no and DATE_FORMAT(date_created,'%c')=:month and DATE_FORMAT(date_created,'%Y')=:year  ORDER BY date_created";
+			
+			#prepare sql first
+			$insert_statement=$this->pdoObject->prepare($insert_sql);
+			$insert_statement->bindParam(':plate_no',$this->plate_no);
+			$insert_statement->bindParam(':month',$this->month);
+			$insert_statement->bindParam(':year',$this->year);
+			#exec the transaction
+			$insert_statement->execute();
+
+			$res=Array();
+			$result='';
+			$amount=0;
+			while($row=$insert_statement->fetch(\PDO::FETCH_OBJ)){
+
+				$res[]=Array('id'=>$row->id,'plate_no'=>$row->plate_no,'date_created'=>date('m/d/y',strtotime($row->date_created)),'liters'=>$row->liters,'amount'=>number_format($row->amount, 2, '.', ''),'receipt'=>$row->receipt,'station'=>ucfirst($row->station));
+				$amount+=$row->amount;
+			}
+			
+			
+			$result=Array('grand_total'=>number_format($amount,2,'.',','),'items'=>$res);
+
+			#return
+			return json_encode($result);
+			
+
+
+		}catch(Exception $e){ echo $e->getMessage();}
+
+
+
+	}
+
+
+
+
 }
