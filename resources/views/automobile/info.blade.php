@@ -1,54 +1,22 @@
 
 	<div>
 		<h1 style="color:#ff9933"><span class="glyphicon glyphicon-menu-right"></span> Information</h1>
-		<p>Plate number : 1598fd</p>
+		<p>Plate number : <span id="plate_number" style="color:#ff9933"></span></p>
 
-		<p>Current Mileage Reading : 0 km</p>
+		<p>Brand/Make/Model : <span id="brand" style="color:#ff9933"></span></p>
 
-		<p>Brand/Make/Model : Toyota Camry LE</p>
-
-		<p>Color :</p>
+		<p>Color : <input type="color" id="color" style="border:none !important;-webkit-appearance:none !important;" /></p>
 	</div>
 
 	<canvas id="myChart3" width="400" height="250"></canvas>
+<script type="text/javascript" src="js/chart.info.js"></script>
+<script>
+$(document).ready(function(){
 
-	<script>
-var ctx3 = document.getElementById("myChart3");
-var data3 = {
-    labels:months,
-};
+	for(var y=2015;y<2018;y++){
+		show_automobileExpenses(plate_no,y);
+	}
 
-
-data3.datasets= [
-				
-				{
-					label: statData[0].total.year + " outlay",
-					backgroundColor:'rgba(255,255,255, 0.8)',
-            		data:[statData[0].data[0].jan.amount,statData[0].data[0].feb.amount,statData[0].data[0].mar.amount,statData[0].data[0].apr.amount,statData[0].data[0].may.amount,statData[0].data[0].jun.amount,statData[0].data[0].jul.amount,statData[0].data[0].aug.amount,statData[0].data[0].sep.amount,statData[0].data[0].oct.amount,statData[0].data[0].nov.amount,statData[0].data[0].dec.amount]
-					
-				},
-				{
-					label: statData[1].total.year+ " outlay",
-           			backgroundColor:'rgba(0,150,150, 0.8)',
-            		data:[statData[1].data[0].jan.amount,statData[1].data[0].feb.amount,statData[1].data[0].mar.amount,statData[1].data[0].apr.amount,statData[1].data[0].may.amount,statData[1].data[0].jun.amount,statData[1].data[0].jul.amount,statData[1].data[0].aug.amount,statData[1].data[0].sep.amount,statData[1].data[0].oct.amount,statData[1].data[0].nov.amount,statData[1].data[0].dec.amount]
-					
-				}
-				,
-				{
-					label: statData[2].total.year+ " outlay",
-					backgroundColor:'rgba(255, 150, 0, 0.9)',
-            		data:[statData[2].data[0].jan.amount,statData[2].data[0].feb.amount,statData[2].data[0].mar.amount,statData[2].data[0].apr.amount,statData[2].data[0].may.amount,statData[2].data[0].jun.amount,statData[2].data[0].jul.amount,statData[2].data[0].aug.amount,statData[2].data[0].sep.amount,statData[2].data[0].oct.amount,statData[2].data[0].nov.amount,statData[2].data[0].dec.amount]
-					
-				}
-				
-
-			]
-
-// And for a doughnut chart
-var c3 = new Chart(ctx3, {
-    type: 'line',
-    data: data3,
-   
-});
+})
 </script>
 

@@ -412,3 +412,7 @@ Route::get('/automobile/gasoline/ledger/{id}/{year}/{month}',['uses'=>'Automobil
 #ledger
 Route::get('/automobile/maintenance/ledger/{id}/{year}/{month}',['uses'=>'Automobile@view_ledger']);
 
+#expenses
+
+Route::get('/automobile/info/expenses/{id}/{year}/',['uses'=>'Automobile@view_expenses']);
+

@@ -13,8 +13,8 @@
 			<dd><a href="#" data-content="automobile/maintenance">Maintenance</a></dd>
 			<dd><a href="#" data-content="automobile/ledger">Maintenance Ledger</a></dd>
 		</dl>
-		<div class="col col-md-7 col-sm-6 col-xs-12 pull-right">
-			<img src="{{asset('img/brands/mitsubishiLogo.jpg')}}" width="100%">	
+		<div class="col col-md-7 col-sm-6 col-xs-12 pull-right" id="automobile-brand-logo">
+			<!--<img src="{{asset('img/brands/mitsubishiLogo.jpg')}}" width="100%">-->	
 		</div>
 		
 	</div>
