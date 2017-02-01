@@ -86,8 +86,14 @@ function appendIteneraryListPreviewConfirmation(){
 		var date_created=date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate();
 		var driver=$('#officialTravelDriver').val();
 
+		var tr_id=form_id
+
+		
+
+		if(typeof $(selectedElement).attr('id')!='undefined') tr_id=$(selectedElement).attr('id');
+
 		//JSON data
-		var data={"id":null,"tr_id":$(selectedElement).attr('id'),"res_id":null,"location":origin,"destination":destination,"departure_time":departure_time,"actual_departure_time":"00:00:00","returned_time":"00:00:00","departure_date":departure_date,"returned_date":"0000-00-00","status":"scheduled","plate_no":null,"driver_id":"0","linked":"no","date_created":date_created,driver_id:driver,_token:$('input[name=_token]').val()}
+		var data={"id":null,"tr_id":tr_id,"res_id":null,"location":origin,"destination":destination,"departure_time":departure_time,"actual_departure_time":"00:00:00","returned_time":"00:00:00","departure_date":departure_date,"returned_date":"0000-00-00","status":"scheduled","plate_no":null,"driver_id":"0","linked":"no","date_created":date_created,driver_id:driver,_token:$('input[name=_token]').val()}
 
 
 

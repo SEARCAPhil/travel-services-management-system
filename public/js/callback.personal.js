@@ -24,8 +24,13 @@ function appendStaffToListPreview(jsonData){
 
 	var data=JSON.parse(jsonData)
 
+	var id=form_id
+	if(typeof $(selectedElement).attr('id')!='undefined'){
+		id=$(selectedElement).attr('id')
+	}
+
 	//ajax here
-	$.post('api/directory/personal/staff',{id:$(selectedElement).attr('id'),_token:$('input[name=_token]').val(),uid:data.uid},function(res){
+	$.post('api/directory/personal/staff',{id:id,_token:$('input[name=_token]').val(),uid:data.uid},function(res){
 
 		if(res>0){
 
