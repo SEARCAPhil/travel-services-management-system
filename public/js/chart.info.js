@@ -60,7 +60,7 @@
 
 				//change color
 				if(request_count==1) sets.backgroundColor='rgba(0,150,150, 0.8)';
-				if(request_count==2) sets.backgroundColor='rgba(255, 150, 0, 0.9)';
+				if(request_count==2) sets.backgroundColor='rgba(32,199,150,0.9)';
 
 				data3.datasets.push(sets)
 			
@@ -88,6 +88,12 @@
 			var c3 = new Chart(chart, {
 			    type: 'line',
 			    data: data3,
+			    options: {
+			        title: {
+			            display: true,
+			            text: 'Total Gasoline Expenses for the last 3 years'
+			        }
+			    },
 			    showTooltip: true,
                 multiTooltipTemplate : "<%%=datasetLabel%> : <%%=value%>"
            					   

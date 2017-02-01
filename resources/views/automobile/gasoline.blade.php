@@ -34,39 +34,8 @@
 	<section class="col col-md-11 monthly-ledger December"  style="display: block;" id="11"></section>
 
 </section>
+<script type="text/javascript" src="js/ledger.gasoline.js"></script>
 <script type="text/javascript">
-function formCompleted(){
-	$('#form').hide();
-	var htm=`<center>
-				<div style="width:60px;height:60px;background:rgb(0,200,150);color:rgb(255,255,255);border-radius:50%;text-align:center;overflow:hidden;font-size:3em;" class="text-success"><span class="glyphicon glyphicon-ok"></span></div>
-				<h3 class="text-success">Added Succefully!</h3>
-				<button class="btn btn-success" id="add-more">Add more + </button>
-			</center>`;
-	$('#form-status').html(htm)
-
-	$('#add-more').click(function(){
-		$('#form')[0].reset();
-		$('#form-status').html(' ');
-		$('#form').slideDown();
-
-	})
-}
-
-
-
-function ajax_postGasoline(liters,amount,receipt,station,plate_no,callback){
-	$.post('automobile/gasoline/'+plate_no,{_token:$('input[name=_token]').val(),liters:liters,amount:amount,receipt:receipt,station:station,plate_no:plate_no},function(data){
-					
-		if(data>0&&data.length<50){
-			callback(data)
-		}else{
-			alert('Something went wrog.Please try again later')
-		}
-	}).fail(function(){
-		alert('Something went wrog.Please try again later')
-	})
-}
-
 
 $(document).ready(function(){
 
@@ -81,7 +50,7 @@ $(document).ready(function(){
 			var plate_no=($(selectedAutomobile).attr('data-content'))
 
 			ajax_postGasoline(liters,amount,receipt,station,plate_no,function(){
-				formCompleted()
+				formCompleted(plate_no)
 			});
 
 		})
@@ -100,5 +69,5 @@ $(document).ready(function(){
 
 })
 </script>
-<script type="text/javascript" src="js/ledger.gasoline.js"></script>
+
 

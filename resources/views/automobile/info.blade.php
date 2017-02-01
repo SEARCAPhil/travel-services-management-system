@@ -6,6 +6,7 @@
 		<p>Brand/Make/Model : <span id="brand" style="color:#ff9933"></span></p>
 
 		<p>Color : <input type="color" id="color" style="border:none !important;-webkit-appearance:none !important;" /></p>
+
 	</div>
 
 	<canvas id="myChart3" width="400" height="250"></canvas>

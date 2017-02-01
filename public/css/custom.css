@@ -538,6 +538,7 @@ vertical-align: text-bottom;
 }
 
 /*override modal design*/
+.modal{ z-index: 5050 !important; }
 .modal-content{
 	border-radius: 4px;
 	-webkit-border-radius: 4px;

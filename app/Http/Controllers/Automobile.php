@@ -394,6 +394,67 @@ class Automobile extends Controller
 	}
 
 
+	 function destroy_parts($id){
+		
+		try{
+
+				$this->id=htmlentities(htmlspecialchars($id));
+				$this->pdoObject=DB::connection()->getPdo();
+				$sql="DELETE FROM automobile_repair where id=:id";
+				$statement=$this->pdoObject->prepare($sql);
+				$statement->bindParam(':id',$this->id);
+				$statement->execute();
+				$is_removed=$statement->rowCount();
+			
+				return $is_removed;
+
+		}catch(Exception $e){echo $e->getMessage();}
+
+
+	}
+
+
+
+
+	 function destroy_oil($id){
+		
+		try{
+
+				$this->id=htmlentities(htmlspecialchars($id));
+				$this->pdoObject=DB::connection()->getPdo();
+				$sql="DELETE FROM automobile_oil where id=:id";
+				$statement=$this->pdoObject->prepare($sql);
+				$statement->bindParam(':id',$this->id);
+				$statement->execute();
+				$is_removed=$statement->rowCount();
+			
+				return $is_removed;
+
+		}catch(Exception $e){echo $e->getMessage();}
+
+
+	}
+
+	 function destroy_gasoline($id){
+		
+		try{
+
+				$this->id=htmlentities(htmlspecialchars($id));
+				$this->pdoObject=DB::connection()->getPdo();
+				$sql="DELETE FROM automobile_refuel where id=:id";
+				$statement=$this->pdoObject->prepare($sql);
+				$statement->bindParam(':id',$this->id);
+				$statement->execute();
+				$is_removed=$statement->rowCount();
+			
+				return $is_removed;
+
+		}catch(Exception $e){echo $e->getMessage();}
+
+
+	}
+
+
 
 
 }

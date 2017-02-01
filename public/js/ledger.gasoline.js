@@ -7,6 +7,69 @@ function ajax_getGasolineLedger(plate_no,year,month,callback){
 
 }
 
+function ajax_removeGasoline(id,callback){
+	$.ajax({
+
+		url:'automobile/gasoline/'+id,
+		method:'DELETE',
+		data: { _token: $("input[name=_token]").val(),id:id},
+		success:function(data){
+			if(data==1){
+				callback(data)
+			}else{
+				alert('Oops! Something went wrong.Try to refresh the page')
+			}
+		},error:function(){
+			$('#preview-modal').modal('hide');
+			alert('Oops! Something went wrong.Try to refresh the page')
+		}
+	})
+
+
+}
+
+
+function ajax_postGasoline(liters,amount,receipt,station,plate_no,callback){
+	$.post('automobile/gasoline/'+plate_no,{_token:$('input[name=_token]').val(),liters:liters,amount:amount,receipt:receipt,station:station,plate_no:plate_no},function(data){
+					
+		if(data>0&&data.length<50){
+			callback(data)
+		}else{
+			alert('Something went wrog.Please try again later')
+		}
+	}).fail(function(){
+		alert('Something went wrog.Please try again later')
+	})
+}
+
+
+
+function formCompleted(plate_no){
+	$('#form').hide();
+	var htm=`<center>
+				<div style="width:60px;height:60px;background:rgb(0,200,150);color:rgb(255,255,255);border-radius:50%;text-align:center;overflow:hidden;font-size:3em;" class="text-success"><span class="glyphicon glyphicon-ok"></span></div>
+				<h3 class="text-success">Added Succefully!</h3>
+				<button class="btn btn-success" id="add-more">Add more + </button>
+			</center>`;
+	$('#form-status').html(htm)
+
+	$('#add-more').click(function(){
+		$('#form')[0].reset();
+		$('#form-status').html(' ');
+		$('#form').slideDown();
+
+	})
+
+	//refresh section fo this month
+	var date=new Date();
+	var year=date.getFullYear();
+	var month=date.getMonth();
+
+	showGasolineLedger(plate_no,year,month+1)
+}
+
+
+
 function showGasolineLedger(plate_no,year,month){
 
 	var months=['January', 'February', 'March', 'April','May', 'June', 'July', 'August', 'September','October', 'November', 'December'];
@@ -18,10 +81,6 @@ function showGasolineLedger(plate_no,year,month){
 	ajax_getGasolineLedger(plate_no,year,month,function(json){
 		var data=JSON.parse(json);
 		var items=data.items	
-
-
-
-
 
 		var htm=`
 				<h3 style="color:#f39c12;">`+months[month-1]+`</h3>
@@ -58,7 +117,7 @@ function showGasolineLedger(plate_no,year,month){
 						<td class="">`+items[y].station+`</td>
 						<td class="">`+items[y].receipt+`</td> 
 						<td>
-							<span class="glyphicon glyphicon-remove text-muted"></span>
+							<span class="glyphicon glyphicon-remove remove-ledger-item text-muted" data-content="`+items[y].id+`" data-amount="`+items[y].amount+`" data-month="`+month+`"></span>
 						</td>
 					</tr>`;
 
@@ -71,7 +130,7 @@ function showGasolineLedger(plate_no,year,month){
 						</table>
 						<span class="pull-right"> &nbsp;&nbsp; 
 							<span class="btn btn-xs btn-default" print-ledger="6"><span class="glyphicon glyphicon-print"></span> print </span></span> 
-							<p class="pull-right ng-binding"> Total amount : <span style="color:rgb(32,199,150);">Php `+data.grand_total+`<span> </p>
+							<p class="pull-right ng-binding"> Total amount : <span style="color:rgb(32,199,150);">Php <span id="total-`+month+`">`+data.grand_total+`</span><span> </p>
 					</div>
 				</div>
 			`;
@@ -80,13 +139,58 @@ function showGasolineLedger(plate_no,year,month){
 
 			if(items.length>0){
 				$('#'+month).html(htm)
-			}else{
-				/*var htm=`
-					<div style="width:100%;background:rgb(70,70,70);margin-bottom:20px;margin-top:10px;padding:2px;text-align:center;color:rgb(180,180,180);opacity:0.2;"><h3>`+months[month-1]+`</h3></div>
-
-				`;
-				$('#'+month).html(htm)*/
 			}
+
+
+			$('.remove-ledger-item').off('click');
+			$('.remove-ledger-item').on('click',function(){
+				var target=this
+				showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/remove',function(){
+					//remove
+					$('.modal-submit').click(function(){
+
+						var id=$(target).attr('data-content')
+						var month=$(target).attr('data-month')
+						var amount=$(target).attr('data-amount')
+
+						var total_amount=$('#total-'+month).html();
+
+						//remove , from number
+						var total=total_amount.split(',');
+						var parsed_total="";
+						for(let x of total){
+							parsed_total+=x;
+
+						}
+
+
+						
+						var updated_amount=(parseFloat(parsed_total))-(parseFloat(amount));
+
+						
+
+						$('.modal-body').html('Removing . . .')
+
+
+							ajax_removeGasoline(id,function(){
+
+								$('.modal-body').html('<h3 class="text-success">Deleted Successfully! <span class="glyphicon glyphicon-ok"></span></h3>')
+								$(target).parent().parent().fadeOut();
+
+								console.log(updated_amount)
+
+								//update amount
+								$('#total-'+month).html(updated_amount);
+
+								setTimeout(function(){ $('#preview-modal').modal('hide'); },1000);
+							})
+
+						
+					})
+
+				})
+			})
+
 			
 
 

@@ -6,6 +6,51 @@ function ajax_getMaintenanceLedger(plate_no,year,month,callback){
 
 }
 
+function ajax_removeParts(id,callback){
+	$.ajax({
+
+		url:'automobile/replace/'+id,
+		method:'DELETE',
+		data: { _token: $("input[name=_token]").val(),id:id},
+		success:function(data){
+			if(data==1){
+				callback(data)
+			}else{
+				alert('Oops! Something went wrong.Try to refresh the page')
+			}
+		},error:function(){
+			$('#preview-modal').modal('hide');
+			alert('Oops! Something went wrong.Try to refresh the page')
+		}
+	})
+
+
+}
+
+
+function ajax_removeOil(id,callback){
+	$.ajax({
+
+		url:'automobile/oil/'+id,
+		method:'DELETE',
+		data: { _token: $("input[name=_token]").val(),id:id},
+		success:function(data){
+			if(data==1){
+				callback(data)
+			}else{
+				alert('Oops! Something went wrong.Try to refresh the page')
+			}
+		},error:function(){
+			$('#preview-modal').modal('hide');
+			alert('Oops! Something went wrong.Try to refresh the page')
+		}
+	})
+
+
+}
+
+
+
 function showMaintenanceLedger(plate_no,year,month){
 
 	var months=['January', 'February', 'March', 'April','May', 'June', 'July', 'August', 'September','October', 'November', 'December'];
@@ -45,7 +90,7 @@ function showMaintenanceLedger(plate_no,year,month){
 						<td class="" style="color:rgb(32,199,150);">`+items[y].amount+`</td> 
 						<td class="">`+items[y].station+`</td>
 						<td>
-							<span class="glyphicon glyphicon-remove text-muted"></span>
+							<span class="glyphicon glyphicon-remove text-muted remove-ledger-item" data-type="`+items[y].type+`" data-content="`+items[y].id+`" data-amount="`+items[y].amount+`" data-month="`+month+`"></span>
 						</td>
 					</tr>`;
 
@@ -58,7 +103,7 @@ function showMaintenanceLedger(plate_no,year,month){
 						</table>
 						<span class="pull-right"> &nbsp;&nbsp; 
 							<span class="btn btn-xs btn-default" print-ledger="6"><span class="glyphicon glyphicon-print"></span> print </span></span> 
-							<p class="pull-right ng-binding"> Total amount : <span style="color:rgb(32,199,150);">Php `+data[0].grand_total+`<span> </p>
+							<p class="pull-right ng-binding"> Total amount : <span style="color:rgb(32,199,150);">Php <span id="total-`+month+`">`+data[0].grand_total+`</span><span> </p>
 					</div>
 				</div>
 			`;
@@ -76,6 +121,71 @@ function showMaintenanceLedger(plate_no,year,month){
 			}
 			
 
+			$('.remove-ledger-item').off('click');
+			$('.remove-ledger-item').on('click',function(){
+				var target=this
+				showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/remove',function(){
+					//remove
+					$('.modal-submit').click(function(){
+						var type=$(target).attr('data-type')
+						var id=$(target).attr('data-content')
+						var id=$(target).attr('data-content')
+						var month=$(target).attr('data-month')
+						var amount=$(target).attr('data-amount')
+
+						var total_amount=$('#total-'+month).html();
+
+						//remove , from number
+						var total=total_amount.split(',');
+						var parsed_total="";
+						for(let x of total){
+							parsed_total+=x;
+
+						}
+
+
+						
+						var updated_amount=parseFloat((parseFloat(parsed_total))-(parseFloat(amount)));
+
+
+						$('.modal-body').html('Removing . . .')
+
+						//repair
+						if(type=='repair'||type=='replace'){
+							ajax_removeParts(id,function(){
+								$('.modal-body').html('<h3 class="text-success">Deleted Successfully! <span class="glyphicon glyphicon-ok"></span></h3>')
+								$(target).parent().parent().fadeOut();
+
+
+								//update amount
+								$('#total-'+month).html(updated_amount);
+
+								setTimeout(function(){ $('#preview-modal').modal('hide'); },1000);
+							})
+
+						}
+
+
+						//oil
+						if(type=='oil'){
+							ajax_removeOil(id,function(){
+								$('.modal-body').html('<h3 class="text-success">Deleted Successfully! <span class="glyphicon glyphicon-ok"></span></h3>')
+								$(target).parent().parent().fadeOut();
+
+								//update amount
+								$('#total-'+month).html(updated_amount);
+
+								setTimeout(function(){ $('#preview-modal').modal('hide'); },1000);
+							})
+
+						}
+
+						
+						
+					})
+
+				})
+			})
 
 
 	})

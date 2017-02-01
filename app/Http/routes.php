@@ -398,16 +398,19 @@ Route::get('/automobile/{id}',['uses'=>'Automobile@index']);
 
 #replace parts
 Route::post('/automobile/replace/{id}',['uses'=>'Automobile@create_replace_parts']);
+Route::delete('/automobile/replace/{id}',['uses'=>'Automobile@destroy_parts']);
 
 #repair parts
 Route::post('/automobile/repair/{id}',['uses'=>'Automobile@create_repair_parts']);
 
 #oil
 Route::post('/automobile/oil/{id}',['uses'=>'Automobile@create_oil']);
+Route::delete('/automobile/oil/{id}',['uses'=>'Automobile@destroy_oil']);
 
 #gasoline
 Route::post('/automobile/gasoline/{id}',['uses'=>'Automobile@create_gasoline']);
 Route::get('/automobile/gasoline/ledger/{id}/{year}/{month}',['uses'=>'Automobile@view_gasoline_ledger']);
+Route::delete('/automobile/gasoline/{id}',['uses'=>'Automobile@destroy_gasoline']);
 
 #ledger
 Route::get('/automobile/maintenance/ledger/{id}/{year}/{month}',['uses'=>'Automobile@view_ledger']);
