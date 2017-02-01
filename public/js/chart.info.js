@@ -1,4 +1,6 @@
 
+	var months=['January', 'February', 'March', 'April','May', 'June', 'July', 'August', 'September','October', 'November', 'December'];
+
 	var plate_no=($(selectedAutomobile).attr('data-content'))
 
 	var statData=Array();

@@ -49,6 +49,9 @@ $(document).ready(function(){
 	ajax_getAutmobileList(1,function(json){
 
 		var auto=JSON.parse(json);
+		var priv=(window.localStorage.getItem('priv'));
+
+
 		for(var x=0;x<auto.length;x++){
 
 				var automobile_json=JSON.stringify(auto[x]);
@@ -56,7 +59,10 @@ $(document).ready(function(){
 				console.log(auto[x].brand)
 				var brand=auto[x].brand.length>1?auto[x].brand:'<br/>';
 				var is_unavailable=auto[x].status=='in_use'||auto[x].status=='under_maintenance'?'active':'';
-				var htm=`<div class="col col-md-3 col-sm-4 col-xs-6 " onclick="modalOpen(this)" data-content="`+auto[x].id+`" data-json='`+automobile_json+`'><div class="automobile-list-item">
+				var click_event_for_admin=priv=='admin'?'modalOpen(this)':'';
+
+
+				var htm=`<div class="col col-md-3 col-sm-4 col-xs-6 " onclick="`+click_event_for_admin+`" data-content="`+auto[x].id+`" data-json='`+automobile_json+`'><div class="automobile-list-item">
 				    					<img src="/laravel/public/uploads/automobile/`+auto[x].image+`" onerror="this.src='/laravel/public/img/no-photo-available.jpg'"/>
 				    					<div class="col col-md-12">
 				    						<h4 class="page-header">`+brand+`</h4>
