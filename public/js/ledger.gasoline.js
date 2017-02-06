@@ -128,8 +128,7 @@ function showGasolineLedger(plate_no,year,month){
 
 			htm+=`				</tbody>
 						</table>
-						<span class="pull-right"> &nbsp;&nbsp; 
-							<span class="btn btn-xs btn-default" print-ledger="6"><span class="glyphicon glyphicon-print"></span> print </span></span> 
+
 							<p class="pull-right ng-binding"> Total amount : <span style="color:rgb(32,199,150);">Php <span id="total-`+month+`">`+data.grand_total+`</span><span> </p>
 					</div>
 				</div>
