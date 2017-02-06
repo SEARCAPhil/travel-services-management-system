@@ -102,7 +102,7 @@ function showMaintenanceLedger(plate_no,year,month){
 			htm+=`				</tbody>
 						</table>
 						<span class="pull-right"> &nbsp;&nbsp; 
-							<span class="btn btn-xs btn-default" print-ledger="6"><span class="glyphicon glyphicon-print"></span> print </span></span> 
+							<a href="automobile/maintenance/ledger/print/`+plate_no+`/`+year+`/`+month+`" target="_blank" class="btn btn-xs btn-default" print-ledger="6"><span class="glyphicon glyphicon-print"></span> print </a></span> 
 							<p class="pull-right ng-binding"> Total amount : <span style="color:rgb(32,199,150);">Php <span id="total-`+month+`">`+data[0].grand_total+`</span><span> </p>
 					</div>
 				</div>

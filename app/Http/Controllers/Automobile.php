@@ -452,7 +452,247 @@ class Automobile extends Controller
 		}catch(Exception $e){echo $e->getMessage();}
 
 
-	}
+	} 
+
+
+	function print_ledger($id,$year,$month){
+
+		global $idx;
+   		$idx=$id;
+
+   		$ledger=@json_decode(self::view_ledger($id,$year,$month));
+
+    	//get default settings from config/laravel-tcpdf.php
+   		$pdf_settings = \Config::get('laravel-tcpdf');
+
+   		$pdf = new \Elibyy\TCPDF\TCPdf('L', $pdf_settings['page_units'], array(210,297), true, 'UTF-8', false);
+   		
+   		
+
+   		// Custom Header
+		$pdf->setHeaderCallback(function($pdf) {
+			global $idx;
+			
+			// Title
+			// set cell margins
+			$pdf->setFontSize(8);
+			$pdf->Ln(10);
+			$pdf->setFontSize(9);
+			//$this->image("../model/img/Logo Searca.png",20,'',15);
+			//$this->Cell(0, 0, '<img src="../model/img/Logo Searca.png"/>', 0, 2, 'L', 0, '', 0, false, 'T', 'B');
+			//$this->Cell(0, 0, 'Southeast Asian Ministers of Education Organization', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
+			$pdf->Cell(0, 0, 'SOUTHEAST ASIAN REGIONAL CENTER FOR GRADUATE STUDY', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
+			$pdf->Cell(0, 0, ' AND RESEARCH IN AGRICULTURE', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
+			$pdf->Cell(0, 0, 'College, Laguna, 4031, Philippines', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
+			$pdf->setFontSize(15);
+			$pdf->Cell(0, 15, 'SEARCA Vehicle Travel Maintenance Ledger', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
+			$pdf->setFontSize(12);
+			$pdf->Cell(0, 0, $idx, 0, 2, 'C', 0, '', 0, false, 'T', 'B');
+
+
+
+		if ($pdf->getPage() <= $pdf->getAliasNumPage()) {
+			$pdf->SetY(-30);
+			$pdf->Writehtml($foot);
+		}
+
+
+
+		});
+
+		// Custom Footer
+		$pdf->setFooterCallback(function($pdf) {
+
+			$pdf->SetY(-50);
+			// Set font
+	        $pdf->SetFont('helvetica', 'N', 9);
+
+
+
+
+
+	        // Position at 15 mm from bottom
+	        $pdf->SetY(-15);
+	       	$pdf->SetFont('helvetica', 'I', 8);
+	        // Page number
+	        $pdf->Cell(0, 10, 'Page '.$pdf->getAliasNumPage().'/'.$pdf->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+
+	       
+
+
+  	  	});
+
+
+		//settings
+		// set margins
+		$pdf->SetMargins(PDF_MARGIN_LEFT, 50, PDF_MARGIN_RIGHT);
+
+	
+
+
+
+
+		
+	
+$html='
+	<div align="center">
+
+<table class="MsoNormalTable" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;mso-yfti-tbllook:1184;mso-padding-alt:0in 0in 0in 0in"> 
+ <tbody>
+ <tr style="mso-yfti-irow:0;mso-yfti-firstrow:yes">
+  <td width="60" rowspan="2" valign="top" style="width:36.3pt;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;">Date<o:p></o:p></span></b></p>
+  </td>
+  <td width="120" rowspan="2" valign="top" style="width:120.3pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;">Particulars (Work Done)<o:p></o:p></span></b></p>
+  </td>
+  <td width="60" rowspan="2" valign="top" style="width:92.95pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;">Job Request No.<o:p></o:p></span></b></p>
+  </td>
+  <td width="50" rowspan="2" valign="top" style="width:79.05pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;">PR No./TT No.<o:p></o:p></span></b></p>
+  </td>
+  <td width="40" rowspan="2" valign="top" style="width:.65in;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;">OV No.<o:p></o:p></span></b></p>
+  </td>
+  <td width="155" colspan="3" valign="top" style="width:2.2in;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;">O B L I G A T E D<o:p></o:p></span></b></p>
+  </td>
+  <td width="150" colspan="3" valign="top" style="width:2.2in;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;">EXPENDED<o:p></o:p></span></b></p>
+  </td>
+  <td width="70" rowspan="2" valign="top" style="width:100.05pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;">Variance in Amount<o:p></o:p></span></b></p>
+  </td>
+  <td width="72" rowspan="2" valign="top" style="width:54.3pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;">Remarks<o:p></o:p></span></b></p>
+  </td>
+ </tr>
+ <tr style="mso-yfti-irow:1">
+  <td width="50" valign="top" style="width:52.05pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;">Quantity<o:p></o:p></span></b></p>
+  </td>
+  <td width="50" valign="top" style="width:57.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;">Unit Price<o:p></o:p></span></b></p>
+  </td>
+  <td width="55" valign="top" style="width:49.05pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;">Amount<o:p></o:p></span></b></p>
+  </td>
+  <td width="50" valign="top" style="width:52.05pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;">Quantity<o:p></o:p></span></b></p>
+  </td>
+  <td width="50" valign="top" style="width:57.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;">Unit Price<o:p></o:p></span></b></p>
+  </td>
+  <td width="50" valign="top" style="width:49.05pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><b><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;">Amount<o:p></o:p></span></b></p>
+  </td>
+ </tr>';
+
+
+foreach ($ledger[0]->items as $key => $value) {
+				
+						
+
+$html.='<tr style="mso-yfti-irow:2"  nobr="true">
+  <td width="60" valign="top" style="width:36.3pt;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal"><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;">'.explode(' ',$value->date_created)[0].'</span></p>
+  </td>
+  <td width="120" valign="top" style="width:120.3pt;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal"><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;">'.$value->item.'</span></p>
+  </td>
+  <td width="60" valign="top" style="width:92.95pt;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal"><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;"><o:p>&nbsp;</o:p></span></p>
+  </td>
+  <td width="50" valign="top" style="width:79.05pt;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal"><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;"><o:p>&nbsp;</o:p></span></p>
+  </td>
+  <td width="40" valign="top" style="width:.65in;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal"><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;"><o:p>&nbsp;</o:p></span></p>
+  </td>
+  <td width="50" valign="top" style="width:52.05pt;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal"><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;"><o:p>&nbsp;</o:p></span></p>
+  </td>
+  <td width="50" valign="top" style="width:57.3pt;border-top:none;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal"><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;"><o:p>&nbsp;</o:p></span></p>
+  </td>
+  <td width="55" valign="top" style="width:49.05pt;border-top:none;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal"><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;"><o:p>&nbsp;</o:p></span></p>
+  </td>
+  <td width="50" valign="top" style="width:52.05pt;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal"><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;"><o:p>&nbsp;</o:p></span></p>
+  </td>
+  <td width="50" valign="top" style="width:57.3pt;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal"><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;"><o:p>&nbsp;</o:p></span></p>
+  </td>
+  <td width="50" valign="top" style="width:49.05pt;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal"><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;">'.$value->amount.'</span></p>
+  </td>
+  <td width="70" valign="top" style="width:100.05pt;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal"><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;"><o:p>&nbsp;</o:p></span></p>
+  </td>
+  <td width="72" valign="top" style="width:54.3pt;border-top:none;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal"><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;"><o:p>&nbsp;</o:p></span></p>
+  </td>
+ </tr>
+';
+
+}
+
+
+$html.='</tbody></table></div>';
+$html.='<p text-align="left"><span style="font-size:10.0pt;font-family:&quot;Helvetica Neue&quot;">Grand Total : <b>Php '.@$ledger[0]->grand_total.'</b></span></p>
+
+</article>';
+
+
+
+
+		
+		$pdf->setFontSize(8);	
+
+		//output
+        $pdf->AddPage('L');
+        $pdf->SetMargins(10,50,5,true);
+        $pdf->Writehtml($html);
+        $pdf->output('Travel Request', 'I');
+
+
+    }
 
 
 

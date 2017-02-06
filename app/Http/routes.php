@@ -414,6 +414,7 @@ Route::delete('/automobile/gasoline/{id}',['uses'=>'Automobile@destroy_gasoline'
 
 #ledger
 Route::get('/automobile/maintenance/ledger/{id}/{year}/{month}',['uses'=>'Automobile@view_ledger']);
+Route::get('/automobile/maintenance/ledger/print/{id}/{year}/{month}',['uses'=>'Automobile@print_ledger']);
 
 #expenses
 
