@@ -58,7 +58,7 @@
 
 
 			<div class="col col-md-12 preview-sections">
-				<p><div class="mini-circle"></div> <span class="pull-left"><b>Itenerary</b></span> 
+				<p><div class="mini-circle"></div> <span class="pull-left"><b>Itinerary</b></span> 
 				<span class="label label-success status-box status-box-mini green itenerary-count"> ? </span></p>
 				<div class="preview-itenerary">
 

@@ -40,7 +40,7 @@
 <div class="row preview-content">
 		<div class="col col-md-5 col-md-offset-2">
 			<ul class="list-unstyled preview-menu-li">
-				<li><strong>5691</strong>&emsp;<small>[R/W Mode]</small></li>
+				<li><strong></strong>&emsp;<small>[R/W Mode]</small></li>
 			</ul>
 			
 		</div>
@@ -84,7 +84,7 @@
 
 
 			<div class="col col-md-8  col-md-offset-2 preview-sections">
-				<p><div class="mini-circle"></div> <b>Itenerary</b> <span class="btn btn-success btn-xs" id="officialIteneraryButton" data-toggle="modal" data-target="#itenerary-modal"><span class="glyphicon glyphicon-map-marker"></span></span></p>
+				<p><div class="mini-circle"></div> <b>Itinerary</b> <span class="btn btn-success btn-xs" id="officialIteneraryButton" data-toggle="modal" data-target="#itenerary-modal"><span class="glyphicon glyphicon-map-marker"></span></span></p>
 				<div class="preview-itenerary">
 
 				</div>

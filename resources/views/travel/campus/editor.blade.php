@@ -61,7 +61,7 @@
 
 
 			<div class="col col-md-8  col-md-offset-2 preview-sections">
-				<p></p><div class="mini-circle"></div> <b>Itenerary</b>
+				<p></p><div class="mini-circle"></div> <b>Itinerary</b>
 				<span class="btn btn-success btn-xs" id="officialIteneraryButton" data-toggle="modal" data-target="#itenerary-modal"><span class="glyphicon glyphicon-map-marker"></span></span>
 					<div id="officialIteneraryStatus" class="text-muted" style="float:right;height:20px;width:250px;overflow: hidden;position:relative;"></div>
 				</p>

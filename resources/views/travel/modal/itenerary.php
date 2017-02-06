@@ -15,7 +15,7 @@
 			    	</div>
 			    	<div class="col col-md-12">
 			    		<div class="col col-md-12 col-sm-12">
-		            		<h3 class="ng-scope">Itenerary</h3>
+		            		<h3 class="ng-scope">Itinerary</h3>
 		            		<p class="ng-scope">Please fill up all fields below</p>
 		            	</div>
 			            <form class="form col col-md-10 col-sm-10 col-sm-offset-1 col-md-offset-1 text-left">

@@ -11,6 +11,8 @@ use App\Http\Controllers\Campus_itenerary;
 use App\Http\Controllers\Charge;
 
 use PDF;
+
+error_reporting(0);
 class Campus_printables extends Controller
 {
     

@@ -65,7 +65,7 @@
 		</div>
 		
 		<div class="col col-md-12 xs-12">
-			<div class="circle done">1<span class="circle-label">Itenerary<span></div>	
+			<div class="circle done">1<span class="circle-label">Itinerary<span></div>	
 			<div class="bar done"></div>	
 			<div class="circle finished-circle-group"><span class="glyphicon glyphicon-check"></span><span class="circle-label">Finished<span></div>
 
@@ -76,7 +76,7 @@
 
 
 			<div class="col col-md-12 preview-sections"><br/><br/><br/>
-				<p></p><div class="mini-circle"></div> <b>Itenerary</b>
+				<p></p><div class="mini-circle"></div> <b>Itinerary</b>
 				<span class="btn btn-success btn-xs" id="officialIteneraryButton" data-toggle="modal" data-target="#itenerary-modal"><span class="glyphicon glyphicon-map-marker"></span></span>
 					<div id="officialIteneraryStatus" class="text-muted" style="float:right;height:20px;width:250px;overflow: hidden;position:relative;"></div>
 				</p>

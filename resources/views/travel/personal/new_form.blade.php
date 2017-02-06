@@ -70,7 +70,7 @@
 			<div class="bar done"></div>	
 			<div class="circle passenger-circle-group">2<span class="circle-label">Passenger<span></div>
 			<div class="bar passenger-circle-group"></div>	
-			<div class="circle  itenerary-circle-group">3<span class="circle-label">Itenerary<span></div>
+			<div class="circle  itenerary-circle-group">3<span class="circle-label">Itinerary<span></div>
 			<div class="bar  itenerary-circle-group"></div>	
 			<div class="circle vehicle-circle-group">4<span class="circle-label top">Vehicle<span></div>
 
@@ -115,7 +115,7 @@
 
 
 			<div class="col col-md-12 preview-sections">
-				<p></p><div class="mini-circle"></div> <b>Itenerary</b>
+				<p></p><div class="mini-circle"></div> <b>Itinerary</b>
 				<span class="btn btn-success btn-xs" id="iteneraryFormButton" data-toggle="modal" data-target="#itenerary-modal"><span class="glyphicon glyphicon-map-marker"></span></span>
 					<div id="officialIteneraryStatus" class="text-muted" style="float:right;height:20px;width:250px;overflow: hidden;position:relative;"></div>
 				</p>

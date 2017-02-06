@@ -31,7 +31,7 @@
 
 
 			<div class="col col-md-12 preview-sections">
-				<p><div class="mini-circle"></div> <b>Itenerary</b></p>
+				<p><div class="mini-circle"></div> <b>Itinerary</b></p>
 				<div class="preview-itenerary">
 
 				</div>
