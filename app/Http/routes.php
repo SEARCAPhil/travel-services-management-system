@@ -395,6 +395,7 @@ Route::get('api/travel/calendar/{date}',['uses'=>'Calendar@index']);
 #list
 Route::get('/automobile/{id}',['uses'=>'Automobile@index']);
 Route::post('api/automobile',['uses'=>'Automobile@create_automobile']);
+Route::put('api/automobile/{id}',['uses'=>'Automobile@update_automobile']);
 
 
 #replace parts

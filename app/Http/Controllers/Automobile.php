@@ -217,6 +217,44 @@ class Automobile extends Controller
 	}
 
 
+	function update_automobile($plate_no,Request $request){
+		
+		try{
+
+				
+				
+				$token = $request->input('_token');
+		        $plate_no = $request->input('plate_no');
+		        $color=$request->input('color');
+		        $brand=$request->input('brand');
+
+		  
+
+				$this->pdoObject=DB::connection()->getPdo();
+
+				
+				$sql="UPDATE automobile set manufacturer=:manufacturer,color=:color where plate_no=:plate_no";
+				$statement=$this->pdoObject->prepare($sql);
+
+				$statement->bindParam(':plate_no',$plate_no);
+				$statement->bindParam(':manufacturer',$brand);
+				$statement->bindParam(':color',$color);
+				
+
+
+				$statement->execute();
+
+				$lastInsertId=$statement->rowCount();
+	
+			
+				return $lastInsertId;
+
+		}catch(Exception $e){echo $e->getMessage();}
+
+
+	}
+
+
 	function view_ledger($plate_no,$year=' ',$month=''){
 
 

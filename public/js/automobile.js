@@ -36,7 +36,7 @@ function modalClose(){
 	return this;
 }
 
-function showAutmobileList(page=1,callback=function(){}){
+function showAutomobileList(page=1,callback=function(){}){
 
 
 	ajax_getAutmobileList(page,function(json){
@@ -44,6 +44,7 @@ function showAutmobileList(page=1,callback=function(){}){
 		var auto=JSON.parse(json);
 		var priv=(window.localStorage.getItem('priv'));
 
+		$('.automobile-list').html('Loading . . .');
 
 		for(var x=0;x<auto.length;x++){
 
@@ -58,7 +59,7 @@ function showAutmobileList(page=1,callback=function(){}){
 				var htm=`<div class="col col-md-3 col-sm-4 col-xs-6 " onclick="`+click_event_for_admin+`" data-content="`+auto[x].id+`" data-json='`+automobile_json+`'><div class="automobile-list-item">
 				    					<img src="/laravel/public/uploads/automobile/`+auto[x].image+`" onerror="this.src='/laravel/public/img/no-photo-available.jpg'"/>
 				    					<div class="col col-md-12">
-				    						<h4 class="page-header">`+brand+`</h4>
+				    						<h4 class="page-header">`+auto[x].brand+`</h4>
 
 				    						<p><div class="marker marker-danger `+is_unavailable+`">`+auto[x].id+`</div></p>`
 
@@ -94,7 +95,7 @@ function bindAddAutomobile(){
 			$('#add-button').click(function(){
 
 				var brand=$('#automobile').val()
-				var plate_number=$('#plate_number').val()
+				var plate_number=$('#plate_number_input').val()
 				var color=$('#color').val();
 
 
@@ -106,7 +107,7 @@ function bindAddAutomobile(){
 
 								$('.modal').modal('hide');
 
-								showAutmobileList(1,function(){
+								showAutomobileList(1,function(){
 									setTimeout(function(){ window.document.body.scrollTop=document.body.scrollHeight; },700);
 								});
 								

@@ -12,7 +12,7 @@
 <script type="text/javascript" src="js/automobile.js"></script>	
 <script type="text/javascript">
 $(document).ready(function(){
-	showAutmobileList();
+	showAutomobileList();
 
 	if(localStorage.getItem('priv')==='admin'){
 		bindAddAutomobile()
