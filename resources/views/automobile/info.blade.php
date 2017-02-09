@@ -5,7 +5,7 @@
 
 		<p>Brand/Make/Model : <span id="brand" style="color:#ff9933"></span></p>
 
-		<p>Color : <input type="color" id="color" style="border:none !important;-webkit-appearance:none !important;" /></p>
+		<p>Color : <input type="color" id="color" class="automobile-color" style="border:none !important;-webkit-appearance:none !important;" /></p>
 
 	</div>
 

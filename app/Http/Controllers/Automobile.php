@@ -16,7 +16,7 @@ class Automobile extends Controller
 
 				$this->page=htmlentities(htmlspecialchars($page));
 				$this->pdoObject=DB::connection()->getPdo();
-				$sql="SELECT * FROM automobile";
+				$sql="SELECT * FROM automobile order by manufacturer ASC";
 				$statement=$this->pdoObject->query($sql);
 				#$statement->bindParam(':plate_no',$this->plate_no);
 				$statement->execute();
@@ -26,6 +26,69 @@ class Automobile extends Controller
 				}
 			
 				return json_encode($res);
+
+		}catch(Exception $e){}
+
+
+	}
+
+
+	 function is_exists_automobile($plate_no){
+		
+		try{
+
+				$this->plate_no=htmlentities(htmlspecialchars($plate_no));
+				$this->pdoObject=DB::connection()->getPdo();
+				$sql="SELECT count(*) as total FROM automobile where plate_no=:plate_no LIMIT 1";
+				$statement=$this->pdoObject->prepare($sql);
+				$statement->bindParam(':plate_no',$this->plate_no);
+				$statement->execute();
+				$total=0;
+				while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+					$total=$row->total;
+				}
+			
+				return $total;
+
+		}catch(Exception $e){}
+
+
+	}
+
+	function create_automobile(Request $request){
+		
+		try{
+
+				
+				
+				$token = $request->input('_token');
+		        $plate_no = $request->input('plate_number');
+		        $color=$request->input('color');
+		        $brand=$request->input('brand');
+
+		        $already_exist=self::is_exists_automobile($plate_no);
+
+				$this->pdoObject=DB::connection()->getPdo();
+
+				if($already_exist){
+					return 0;
+				}
+
+				$sql="INSERT INTO automobile(plate_no,manufacturer,color)values(:plate_no,:manufacturer,:color)";
+				$statement=$this->pdoObject->prepare($sql);
+
+				$statement->bindParam(':plate_no',$plate_no);
+				$statement->bindParam(':manufacturer',$brand);
+				$statement->bindParam(':color',$color);
+				
+
+
+				$statement->execute();
+
+				$lastInsertId=$this->pdoObject->lastInsertId();
+	
+			
+				return $lastInsertId;
 
 		}catch(Exception $e){echo $e->getMessage();}
 

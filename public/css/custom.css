@@ -6,16 +6,16 @@ summary{
 input[disabled]{
 	cursor: initial !important;
 }
-input[type="color"] {
+.automobile-color {
 	-webkit-appearance: none;
 	border: none;
 	width: 15px;
 	height: 15px;
 }
-input[type="color"]::-webkit-color-swatch-wrapper {
+.automobile-color::-webkit-color-swatch-wrapper {
 	padding: 0;
 }
-input[type="color"]::-webkit-color-swatch {
+.automobile-color::-webkit-color-swatch {
 	border: none;
 }
 
