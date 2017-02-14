@@ -107,9 +107,30 @@ function bindAddAutomobile(){
 
 								$('.modal').modal('hide');
 
-								showAutomobileList(1,function(){
-									setTimeout(function(){ window.document.body.scrollTop=document.body.scrollHeight; },700);
-								});
+
+								//new item in list
+								var data=`<div class="col col-md-3 col-sm-4 col-xs-6 " onclick="modalOpen(this)" data-content="`+plate_number+`" data-json="{id:`+plate_number+`,brand:`+brand+`,color:`+color+`,image:null}"><div class="automobile-list-item">
+				    					<img src="/laravel/public/img/no-photo-available.jpg" onerror="this.src='/laravel/public/img/no-photo-available.jpg'">
+				    					<div class="col col-md-12">
+				    						<h4 class="page-header">`+brand+`</h4>
+
+				    						<p></p><div class="marker marker-danger ">`+plate_number+`</div><p></p>
+				    					</div></div>
+				    				</div>`
+
+								$('.automobile-list').append(data)
+
+								//preselect automobile for uploading
+								selectedAutomobile=data;
+
+								//scroll to the last page then show upload cover dialog
+								setTimeout(function(){
+									 window.document.body.scrollTop=document.body.scrollHeight;
+									 showBootstrapDialog('#preview-modal','#preview-modal-dialog','automobile/modal/automobile-image',function(){});
+								},700);
+								
+
+								
 								
 							}else{
 								alert('Oops something went wrong!Automobile plate number is not available or system is temporarily down.Try to refresh the page or try again later.')

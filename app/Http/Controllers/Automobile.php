@@ -254,6 +254,85 @@ class Automobile extends Controller
 
 	}
 
+	function update_automobile_image($plate_no,$file_name){
+		
+		try{
+
+			$file_name=htmlentities(htmlspecialchars($file_name));
+			$plate_no=htmlentities(htmlspecialchars($plate_no));
+
+			$this->pdoObject=DB::connection()->getPdo();
+
+			
+			$sql="UPDATE automobile set image=:image where plate_no=:plate_no";
+			$statement=$this->pdoObject->prepare($sql);
+
+			$statement->bindParam(':plate_no',$plate_no);
+			$statement->bindParam(':image',$file_name);
+			
+
+			$statement->execute();
+
+			$lastInsertId=$statement->rowCount();
+
+		
+			return $lastInsertId;
+
+		}catch(Exception $e){echo $e->getMessage();}
+
+
+	}
+
+	function upload_automobile_image($id=''){
+
+		if(!isset($_FILES["attachment"])||empty($id)){
+			$error = array('error' => 'invalid file');
+             echo json_encode($error);
+             exit;
+		}
+
+		$result=array();
+
+		$inf=pathinfo($_FILES["attachment"]['name']);
+		$allowed_types        = Array('gif','jpg','png','jpeg','pdf','bmp');
+
+		#5MiB
+     	$max_size             = 5242880;
+
+     	$extension=$inf['extension'];
+     	$size=$_FILES["attachment"]['size'];
+     	$id=htmlentities(htmlspecialchars($id));
+
+     	if(!in_array($extension, $allowed_types)){
+     		$result['error']='invalid file';
+     		
+     	}
+
+     	if($size>$max_size){
+     		$result['error']='File must not be greater than 5MB';
+     		
+     	}
+
+     	#if no error
+     	if(!isset($result['error'])){
+
+     		$filename=$id.'.'.$extension;
+     		if(move_uploaded_file($_FILES["attachment"]["tmp_name"], 'uploads/automobile/'.$filename)){
+
+     			$update_filename=self::update_automobile_image($id,$filename);
+
+     		
+     			$result['result']=1;
+     			
+     			
+     			return json_encode($result);
+     		}
+     	}
+
+
+		
+	}
+
 
 	function view_ledger($plate_no,$year=' ',$month=''){
 

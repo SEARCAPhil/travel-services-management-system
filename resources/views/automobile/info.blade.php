@@ -30,13 +30,9 @@
 	<canvas id="myChart3" width="400" height="250"></canvas>
 <script type="text/javascript" src="js/chart.info.js"></script>
 <script>
-$(document).ready(function(){
 
-	for(var y=2015;y<2018;y++){
-		show_automobileExpenses(plate_no,y);
-	}
-
-	$('.info-menu').click(function(){
+function showAutomobileDetails(){
+	
 		showBootstrapDialog('#preview-modal','#preview-modal-dialog','automobile/modal/automobile',function(){
 			var json=JSON.parse($(selectedAutomobile).attr('data-json'))
 			
@@ -72,7 +68,32 @@ $(document).ready(function(){
 			})
 
 		});
-	})
+	
+}
+
+
+
+
+$(document).ready(function(){
+
+	for(var y=2015;y<2018;y++){
+		show_automobileExpenses(plate_no,y);
+	}
+
+	$('.info-menu').click(function(){
+		var mark=$(this).attr('data-mark');
+
+		if(mark=='details'){
+			showAutomobileDetails();
+		}
+
+
+		if(mark=='image'){
+			showBootstrapDialog('#preview-modal','#preview-modal-dialog','automobile/modal/automobile-image',function(){
+
+			});
+		}
+	});
 
 })
 </script>

@@ -397,6 +397,8 @@ Route::get('/automobile/{id}',['uses'=>'Automobile@index']);
 Route::post('api/automobile',['uses'=>'Automobile@create_automobile']);
 Route::put('api/automobile/{id}',['uses'=>'Automobile@update_automobile']);
 
+Route::post('api/automobile/image/{id}',['uses'=>'Automobile@upload_automobile_image']);
+
 
 #replace parts
 Route::post('/automobile/replace/{id}',['uses'=>'Automobile@create_replace_parts']);

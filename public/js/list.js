@@ -329,7 +329,7 @@ function searchCampusTravelList(param){
 |
 */
 
-function appendToList(callback){
+function appendToList(callback=function(){}){
 
 	//clear list
 	$('.list-details').html('')
