@@ -8,7 +8,9 @@
         </div>
             <form  class="form col col-md-10 col-sm-10 col-sm-offset-1 col-md-offset-1 text-left" id="form">
             <label>Liters</label> <input type="text" class="form-control" id="liters">
+            <p class="text-danger refuel-liters-status"></p>
             <label>Amount in PHP</label> <input type="text" class="form-control" id="amount">
+            <p class="text-danger refuel-amount-status"></p>
             <label>Receipt Number</label> <input type="text" class="form-control" id="receipt_number">
             <label>Gasoline station</label> <input type="text" class="form-control" id="station"> <br><br>
             <div class="form-group text-right">

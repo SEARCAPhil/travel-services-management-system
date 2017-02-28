@@ -9,7 +9,8 @@
 	</div>
 <script type="text/javascript" src="js/common.js"></script>	
 <script type="text/javascript" src="js/directory.js"></script>
-<script type="text/javascript" src="js/automobile.js"></script>	
+<script type="text/javascript" src="js/automobile.js"></script>
+<script type="text/javascript" src="js/validator.min.js"></script>	
 <script type="text/javascript">
 $(document).ready(function(){
 	showAutomobileList();

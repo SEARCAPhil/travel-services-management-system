@@ -8,12 +8,15 @@
       		<form  class="form col col-md-10 col-sm-10 col-sm-offset-1 col-md-offset-1 text-left" id="form">
            
              <label>Type of oil</label>
-             <select class="form-control" id="oil"><option value="regular">Select one</option>
+             <select class="form-control" id="oil"><option value="regular">Select one (Default is Regular)</option>
               <option value="regular">Regular Oil</option>
               <option value="synthetic">Synthetic Oil</option>
             </select>
+            <p class="text-danger oil-status"></p>
             <label>Amount in PHP</label> <input type="text" class="form-control" id="amount" placeholder="PHP 00.00">
+              <p class="text-danger oil-amount-status"></p>
             <label>Mileage</label> <input type="text" class="form-control" id="mileage" placeholder="mileage">
+            <p class="text-danger oil-mileage-status"></p>
       			<label>Receipt / Voucher Number</label> <input type="text" class="form-control" id="receipt_number">
             <label>Station</label> <input type="text" class="form-control" id="station" placeholder="Station"><br><br>
              <div class="form-group text-right">

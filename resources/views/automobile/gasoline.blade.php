@@ -49,9 +49,39 @@ $(document).ready(function(){
 			var station=$('#station').val();
 			var plate_no=($(selectedAutomobile).attr('data-content'))
 
-			ajax_postGasoline(liters,amount,receipt,station,plate_no,function(){
-				formCompleted(plate_no)
-			});
+			var error=[];
+
+			$('.refuel-amount-status').html('')
+			$('.refuel-liters-status').html('')
+
+
+			if(validator.isEmpty(liters)){
+				$('.refuel-liters-status').html('Item could not be empty!')
+				error.push('oil');
+			}
+
+			
+			if(validator.isEmpty(amount)){
+				$('.refuel-amount-status').html('Amount could not be empty!')
+				error.push('amount');
+			}
+
+			if(!validator.isNumeric(amount)&&!validator.isFloat(amount)){
+				$('.refuel-amount-status').html('Invalid amount')
+				error.push('amount');
+			}
+
+
+			//no error
+			if(error.length===0){
+				ajax_postGasoline(liters,amount,receipt,station,plate_no,function(){
+					formCompleted(plate_no)
+				});
+
+			}
+
+
+			
 
 		})
 	});
@@ -65,6 +95,9 @@ $(document).ready(function(){
 	$('#ledger-date').change(function(){
 		bindGasolineLedger(plate_no,$(this).val())
 	})
+
+
+
 
 
 })

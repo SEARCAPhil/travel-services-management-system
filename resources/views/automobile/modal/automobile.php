@@ -7,7 +7,9 @@
           </div>
       		<form  class="form col col-md-10 col-sm-10 col-sm-offset-1 col-md-offset-1 text-left" id="form">
       			<label>Vehicle Brand/Make/Model</label> <input type="text" class="form-control" id="automobile" placeholder="Toyota Corolla XL">
+            <p class="text-danger automobile-brand-status"></p>
       			<label>Plate Number</label> <input type="text" class="form-control" placeholder="ABC-1234" id="plate_number_input">
+            <p class="text-danger automobile-no-status"></p>
       			<label>Color</label> <input type="color" class="form-control" id="color">
             <br><br>
               <div class="form-group text-right">

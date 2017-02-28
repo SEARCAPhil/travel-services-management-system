@@ -99,7 +99,29 @@ function bindAddAutomobile(){
 				var color=$('#color').val();
 
 
-				if(brand.length>0&&plate_number.length>0){
+				var error=[];
+
+				$('.automobile-brand-status').html('')
+				$('.automobile-no-status').html('')
+
+
+				if(validator.isEmpty(brand)){
+					$('.automobile-brand-status').html('Brand could not be empty!')
+					error.push('Brand');
+				}
+
+				
+				if(validator.isEmpty(plate_number)){
+					$('.automobile-no-status').html('Plate number could not be empty!')
+					error.push('Plate number');
+				}
+
+			
+				
+
+
+
+				if(brand.length>0&&plate_number.length>0&&error.length===0){
 
 						ajax_postAutomobile(brand,plate_number,color,function(res){
 
