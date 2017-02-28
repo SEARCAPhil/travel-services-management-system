@@ -248,6 +248,9 @@ Route::get('api/travel/gc',['uses' =>'Directory@gasoline_charge']);
 Route::get('api/travel/dc',['uses' =>'Directory@drivers_charge']);
 
 
+Route::get('api/travel/official/charge/advance/{id}',['uses' =>'Official_itenerary@show_advance_charges']);
+Route::post('api/travel/official/charge/advance/{id}',['uses' =>'Official_itenerary@create_advance_charge_breakdown']);
+
 
 
 

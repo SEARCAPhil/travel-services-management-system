@@ -14,19 +14,19 @@
                 	{{csrf_field()}}
 
                         <p><b>Gasoline Charge</b></p>
-                        <input type="text" class="form-control" placeholder="Price in PHP"/><br/>
+                        <input type="text" class="form-control" placeholder="Price in PHP" id="gasoline_charge" /><br/>
 
                         <p><b>Additional Charge</b></p>
-                        <input type="text" class="form-control" placeholder="Price in PHP"/><br/>
+                        <input type="text" class="form-control" placeholder="Price in PHP" id="additional_charge"/><br/>
 
                         <p><b>Drivers Charge</b></p>
-                        <input type="text" class="form-control" placeholder="Price in PHP"/><br/>
+                        <input type="text" class="form-control" placeholder="Price in PHP" id="drivers_charge"/><br/>
 
 
                         <p><b>Notes</b></p>
                         
                         <div style="margin-bottom: 30px;">
-                            <textarea class="form-control" rows="5" placeholder="Notes"></textarea>
+                            <textarea class="form-control" rows="5" placeholder="Notes" id="notes"></textarea>
                         </div>
 
                        
@@ -57,7 +57,9 @@
 
 $(document).ready(function(){ 
 
-   gasolineCharge();
+   advanceGasolineCharge();
+
+	showAdvanceGasolineCharge()
 
 })
     

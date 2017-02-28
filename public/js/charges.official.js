@@ -74,11 +74,17 @@ function ajax_getChargesCampus(id,callback){
 
 
 
+function ajax_getAdvanceChargesOfficial(id,callback){
+        
+  $.get('api/travel/official/charge/advance/'+id,function(data){
+    callback(data)
+  })      
+}
+
 
 
 
 function ajax_postCharge(id,mileage_in,mileage_out,gasoline_charge,drivers_charge,appointment,callback){
-
     $.post('api/travel/official/charge/'+id,{id:id,in:mileage_in,out:mileage_out,gasoline_charge:gasoline_charge,drivers_charge:drivers_charge,appointment:appointment,_token: $("input[name=_token]").val()},function(data){
              callback(data)
     }).fail(function(){
@@ -106,6 +112,15 @@ function ajax_postChargeCampus(id,mileage_in,mileage_out,gasoline_charge,drivers
 }
 
 
+
+
+function ajax_postAdvanceCharge(id,gasoline_charge,drivers_charge,additional_charge,notes,callback){
+    $.post('api/travel/official/charge/advance/'+id,{id:id,gasoline_charge:gasoline_charge,drivers_charge:drivers_charge,additional_charge:additional_charge,notes:notes,_token: $("input[name=_token]").val()},function(data){
+             callback(data)
+    }).fail(function(){
+        alert('Oops Something went wrong.Please try again later');
+    })
+}
 
 
 
@@ -229,6 +244,10 @@ function showCharges(data){
             
 }
 
+
+
+
+
 function showChargesOfficial(id){
     ajax_getChargesOfficial(id,function(json){
         var data=JSON.parse(json);
@@ -252,9 +271,38 @@ function showChargesCampus(id){
 
 
 
+function showAdvanceChargesOfficial(id){
+    ajax_getAdvanceChargesOfficial(id,function(json){
+        var data=JSON.parse(json);
 
+        if(typeof data[0].gasoline_charge!='undefined') $('#gasoline_charge').val(data[0].gasoline_charge)
+        if(typeof data[0].additional_charge!='undefined') $('#additional_charge').val(data[0].additional_charge)
+        if(typeof data[0].drivers_charge!='undefined') $('#drivers_charge').val(data[0].drivers_charge)
+        if(typeof data[0].notes!='undefined') $('#notes').html(data[0].notes)
+    
+
+        
+    })
+}
+
+
+
+function showAdvanceGasolineCharge(){
+    var content=$(selectedTrips).attr('data-content');
+    var json=JSON.parse(content);
+    var id=json.id;
+    var type=json.type; 
+
+    
+
+    if(type=='official'){
+        showAdvanceChargesOfficial(id)
+    }
+    
+}
 
 function gasolineCharge(){
+
     var content=$(selectedTrips).attr('data-content');
     var json=JSON.parse(content);
     var id=json.id;
@@ -282,6 +330,18 @@ function gasolineCharge(){
 }
 
 
+function advanceGasolineCharge(type){
+
+    var content=$(selectedTrips).attr('data-content');
+    var json=JSON.parse(content);
+    var id=json.id;
+    var type=json.type;
+
+    if(type=='official'){
+        bindAdvanceGasolineCharge(type)
+    }
+     
+}
 
 
 
@@ -364,5 +424,29 @@ function bindGasolineCharge(type){
             }
 
         }
+    });
+}
+
+
+function bindAdvanceGasolineCharge(type){
+  
+    //bind submit
+    $('.modal-submit').off('click');
+    $('.modal-submit').on('click',function(e){
+      
+        
+              
+
+        var content=$(selectedTrips).attr('data-content');
+        var json=JSON.parse(content);
+        var id=json.id;
+        var gasoline_charge=$('#gasoline_charge').val()
+        var drivers_charge=$('#drivers_charge').val()
+        var additional_charge=$('#additional_charge').val()
+        var notes=$('#notes').val()
+
+        ajax_postAdvanceCharge(id,gasoline_charge,drivers_charge,additional_charge,notes,function(){
+             window.open('travel/official/print/trip_ticket/'+id);
+        });
     });
 }
