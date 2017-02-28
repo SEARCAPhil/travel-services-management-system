@@ -2,15 +2,14 @@
 	<div class="modal-body">
       <div class="row">
           <div class="col col-md-12 col-sm-12 text-center">
-            <center>[LOGO HERE]</center>
-            <h3 class="ng-scope">Change Oil</h3><br/>
+            <center><img src="img/maintenance.png" width="40%"></center>
           </div>
       		<form  class="form col col-md-10 col-sm-10 col-sm-offset-1 col-md-offset-1 text-left" id="form">
-      			<label>Specify Item(s) to replace</label> <input type="text" class="form-control" id="item">
+      			<label>Specify Item(s) to replace <small class="text-danger">(* Required)</small></label> <input type="text" class="form-control" id="item">
             <p class="text-danger repair-item-status"></p>
-           		<label>Details</label> <textarea class="form-control" placeholder="write details here" id="details"></textarea>
+           		<label>Details <small class="text-danger">(* Required)</small></label> <textarea class="form-control" placeholder="write details here" id="details"></textarea>
               <p class="text-danger repair-details-status"></p>
-      			<label>Amount in PHP</label> <input type="text" class="form-control" placeholder="PHP 00.00" id="amount">
+      			<label>Amount in PHP <small class="text-danger">(* Required)</small></label> <input type="text" class="form-control" placeholder="PHP 00.00" id="amount">
             <p class="text-danger repair-amount-status"></p>
       			<label>Receipt Number</label> <input type="text" class="form-control" id="receipt_number">
             	<label>Dealer/Supplier</label> <input type="text" class="form-control" id="supplier"><br><br>

@@ -2,7 +2,7 @@
 	<div class="modal-body">
       <div class="row">
           <div class="col col-md-12 col-sm-12 text-center">
-            <center>[LOGO HERE]</center>
+            <center><img src="img/upload.png" width="40%"></center>
             <h3 class="ng-scope">UploadImage</h3>
             <p>Select image (.png,.jpg, .jpeg, .gif) not greater than 5MB</p><br/>
 
