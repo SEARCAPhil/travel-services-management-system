@@ -314,6 +314,14 @@ Route::get('api/travel/personal/scholars/{id}',['uses' =>'Personal_scholars@inde
 Route::post('api/travel/personal/scholars/',['uses' =>'Personal_scholars@create']);
 Route::delete('api/travel/personal/scholars/{id}',['uses' =>'Personal_scholars@destroy']);
 
+
+#charge
+Route::get('api/travel/personal/charge/advance/{id}',['uses' =>'Personal_itenerary@show_advance_charges']);
+Route::post('api/travel/personal/charge/advance/{id}',['uses' =>'Personal_itenerary@create_advance_charge_breakdown']);
+
+
+
+
 ######################################################################################
 #Staff and scholars directory
 ######################################################################################

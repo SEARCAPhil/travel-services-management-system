@@ -81,6 +81,13 @@ function ajax_getAdvanceChargesOfficial(id,callback){
   })      
 }
 
+function ajax_getAdvanceChargesPersonal(id,callback){
+        
+  $.get('api/travel/personal/charge/advance/'+id,function(data){
+    callback(data)
+  })      
+}
+
 
 
 
@@ -116,6 +123,14 @@ function ajax_postChargeCampus(id,mileage_in,mileage_out,gasoline_charge,drivers
 
 function ajax_postAdvanceCharge(id,gasoline_charge,drivers_charge,additional_charge,notes,callback){
     $.post('api/travel/official/charge/advance/'+id,{id:id,gasoline_charge:gasoline_charge,drivers_charge:drivers_charge,additional_charge:additional_charge,notes:notes,_token: $("input[name=_token]").val()},function(data){
+             callback(data)
+    }).fail(function(){
+        alert('Oops Something went wrong.Please try again later');
+    })
+}
+
+function ajax_postAdvanceChargePersonal(id,gasoline_charge,drivers_charge,additional_charge,notes,callback){
+    $.post('api/travel/personal/charge/advance/'+id,{id:id,gasoline_charge:gasoline_charge,drivers_charge:drivers_charge,additional_charge:additional_charge,notes:notes,_token: $("input[name=_token]").val()},function(data){
              callback(data)
     }).fail(function(){
         alert('Oops Something went wrong.Please try again later');
@@ -286,6 +301,20 @@ function showAdvanceChargesOfficial(id){
 }
 
 
+function showAdvanceChargesPersonal(id){
+    ajax_getAdvanceChargesPersonal(id,function(json){
+        var data=JSON.parse(json);
+
+        if(typeof data[0].gasoline_charge!='undefined') $('#gasoline_charge').val(data[0].gasoline_charge)
+        if(typeof data[0].additional_charge!='undefined') $('#additional_charge').val(data[0].additional_charge)
+        if(typeof data[0].drivers_charge!='undefined') $('#drivers_charge').val(data[0].drivers_charge)
+        if(typeof data[0].notes!='undefined') $('#notes').html(data[0].notes)
+    
+
+        
+    })
+}
+
 
 function showAdvanceGasolineCharge(){
     var content=$(selectedTrips).attr('data-content');
@@ -297,6 +326,10 @@ function showAdvanceGasolineCharge(){
 
     if(type=='official'){
         showAdvanceChargesOfficial(id)
+    }
+
+    if(type=='personal'){
+        showAdvanceChargesPersonal(id)
     }
     
 }
@@ -337,10 +370,11 @@ function advanceGasolineCharge(type){
     var id=json.id;
     var type=json.type;
 
-    if(type=='official'){
-        bindAdvanceGasolineCharge(type)
-    }
-     
+  
+    bindAdvanceGasolineCharge(type)
+    
+
+
 }
 
 
@@ -440,13 +474,26 @@ function bindAdvanceGasolineCharge(type){
         var content=$(selectedTrips).attr('data-content');
         var json=JSON.parse(content);
         var id=json.id;
+        var type=json.type
         var gasoline_charge=$('#gasoline_charge').val()
         var drivers_charge=$('#drivers_charge').val()
         var additional_charge=$('#additional_charge').val()
         var notes=$('#notes').val()
 
-        ajax_postAdvanceCharge(id,gasoline_charge,drivers_charge,additional_charge,notes,function(){
-             window.open('travel/official/print/trip_ticket/'+id);
-        });
+        console.log(type)
+
+        if(type=='official'){
+            ajax_postAdvanceCharge(id,gasoline_charge,drivers_charge,additional_charge,notes,function(){
+                 window.open('travel/official/print/trip_ticket/'+id);
+            });
+        }
+
+        if(type=='personal'){
+            ajax_postAdvanceChargePersonal(id,gasoline_charge,drivers_charge,additional_charge,notes,function(){
+                 window.open('travel/personal/print/statement_of_account/'+id);
+            });
+        }
+
+        
     });
 }
