@@ -420,78 +420,80 @@ function bindGasolineCharge(type){
     //bind submit
     $('.modal-submit').off('click');
     $('.modal-submit').on('click',function(e){
-      
-        var gasoline_charge=($('#gasoline_charge').val());
-              
+        
+        if(confirm('Are you sure you wanto tocontinue?')){
+            var gasoline_charge=($('#gasoline_charge').val());
+                  
 
-        var content=$(selectedTrips).attr('data-content');
-        var json=JSON.parse(content);
-        var id=json.id;
-        var type=json.type;
-        var mileage_in=$('#start_km').val()
-        var mileage_out=$('#end_km').val()
-        var gasoline_charge=$('#gasoline_charge').val()
-        var drivers_charge=$('#drivers_charge').val()
-        var appointment=$('#appointment').val()
+            var content=$(selectedTrips).attr('data-content');
+            var json=JSON.parse(content);
+            var id=json.id;
+            var type=json.type;
+            var mileage_in=$('#start_km').val()
+            var mileage_out=$('#end_km').val()
+            var gasoline_charge=$('#gasoline_charge').val()
+            var drivers_charge=$('#drivers_charge').val()
+            var appointment=$('#appointment').val()
 
-        var action=$('#action').val()
+            var action=$('#action').val()
 
 
-        if(action!=''&&action>0){
+            if(action!=''&&action>0){
 
-            if(type=='official'){  
-                //insert
-                ajax_putCharge(action,mileage_in,mileage_out,gasoline_charge,drivers_charge,appointment,function(data){
-                    //open print page
-                   window.open('travel/official/print/trip_ticket/'+id);
-                 })
+                if(type=='official'){  
+                    //insert
+                    ajax_putCharge(action,mileage_in,mileage_out,gasoline_charge,drivers_charge,appointment,function(data){
+                        //open print page
+                       window.open('travel/official/print/trip_ticket/'+id);
+                     })
+                }
+
+
+                if(type=='personal'){  
+                    //insert
+                    ajax_putChargePersonal(action,mileage_in,mileage_out,gasoline_charge,drivers_charge,appointment,function(data){
+                        //open print page
+                       window.open('travel/personal/print/statement_of_account/'+id);
+                     })
+                }
+
+
+
+                if(type=='campus'){  
+                    //insert
+                    ajax_putChargeCampus(action,mileage_in,mileage_out,gasoline_charge,drivers_charge,appointment,function(data){
+                        //open print page
+                       window.open('travel/campus/print/notice_of_charges/'+id);
+                     })
+                }
+
+                 
+            }else{
+
+
+                if(type=='official'){
+                    ajax_postCharge(id,mileage_in,mileage_out,gasoline_charge,drivers_charge,appointment,function(data){
+                        //open print page
+                       window.open('travel/official/print/trip_ticket/'+id);
+                     })
+                }
+
+                if(type=='personal'){
+                    ajax_postChargePersonal(id,mileage_in,mileage_out,gasoline_charge,drivers_charge,appointment,function(data){
+                        //open print page
+                        window.open('travel/personal/print/statement_of_account/'+id);
+                     })
+                }
+
+
+                if(type=='campus'){
+                    ajax_postChargeCampus(id,mileage_in,mileage_out,gasoline_charge,drivers_charge,appointment,function(data){
+                        //open print page
+                       window.open('travel/campus/print/notice_of_charges/'+id);
+                     })
+                }
+
             }
-
-
-            if(type=='personal'){  
-                //insert
-                ajax_putChargePersonal(action,mileage_in,mileage_out,gasoline_charge,drivers_charge,appointment,function(data){
-                    //open print page
-                   window.open('travel/personal/print/statement_of_account/'+id);
-                 })
-            }
-
-
-
-            if(type=='campus'){  
-                //insert
-                ajax_putChargeCampus(action,mileage_in,mileage_out,gasoline_charge,drivers_charge,appointment,function(data){
-                    //open print page
-                   window.open('travel/campus/print/notice_of_charges/'+id);
-                 })
-            }
-
-             
-        }else{
-
-
-            if(type=='official'){
-                ajax_postCharge(id,mileage_in,mileage_out,gasoline_charge,drivers_charge,appointment,function(data){
-                    //open print page
-                   window.open('travel/official/print/trip_ticket/'+id);
-                 })
-            }
-
-            if(type=='personal'){
-                ajax_postChargePersonal(id,mileage_in,mileage_out,gasoline_charge,drivers_charge,appointment,function(data){
-                    //open print page
-                    window.open('travel/personal/print/statement_of_account/'+id);
-                 })
-            }
-
-
-            if(type=='campus'){
-                ajax_postChargeCampus(id,mileage_in,mileage_out,gasoline_charge,drivers_charge,appointment,function(data){
-                    //open print page
-                   window.open('travel/campus/print/notice_of_charges/'+id);
-                 })
-            }
-
         }
     });
 }
@@ -504,37 +506,37 @@ function bindAdvanceGasolineCharge(type){
     $('.modal-submit').on('click',function(e){
       
         
-              
+        if(confirm('Are you sure you wanto to overide the default computation?')){       
 
-        var content=$(selectedTrips).attr('data-content');
-        var json=JSON.parse(content);
-        var id=json.id;
-        var type=json.type
-        var gasoline_charge=$('#gasoline_charge').val()
-        var drivers_charge=$('#drivers_charge').val()
-        var additional_charge=$('#additional_charge').val()
-        var notes=$('#notes').val()
+            var content=$(selectedTrips).attr('data-content');
+            var json=JSON.parse(content);
+            var id=json.id;
+            var type=json.type
+            var gasoline_charge=$('#gasoline_charge').val()
+            var drivers_charge=$('#drivers_charge').val()
+            var additional_charge=$('#additional_charge').val()
+            var notes=$('#notes').val()
 
-        console.log(type)
+            console.log(type)
 
-        if(type=='official'){
-            ajax_postAdvanceCharge(id,gasoline_charge,drivers_charge,additional_charge,notes,function(){
-                 window.open('travel/official/print/trip_ticket/'+id);
-            });
+            if(type=='official'){
+                ajax_postAdvanceCharge(id,gasoline_charge,drivers_charge,additional_charge,notes,function(){
+                     window.open('travel/official/print/trip_ticket/'+id);
+                });
+            }
+
+            if(type=='personal'){
+                ajax_postAdvanceChargePersonal(id,gasoline_charge,drivers_charge,additional_charge,notes,function(){
+                     window.open('travel/personal/print/statement_of_account/'+id);
+                });
+            }
+
+            if(type=='campus'){
+                ajax_postAdvanceChargeCampus(id,gasoline_charge,drivers_charge,additional_charge,notes,function(){
+                    window.open('travel/campus/print/notice_of_charges/'+id);
+                });
+            }
         }
-
-        if(type=='personal'){
-            ajax_postAdvanceChargePersonal(id,gasoline_charge,drivers_charge,additional_charge,notes,function(){
-                 window.open('travel/personal/print/statement_of_account/'+id);
-            });
-        }
-
-        if(type=='campus'){
-            ajax_postAdvanceChargeCampus(id,gasoline_charge,drivers_charge,additional_charge,notes,function(){
-                window.open('travel/campus/print/notice_of_charges/'+id);
-            });
-        }
-
         
     });
 }
