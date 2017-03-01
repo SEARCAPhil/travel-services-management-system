@@ -314,7 +314,7 @@ class Campus_itenerary extends Controller
 
 
             $this->pdoObject=DB::connection()->getPdo();
-            $sql="SELECT trc_charge.*,trc_charge_breakdown.charge,trc_charge_breakdown.additional_charge,trc_charge_breakdown.charge,trc_charge_breakdown.drivers_overtime_charge,trc_charge_breakdown.overtime,trc_charge_breakdown.total FROM trc_charge LEFT JOIN trc_charge_breakdown on trc_charge_breakdown.charge_id=trc_charge.id where rid=:id ORDER BY id DESC LIMIT 1";
+            $sql="SELECT trc_charge.*,trc_charge_breakdown.charge,trc_charge_breakdown.additional_charge,trc_charge_breakdown.charge,trc_charge_breakdown.drivers_overtime_charge,trc_charge_breakdown.overtime,trc_charge_breakdown.total FROM trc_charge LEFT JOIN trc_charge_breakdown on trc_charge_breakdown.charge_id=trc_charge.id where rid=:id ORDER BY date_modified DESC LIMIT 1";
             $statement=$this->pdoObject->prepare($sql);
             $statement->bindParam(':id',$this->id);
             $statement->execute();
@@ -332,6 +332,46 @@ class Campus_itenerary extends Controller
         }catch(Exception $e){
             echo $e->getMessage();
         }
+    }
+
+
+     function show_advance_charges($id){
+
+        $charges=self::show_charges($id);
+
+        $charge_id=@json_decode($charges)[0]->id;
+
+        if(!empty($charge_id)&&!is_null($charge_id)){
+
+            try{
+
+                $this->id=htmlentities(htmlspecialchars($charge_id));
+
+
+                $this->pdoObject=DB::connection()->getPdo();
+
+                $sql="SELECT * from trc_charge_breakdown where charge_id=:id ORDER BY date_modified DESC LIMIT 1";
+                $statement=$this->pdoObject->prepare($sql);
+                $statement->bindParam(':id',$this->id);
+                $statement->execute();
+
+                $res=Array();
+
+                while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+                    $res[]=Array('id'=>$row->id,'charge_id'=>$row->charge_id,'gasoline_charge'=>$row->charge,'drivers_charge'=>$row->drivers_overtime_charge,'additional_charge'=>$row->additional_charge,'total'=>$row->total,'notes'=>$row->notes);
+                }
+                   
+
+               return json_encode($res);
+                    
+
+            }catch(Exception $e){
+                echo $e->getMessage();
+            }
+
+        }
+
+        
     }
 
  function update_charges($id,Request $request){
@@ -473,7 +513,7 @@ class Campus_itenerary extends Controller
 
 
 
-    function create_charge_breakdown($charge_id,$charge,$additional_charge,$drivers_overtime_charge,$overtime,$total){
+    function create_charge_breakdown($charge_id,$charge,$additional_charge,$drivers_overtime_charge,$overtime,$total,$notes=''){
 
             try{
              
@@ -483,13 +523,14 @@ class Campus_itenerary extends Controller
                 $this->drivers_overtime_charge=htmlentities(htmlspecialchars($drivers_overtime_charge));
                 $this->overtime=htmlentities(htmlspecialchars($overtime));
                 $this->total=htmlentities(htmlspecialchars($total));
+                $this->notes=htmlentities(htmlspecialchars($notes));
 
             
             
             
                 $this->pdoObject=DB::connection()->getPdo();
                 #begin transaction   
-                $insert_sql="INSERT INTO trc_charge_breakdown(charge_id,charge,additional_charge,drivers_overtime_charge,overtime,total)values(:charge_id,:charge,:additional_charge,:drivers_overtime_charge,:overtime,:total)";
+                $insert_sql="INSERT INTO trc_charge_breakdown(charge_id,charge,additional_charge,drivers_overtime_charge,overtime,total,notes)values(:charge_id,:charge,:additional_charge,:drivers_overtime_charge,:overtime,:total,:notes)";
 
                 $insert_statement=$this->pdoObject->prepare($insert_sql);
         
@@ -500,6 +541,7 @@ class Campus_itenerary extends Controller
                 $insert_statement->bindParam(':drivers_overtime_charge',$this->drivers_overtime_charge);
                 $insert_statement->bindParam(':overtime',$this->overtime);
                 $insert_statement->bindParam(':total',$this->total);
+                $insert_statement->bindParam(':notes',$this->notes);
                 
                 #exec the transaction
                 $insert_statement->execute();
@@ -559,6 +601,33 @@ class Campus_itenerary extends Controller
 
 
     }
+
+
+     function create_advance_charge_breakdown(Request $request){
+
+        $token = $request->input('_token');
+        $id = $request->input('id');
+        $gasoline_charge = $request->input('gasoline_charge');
+        $additional_charge = $request->input('additional_charge');
+        $drivers_charge= $request->input('drivers_charge');
+        $notes= $request->input('notes');
+
+        $total=$gasoline_charge+$drivers_charge+$additional_charge;
+
+
+
+        $charges=self::show_charges($id);
+
+        $charge_id=@json_decode($charges)[0]->id;
+
+        if(!empty($charge_id)&&!is_null($charge_id)){
+            //override charges 
+          return self::create_charge_breakdown($charge_id,$gasoline_charge,$additional_charge,$drivers_charge,0,$total,$notes);  
+        }
+       
+        return 0;
+
+   }
 
 
 

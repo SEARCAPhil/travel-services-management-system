@@ -369,6 +369,13 @@ Route::post('api/travel/campus/charge/{id}',['uses' =>'Campus_itenerary@charge']
 Route::get('api/travel/campus/charges/{id}',['uses' =>'Campus_itenerary@show_charges']);
 Route::put('api/travel/campus/charges/{id}',['uses' =>'Campus_itenerary@update_charges']);
 
+
+
+#charge
+Route::get('api/travel/campus/charge/advance/{id}',['uses' =>'Campus_itenerary@show_advance_charges']);
+Route::post('api/travel/campus/charge/advance/{id}',['uses' =>'Campus_itenerary@create_advance_charge_breakdown']);
+
+
 ###############################################################################################
 # PRINTABLES
 ###############################################################################################

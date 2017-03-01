@@ -89,6 +89,14 @@ function ajax_getAdvanceChargesPersonal(id,callback){
 }
 
 
+function ajax_getAdvanceChargesCampus(id,callback){
+        
+  $.get('api/travel/campus/charge/advance/'+id,function(data){
+    callback(data)
+  })      
+}
+
+
 
 
 function ajax_postCharge(id,mileage_in,mileage_out,gasoline_charge,drivers_charge,appointment,callback){
@@ -131,6 +139,15 @@ function ajax_postAdvanceCharge(id,gasoline_charge,drivers_charge,additional_cha
 
 function ajax_postAdvanceChargePersonal(id,gasoline_charge,drivers_charge,additional_charge,notes,callback){
     $.post('api/travel/personal/charge/advance/'+id,{id:id,gasoline_charge:gasoline_charge,drivers_charge:drivers_charge,additional_charge:additional_charge,notes:notes,_token: $("input[name=_token]").val()},function(data){
+             callback(data)
+    }).fail(function(){
+        alert('Oops Something went wrong.Please try again later');
+    })
+}
+
+
+function ajax_postAdvanceChargeCampus(id,gasoline_charge,drivers_charge,additional_charge,notes,callback){
+    $.post('api/travel/campus/charge/advance/'+id,{id:id,gasoline_charge:gasoline_charge,drivers_charge:drivers_charge,additional_charge:additional_charge,notes:notes,_token: $("input[name=_token]").val()},function(data){
              callback(data)
     }).fail(function(){
         alert('Oops Something went wrong.Please try again later');
@@ -315,6 +332,20 @@ function showAdvanceChargesPersonal(id){
     })
 }
 
+function showAdvanceChargesCampus(id){
+    ajax_getAdvanceChargesCampus(id,function(json){
+        var data=JSON.parse(json);
+
+        if(typeof data[0].gasoline_charge!='undefined') $('#gasoline_charge').val(data[0].gasoline_charge)
+        if(typeof data[0].additional_charge!='undefined') $('#additional_charge').val(data[0].additional_charge)
+        if(typeof data[0].drivers_charge!='undefined') $('#drivers_charge').val(data[0].drivers_charge)
+        if(typeof data[0].notes!='undefined') $('#notes').html(data[0].notes)
+    
+
+        
+    })
+}
+
 
 function showAdvanceGasolineCharge(){
     var content=$(selectedTrips).attr('data-content');
@@ -330,6 +361,10 @@ function showAdvanceGasolineCharge(){
 
     if(type=='personal'){
         showAdvanceChargesPersonal(id)
+    }
+
+    if(type=='campus'){
+        showAdvanceChargesCampus(id)
     }
     
 }
@@ -491,6 +526,12 @@ function bindAdvanceGasolineCharge(type){
         if(type=='personal'){
             ajax_postAdvanceChargePersonal(id,gasoline_charge,drivers_charge,additional_charge,notes,function(){
                  window.open('travel/personal/print/statement_of_account/'+id);
+            });
+        }
+
+        if(type=='campus'){
+            ajax_postAdvanceChargeCampus(id,gasoline_charge,drivers_charge,additional_charge,notes,function(){
+                window.open('travel/campus/print/notice_of_charges/'+id);
             });
         }
 
