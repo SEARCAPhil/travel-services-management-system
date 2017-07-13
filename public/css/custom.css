@@ -26,6 +26,7 @@ input[disabled]{
 .top-navbar{
 	border-radius: 0 !important;
 	background: rgb(40,40,40) !important;
+	border:0 !important;
 }
 .profile-picture{
 	float: left;

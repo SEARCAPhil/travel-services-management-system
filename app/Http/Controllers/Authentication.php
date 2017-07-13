@@ -54,7 +54,7 @@ class Authentication extends Controller
             }else{
                 #save to own database
                 $to_own_db=self::register($res->id,$res->profile_name,$res->last_name,$res->first_name,$res->profile_image,$res->dept_name,$res->dept_alias,$res->position,$res->date_modified);
-
+var_dump($to_own_db);
                 if($to_own_db>0){
 
                     $_SESSION['id']=$to_own_db;
@@ -74,7 +74,7 @@ class Authentication extends Controller
                 }
             }
        }else{
-        return view('authentication',array('message'=>'<div class="alert alert-danger text-center">Oops! Invalid Username or Password!</div>'));
+        return view('authentication',array('message'=>'<div class="alert alert-danger">Oops! Invalid Username or Password!  <p class="text-important">Is this your account? <small><a href="'.url("/").'">not my account.</a></small></p></div>'));
        }
 
 

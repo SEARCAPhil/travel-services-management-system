@@ -1,31 +1,33 @@
 <?php @session_start();?>
 @extends('automobile.page')
 @section('header')
+<?php 
+	/*check image*/
+	$image=@$_SESSION["image"];
+	if(is_null($image)||empty($image)){
+		$image='user.png';
+	}
+
+?>
+
 <script type="text/javascript" src="js/preview.official.js"></script>
 <nav class="navbar navbar-inverse navbar-fixed-top top-navbar">
 		<div class="container">
 			<div class="navbar-header">
-				<div class="navbar-brand"><span class="glyphicon glyphicon-th-large"></span></div>
+				<a class="navbar-brand"  style="margin-left:0;background: rgb(255,169,18);"><img src="{{url('/')}}/img/sample-logo.png"  width="25px"></a>
+				<a class="navbar-brand"  style="margin-left:0;"><small>Travel ServicesInformation System</small></a>
 			</div>
 
-			<div class="navbar-right dropdown">
-			<?php 
-				/*check image*/
-				$image=@$_SESSION["image"];
-				if(is_null($image)||empty($image)){
-					$image='user.png';
-				}
-
-			?>
-				<div class="profile-name pull-left"><?php echo @$_SESSION['name']; ?></div>
-				<div class="profile-picture dropdown-toggle" data-toggle="dropdown" style="background:url('/profiler/profile/<?php echo $image; ?>') no-repeat center center;background-size:cover;"></div>
-
-					<!--account-menu-->
-					<ul class="dropdown-menu"  id="account_menu">
-					    <li><a href="authentication/logout">Logout</a></li>
-				
-					</ul>
+			<div class="collapse navbar-collapse pull-right">
+				<ul class="nav navbar-nav">
+					<li><a class="navbar-brand"><small><?php echo @$_SESSION['name']; ?></small></a></li>
+					<li><div class="profile-picture dropdown-toggle" data-toggle="dropdown" style="background:url('/profiler/profile/<?php echo $image; ?>') no-repeat center center;background-size:cover;"></div></li>
+					<li><a href="authentication/logout"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
+				</ul>
 			</div>
+
+
+			
 		</div>
 	</nav>
 @endsection

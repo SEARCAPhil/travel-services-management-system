@@ -135,6 +135,8 @@ function bindOtfSelection(callback=function(){}){
 		}).fail(function(){
 			alert('failed loading project list');
 		})
+	}else{
+		$('#otf-funding-section').hide();
 	}
 })
 }

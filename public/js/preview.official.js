@@ -211,10 +211,13 @@ function showOfficialTravelListPreview(id){
 
 		$('.preview-print').attr('href','travel/official/print/travel_request/'+json[0].tr)
 
-		for(var x=0;x<json[0].projects.length;x++){
-
-			$('.preview-cash-advance').append('&emsp;<p>'+json[0].projects[x].project+'</p>');
+		//hide projects for opf
+		if(json[0].source_of_fund!='opf'){
+			for(var x=0;x<json[0].projects.length;x++){
+				$('.preview-cash-advance').append('&emsp;<p>'+json[0].projects[x].project+'</p>');
+			}	
 		}
+
 		
 
 		//--------------------------------------
