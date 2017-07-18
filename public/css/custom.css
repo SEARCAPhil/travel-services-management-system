@@ -1,4 +1,61 @@
+/*material icon font*/
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Material Icons'),
+    local('MaterialIcons-Regular'),
+    url(../fonts/MaterialIcons-Regular.woff2) format('woff2'),
+    url(../fonts/MaterialIcons-Regular.woff) format('woff'),
+    url(../fonts/MaterialIcons-Regular.ttf) format('truetype');
+}
+
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
+
+/* Rules for sizing the icon. */
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-48 { font-size: 48px; }
+
+/* Rules for using icons as black on a light background. */
+.material-icons.md-dark { color: rgba(0, 0, 0, 0.54); }
+.material-icons.md-dark.md-inactive { color: rgba(0, 0, 0, 0.26); }
+
+/* Rules for using icons as white on a dark background. */
+.material-icons.md-light { color: rgba(255, 255, 255, 1); }
+.material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
+
+
 /*global*/
+
+body{
+
+}
 summary{
   outline:none;
   cursor: pointer;
@@ -6,6 +63,13 @@ summary{
 input[disabled]{
 	cursor: initial !important;
 }
+input:focus,input:active,textarea:focus,textarea:active,select:active,select:focus {
+  border-color: inherit;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
 .automobile-color {
 	-webkit-appearance: none;
 	border: none;
@@ -22,6 +86,13 @@ input[disabled]{
 .modalx a{
 	color:#3498db !important;
 }
+
+.alert.alert-danger{
+	background: #e13d34;
+}
+
+
+
 /*navbar*/
 .top-navbar{
 	border-radius: 0 !important;
@@ -92,7 +163,7 @@ input[disabled]{
 	width: 100%;
 	height: 1px;
 	background: #ddd;
-	margin-top: 40px;
+	margin-top: 19px;
 }
 
 /*loading*/
@@ -107,6 +178,55 @@ input[disabled]{
 	100% { -webkit-transform: rotate(360deg); }
 }
 
+/*main menu*/
+.main-menu{
+	margin-top: 100px;
+}
+
+.main-menu li{
+	float: left;
+	padding: 10px 5px 10px 5px;
+	margin-bottom: 2px;
+	cursor:pointer;
+	color:rgb(240,240,240);
+	padding-left: 30px;
+}
+.main-menu li.active{
+	/*background: rgb(255,82,87);*/
+	background: rgb(180,180,180);
+	/*border-bottom: 1px solid rgba(200,200,200,0.8);*/
+}
+
+
+
+.content-section{
+	background: rgb(255,255,255);
+	padding: 20px;
+	border-radius: 5px;
+	margin-bottom: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*automobile status*/
 .status-box-sm{
 width: 20px !important;
@@ -120,15 +240,20 @@ padding: 2px;
 /*automobile-list*/
 .automobile-list{
 	margin-top: 50px;
+
+	padding: 10px;
 }
 .automobile-list-item{
-	height: 300px;
+	height: auto;
 	display: block;
 	overflow: hidden;
 	margin-bottom: 50px;
 	padding-top: 20px;
 	cursor: pointer;
-	transition: background 0.5s ease-in-out;/*background: rgb(240,240,240);*/
+	transition: background 0.5s ease-in-out;
+		background: rgb(255,255,255) !important;
+	border-radius: 5px;
+
 
 	
 }
@@ -155,7 +280,7 @@ padding: 2px;
 padding: 5px;
 }
 .preview-command.disabled{
-	color: rgb(100,100,100);
+	color: rgb(100,100,100) !important;
 	opacity: 0.5;
 	cursor: none;
 
@@ -194,17 +319,22 @@ padding: 5px;
 .btn-primary{
 	background: rgb(0,100,150) !important;
 	background-image: none;
-	
+	color: rgb(255,255,255) !important;
 	box-shadow: none !important;
 }
 
 .btn-success{
 	background: rgb(32,199,150) !important;
-		background-image: none;
+	background-image: none;
+	color: rgb(255,255,255) !important;
 }
 .btn-danger{
 	background: rgb(255,82,87) !important;
 	background-image: none;
+	color:rgb(255,255,255) !important;
+}
+.btn-default{
+	background: rgba(153,153,153,.2);
 }
 
 .btn-primary:hover{
@@ -224,10 +354,26 @@ padding: 5px;
 /*list*/
 .list-details dd{
 	cursor: pointer;
-	padding:2px 5px 20px 5px;
-	border-bottom: 1px solid rgb(220,220,220);
+	padding:10px;
+	border-bottom: 1px solid rgba(220,220,220,0.5);
 
 }
+.list-details dd.closed{
+	position: relative;
+}
+
+.list-details dd.closed:after{
+	content: '';
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><path d="M36 16h-2v-4c0-5.52-4.48-10-10-10S14 6.48 14 12v4h-2c-2.21 0-4 1.79-4 4v20c0 2.21 1.79 4 4 4h24c2.21 0 4-1.79 4-4V20c0-2.21-1.79-4-4-4zM24 34c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm6.2-18H17.8v-4c0-3.42 2.78-6.2 6.2-6.2 3.42 0 6.2 2.78 6.2 6.2v4z"/></svg>') center center no-repeat;
+	opacity: 0.25;
+}
+
+
 .list-details p{
 
 }
@@ -264,30 +410,32 @@ padding: 5px;
 .preview-title{
 	/*background: rgb(0,100,150);
 	color:rgb(255,255,255);*/
-	padding-top: 5px;
-	padding-bottom: 15px;
-
 	margin-bottom: 20px;
-	background: rgba(250,250,250,0.8);
 }
+
 .preview-menu-li li{
 	float: left;
 	display: block;
 	margin-right: 15px;
 	margin-left: 5px;
 	cursor: pointer;
-	color:rgb(0,100,150);
 }
 .preview-table{
 
 }
 .preview-sections{
 	margin-top: 10px;
-	margin-bottom: 15px;
+	margin-bottom: 25px;
+}
+.preview-status-section{
+	border:1px solid #ccc;
+	padding-top: 15px;
+	margin-bottom: 30px;
 }
 
 .status-markings{
-	float:left;background: rgb(255,82,87);color:rgb(255,255,255);width:30px;height:30px;padding:5px;border-radius:50%;
+	float:left;
+	width:30px;height:30px;padding:5px;border-radius:50%;
 	text-align: center;
 }
 
@@ -307,6 +455,16 @@ padding: 5px;
     border-radius: 50%;
     background: rgb(100,100,100);
     margin: 5px 10px 0 0px;
+}
+
+.content-header-section{
+	border-bottom: 1px solid rgba(200,200,200,0.5);
+	margin-bottom: 30px;
+}
+
+.content-header{
+	float: left;
+	width: 200px;background: #009688;padding: 8px;color:rgb(250,250,250);
 }
 
 .purpose-content{
@@ -357,36 +515,49 @@ padding: 5px;
 
 /*add button*/
 .add-button{
-	float:left;
-	width:20px;
-	height: 20px;
-	background: rgba(0,100,150,0.9);
-
-	color: rgb(255,255,255);
-	border-radius: 50%;
-	text-align: center;
-	margin-bottom: 20px;
-	cursor: pointer;
-	font-size: 0.6em;
-}
-.add-button > span{
-	margin-top: 5px;
-
+	color: #e13d34;
+	opacity: 0.8;
 }
 
 .add-button:hover{
-	box-shadow: 0px 0px 15px #ccc;
+	color: #e13d34;
+	opacity: 1;
 }
 /*travel lin*/
 .travel-link-ul li{
 	float: left;
-	width:100%;
+	display: block;
+	width:150px;
+	text-align: center !important;
+	background: rgb(160,160,160);
+	padding: 5px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	border-right: 1px solid rgba(100,100,100,0.3);
+
 
 }
+
+.travel-link-ul li.active{
+	background: #fff !important;
+	
+}
+
 
 .travel-link-ul li a{
-margin-right: 5px;	
+	margin-right: 5px;	
+	color: rgb(255,255,255) !important;
 }
+
+
+.travel-link-ul li.active a{
+	color: #009688 !important;
+}
+
+.travel-link >a{
+	color:#e13d34;
+}
+
 
 /**form-design**/
 

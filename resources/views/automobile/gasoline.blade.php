@@ -42,7 +42,7 @@ $(document).ready(function(){
 	//Bind function for add button in Re-fuel modal
 	unbindAjaxLoad();
 	ajaxLoad(function(){
-		$('#add-button').on('click',function(){
+		$('#add-gasoline-button').on('click',function(){
 			var liters=$('#liters').val();
 			var amount=$('#amount').val();
 			var receipt=$('#receipt_number').val();
@@ -56,18 +56,18 @@ $(document).ready(function(){
 
 
 			if(validator.isEmpty(liters)){
-				$('.refuel-liters-status').html('Item could not be empty!')
+				$('.refuel-liters-status').html('<div class="alert alert-danger">Item must not be empty!</div>')
 				error.push('oil');
 			}
 
 			
 			if(validator.isEmpty(amount)){
-				$('.refuel-amount-status').html('Amount could not be empty!')
+				$('.refuel-amount-status').html('<div class="alert alert-danger">Amount must not be empty!</div>')
 				error.push('amount');
 			}
 
 			if(!validator.isNumeric(amount)&&!validator.isFloat(amount)){
-				$('.refuel-amount-status').html('Invalid amount')
+				$('.refuel-amount-status').html('<div class="alert alert-danger">Invalid amount</div>')
 				error.push('amount');
 			}
 

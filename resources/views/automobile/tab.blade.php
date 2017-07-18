@@ -12,43 +12,75 @@
 
 <script type="text/javascript" src="js/preview.official.js"></script>
 <nav class="navbar navbar-inverse navbar-fixed-top top-navbar">
-		<div class="container">
+		<div class="container-fluid">
 			<div class="navbar-header">
-				<a class="navbar-brand"  style="margin-left:0;background: rgb(255,169,18);"><img src="{{url('/')}}/img/sample-logo.png"  width="25px"></a>
-				<a class="navbar-brand"  style="margin-left:0;"><small>Travel ServicesInformation System</small></a>
+				<a class="navbar-brand"  style="margin-left:0;color: #009688;"><i class="material-icons">menu</i></a>
+				<a class="navbar-brand"  style="margin-left:0;"></a>
 			</div>
-
-			<div class="collapse navbar-collapse pull-right">
-				<ul class="nav navbar-nav">
-					<li><a class="navbar-brand"><small><?php echo @$_SESSION['name']; ?></small></a></li>
-					<li><div class="profile-picture dropdown-toggle" data-toggle="dropdown" style="background:url('/profiler/profile/<?php echo $image; ?>') no-repeat center center;background-size:cover;"></div></li>
-					<li><a href="authentication/logout"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
-				</ul>
-			</div>
-
-
 			
 		</div>
 	</nav>
 @endsection
 @section('status')
-	<section class="row">
-		<div class="col col-md-12 col-sm-12 col-xs-12" style="float:left;">
-			<center  class="col col-xs-6 col-sm-6 col-md-4  col-md-offset-4 col-sm-offset-3 col-xs-offset-3  chart-section">
-				<h3>Current Status</h3>
-				<canvas id="myChart" width="400" height="200"></canvas>
-				
-			</center>
-			<div class="col col-md-10 col-sm-10 col-xs-10 col-md-offset-2 col-sm-offset-2 col-xs-offset-2 "><br/>
-				<ul class="list-unstyled status-indicator">
-					<li class="col col-md-4"><div class="status-box blue"></div>Automobile</li>
-					<li class="col col-md-4"><div class="status-box green"></div>Available Cars</li>
-					<li class="col col-md-4"><div class="status-box red"></div>Unavailable</li>
-				</ul>
-			</div>
-		</div>
-		
-	</section>
+	<div class="col col-md-2 col-sm-3" style="background: rgb(60,60,60);min-height: 1080px;box-shadow: 0px 5px 15px rgba(200,200,200,0.3);">
+
+		<div class="col col-md-12 col-xs-12 col-sm-12">
+ 			<ul class="list-unstyled main-menu main-menu-list pull-left">
+
+
+ 				<li href="#status" aria-controls="status" role="tab" data-toggle="tab" class="automobile-tab col col-md-12" data-page="status">
+ 					<i class="material-icons" style="width: 24px;">dashboard</i> Dashboard 
+ 				</li>
+
+ 				<li  href="#home" aria-controls="home" role="tab" data-toggle="tab" class="automobile-tab col col-md-12" data-page="automobile">
+ 					<i class="material-icons" style="width: 24px;">motorcycle</i> Automobile
+ 				 </li>
+
+ 				<li href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab col col-md-12" data-page="verified">
+ 					<i class="material-icons">card_travel</i> Travel
+ 				</li>
+
+
+					<li href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab pull-left col col-md-10" data-page="travel" data-type="official" onclick="showOfficialTravelList()">&emsp;&emsp;Official </li>
+
+
+					<li role="presentation" class="col col-md-1"><a href="#" class="add-button" data-content="official"><i class="material-icons">add_box</i></a></li>
+
+
+					<li href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab pull-left col col-md-10" data-page="travel" data-type="personal"  onclick="showPersonalTravelList()">&emsp;&emsp;Personal </li>
+
+
+					<li role="presentation" class="col col-md-1"><a href="#" class="add-button" data-content="personal"><i class="material-icons">add_box</i></a></li>
+
+
+					<li href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab  pull-left col col-md-10" data-page="travel" data-type="campus"  onclick="showCampusTravelList()">&emsp;&emsp;Campus </li>
+
+
+					<li role="presentation" class="col col-md-1"><a href="#" class="add-button" data-content="campus"><i class="material-icons">add_box</i></a></li>
+
+
+
+ 				<li href="#profile" aria-controls="profile" role="tab" data-toggle="tab"  class="automobile-tab col col-md-12" data-page="calendar">
+ 					<i class="material-icons" style="width: 24px;">event</i> Calendar 
+ 				</li>
+
+
+
+ 				<li role="presentation" class=" hidden-lg hiiden-md hiiden-xs"><a href="#editor" aria-controls="messages" role="tab" data-toggle="tab"  data-page="travel/official/editor" id="editorTab" style="display:none;">Editor</a></li>
+		  		<li role="presentation" class=" hidden-lg hiiden-md hiiden-xs"><a href="#editor" aria-controls="messages" role="tab" data-toggle="tab"  data-page="travel/official/editor" id="insertTab" style="display:none;">&nbsp;</a></li>
+
+
+ 			</ul>
+
+ 			<ul class="list-unstyled main-menu main-menu-list pull-left">
+ 				<li id="new"><a href="authentication/logout">Sign-out<i class="material-icons" style="width: 24px;">keyboard_backspace</i></a></li>
+ 			</ul>
+
+ 			
+ 		</div>
+
+	</div>
+
 @endsection
 @section('tabs')
 <div class="modal fade" id="preview-modal">
@@ -57,11 +89,11 @@
 	</div>
 </div>
 
-	<div>
+	<!--<div>
 		<br/><br/>
 	  <div class="col col-md-4 col-sm-4 col-xs-4" style="padding-right:0;"><div class="tab-line">&nbsp;</div></div>
 	  
-		  <ul class="nav nav-tabs col col-md-8 col-sm-8 col-xs-8 tablist" role="tablist">
+		  <ul class="nav nav-tabs col col-md-10 col-sm-10 col-xs-10 tablist" role="tablist" style="opacity:0.1;">
 
 		   <?php if(@$_SESSION["priv"]=='admin'): ?>
 		 	 <li role="presentation" class="active"><a href="#status" aria-controls="status" role="tab" data-toggle="tab" class="automobile-tab" data-page="status">Status</a></li>
@@ -86,7 +118,7 @@
 		  </ul>
 	  </div>
 
-	</div>
+	</div>-->
 @endsection
 
 
@@ -94,7 +126,7 @@
 	<div>
 		
 	  <!-- Tab panes -->
-	  <div class="tab-content" style="margin-top: 80px;">
+	  <div class="tab-content" style="margin-top: 40px;">
 
 
 	  <!--status-->
@@ -135,10 +167,17 @@
 
 
 @section('script')
-
+<script type="text/javascript" src="js/list.js"></script>
 <script type="text/javascript" src="js/Chart.min.js"></script>
 <script type="text/javascript" src="js/directory.js"></script>
 <script type="text/javascript" src="js/chart.automobile.status.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	//addd button
+	bindAddFormNavigationButton();
+});
+</script>
 
 
 @stop

@@ -39,14 +39,35 @@ function previewLoadingEffectFade(panel){
 	$(panel).css({opacity:'1','user-select':'auto'});
 }
 
-$(document).ready(function(){
-	 $(".automobile-tab").on('click',function(){
-	 	var target=$(this).attr('href');
 
+
+
+
+/*-------------------
+| Main MENU
+|
+|--------------------*/
+$(document).ready(function(){
+	 
+	 $(".automobile-tab").on('click',function(){
+
+	 	var target=$(this).attr('href');
 	 	var panel=document.querySelector(target);
+
+	 	//show loading effect
 	 	previewLoadingEffect(panel)
+
+	 	//callback
+	 	var callback=$(this).attr('data-callback');
+
+	
+
+
 	 	$(panel).load($(this).attr('data-page'),function(){
 	 		previewLoadingEffectFade(panel)
+	 		
+	 		//callback
+	 		if(typeof callback!='undefined') callback(this)
 	 	})
 
 	 	

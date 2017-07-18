@@ -4,13 +4,12 @@
 			<span class="glyphicon glyphicon-menu-right"></span> 
 			Information 
 			<small style="position: relative;">
-				<span class="glyphicon glyphicon-cog dropdown-toggle mark-as-menu" data-type="personal" data-target=".mark-as-dropdownmenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-								
-								 </span>
+				<i class="material-icons dropdown-toggle mark-as-menu" data-type="personal" data-target=".mark-as-dropdownmenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">expand_more</i> 
 
-				<ul class="dropdown-menu marks-as-dropdownmenu">
-					<li class="info-menu" data-mark="details"><a href="#">Update details</a></li>
-					<li class="info-menu" data-mark="image"><a href="#">Change Image</a></li>
+
+				<ul class="dropdown-menu marks-as-dropdownmenu" style="font-size: 12px;">
+					<li class="info-menu" data-mark="details"><a href="#"><i class="material-icons md-18">mode_edit</i> Update details</a></li>
+					<li class="info-menu" data-mark="image"><a href="#"><i class="material-icons md-18">add_a_photo</i> Change Image</a></li>
 				</ul>
 								 </small>
 			
@@ -23,7 +22,7 @@
 
 		<p>Brand/Make/Model : <span id="brand" style="color:#ff9933"></span></p>
 
-		<p>Color : <input type="color" id="color" class="automobile-color" style="border:none !important;-webkit-appearance:none !important;" /></p>
+		<p>Color : <input type="color" id="color" class="automobile-color" style="border:none !important;-webkit-appearance:none !important;" disabled="disabled"/></p>
 	</div>
 
 

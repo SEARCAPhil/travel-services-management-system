@@ -77,9 +77,12 @@ function uploadAutomobileImage(file,plate_no,callback){
             var data=response.result;
 
             if(data==1){
+              $('.modal-body').css({background:'#4cc34c',color:'rgb(255,255,255)'});
+              $('.upload-image-section').html('<div class="col col-md-12"><i class="material-icons md-18">check</i>Uploaded Succefully!</div>');
+              //$('.output').html('<p class="text-success text-left">Uploaded Succefully! <span class="glyphicon glyphicon-ok"></span></p><img src="'+reader.result+'" width="100%;"/>');
 
-              $('.output').html('<p class="text-success text-left">Uploaded Succefully! <span class="glyphicon glyphicon-ok"></span></p><img src="'+reader.result+'" width="100%;"/>');
-
+              //remove all items in the list
+              $('.automobile-list').html('')
               //update list on the background
               showAutomobileList(1,function(){});
 

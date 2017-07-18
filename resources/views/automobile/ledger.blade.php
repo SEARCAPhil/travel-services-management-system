@@ -1,6 +1,11 @@
 	<div>
 		<h1 style="color:#ff9933"><span class="glyphicon glyphicon-menu-right"></span>Ledger</h1>
 		<div class="col col-md-12 ">
+			
+			<div class="col col-md-12">
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+			</div>
+
 			<div class="col col-md-3">
 				<select class="form-control" id="ledger-date">
 					<option>2017</option>
@@ -10,7 +15,8 @@
 
 				</select>
 			</div>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+
+
 		</div>
 		<div class="col col-md-12 "><br/><div style="border:1px solid rgb(45,45,45)"></div><br/></div>
 

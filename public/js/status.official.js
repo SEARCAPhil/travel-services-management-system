@@ -65,12 +65,7 @@ function ajax_updateTravelStatusPreview(url,id,status,callback){
 
 function showUntouchedStatusAdmin(){
 	var htm=`
-			<div class="col col-md-1">
-				<div class="status-markings">
-					 <span class="glyphicon glyphicon-warning-sign"></span>
-				</div>
-			</div>
-			<div class="col col-md-11">
+			<div class="col col-md-12">
 				<p>
 					This Travel Request is not yet verified. Please review before making any further actions.
 					<button class="btn btn-xs btn-danger preview-return">Return to sender <span class="glyphicon glyphicon-inbox"></span></button> Or
@@ -84,18 +79,14 @@ function showUntouchedStatusAdmin(){
 
 function showVerifyStatusAdmin(){
 
-	var htm=`<div class="col col-md-1">
-				<div class="status-markings green">
-					<span class="glyphicon glyphicon-ok"></span>
-				</div>
-			</div>
-			<div class="col col-md-11 text-muted">
+	var htm=`
+			<div class="col col-md-12">
 				<p>
 					Travel Request Verified!
 					<button class="btn btn-xs btn-danger preview-return">Return to sender <span class="glyphicon glyphicon-inbox"></span></button> Or
 					<button class="btn btn-xs btn-danger preview-close">Mark as <u>Closed</u> <span class="glyphicon glyphicon-lock"></span></button> 
 				</p>
-				<hr/>
+
 			</div>`;
 	$('.preview-status-section').html(htm);
 }
@@ -108,7 +99,7 @@ function showClosedStatusAdmin(){
 				</p>
 			</div>`;
 
-	$('.preview-status-section').html(htm);
+	//$('.preview-status-section').html(htm);
 }
 
 
@@ -144,7 +135,7 @@ function showClosedStatus(){
 				</p>
 				<hr/>
 			</div>`;
-	$('.preview-status-section').html(htm);
+	$('.preview-status-section').hide();
 }
 
 
@@ -192,52 +183,36 @@ function showUntouchedStatus(){
 
 function showVerifyStatus(){
 
-	var htm=`<div class="col col-md-1">
-				<div class="status-markings">
-					<span class="glyphicon glyphicon-flag"></span>
-				</div>
-			</div>
+	var htm=`
 			<div class="col col-md-11">
 				<p>
 					This Travel Request is waiting for verification
 				</p>
-				<hr/>
 			</div>`;
-	$('.preview-status-section').html(htm);
+	$('.preview-status-section').fadeIn().html(htm);
 }
 
 function showVerifiedStatus(){
 
-	var htm=`<div class="col col-md-1">
-				<div class="status-markings green">
-					<span class="glyphicon glyphicon-pushpin"></span>
-				</div>
-			</div>
-
-			<div class="col col-md-11 text-muted">
+	var htm=`
+			<div class="col col-md-11">
 				<p>
-					This Travel Request has been verified.
+					<i class="material-icons md-18">check_circle</i> This Travel Request has been verified.
 				</p>
-				<hr/>
 			</div>`;
-	$('.preview-status-section').html(htm);
+	$('.preview-status-section').fadeIn().html(htm);
 }
 
 
 
 function showReturnStatus(){
 	var htm=`
-			<div class="col col-md-1">
-				<div class="status-markings">
-					<span class="glyphicon glyphicon-pushpin"></span>
-				</div>
-			</div>
-			<div class="col col-md-11" style="margin-bottom: 20px;padding: 5px;">
+			
+			<div class="col col-md-10">
 
-				<p class="text-muted">
-					This Travel Request was returned by admin.Please review the request before resending.
+				<p>
+					<i class="material-icons md-18">undo</i> This Travel Request was returned by admin.Please review the request before resending.
 				</p>
-				<hr/>
 			</div>`;
 	$('.preview-status-section').html(htm);
 }

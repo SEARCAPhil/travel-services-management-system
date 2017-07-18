@@ -361,22 +361,27 @@ function appendToList(callback=function(){}){
 		}
 
 		var status_message='';
+		var activeClass='';
 
 
 		//get status
 		if(typeof list[x].status!='undefined'){
 
-			if(list[x].status==0) status_message='<small>[draft]</small>'
+			if(list[x].status==0) status_message='<i class="material-icons md-18" title="draft">drafts</i>'
 		}
 
 
 		//get travel request personal status
 		if(typeof list[x].trp_status!='undefined'){
-			if(list[x].trp_status==0) status_message='[draft]'
+			if(list[x].trp_status==0) status_message='<i class="material-icons md-18" title="draft">drafts</i>'
+		}
+
+		if(list[x].status==4){
+			activeClass='closed';
 		}
 
 		//append to the DIV
-		htm+=`<dd id="`+list[x].id+`">
+		htm+=`<dd id="`+list[x].id+`" class="`+activeClass+`">
 			<h4><b>`+list[x].id+`</b>  <small class="text-danger">`+status_message+`</small></h4>
 			<p><small>`+purpose+`</small></p>
 			<p><div class="list-active-status" style="float:left;"></div></p>
@@ -480,12 +485,16 @@ function attachClickEventToList(url,callback){
 */
 
 function bindAddFormNavigationButton(){
-	$('.add-button').off('click');
+	//$('.add-button').off('click');
 	$('.add-button').on('click',function(){
 
+		//clear section
+		$('#editorTab').html();
 		$('#editorTab').click();
+
 		//loading
 		showLoading('#editor','<div><img src="img/loading.png" class="loading-circle" style="width: 80px !important;" /></div>')
+
 		var id=$(this).attr('data-content');
 		var url='';
 
@@ -507,12 +516,14 @@ function bindAddFormNavigationButton(){
 
 		}
 
-		if(url.length>1){
-			$('#editor').load(url,function(){
-				//attach a form navigation to a new element inside the loaded page
-				bindAddFormNavigationButton();
-			})
-		}
+		
+			
+			if(url.length>1){
+				$('#editor').load(url,function(){
+				
+				})
+			}
+		
 	})
 
 

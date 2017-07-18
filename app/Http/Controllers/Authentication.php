@@ -74,7 +74,7 @@ var_dump($to_own_db);
                 }
             }
        }else{
-        return view('authentication',array('message'=>'<div class="alert alert-danger">Oops! Invalid Username or Password!  <p class="text-important">Is this your account? <small><a href="'.url("/").'">not my account.</a></small></p></div>'));
+        return view('authentication',array('message'=>'<div class="alert alert-danger auth-error" style="border-radius: 5px !important;"><small>Oops! Invalid Username or Password!  <p class="text-important">Is this your account? <small><a href="'.url("/").'">not my account.</a></small></small></p></div><br/>'));
        }
 
 

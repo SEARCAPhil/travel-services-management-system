@@ -38,25 +38,11 @@
 	</div>
 </div>
 
-<div class="row preview-content">
+<div class="preview-content">
 {{csrf_field()}}
 
 
-
-	<div class="col col col-md-3 col-sm-3 hidden-xs">
-		<p class="page-header"><span class="glyphicon glyphicon-th-large"></span> <b>Travel Request</b></p>
-		<ul class="list-unstyled travel-link-ul">
-			<li><a href="#" class="travel-link pull-left" data-type="official">Official</a> <span class="add-button" data-content="official"><span class="glyphicon glyphicon-plus" ></span></li>
-			<li><a href="#" class="travel-link pull-left" data-type="personal">Personal</a> <span class="add-button" data-content="personal"><span class="glyphicon glyphicon-plus"></span</span></li>
-			<li><a href="#" class="travel-link pull-left" data-type="campus">Campus</a> <span class="add-button" data-content="campus"><span class="glyphicon glyphicon-plus"></span></span></li>
-		</ul>
-		<div class="col col-md-2 col-sm-2">
-			<!--<div class="profile-image profile-image-main" display-image="67.PNG" data-mode="staff"  style="background:url('/profiler/profile/<?php echo @$_SESSION["image"]; ?>') no-repeat center center;background-size:cover;"></div>-->
-			<img src="img/list.png" oncontextmenu="return false;" onerror="this.remove();" width="100" />
-		</div>
-	</div>
-
-	<div class="row col col-md-8">
+	<div class="row col col-md-6 col-md-offset-2 content-section">
 
 		<div class="col col-md-12">
 			<h3 class="page-header">Campus Travel Request Form</h3>

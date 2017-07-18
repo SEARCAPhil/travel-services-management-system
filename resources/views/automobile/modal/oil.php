@@ -1,24 +1,40 @@
 <div class="modal-content" style="color:rgb(40,40,40);">
   <div class="modal-body">
     <div class="row">
-        <div class="col col-md-12 col-sm-12 text-center">
-          <center><img src="img/change-oil.png" width="40%"></center>
+        <div class="col col-md-12 col-sm-12">
+          <h3 class="page-header"><a href="#">Change Oil</a></h3>
           
         </div>
-      		<form  class="form col col-md-10 col-sm-10 col-sm-offset-1 col-md-offset-1 text-left" id="form">
+      		<form  class="form col col-md-12 text-left" id="form">
            
-             <label>Type of oil <small class="text-danger">(* Required)</small></label>
-             <select class="form-control" id="oil"><option value="regular">Select one (Default is Regular)</option>
-              <option value="regular">Regular Oil</option>
-              <option value="synthetic">Synthetic Oil</option>
+             <p>Type of oil <small class="text-danger">(* Required)</small></p>
+             <p class="text-danger oil-status"></p>
+             <select class="form-control" id="oil">
+                <option value="regular">Select one (Default is Regular)</option>
+                <option value="regular">Regular Oil</option>
+                <option value="synthetic">Synthetic Oil</option>
             </select>
-            <p class="text-danger oil-status"></p>
-            <label>Amount in PHP <small class="text-danger">(* Required)</small></label> <input type="text" class="form-control" id="amount" placeholder="PHP 00.00">
-              <p class="text-danger oil-amount-status"></p>
-            <label>Mileage <small class="text-danger">(* Required)</small></label> <input type="text" class="form-control" id="mileage" placeholder="mileage">
+
+
+            
+            <p>Amount in PHP <small class="text-danger">(* Required)</small></p>
+            <p class="text-danger oil-amount-status"></p> 
+            <input type="text" class="form-control" id="amount" placeholder="PHP 00.00">
+              
+
+
+
+            <p>Mileage <small class="text-danger">(* Required)</small></p> 
             <p class="text-danger oil-mileage-status"></p>
-      			<label>Receipt / Voucher Number</label> <input type="text" class="form-control" id="receipt_number">
-            <label>Station</label> <input type="text" class="form-control" id="station" placeholder="Station"><br><br>
+            <input type="text" class="form-control" id="mileage" placeholder="mileage">
+            
+
+
+
+      			<p>Receipt / Voucher Number</p> 
+            <input type="text" class="form-control" id="receipt_number">
+
+            <p>Station</p> <input type="text" class="form-control" id="station" placeholder="Station">
              <div class="form-group text-right">
                 <button class="btn btn-success" type="button" id="add-button">Add</button>
                 <button class="btn btn-default" type="button" data-dismiss="modal" id="">Cancel</button>
@@ -44,3 +60,6 @@
   </div>
 
 </div>
+<script type="text/javascript">
+  $.material.init();
+</script>

@@ -1,28 +1,28 @@
-{{csrf_field()}}
-<div class="row">
-		<div class="col col-md-12 row">
-			<small>
-				<ul class="list-unstyled preview-menu-li pull-right">
 
-					
-					<li class="preview-command"><a href="#" target="_blank" class="preview-print" title="print"><span class="glyphicon glyphicon-print"></span> Print</a></li>
-					<li class="preview-remove preview-command disabled" title="remove"><span class="glyphicon glyphicon-remove"></span> Remove</li>
-					<li class="preview-update preview-command disabled" title="update"><span class="glyphicon glyphicon-pencil"></span> Update</li>
-					<li class="text-danger preview-forward preview-command disabled" title="send"> <span class="glyphicon glyphicon-send"></span> Send</li>
+<div class="preview-status-section hidden-lg"></div>
+<div  class="col col-md-12"  style="margin-bottom: 10px;">
+	<small>
+		<ul class="list-unstyled preview-menu-li">
 
-				</ul>
-			</small>
 			
+			<li class="preview-command"><a href="#" target="_blank" class="preview-print" title="print"><span class="glyphicon glyphicon-print"></span> Print</a></li>
+			<li class="preview-remove preview-command disabled" title="remove"><span class="glyphicon glyphicon-remove"></span> Remove</li>
+			<li class="preview-update preview-command disabled" title="update"><span class="glyphicon glyphicon-pencil"></span> Update</li>
+			<li class="text-danger preview-forward preview-command disabled" title="send"> <span class="glyphicon glyphicon-send"></span> Send</li>
+
+		</ul>
+	</small>
+	
 		</div>
-		<div class="preview-status-section"></div>
-		<div class="col col-md-12 preview-title" >
-			<div class="col col-md-3">
-				<div class="profile-image profile-image-main" display-image="67.PNG" data-mode="staff" style="background: url(&quot;/profiler/profile/user.png&quot;) center center / cover no-repeat;"></div>
-			</div>
-			<div class="col col-md-9">
+
+{{csrf_field()}}
+<div class="col col-md-12 content-section">
+
+		<div class="col col-md-12 preview-title row">
+			<div class="col col-md-12">
 				<h3 class="preview-name"></h3>
-				<p class="preview-unit">...</p>
-				<p class="preview-created">...</p>
+				<small class="preview-unit">. . .</small><br/>
+				<small class="preview-created">. . .</small>
 			</div>
 		</div>
 		
@@ -30,8 +30,15 @@
 			
 
 
+			
 			<div class="col col-md-12 preview-sections">
-				<p><div class="mini-circle"></div> <b>Itinerary</b></p>
+				<div class="col col-md-12 content-header-section">
+					<div class="content-header">
+						<div class="mini-circle" style="background: #fff;"></div> <span class="pull-left"><b>Itinerary</b></span> &emsp;
+					</div>
+				</div>
+
+				
 				<div class="preview-itenerary">
 
 				</div>

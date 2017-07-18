@@ -1,20 +1,23 @@
-<div class="col col-md-3">
-	<h3>Itinerary</h3>
-	<ul class="list-unstyled travel-link-ul">
-		<li><a href="#" class="trip-link pull-left" data-type="Scheduled">Scheduled</a> </li>
-		<li><a href="#" class="trip-link pull-left" data-type="Ongoing">Ongoing</a> </li>
-		<li><a href="#" class="trip-link pull-left" data-type="Finished">Finished</a></li>
-	</ul>
-	<div style="clear:both;"><br/><br/></div>
-	<p class="row col col-md-10">
+<div class="col col-md-10">
+	<p class="row col col-md-10" style="display: none;">
 		<b class="text-danger">Page /<span class="list-total-pages">1</span></b>
 		<input type="number" class="form-control list-current-page" value="1">
 	</p>
 
 </div>
-<div class="col col-md-9 trip-section">
-	 <h3><span class="verified_travel_title">Scheduled</span> trips and travels</h3><br/>
-	 <div class="verified_travel_result"></div>
+<div class="col col-md-8" style="margin-top: 50px;">
+	<ul class="list-unstyled travel-link-ul">
+		<li class="active"><a href="#" class="trip-link" data-type="Scheduled">Scheduled</a> </li>
+		<li><a href="#" class="trip-link" data-type="Ongoing">Ongoing</a> </li>
+		<li><a href="#" class="trip-link" data-type="Finished">Finished</a></li>
+	</ul>
+	<div class="col col-md-12 trip-section content-section">
+		 <h3 class="page-header"><span class="verified_travel_title">Scheduled</span> trips and travels</h3><br/>
+
+		 <div class="col col-md-10">
+		 	<div class="verified_travel_result"></div>
+		 </div>
+	</div>
 </div>
 {{csrf_field()}}
 

@@ -67,7 +67,7 @@ function showMaintenanceLedger(plate_no,year,month){
 
 		var htm=`
 				<h3 style="color:#f39c12;">`+months[month-1]+`</h3>
-				<p class="text-muted"><span class="glyphicon glyphicon-calendar"></span> 2016</p>
+				<p class="text-muted"><span class="glyphicon glyphicon-calendar"></span> `+year+`</p>
 				<div class="ledgerContent">
 				<div style="border:1px solid rgb(60,60,60)"></div>
 					<div class="table-fluid">
@@ -90,7 +90,9 @@ function showMaintenanceLedger(plate_no,year,month){
 						<td class="" style="color:rgb(32,199,150);">`+items[y].amount+`</td> 
 						<td class="">`+items[y].station+`</td>
 						<td>
-							<span class="glyphicon glyphicon-remove text-muted remove-ledger-item" data-type="`+items[y].type+`" data-content="`+items[y].id+`" data-amount="`+items[y].amount+`" data-month="`+month+`"></span>
+							<button type="button" class="btn btn-default btn-xs remove-ledger-item"data-type="`+items[y].type+`" data-content="`+items[y].id+`" data-amount="`+items[y].amount+`" data-month="`+month+`" style="text-shadow:none;">Remove 
+								<i class="material-icons md-18">remove</i>
+							</button>
 						</td>
 					</tr>`;
 
@@ -102,7 +104,7 @@ function showMaintenanceLedger(plate_no,year,month){
 			htm+=`				</tbody>
 						</table>
 						<span class="pull-right"> &nbsp;&nbsp; 
-							<a href="automobile/maintenance/ledger/print/`+plate_no+`/`+year+`/`+month+`" target="_blank" class="btn btn-xs btn-default" print-ledger="6"><span class="glyphicon glyphicon-print"></span> print </a></span> 
+							<a href="automobile/maintenance/ledger/print/`+plate_no+`/`+year+`/`+month+`" target="_blank" class="btn btn-xs btn-success" print-ledger="6" style="color:rgb(250,250,250) !important;"><span class="glyphicon glyphicon-print"></span> print </a></span> 
 							<p class="pull-right ng-binding"> Total amount : <span style="color:rgb(32,199,150);">Php <span id="total-`+month+`">`+data[0].grand_total+`</span><span> </p>
 					</div>
 				</div>

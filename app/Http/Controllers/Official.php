@@ -50,7 +50,6 @@ class Official extends Controller
     public function list_by_account($page=1)
     {
 
-
             try{
                 $this->pdoObject=DB::connection()->getPdo();
                 $this->page=htmlentities(htmlspecialchars($page));

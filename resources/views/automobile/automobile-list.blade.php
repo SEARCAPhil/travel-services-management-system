@@ -1,6 +1,15 @@
 {{csrf_field()}}
-<p><div class="vehicle" style="float: left;width:20px;height:20px;background: rgb(255,100,99);border-radius: 50%;color:rgb(255,255,255);text-align: center;cursor:pointer;">+</div> &nbsp;Vehicle<!--<a href="#"><div class="status-box status-box-sm gray">+</div>Vehicle</a>--></p>
-<section class="automobile-list"></section>
+<p class="col col-md-8 col-md-offset-1 text-right" style="margin-top: 50px;">
+
+	<a href="#" class="vehicle"><i class="material-icons md-36">add_box</i></a>
+
+</p>
+
+
+	
+<article class="col col-md-8 col-md-offset-1">
+	<section class="col col-md-12  row automobile-list"></section>
+</article>
 
 <div class="backdrop">
 		<div class="modalx">

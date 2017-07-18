@@ -47,9 +47,7 @@ function ajax_postOil(oil,amount,receipt,station,mileage,plate_no,callback){
 function formCompleted(){
 	$('#form').hide();
 	var htm=`<center>
-				<div style="width:60px;height:60px;background:rgb(0,200,150);color:rgb(255,255,255);border-radius:50%;text-align:center;overflow:hidden;font-size:3em;" class="text-success"><span class="glyphicon glyphicon-ok"></span></div>
-				<h3 class="text-success">Added Succefully!</h3>
-				<button class="btn btn-success" id="add-more">Add more + </button>
+				<p class="text-success"><i class="material-icons text-success">check_circle</i>Added Succefully! <button class="btn btn-success btn-sm" id="add-more">Add more + </button></p>
 			</center>`;
 	$('#form-status').html(htm)
 
@@ -84,22 +82,22 @@ function bindMaintenance(){
 
 
 				if(validator.isEmpty(item)){
-					$('.repair-item-status').html('Item could not be empty!')
+					$('.repair-item-status').html('<div class="alert alert-danger">Item must not be empty!</div>')
 					error.push('item');
 				}
 
 				if(validator.isEmpty(details)){
-					$('.repair-details-status').html('Details could not be empty!')
+					$('.repair-details-status').html('<div class="alert alert-danger">Details could not be empty!</div>')
 					error.push('status');
 				}
 
 				if(validator.isEmpty(amount)){
-					$('.repair-amount-status').html('Amount could not be empty!')
+					$('.repair-amount-status').html('<div class="alert alert-danger">Amount could not be empty!</div>')
 					error.push('amount');
 				}
 
 				if(!validator.isNumeric(amount)&&!validator.isFloat(amount)){
-					$('.repair-amount-status').html('Invalid amount')
+					$('.repair-amount-status').html('<div class="alert alert-danger">Invalid amount</div>')
 					error.push('amount');
 				}
 
@@ -135,22 +133,22 @@ function bindMaintenance(){
 
 
 				if(validator.isEmpty(item)){
-					$('.repair-item-status').html('Item could not be empty!')
+					$('.repair-item-status').html('<div class="alert alert-danger">Item must not be empty!</div>')
 					error.push('item');
 				}
 
 				if(validator.isEmpty(details)){
-					$('.repair-details-status').html('Details could not be empty!')
+					$('.repair-details-status').html('<div class="alert alert-danger">Details must not be empty!</div>')
 					error.push('status');
 				}
 
 				if(validator.isEmpty(amount)){
-					$('.repair-amount-status').html('Amount could not be empty!')
+					$('.repair-amount-status').html('<div class="alert alert-danger">Amount must not be empty!</div>')
 					error.push('amount');
 				}
 
 				if(!validator.isNumeric(amount)&&!validator.isFloat(amount)){
-					$('.repair-amount-status').html('Invalid amount')
+					$('.repair-amount-status').html('<div class="alert alert-danger">Invalid amount</div>')
 					error.push('amount');
 				}
 
@@ -188,22 +186,22 @@ function bindMaintenance(){
 
 
 				if(validator.isEmpty(oil)){
-					$('.oil-status').html('Item could not be empty!')
+					$('.oil-status').html('<div class="alert alert-danger">Item must not be empty!/div>')
 					error.push('oil');
 				}
 
 				if(validator.isEmpty(mileage)&&!validator.isNumeric(mileage)&&!validator.isFloat(mileage)){
-					$('.oil-mileage-status').html('Invalid Mileage!')
+					$('.oil-mileage-status').html('<div class="alert alert-danger">Invalid Mileage!</div>')
 					error.push('mileage');
 				}
 
 				if(validator.isEmpty(amount)){
-					$('.oil-amount-status').html('Amount could not be empty!')
+					$('.oil-amount-status').html('<div class="alert alert-danger">Amount could not be empty!</div>')
 					error.push('amount');
 				}
 
 				if(!validator.isNumeric(amount)&&!validator.isFloat(amount)){
-					$('.oil-amount-status').html('Invalid amount')
+					$('.oil-amount-status').html('<div class="alert alert-danger">Invalid amount</div>')
 					error.push('amount');
 				}
 

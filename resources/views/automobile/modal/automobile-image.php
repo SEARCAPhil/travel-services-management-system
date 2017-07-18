@@ -1,12 +1,14 @@
 <div class="modal-content" style="color:rgb(40,40,40);">
 	<div class="modal-body">
-      <div class="row">
+      <div class="row upload-image-section">
           <div class="col col-md-12 col-sm-12 text-center">
-            <center><img src="img/upload.png" width="40%"></center>
-            <h3 class="ng-scope">UploadImage</h3>
-            <p>Select image (.png,.jpg, .jpeg, .gif) not greater than 5MB</p><br/>
+            <center><img src="img/upload.png" width="25%"></center>
+            <h3 class="ng-scope">Upload Image</h3>
+            <p>Select image (.png,.jpg, .jpeg, .gif) not greater than <em>5MB</em></p><br/>
 
-            <h1><button type="button" class="btn btn-lg" onclick="$('#auto-mobile-fie-input').click()"><span class="glyphicon glyphicon-paperclip"></span></button></h1>
+           
+            <button type="button" class="btn btn-lg btn-primary" onclick="$('#auto-mobile-fie-input').click()"><span class="glyphicon glyphicon-paperclip"></span></button>
+            <button type="button" class="btn btn-lg btn-default" data-dismiss="modal">SKIP/CANCEL</button>
 
             <div class="output"></div>
 
@@ -22,5 +24,6 @@
 
 </div>
 <script type="text/javascript" src="js/automobile.upload.js"></script>
+
         	
     

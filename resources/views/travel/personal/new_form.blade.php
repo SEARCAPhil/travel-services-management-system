@@ -38,25 +38,9 @@
 	</div>
 </div>
 
-<div class="row preview-content">
+<div class="preview-content">
 
-
-
-	<div class="col col col-md-3 col-sm-3 hidden-xs">
-		<p class="page-header"><span class="glyphicon glyphicon-th-large"></span> <b>Travel Request</b></p>
-		<ul class="list-unstyled travel-link-ul">
-			<li><a href="#" class="travel-link pull-left" data-type="official">Official</a> <span class="add-button" data-content="official"><span class="glyphicon glyphicon-plus" ></span></li>
-			<li><a href="#" class="travel-link pull-left" data-type="personal">Personal</a> <span class="add-button" data-content="personal"><span class="glyphicon glyphicon-plus"></span</span></li>
-			<li><a href="#" class="travel-link pull-left" data-type="campus">Campus</a> <span class="add-button" data-content="campus"><span class="glyphicon glyphicon-plus"></span></span></li>
-		</ul>
-<div class="col col-md-2 col-sm-2">
-			<!--<div class="profile-image profile-image-main" display-image="67.PNG" data-mode="staff"  style="background:url('/profiler/profile/<?php echo @$_SESSION["image"]; ?>') no-repeat center center;background-size:cover;"></div>-->
-			<img src="img/list.png" oncontextmenu="return false;" onerror="this.remove();" width="100" />
-		</div>
-
-	</div>
-
-	<div class="row col col-md-8 col-sm-8">
+	<div class="row col col-md-6 col-sm-8 col-md-offset-2 content-section">
 
 		<div class="col col-md-12">
 			<h3 class="page-header">Personal Travel Request Form</h3>
@@ -72,7 +56,10 @@
 			<div class="bar passenger-circle-group"></div>	
 			<div class="circle  itenerary-circle-group">3<span class="circle-label">Itinerary<span></div>
 			<div class="bar  itenerary-circle-group"></div>	
-			<div class="circle vehicle-circle-group">4<span class="circle-label top">Vehicle<span></div>
+			<div class="circle vehicle-circle-group">4<span class="circle-label">Vehicle<span></div>
+			<div class="bar payment-circle-group" style="width: 170px;"></div>	
+			<div class="circle  payment-circle-group">5<span class="circle-label top">Payment<span></div>
+
 
 		</div>
 
@@ -81,11 +68,7 @@
 			<div class="bar continuation-right  vehicle-circle-group"></div>	
 		</div>
 		<div class="col col-md-12 xs-12 circle-pull-right">
-
-			<div class="circle  payment-circle-group">5<span class="circle-label">Payment<span></div>
-			<div class="bar payment-circle-group" style="margin-right: -10px;"></div>	
 			<div class="circle finished-circle-group"><span class="glyphicon glyphicon-check"></span><span class="circle-label">Finished<span></div>
-
 		</div>
 
 	
