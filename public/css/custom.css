@@ -383,6 +383,7 @@ padding: 5px;
 	transition: border 0.2s ease-in-out;
 
 	padding:5px;
+	border:1px dashed #ccc;
 
 
 }
@@ -430,7 +431,8 @@ padding: 5px;
 .preview-status-section{
 	border:1px solid #ccc;
 	padding-top: 15px;
-	margin-bottom: 30px;
+	margin-bottom: 10px;
+	display: none;
 }
 
 .status-markings{
@@ -512,6 +514,18 @@ padding: 5px;
     transition: all 0.3s ease-in-out;
 
 }
+
+.contextMenu > ul.list-group{
+	    background: rgb(255,255,255);
+	    border-radius: 5px;
+	    box-shadow: 0px 3px 10px rgba(200,200,200,0.9);
+}
+
+.contextMenu > ul.list-group > li{
+	    cursor: pointer;
+	    padding: 4px;
+}
+
 
 /*add button*/
 .add-button{

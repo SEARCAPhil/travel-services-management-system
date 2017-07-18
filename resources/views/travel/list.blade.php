@@ -25,7 +25,7 @@
 </div>
 
 
-<div class=" list-section col col col-md-2 col-sm-9 hidden-sm hidden-xs">
+<div class=" list-section col col col-md-2 col-sm-9 hidden-sm hidden-xs row">
 	<div class="col col-md-12 content-section">
 		<dl class="row list-details">	
 			<!--<dd>

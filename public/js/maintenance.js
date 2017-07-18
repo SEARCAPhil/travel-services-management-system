@@ -66,7 +66,8 @@ function bindMaintenance(){
 
 		//replace
 		if(content=='automobile/modal/replace'){
-			$('#add-button').on('click',function(){
+			$('#add-button-replace').off('click');
+			$('#add-button-replace').on('click',function(){
 				var item=$('#item').val();
 				var details=$('#details').val();
 				var amount=$('#amount').val();
@@ -117,7 +118,8 @@ function bindMaintenance(){
 
 		//repair
 		if(content=='automobile/modal/repair'){
-			$('#add-button').on('click',function(){
+			$('#add-button-replace').off('click');
+			$('#add-button-replace').on('click',function(){
 				var item=$('#item').val();
 				var details=$('#details').val();
 				var amount=$('#amount').val();
@@ -169,7 +171,8 @@ function bindMaintenance(){
 
 		//oil
 		if(content=='automobile/modal/oil'){
-			$('#add-button').on('click',function(){
+			$('#add-button-replace').off('click');
+			$('#add-button-replace').on('click',function(){
 				var oil=$('#oil').val();
 				var amount=$('#amount').val();
 				var receipt=$('#receipt_number').val();

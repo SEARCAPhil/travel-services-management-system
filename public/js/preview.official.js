@@ -330,8 +330,8 @@ function showOfficialTravelPassengerStaffPreview(id){
 										<div class="col col-md-9"><b>`+staff[x].name+`</b></div></td>
 
 									
-									<td>`+staff[x].designation+`</td>
-									<td>`+staff[x].office+`</td>
+								<td>`+((staff[x].designation==null)?'N/A':staff[x].designation)+`</td>
+								<td>`+((staff[x].office==null)?'N/A':staff[x].office)+`</td>
 								</tr>`
 				$('.preview-passengers').append(htm)
 			}
@@ -363,6 +363,10 @@ function showOfficialTravelPassengerScholarsPreview(id){
 							</tr>`
 			$('.preview-passengers').append(htm);
 			
+		}
+
+		if(scholars.length<=0){
+			$('.preview-passengers').parent().html('<center><h3>Empty Passenger</h3><p class="text-muted">This request do not have any passenger.Please select person from the list.</p></center>')
 		}
 
 		
@@ -435,6 +439,11 @@ function showOfficialTravelItenerary(id){
 			$('.preview-itenerary').append(htm)
 		}
 
+
+		if(itenerary_count<=0){
+			$('.preview-itenerary').html('<center><i class="material-icons md-36">directions_car</i><h3>Empty Itinerary</h3><p class="text-muted">Add new destination to your request.</p></center>')
+		}
+
 		setTimeout(function(){ context() },1000);
 	});
 	
@@ -475,6 +484,7 @@ function removeOfficialTravelRequest(id){
 		    		setTimeout(function(){
 
 		    			$('.preview-content').fadeOut()
+		    			$('.preview-section').html('<center style="margin-top:10vh;"><h3 class="text-danger"><i class="material-icons">check_circle</i> Deleted successfully!</h3><p>This request was deleted from the database and no longer link in any other request</p></center>')
 
 		    			var nextItem=$(selectedElement).next();
 		    			$(selectedElement).remove();
@@ -618,7 +628,7 @@ function bindRemoveItenerary(){
 
 function bindRemoveOfficialPreview(){
 
-
+	$('.preview-remove').off('click');
 	$('.preview-remove').on('click',function(){
 		//call custom bootstrap dialog
 			showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/remove',function(){

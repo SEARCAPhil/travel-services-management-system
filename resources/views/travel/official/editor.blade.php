@@ -37,10 +37,10 @@
 	</div>
 </div>
 
-<div class="col col-md-8 col-md-offset-2 preview-content">
+<div class="col col-md-8 col-md-offset-2 preview-content" style="margin-top: 50px;">
 	<div class="col col-md-8 content-section">
 		<div class="col col-xs-12 col-md-8 preview-title">
-			<div class="col col-md-12 col-xs-7">
+			<div class="col col-md-12 col-xs-7 row">
 				<h3 class="preview-name">. . .</h3>
 				<small class="preview-unit">. . .</small>
 				<small class="preview-created">. . .</small>
@@ -51,11 +51,14 @@
 			<div class="col col-md-12 preview-sections">
 
 				<div class="col col-md-12 content-header-section">
-					<div class="content-header"><div class="mini-circle" style="background: #fff;"></div> 
+					<div class="content-header">
 						<span class="pull-left"><b>Purpose</b></span> &emsp;
-						<i class="material-icons" id="officialPurposeSaveButton">save</i>
-						
-					<span id="officialPurposeSaveStatus"></span>
+
+						<span id="officialPurposeSaveStatus"></span>
+					</div>
+
+					<div class="col col-md-2">
+						<button class="btn btn-default btn-xs" id="officialPurposeSaveButton"><i class="material-icons md-18">save</i> Save</button>
 					</div>
 				</div>
 
@@ -69,10 +72,14 @@
 			<div class="col col-md-12 preview-sections">
 				{{csrf_field()}}
 				<div class="col col-md-12 content-header-section">
-					<div class="content-header"><div class="mini-circle" style="background: #fff;"></div> 
+					<div class="content-header">
 						<span class="pull-left"><b>Passengers</b></span>&emsp;
-						<i class="material-icons" data-toggle="modal" data-target="#passenger-modal">add_box</i>
 					</div>
+
+					<div class="col col-md-2">
+						<button class="btn btn-default btn-xs" data-toggle="modal" data-target="#passenger-modal"><i class="material-icons md-18">add_box</i></button>
+					</div>
+
 				</div>
 
 
@@ -92,9 +99,13 @@
 
 			<div class="col col-md-12 preview-sections">
 				<div class="col col-md-12 content-header-section">
-					<div class="content-header"><div class="mini-circle" style="background: #fff;"></div> 
+					<div class="content-header"> 
 						<span class="pull-left"><b>Itinerary</b></span> &emsp;
-						<i class="material-icons"  id="officialIteneraryButton" data-toggle="modal" data-target="#itenerary-modal" data-toggle="modal" data-target="#passenger-modal">add_box</i>
+						
+					</div>
+
+					<div class="col col-md-2">
+						<button class="btn btn-default btn-xs" id="officialIteneraryButton" data-toggle="modal" data-target="#itenerary-modal" data-toggle="modal" data-target="#passenger-modal"><i class="material-icons md-18">add_box</i> Location</button>
 					</div>
 				</div>
 
@@ -107,7 +118,7 @@
 			<div class="col col-md-12 preview-sections">
 
 				<div class="col col-md-12 content-header-section">
-					<div class="content-header"><div class="mini-circle" style="background: #fff;"></div> 
+					<div class="content-header">
 						<span><b>Cash Advance</b></span> 
 						<i class="material-icons md-18" onclick="$('#fundings').show();return false;">edit</i>
 					</div>

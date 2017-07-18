@@ -72,7 +72,7 @@ function showUntouchedStatusAdmin(){
 					<button class="btn btn-xs btn-danger preview-verify"> Verify <span class="glyphicon glyphicon-ok"></span></button>
 				</p>
 			</div>`;
-	$('.preview-status-section').html(htm);
+	$('.preview-status-section').fadeIn().html(htm);
 }
 
 
@@ -88,7 +88,7 @@ function showVerifyStatusAdmin(){
 				</p>
 
 			</div>`;
-	$('.preview-status-section').html(htm);
+	$('.preview-status-section').fadeIn().html(htm);
 }
 
 
@@ -116,7 +116,7 @@ function showReturnStatusAdmin(){
 					This Travel Request was returned. 
 				</p>
 			</div>`;
-	$('.preview-status-section').html(htm);
+	$('.preview-status-section').fadeIn().html(htm);
 }
 
 
@@ -173,7 +173,7 @@ function showUntouchedStatus(){
 					<button class="btn btn-xs btn-danger preview-forward preview-command">Send <span class="glyphicon glyphicon-send"></span></button>
 				</p>
 			</div>`;
-	$('.preview-status-section').html(htm);
+	$('.preview-status-section').fadeIn().html(htm);
 
 	//bind forward button
 	bindForwardOfficial()
@@ -197,7 +197,7 @@ function showVerifiedStatus(){
 	var htm=`
 			<div class="col col-md-11">
 				<p>
-					<i class="material-icons md-18">check_circle</i> This Travel Request has been verified.
+					<i class="material-icons md-18 text-success">check_circle</i> This Travel Request has been verified.
 				</p>
 			</div>`;
 	$('.preview-status-section').fadeIn().html(htm);
@@ -214,7 +214,7 @@ function showReturnStatus(){
 					<i class="material-icons md-18">undo</i> This Travel Request was returned by admin.Please review the request before resending.
 				</p>
 			</div>`;
-	$('.preview-status-section').html(htm);
+	$('.preview-status-section').fadeIn().html(htm);
 }
 
 
@@ -310,7 +310,7 @@ function verifyOfficialTravelRequest(id){
 
 
 function returnOfficialTravelRequest(){
-	
+	$('.modal-submit').off('click');
 	$('.modal-submit').on('click',function(){
 
 		//loading
@@ -327,6 +327,9 @@ function returnOfficialTravelRequest(){
 	    		//change status
 	    		if(isAdmin()){
 					showReturnStatusAdmin()
+
+					//hide menu
+					$('.preview-menu-li').hide();
 
 					//hide section
 					setTimeout(function(){

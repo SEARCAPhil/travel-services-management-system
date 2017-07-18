@@ -36,7 +36,7 @@
 
             <p>Station</p> <input type="text" class="form-control" id="station" placeholder="Station">
              <div class="form-group text-right">
-                <button class="btn btn-success" type="button" id="add-button">Add</button>
+                <button class="btn btn-success" type="button" id="add-button-replace">Add</button>
                 <button class="btn btn-default" type="button" data-dismiss="modal" id="">Cancel</button>
               </div>
       		</form>

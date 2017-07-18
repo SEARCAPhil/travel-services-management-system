@@ -38,8 +38,8 @@ function appendStaffToListPreview(jsonData){
 									<div class="col col-md-9"><b>`+data.name+`</b></div></td>
 
 								
-								<td>`+data.designation+`</td>
-								<td>`+data.office+`</td>
+								<td>`+((data.designation==null)?'':data.designation)+`</td>
+								<td>`+((data.office==null)?'':data.office)+`</td>
 							</tr>`
 			$('.preview-passengers').append(htm)
 

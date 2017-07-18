@@ -209,7 +209,7 @@ function showVerifiedRecentTravel(page=1){
 
 	ajax_getVerifiedTravel('travel/verified/scheduled/',page,function(json){
 
-		appendToList(json);
+		appendTravelToList(json);
 		
 		//next page
 		setTimeout(function(){
@@ -232,7 +232,7 @@ function showVerifiedOngoingTravel(page=1){
 
 	ajax_getVerifiedTravel('travel/verified/ongoing/',page,function(json){
 
-		appendToList(json);
+		appendTravelToList(json);
 
 		//next page
 		setTimeout(function(){
@@ -254,7 +254,7 @@ function showVerifiedFinishedTravel(page=1){
 
 	ajax_getVerifiedTravel('travel/verified/finished/',page,function(json){
 
-		appendToList(json);
+		appendTravelToList(json);
 
 		//next page
 		setTimeout(function(){
@@ -402,7 +402,7 @@ var htm='';
 | Display all item on the list. This is used inside the show* function
 */
 
-function appendToList(json){
+function appendTravelToList(json){
 
 		var htm='';
 

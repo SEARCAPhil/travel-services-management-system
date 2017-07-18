@@ -1,6 +1,6 @@
 <div class="col col-md-12 preview-status-section" style="background-image: none;background: rgba(225, 61, 52,0.2);"></div>	
 
-<div class="col col-md-12"  style="margin-bottom: 10px;">
+<div class="col col-md-12"  style="margin-bottom: 10px;margin-top: 20px;">
 	<small>
 		<ul class="list-unstyled preview-menu-li">
 
@@ -39,7 +39,7 @@
 
 			<div class="col col-md-12 preview-sections">
 				<div class="col col-md-12 content-header-section">
-					<div class="content-header"><div class="mini-circle" style="background: #fff;"></div> <b>Purpose</b></div>
+					<div class="content-header"> <b>Purpose</b></div>
 				</div>
 				
 				<div class="col col-md-12">
@@ -52,7 +52,7 @@
 			<div class="col col-md-12 preview-sections">
 
 				<div class="col col-md-12 content-header-section">
-					<div class="content-header"><div class="mini-circle" style="background: #fff;"></div> 
+					<div class="content-header">
 						<span class="pull-left"><b>Passengers</b></span> &emsp;
 						<span class="label label-success  passenger-count">?</span>
 					</div>
@@ -60,7 +60,7 @@
 				
 				<div class="col col-md-12">
 					<div class="colcol-md-12">
-						<table class="table table-striped passenger-table preview-table table-fluid" id="table-passenger" ng-show="passengersX.length>=1||passengersScholar.length>=1||passengersCustom.length>=1">
+						<table class="table table-striped passenger-table preview-table table-fluid" id="table-passenger">
 							<thead>
 								<tr>
 									<th>Name</th><th>Designation</th><th>Office/Unit</th>
@@ -78,7 +78,7 @@
 
 			<div class="col col-md-12 preview-sections">
 				<div class="col col-md-12 content-header-section">
-					<div class="content-header"><div class="mini-circle" style="background: #fff;"></div> <span class="pull-left"><b>Itinerary</b></span> &emsp;
+					<div class="content-header"> <span class="pull-left"><b>Itinerary</b></span> &emsp;
 				<span class="label label-success itenerary-count"> ? </span></div>
 				</div>
 
@@ -92,7 +92,7 @@
 
 			<div class="col col-md-12 preview-sections">
 				<div class="col col-md-12 content-header-section">
-					<div class="content-header"><div class="mini-circle" style="background: #fff;"></div> <span><b>Cash Advance</b></span></div>
+					<div class="content-header"> <span><b>Cash Advance</b></span></div>
 				</div>
 				<div class="col co-md-12">
 					<div class="preview-cash-advance"></div>

@@ -43,7 +43,7 @@
 {{csrf_field()}}
 
 
-	<div class="row col col-md-6 col-sm-8 col-md-offset-2 content-section">
+	<div class="row col col-md-6 col-sm-8 col-md-offset-2 content-section" style="margin-top: 50px;">
 
 		<div class="col col-md-12">
 			<h3 class="page-header">Official Travel Request Form</h3>

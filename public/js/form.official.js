@@ -13,16 +13,18 @@
 */
 
 function bindOfficialPurposeSaveButton(){
-
-	$('#officialPurposeSaveButton').click(function(e){
+	$('#officialPurposeSaveButton').off('click')
+	$('#officialPurposeSaveButton').on('click',function(e){
 		e.preventDefault();
-		//loading
-		 showLoading('#officialPurposeSaveStatus',' <span>saving . . .</span>&emsp;<span><img src="img/loading.png" class="loading-circle" width="10px"/></span>')
+
+		if($('#form-purpose').val().length<2){
+			alert('Sorry!Unable to handle request.Please check all the fields if not empty.')
+			return 0;
+		} else{
+			//loading
+			showLoading('#officialPurposeSaveStatus',' <span>saving . . .</span>&emsp;<span><img src="img/loading.png" class="loading-circle" width="10px"/></span>')
 			setTimeout(function(){  showLoading('#officialPurposeSaveStatus') },1000)
-		
-
-
-		if($('#form-purpose').val().length<2) return 0;
+		}
 		
 
 		//insert new item to db if not yet saved
@@ -53,7 +55,9 @@ function bindOfficialPurposeSaveButton(){
 				method:'PUT',
 				success:function(res){
 					if(res>0&&res.length<50){
-
+						alert('Updated Successfully!')
+					}else{
+						alert('Sorry!Unable to handle request.Please try again later.')
 					}
 				}
 			});
