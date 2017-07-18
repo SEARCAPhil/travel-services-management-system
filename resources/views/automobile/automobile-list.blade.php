@@ -1,5 +1,5 @@
 {{csrf_field()}}
-<p class="col col-md-8 col-md-offset-1 text-right" style="margin-top: 50px;">
+<p class="col col-md-8 col-sm-8 col-md-offset-1 text-right" style="margin-top: 2vh;">
 
 	<a href="#" class="vehicle"><i class="material-icons md-36">add_box</i></a>
 
@@ -7,7 +7,7 @@
 
 
 	
-<article class="col col-md-8 col-md-offset-1">
+<article class="col col-md-9 col-sm-8 col-lg-8 col-lg-offset-1">
 	<section class="col col-md-12  row automobile-list"></section>
 </article>
 

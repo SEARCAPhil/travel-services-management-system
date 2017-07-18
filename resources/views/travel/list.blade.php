@@ -4,7 +4,7 @@
 
 
 
-<div class="col col col-md-3 col-sm-3 hidden-xs hidden-lg">
+<div class="col col col-md-3 col-sm-3 hidden-xs hidden-lg hidden-md hidden-sm">
 	<p class="page-header"><span class="glyphicon glyphicon-th-large"></span> <b>Travel Request</b></p>
 	<ul class="list-unstyled travel-link-ul">
 		<li><a href="#" class="travel-link pull-left" data-type="official">Official</a> <span class="add-button" data-content="official"><span class="glyphicon glyphicon-plus" ></span></li>
@@ -25,7 +25,7 @@
 </div>
 
 
-<div class=" list-section col col col-md-2 col-sm-9 hidden-sm hidden-xs row">
+<div class=" list-section col col col-md-3 col-lg-2 col-sm-9 hidden-sm hidden-xs row">
 	<div class="col col-md-12 content-section">
 		<dl class="row list-details">	
 			<!--<dd>
@@ -35,7 +35,7 @@
 			
 		</dl>
 
-		<p class="row hidden-lg">
+		<p class="row hidden-lg hidden-md hidden-xs">
 				<b class="text-danger">Page /<span class="list-total-pages">40</span></b>
 				<input type="number" class="form-control list-current-page" value="1">
 		</p>

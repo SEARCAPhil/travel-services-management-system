@@ -411,6 +411,8 @@ function appendTravelToList(json){
 		//update total pages
 		$('.list-total-pages').html(json.pages)
 
+		
+
 		for(var x=0; x<json.data.length; x++){
 			var data=json.data[x];
 
@@ -418,7 +420,7 @@ function appendTravelToList(json){
 			var plate_no=data.plate_no!=null?data.plate_no:'N/A'
 
 			htm+=`<div class="row `+data.type+``+data.id+`" style="margin-bottom: 50px;">
-			 	<div class="col col-md-1 col-sm-1 ">
+			 	<div class="col col-md-2 col-lg-1 col-sm-2 ">
 					 <div class="text-center col trip-date `+data.type+`">
 					 	`+departure_date+`
 					 </div>
@@ -432,7 +434,7 @@ function appendTravelToList(json){
 
 
 
-				 	<div class="col col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11">
+				 	<div class="col col-lg-offset-1 col-md-offset-2 col-md-10 col-sm-offset-1 col-sm-11">
 						<small>
 							<a href="#" class="travel-link advance-menu pull-left  travel-other-details-read-more travel-other-details-read-more-`+data.id+`" title="Read other details" data-target="travel-other-details-`+data.id+`">
 								<span class="glyphicon glyphicon-option-horizontal"></span>
@@ -441,18 +443,20 @@ function appendTravelToList(json){
 					</div>
 
 
-					<div class="col col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11 travel-other-details travel-other-details-`+data.id+`">
-						<p><label>Driver : <u class="travel-other-details-driver-`+data.id+`">`+data.driver+`</u></label> </p>
-						<p><label>Vehicle Plate Number : <u class="travel-other-details-vehicle-`+data.id+`">`+plate_no+`</u></label> </p>
-						<p><label>Departure Time(Actual) : <u>`+data.actual_time+`</u></label> </p>
-						<p><label>Returned Date : <u>`+data.returned_date+`</u></label> </p>
-						<p><label>Returned Time : <u>`+data.returned_time+`</u></label> </p>
-						<p><hr/></p>
+					<div class="col col-md-offset-2 col-lg-offset-1 col-md-11 col-sm-offset-1 col-sm-11 travel-other-details travel-other-details-`+data.id+`">
+							<hr/>
+							<p>&emsp;Driver : <u class="travel-other-details-driver-`+data.id+`">`+data.driver+`</u> </p>
+							<p>&emsp;Vehicle Plate Number : <u class="travel-other-details-vehicle-`+data.id+`">`+plate_no+`</u></p>
+							<p>&emsp;Departure Time(Actual) : <u>`+data.actual_time+`</u></p>
+							<p>&emsp;Returned Date : <u>`+data.returned_date+`</u></p>
+							<p>&emsp;Returned Time : <u>`+data.returned_time+`</u></p>
+							<p><hr/></p>
+						
 					</div>
 
 
 
-				 <div class="col col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11" style="border-bottom:1px solid rgb(250,250,250);">
+				 <div class="col col-md-offset-2  col-lg-offset-1 col-md-10 col-sm-offset-1 col-sm-11">
 					 <small>
 					 	<ul class="list-unstyled trip-list">`;
 
@@ -530,7 +534,7 @@ function appendTravelToList(json){
 						htm+=`</ul>
 					</small>
 
-					<div style="clear:both"><br/></div>
+					
 
 				 	
 				 </div>
@@ -548,7 +552,7 @@ function appendTravelToList(json){
 					 for(var a=0;a<official_staff.length;a++){
 					 	var office=official_staff[a].office!=null?official_staff[a].office:'';
 					 	var designation=official_staff[a].designation!=null?official_staff[a].designation:'';
-					 	htm+=` <div class="col col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11  verified-travel-passenger-section">
+					 	htm+=` <div class="col col-md-offset-2  col-lg-offset-1 col-md-10 col-sm-offset-1 col-sm-11  verified-travel-passenger-section" style="margin-top:10px;">
 						 
 
 						 <div class="row  verified-travel-passenger">
@@ -635,6 +639,8 @@ function appendTravelToList(json){
 	
 
 	$('.verified_travel_result').html(htm)
+
+	if(json.data.length<=0) $('.verified_travel_result').html('<center><i class="material-icons md-48">directions_car</i><h3>No travel available</h3><p class="text-muted">The content of this section is not available. <br/>Please make sure that you have enough privilege to view all travel requests.</p></center>');
 
 	//mark the travel as selected
 	$('.mark-as-menu , .advance-menu').off('click');

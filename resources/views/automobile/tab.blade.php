@@ -24,54 +24,54 @@
 	</nav>
 @endsection
 @section('status')
-	<div class="col col-md-2 col-sm-3" style="background: rgb(60,60,60);min-height: 1080px;box-shadow: 0px 5px 15px rgba(200,200,200,0.3);">
+	<div class="col col-md-3 col-sm-4 col-lg-2" style="background: rgb(60,60,60);min-height: 1080px;box-shadow: 0px 5px 15px rgba(200,200,200,0.3);">
 
 		<div class="col col-md-12 col-xs-12 col-sm-12">
  			<ul class="list-unstyled main-menu main-menu-list pull-left">
 
  			<?php if(@$_SESSION["priv"]=='admin'): ?>
- 				<li href="#status" aria-controls="status" role="tab" data-toggle="tab" class="automobile-tab col col-md-12" data-page="status">
+ 				<li href="#status" aria-controls="status" role="tab" data-toggle="tab" class="automobile-tab col col-md-12 col-sm-12" data-page="status">
  					<i class="material-icons" style="width: 24px;">dashboard</i> Dashboard 	
  				</li>
  			<?php endif; ?>
 
  			<?php if(@$_SESSION["priv"]=='admin'): ?>
- 				<li  href="#home" aria-controls="home" role="tab" data-toggle="tab" class="automobile-tab col col-md-12" data-page="automobile">
+ 				<li  href="#home" aria-controls="home" role="tab" data-toggle="tab" class="automobile-tab col col-md-12 col-sm-12" data-page="automobile">
  					<i class="material-icons" style="width: 24px;">motorcycle</i> Automobile
  				 </li>
  			<?php endif; ?>
 
 
  			<?php if(@$_SESSION["priv"]=='admin'): ?>
- 				<li href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab col col-md-12" data-page="verified">
+ 				<li href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab col col-md-12 col-sm-12" data-page="verified">
  					<i class="material-icons">card_travel</i> Travel
  				</li>
  			<?php endif; ?>
 
 
  			<?php if(@$_SESSION["priv"]!='admin'): ?>
- 				<li>
+ 				<li class="col col-sm-12 col-md-12">
  					<i class="material-icons">card_travel</i> Travel
  				</li>
  			<?php endif; ?>
 
 
-					<li href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab pull-left col col-md-10" data-page="travel" data-type="official" onclick="showOfficialTravelList()">&emsp;&emsp;Official </li>
+					<li href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab pull-left col col-md-10 col-lg-9" data-page="travel" data-type="official" onclick="showOfficialTravelList()">&emsp;&emsp;Official </li>
 
 
-					<li role="presentation" class="col col-md-1"><a href="#" class="add-button" data-content="official"><i class="material-icons">add_box</i></a></li>
+					<li role="presentation" class="col col-md-1 col-lg-1"><a href="#" class="add-button" data-content="official"><i class="material-icons">add_box</i></a></li>
 
 
-					<li href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab pull-left col col-md-10" data-page="travel" data-type="personal"  onclick="showPersonalTravelList()">&emsp;&emsp;Personal </li>
+					<li href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab pull-left col col-md-10 col-lg-9" data-page="travel" data-type="personal"  onclick="showPersonalTravelList()">&emsp;&emsp;Personal </li>
 
 
-					<li role="presentation" class="col col-md-1"><a href="#" class="add-button" data-content="personal"><i class="material-icons">add_box</i></a></li>
+					<li role="presentation" class="col col-md-1  col-lg-1"><a href="#" class="add-button" data-content="personal"><i class="material-icons">add_box</i></a></li>
 
 
-					<li href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab  pull-left col col-md-10" data-page="travel" data-type="campus"  onclick="showCampusTravelList()">&emsp;&emsp;Campus </li>
+					<li href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab  pull-left col col-md-10 col-lg-9" data-page="travel" data-type="campus"  onclick="showCampusTravelList()">&emsp;&emsp;Campus </li>
 
 
-					<li role="presentation" class="col col-md-1"><a href="#" class="add-button" data-content="campus"><i class="material-icons">add_box</i></a></li>
+					<li role="presentation" class="col col-md-1  col-lg-1"><a href="#" class="add-button" data-content="campus"><i class="material-icons">add_box</i></a></li>
 
 
 

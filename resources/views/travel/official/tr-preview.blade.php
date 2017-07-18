@@ -21,9 +21,7 @@
 
 		
 		<div class="col col-md-12 preview-title row" >
-			<div class="col col-md-1 hidden-lg">
-				<div class="profile-image profile-image-main" display-image="67.PNG" data-mode="staff" style="background: url(&quot;/profiler/profile/user.png&quot;) center center / cover no-repeat;"></div>
-			</div>
+
 			<div class="col col-md-9">
 				<h3 class="preview-name"></h3>
 				<small class="preview-unit">. . .</small><br/>
