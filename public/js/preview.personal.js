@@ -293,8 +293,8 @@ function showPersonalTravelPassengerStaffPreview(id){
 										<div class="col col-md-9"><b>`+staff[x].name+`</b></div></td>
 
 									
-									<td>`+staff[x].designation+`</td>
-									<td>`+staff[x].office+`</td>
+									<td>`+(staff[x].designation==null?'N/A':staff[x].designation)+`</td>
+									<td>`+(staff[x].office==null?'N/A':staff[x].office)+`</td>
 								</tr>`
 				$('.preview-passengers').append(htm)
 			}

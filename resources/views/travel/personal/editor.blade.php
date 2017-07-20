@@ -37,18 +37,11 @@
 	</div>
 </div>
 
-<div class="row preview-content">
-		<div class="col col-md-5 col-md-offset-2">
-			<ul class="list-unstyled preview-menu-li">
-				<li><strong></strong>&emsp;<small>[R/W Mode]</small></li>
-			</ul>
-			
-		</div>
-		<div class="col col-xs-12 col-md-8  col-md-offset-2 preview-title">
-			<div class="col col-md-2 col-sm-2">
-				<div class="profile-image profile-image-main" display-image="67.PNG" data-mode="staff" style="background: url(&quot;/profiler/profile/user.png&quot;) center center / cover no-repeat;"></div>
-			</div>
-			<div class="col col-md-9 col-xs-7">
+<div class="col col-md-8 col-md-offset-2 preview-content" style="margin-top: 50px;">
+	<div class="col col-md-8 content-section">
+		<div class="col col-xs-12 col-xs-12 col-md-8 preview-title">
+
+			<div class="col col-md-12 col-xs-7 row">
 				<h3 class="preview-name">. . .</h3>
 				<p class="preview-unit">. . .</p>
 				<p class="preview-created">. . .</p>
@@ -56,7 +49,7 @@
 		</div>
 		
 		<div class="row">
-			<div class="col col-md-8 col-sm-12 col-md-offset-2 preview-sections">
+			<div class="col col-md-12 col-sm-12 preview-sections">
 				{{csrf_field()}}
 				<p></p><div class="mini-circle"></div> <b>Purpose</b> 
 					<span class="btn btn-success btn-xs" id="officialPurposeSaveButton"><span class="glyphicon glyphicon-floppy-disk"></span></span>
@@ -67,7 +60,7 @@
 				</p>	
 			</div>
 
-			<div class="col col-md-8  col-md-offset-2 preview-sections">
+			<div class="col col-md-12 preview-sections">
 				<p><div class="mini-circle"></div> <b>Passengers</b> <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#passenger-modal"><span class="glyphicon glyphicon-plus"></span></button></p>
 				<table class="table table-striped passenger-table preview-table table-fluid" id="table-passenger" ng-show="passengersX.length>=1||passengersScholar.length>=1||passengersCustom.length>=1">
 					<thead>
@@ -83,7 +76,7 @@
 			</div>
 
 
-			<div class="col col-md-8  col-md-offset-2 preview-sections">
+			<div class="col col-md-12 preview-sections">
 				<p><div class="mini-circle"></div> <b>Itinerary</b> <span class="btn btn-success btn-xs" id="officialIteneraryButton" data-toggle="modal" data-target="#itenerary-modal"><span class="glyphicon glyphicon-map-marker"></span></span></p>
 				<div class="preview-itenerary">
 
@@ -91,7 +84,7 @@
 				
 			</div>
 
-			<div class="col col-md-12 col-md-offset-2 preview-sections">
+			<div class="col col-md-12  preview-sections">
 				<p></p><div class="mini-circle"></div> <b>Type of Vehicle</b> <span id="personalVehicleTypeSaveStatus" class=""></span><p></p>
 				<p class="col col-md-12">
 					<input type="radio" name="vtype" value="1" select-mobi="1" 	class="vehicleTypeFormButton"> SUV 
@@ -100,7 +93,7 @@
 				</p>
 			</div>
 
-			<div class="col col-md-12 col-md-offset-2 preview-sections">
+			<div class="col col-md-12  preview-sections">
 				<p></p><div class="mini-circle"></div> <b>Mode of Payment</b> <span id="paymentSaveStatus" class=""></span><p></p>
 				<p class="col col-md-12">
 					<span>Cash <input type="radio" name="mode-of-payment" class="paymentFormButton" value="cash"></span>
@@ -111,6 +104,7 @@
 
 
 	</div>
+</div>
 <script type="text/javascript" src="js/common.js"></script>	
 <script type="text/javascript" src="js/form.personal.js"></script>
 <script type="text/javascript" src="js/itenerary.personal.js"></script>	

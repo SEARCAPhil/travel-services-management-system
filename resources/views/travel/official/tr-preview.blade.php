@@ -1,4 +1,4 @@
-<div class="col col-md-12 preview-status-section" style="background-image: none;background: rgba(225, 61, 52,0.2);"></div>	
+<div class="col col-md-12 preview-status-section"></div>	
 
 <div class="col col-md-12"  style="margin-bottom: 10px;margin-top: 20px;">
 	<small>

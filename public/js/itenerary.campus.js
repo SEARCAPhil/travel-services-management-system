@@ -144,12 +144,18 @@ function appendIteneraryListPreviewConfirmationDone(data){
 						bindRemoveItenerary();
 				},800);
 				
-				//calback
-				appendIteneraryToListPreviewCallback(data);
+				
+				try{
+					//calback
+					appendIteneraryToListPreviewCallback(data);
+				}catch(e){}
+
+
 			})
 
 
 		}catch(e){
+			console.log(e)
 			alert('Something went wrong.Please try again later!');
 		}
 

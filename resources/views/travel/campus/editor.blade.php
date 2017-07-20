@@ -36,20 +36,13 @@
 			@include('travel/modal/itenerary')
 	</div>
 </div>
-
-<div class="row preview-content">
 {{csrf_field()}}
-		<div class="col col-md-5 col-md-offset-2">
-			<ul class="list-unstyled preview-menu-li">
-				<li><strong></strong>&emsp;<small>[R/W Mode]</small></li>
-			</ul>
-			
-		</div>
-		<div class="col col-xs-12 col-md-8  col-md-offset-2 preview-title">
-			<div class="col col-md-2 col-sm-2">
-				<div class="profile-image profile-image-main" display-image="67.PNG" data-mode="staff" style="background: url(&quot;/profiler/profile/user.png&quot;) center center / cover no-repeat;"></div>
-			</div>
-			<div class="col col-md-9 col-xs-7">
+<div class="col col-md-8 col-md-offset-2 preview-content" style="margin-top: 50px;">
+	<div class="col col-md-8 content-section">
+
+
+		<div class="col col-md-12 preview-title row">
+			<div class="col col-md-12">
 				<h3 class="preview-name">. . .</h3>
 				<p class="preview-unit">. . .</p>
 				<p class="preview-created">. . .</p>
@@ -60,7 +53,7 @@
 			
 
 
-			<div class="col col-md-8  col-md-offset-2 preview-sections">
+			<div class="col col-md-12 col-sm-12 preview-sections">
 				<p></p><div class="mini-circle"></div> <b>Itinerary</b>
 				<span class="btn btn-success btn-xs" id="officialIteneraryButton" data-toggle="modal" data-target="#itenerary-modal"><span class="glyphicon glyphicon-map-marker"></span></span>
 					<div id="officialIteneraryStatus" class="text-muted" style="float:right;height:20px;width:250px;overflow: hidden;position:relative;"></div>
@@ -76,6 +69,7 @@
 
 
 	</div>
+</div>
 <script type="text/javascript" src="js/common.js"></script>	
 <script type="text/javascript" src="js/preview.campus.js"></script>	
 <script type="text/javascript" src="js/itenerary.campus.js"></script>

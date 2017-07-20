@@ -1,4 +1,4 @@
-<div class="preview-status-section hidden-lg"></div>
+<div class="preview-status-section"></div>
 <div class="col col-md-12" style="margin-bottom: 10px;">
 	<small>
 		<ul class="list-unstyled preview-menu-li">
@@ -31,7 +31,7 @@
 
 			<div class="col col-md-12 preview-sections">
 				<div class="col col-md-12 content-header-section">
-					<div class="content-header"><div class="mini-circle" style="background: #fff;"></div> <b>Purpose</b></div>
+					<div class="content-header"> <b>Purpose</b></div>
 				</div>
 				
 				<div class="col col-md-12">
@@ -42,7 +42,7 @@
 			<div class="col col-md-12 preview-sections">
 
 				<div class="col col-md-12 content-header-section">
-					<div class="content-header"><div class="mini-circle" style="background: #fff;"></div> 
+					<div class="content-header">
 						<span class="pull-left"><b>Passengers</b></span> &emsp;
 						<span class="label label-success  passenger-count">?</span>
 					</div>
@@ -68,7 +68,7 @@
 
 			<div class="col col-md-12 preview-sections">
 				<div class="col col-md-12 content-header-section">
-					<div class="content-header"><div class="mini-circle" style="background: #fff;"></div> <span class="pull-left"><b>Itinerary</b></span> &emsp;</div>
+					<div class="content-header"><span class="pull-left"><b>Itinerary</b></span> &emsp;</div>
 				</div>
 
 				
@@ -80,7 +80,7 @@
 
 			<div class="col col-md-12 preview-sections">
 				<div class="col col-md-12 content-header-section">
-					<div class="content-header"><div class="mini-circle" style="background: #fff;"></div> <span class="pull-left"><b>Type of Vehicle</b></span> &emsp;</div>
+					<div class="content-header"><span class="pull-left"><b>Type of Vehicle</b></span> &emsp;</div>
 				</div>
 
 				<p class="col col-md-12">
@@ -92,7 +92,7 @@
 
 			<div class="col col-md-12 preview-sections">
 				<div class="col col-md-12 content-header-section">
-					<div class="content-header"><div class="mini-circle" style="background: #fff;"></div> <span class="pull-left"><b>Mode of Payment</b></span> &emsp;</div>
+					<div class="content-header"> <span class="pull-left"><b>Mode of Payment</b></span> &emsp;</div>
 				</div>
 				<p class="col col-md-12">
 					<span>Cash <input type="radio" name="mode-of-payment" disabled="disabled" value="cash"></span>

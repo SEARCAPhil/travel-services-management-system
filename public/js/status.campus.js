@@ -63,39 +63,30 @@ function ajax_updateTravelStatusPreview(url,id,status,callback){
 
 function showUntouchedStatusAdmin(){
 	var htm=`
-			<div class="col col-md-1">
-				<div class="status-markings">
-					 <span class="glyphicon glyphicon-warning-sign"></span>
-				</div>
-			</div>
-			<div class="col col-md-11">
+
+			<div class="col col-md-12">
 				<p>
+					<i class="material-icons md-18 text-success">check_circle</i>
 					This Travel Request is not yet verified. Please review before making any further actions.
 					<button class="btn btn-xs btn-danger preview-return">Return to sender <span class="glyphicon glyphicon-inbox"></span></button> Or
 					<button class="btn btn-xs btn-danger preview-verify"> Verify <span class="glyphicon glyphicon-ok"></span></button>
 				</p>
 			</div>`;
-	$('.preview-status-section').html(htm);
+	$('.preview-status-section').fadeIn().html(htm);
 }
 
 
 
 function showVerifyStatusAdmin(){
 
-	var htm=`<div class="col col-md-1">
-				<div class="status-markings green">
-					<span class="glyphicon glyphicon-ok"></span>
-				</div>
-			</div>
-			<div class="col col-md-11 text-muted">
+	var htm=`
+			<div class="col col-md-12">
 				<p>
-					Travel Request Verified!
 					<button class="btn btn-xs btn-danger preview-return">Return to sender <span class="glyphicon glyphicon-inbox"></span></button> Or
 					<button class="btn btn-xs btn-danger preview-close">Mark as <u>Closed</u> <span class="glyphicon glyphicon-lock"></span></button> 
 				</p>
-				<hr/>
 			</div>`;
-	$('.preview-status-section').html(htm);
+	$('.preview-status-section').css({}).fadeIn().html(htm);
 }
 
 
@@ -106,24 +97,21 @@ function showClosedStatusAdmin(){
 				</p>
 			</div>`;
 
-	$('.preview-status-section').html(htm);
+	$('.preview-status-section').fadeIn().html(htm);
 }
 
 
 
 function showReturnStatusAdmin(){
 	var htm=`
-			<div class="col col-md-1">
-				<div class="status-markings">
-					<span class="glyphicon glyphicon-pushpin"></span>
-				</div>
-			</div>
-			<div class="col col-md-11">
+
+			<div class="col col-md-12">
 				<p>
+					<i class="material-icons md-18 text-danger">undo</i>
 					This Travel Request was returned. 
 				</p>
 			</div>`;
-	$('.preview-status-section').html(htm);
+	$('.preview-status-section').fadeIn().html(htm);
 }
 
 
@@ -142,7 +130,7 @@ function showClosedStatus(){
 				</p>
 				<hr/>
 			</div>`;
-	$('.preview-status-section').html(htm);
+	$('.preview-status-section').fadeIn().html(htm);
 }
 
 
@@ -180,7 +168,7 @@ function showUntouchedStatus(){
 					<button class="btn btn-xs btn-danger preview-forward preview-command">Send <span class="glyphicon glyphicon-send"></span></button>
 				</p>
 			</div>`;
-	$('.preview-status-section').html(htm);
+	$('.preview-status-section').fadeIn().html(htm);
 
 	//bind forward button
 	bindForwardOfficial()
@@ -201,43 +189,34 @@ function showVerifyStatus(){
 				</p>
 				<hr/>
 			</div>`;
-	$('.preview-status-section').html(htm);
+	$('.preview-status-section').fadeIn().html(htm);
 }
 
 function showVerifiedStatus(){
 
-	var htm=`<div class="col col-md-1">
-				<div class="status-markings green">
-					<span class="glyphicon glyphicon-pushpin"></span>
-				</div>
-			</div>
-
-			<div class="col col-md-11 text-muted">
+	var htm=`
+			<div class="col col-md-12">
 				<p>
-					This Travel Request has been verified.
+					<i class="material-icons md-18 text-success">check_circle</i>	This Travel Request has been verified.
 				</p>
-				<hr/>
+				
 			</div>`;
-	$('.preview-status-section').html(htm);
+	$('.preview-status-section').fadeIn().html(htm);
 }
 
 
 
 function showReturnStatus(){
 	var htm=`
-			<div class="col col-md-1">
-				<div class="status-markings">
-					<span class="glyphicon glyphicon-pushpin"></span>
-				</div>
-			</div>
-			<div class="col col-md-11" style="margin-bottom: 20px;padding: 5px;">
 
-				<p class="text-muted">
+			<div class="col col-md-12">
+
+				<p>
+					<i class="material-icons md-18">undo</i>
 					This Travel Request was returned by admin.Please review the request before resending.
 				</p>
-				<hr/>
 			</div>`;
-	$('.preview-status-section').html(htm);
+	$('.preview-status-section').fadeIn().html(htm);
 }
 
 

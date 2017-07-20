@@ -429,9 +429,11 @@ padding: 5px;
 	margin-bottom: 25px;
 }
 .preview-status-section{
-	border:1px solid #ccc;
 	padding-top: 15px;
 	margin-bottom: 10px;
+	background-image: none;
+	background: rgba(220,20,60,0.9);
+	color:rgb(255,255,255);
 	display: none;
 }
 

@@ -1,5 +1,5 @@
 
-<div class="preview-status-section hidden-lg"></div>
+<div class="preview-status-section col col-md-12"></div>
 <div  class="col col-md-12"  style="margin-bottom: 10px;">
 	<small>
 		<ul class="list-unstyled preview-menu-li">
@@ -34,7 +34,7 @@
 			<div class="col col-md-12 preview-sections">
 				<div class="col col-md-12 content-header-section">
 					<div class="content-header">
-						<div class="mini-circle" style="background: #fff;"></div> <span class="pull-left"><b>Itinerary</b></span> &emsp;
+						 <span class="pull-left"><b>Itinerary</b></span> &emsp;
 					</div>
 				</div>
 

@@ -62,6 +62,8 @@ function bindPurpose(){
 				success:function(res){
 					if(res>0&&res.length<50){
 						$('#officialPurposeSaveStatus').html('<span class="text-success"><span class="glyphicon glyphicon-ok"></span></span>')	
+					}else{
+						alert('Oops something went wrong!Please try again later.')
 					}
 				}
 			});

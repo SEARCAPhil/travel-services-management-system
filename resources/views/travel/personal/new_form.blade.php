@@ -38,7 +38,7 @@
 	</div>
 </div>
 
-<div class="preview-content">
+<div class="preview-content"  style="margin-top: 50px;">
 
 	<div class="row col col-md-6 col-sm-8 col-md-offset-2 content-section">
 
@@ -57,7 +57,7 @@
 			<div class="circle  itenerary-circle-group">3<span class="circle-label">Itinerary<span></div>
 			<div class="bar  itenerary-circle-group"></div>	
 			<div class="circle vehicle-circle-group">4<span class="circle-label">Vehicle<span></div>
-			<div class="bar payment-circle-group" style="width: 170px;"></div>	
+			<div class="bar payment-circle-group" style="width: 150px;"></div>	
 			<div class="circle  payment-circle-group">5<span class="circle-label top">Payment<span></div>
 
 
