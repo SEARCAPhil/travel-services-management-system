@@ -337,6 +337,12 @@ function showOfficialTravelPassengerStaffPreview(id){
 			}
 			
 			setTimeout(function(){ context() },1000);
+			setTimeout(function(){
+				if(passenger_count<=0){
+					$('.preview-passengers').parent().html('<center><h3>Empty Passenger</h3><p class="text-muted">This request do not have any passenger.Please select person from the list.</p></center>')
+				}
+
+			},5000)
 
 	});
 	
@@ -363,10 +369,6 @@ function showOfficialTravelPassengerScholarsPreview(id){
 							</tr>`
 			$('.preview-passengers').append(htm);
 			
-		}
-
-		if(scholars.length<=0){
-			$('.preview-passengers').parent().html('<center><h3>Empty Passenger</h3><p class="text-muted">This request do not have any passenger.Please select person from the list.</p></center>')
 		}
 
 		
