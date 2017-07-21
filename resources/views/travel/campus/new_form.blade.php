@@ -38,7 +38,7 @@
 	</div>
 </div>
 
-<div class="preview-content">
+<div class="preview-content"  style="margin-top: 70px;">
 {{csrf_field()}}
 
 

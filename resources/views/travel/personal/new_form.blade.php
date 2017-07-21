@@ -38,7 +38,7 @@
 	</div>
 </div>
 
-<div class="preview-content"  style="margin-top: 50px;">
+<div class="preview-content"  style="margin-top: 70px;">
 
 	<div class="row col col-md-6 col-sm-8 col-md-offset-2 content-section">
 

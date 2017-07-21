@@ -1,4 +1,4 @@
-<div class="preview-status-section"></div>
+<div class="col col-md-12 preview-status-section"></div>
 <div class="col col-md-12" style="margin-bottom: 10px;">
 	<small>
 		<ul class="list-unstyled preview-menu-li">
