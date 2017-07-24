@@ -89,6 +89,10 @@ function showVerifyStatusAdmin(){
 
 			</div>`;
 	$('.preview-status-section').fadeIn().html(htm);
+
+	//bind
+	bindReturnOfficial()
+	bindCloseOfficial();
 }
 
 
@@ -258,6 +262,11 @@ function forwardOfficialTravelRequest(){
 					
 				}else{
 					showVerifyStatus();
+
+					//remove bindings
+					unbindRemoveOfficialPreview();
+					unbindForwardOfficial()
+					unbindUpdateOfficialPreview()
 				}
 	    	}else{
 	    		//show error
@@ -372,6 +381,8 @@ function closeOfficialTravelRequest(){
 	    	if(data==1){
 	    		
 					showClosedStatus();
+
+					$(selectedElement).addClass('closed')
 				
 	    	}else{
 	    		//show error

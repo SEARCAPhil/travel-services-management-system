@@ -131,27 +131,6 @@
 <script type="text/javascript">	
 
 
-/*callback for selecting an item from directory list
-* This must be only present on this page to avoid conflict
-*/
-function appendStaffToListPreviewCallback(data){
-	//itenerary enable button on forms
-	changeCircleState('.itenerary-circle-group')
-	changeButtonState('#iteneraryFormButton','enabled')
-}
-
-
-function appendIteneraryToListPreviewCallback(data){
-	//enable finished circle on forms
-	//changeCircleState('.finished-circle-group')
-
-	//enable finished circle on forms
-	changeButtonState('#source_of_fund','enabled')
-	changeCircleState('.cash-advance-circle-group')
-}
-
-
-
 
 $(document).ready(function(){
 

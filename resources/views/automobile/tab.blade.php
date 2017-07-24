@@ -200,52 +200,7 @@ $(document).ready(function(){
 
 @section('status-script')
 
-	<script>
-$(document).ready(function(){
 
-
-	getautomobileStatus(function(){
-		var ctx = document.getElementById("myChart");
-		Chart.defaults.global.legend.display = false;
-		var data = {
-		    labels:['Total number of automobile','Available','Unavailable'],
-		    datasets: [
-		        {
-		            data: [total_automobile, available_automobile,in_use_automobile],
-		            backgroundColor: [
-		                "rgb(32,122,199)",
-		                "rgb(32,199,150)",
-		                "rgb(255,82,87)"
-		            ],
-		            hoverBackgroundColor: [
-		                "#FF6384",
-		                "#36A2EB",
-		                "#FFCE56"
-		            ]
-		        }]
-		};
-
-		// And for a doughnut chart
-		var myDoughnutChart = new Chart(ctx, {
-		    type: 'doughnut',
-		    data: data,
-		   
-		});
-
-
-		//status box
-		$('.status-box.blue').html(total_automobile)
-		$('.status-box.green').html(available_automobile)
-		$('.status-box.red').html(in_use_automobile)
-
-	});
-
-
-
-	
-})
-
-	</script>
 @stop
 
 

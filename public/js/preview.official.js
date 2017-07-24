@@ -1,3 +1,5 @@
+
+
 /**
 * OFFICIAL TRAVEL REQUEST PREVIEW SCRIPT
 * Kenneth Abella <johnkennethgibasabella@gmail.com>
@@ -287,10 +289,13 @@ function showOfficialTravelListPreview(id){
 
 				//allow the user to update the request
 				showReturnStatus()
+				enableStatusDefaultButtonCommandGroup()
+
+				
 				bindForwardOfficial()
 				bindUpdateOfficialPreview()
-				bindRemoveOfficialPreview()
-				enableStatusDefaultButtonCommandGroup()
+				unbindRemoveOfficialPreview()
+				
 			}
 
 
@@ -339,7 +344,7 @@ function showOfficialTravelPassengerStaffPreview(id){
 			setTimeout(function(){ context() },1000);
 			setTimeout(function(){
 				if(passenger_count<=0){
-					$('.preview-passengers').parent().html('<center><h3>Empty Passenger</h3><p class="text-muted">This request do not have any passenger.Please select person from the list.</p></center>')
+					//$('.preview-passengers').parent().html('<center><h3>Empty Passenger</h3><p class="text-muted">This request do not have any passenger.Please select person from the list.</p></center>')
 				}
 
 			},5000)
@@ -690,6 +695,27 @@ function printOfficialTravelRequest(id){
 	window.open('travel/official/print.php?id='+id);
 }
 
+
+
+
+function unbindRemoveOfficialPreview(){
+
+	$('.preview-remove').off('click');
+	$('.preview-remove').attr('disabled','disabled').addClass('disabled')
+};
+
+
+function unbindUpdateOfficialPreview(){
+
+	$('.preview-update').off('click');
+	$('.preview-update').attr('disabled','disabled').addClass('disabled')
+}
+
+
+function unbindForwardOfficial(){
+	$('.preview-forward').off('click');
+	$('.preview-forward').attr('disabled','disabled').addClass('disabled')
+}
 
 
 
