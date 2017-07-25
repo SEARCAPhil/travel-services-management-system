@@ -37,7 +37,13 @@
 	</div>
 </div>
 {{csrf_field()}}
+
+
 <div class="col col-md-8 col-md-offset-2 preview-content" style="margin-top: 50px;">
+	<div class="col-xs-12"> 
+		<a href="#" onclick="event.preventDefault();$('.automobile-tab[data-type=campus]').click();"><i class="material-icons">keyboard_backspace</i> back to list</a>
+	</div>
+
 	<div class="col col-md-8 content-section">
 
 
@@ -58,12 +64,13 @@
 				<span class="btn btn-success btn-xs" id="officialIteneraryButton" data-toggle="modal" data-target="#itenerary-modal"><span class="glyphicon glyphicon-map-marker"></span></span>
 					<div id="officialIteneraryStatus" class="text-muted" style="float:right;height:20px;width:250px;overflow: hidden;position:relative;"></div>
 				</p>
-				<div class="preview-itenerary">
+				<div class="preview-itenerary"></div>
 
+				<button class="btn btn-success pull-right" onclick="event.preventDefault();$('.automobile-tab[data-type=campus]').click();"><i class="material-icons md-18">check_circle</i> done</button>
 				
 			</div>
-				
-			</div>
+
+
 
 		</div>
 
