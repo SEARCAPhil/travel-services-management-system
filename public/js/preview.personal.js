@@ -205,7 +205,7 @@ function showPersonalTravelListPreview(id){
 
 				bindForwardPersonal()
 				bindUpdatePersonalPreview()
-				ubindRemovePersonalPreview()
+				unbindRemovePersonalPreview()
 				
 			}
 

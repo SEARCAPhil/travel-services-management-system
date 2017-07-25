@@ -15,7 +15,7 @@
 	<div class="col col-md-12 row pull-left">
 		<div><span class="glyphicon glyphicon-search basket" search=""></span> Find</div> 
 		<div>
-			<input type="text" class="form-control" placeholder="travel request number" id="searchInput" autofocus="">
+			
 		</div>
 	</div>
 	<div style="clear:both;"></div><!--
@@ -25,7 +25,14 @@
 </div>
 
 
+
+
+</div>
 <div class=" list-section col col col-md-3 col-lg-2 col-sm-9 hidden-sm hidden-xs row">
+	<div class="col col-xs-12">
+		<input type="text" class="form-control" placeholder="Search" id="searchInput" autofocus="">
+	</div>
+
 	<div class="col col-md-12 content-section">
 		<dl class="row list-details">	
 			<!--<dd>
@@ -35,9 +42,9 @@
 			
 		</dl>
 
-		<p class="row hidden-lg hidden-md hidden-xs">
-				<b class="text-danger">Page /<span class="list-total-pages">40</span></b>
-				<input type="number" class="form-control list-current-page" value="1">
+		<p class="row">
+				<b class="text-danger">Page /<span class="list-total-pages">1</span></b>
+				<input type="number" class="form-control list-current-page" value="1" min="1">
 		</p>
 	</div>
 </div>
@@ -86,20 +93,40 @@ $('.list-current-page').change(function(){
 })
 
 var timeOut;
-$('#searchInput').keyup(function(){
+
+$('#searchInput').keyup(function(e){
 	var that=this
-	clearTimeout(timeOut)
-	timeOut=setTimeout(function(){
-		//next page
-		if($(that).val().length>1)
+		//on enter
+		if(e.which==13){
 
-			//bind search function for active list
-			if(active_list=='official') searchOfficialTravelList($(that).val())
-			if(active_list=='personal') searchPersonalTravelList($(that).val())
-			if(active_list=='campus') searchCampusTravelList($(that).val())
+			if($(that).val().length>1){
 
-		
-	},1000)
+				
+
+				//bind search function for active list
+				if(active_list=='official') searchOfficialTravelList($(that).val())
+				if(active_list=='personal') searchPersonalTravelList($(that).val())
+				if(active_list=='campus') searchCampusTravelList($(that).val())
+
+				
+			}
+
+		}else{
+
+				//empty input
+				if(active_list=='official'&&$(that).val().length<1) showOfficialTravelList(1);
+				if(active_list=='personal'&&$(that).val().length<1) showPersonalTravelList(1)
+				if(active_list=='campus'&&$(that).val().length<1) showCampusTravelList(1)
+
+				
+
+			
+				
+
+		}
+			
+
+
 		
 	
 })
