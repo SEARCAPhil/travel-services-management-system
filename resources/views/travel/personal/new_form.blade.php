@@ -40,6 +40,10 @@
 
 <div class="preview-content"  style="margin-top: 70px;">
 
+	<div class="row col col-md-6 col-sm-8 col-md-offset-2"> 
+		<a href="#" onclick="event.preventDefault();$('.automobile-tab[data-type=personal]').click();"><i class="material-icons">keyboard_backspace</i> back to list</a>
+	</div>
+
 	<div class="row col col-md-6 col-sm-8 col-md-offset-2 content-section">
 
 		<div class="col col-md-12">
@@ -123,7 +127,7 @@
 			</p>
 		</div>
 
-
+		<button class="btn btn-success pull-right" onclick="event.preventDefault();$('.automobile-tab[data-type=personal]').click();"><i class="material-icons md-18">check_circle</i> done</button>
 
 
 		
