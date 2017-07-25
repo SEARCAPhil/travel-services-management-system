@@ -61,8 +61,9 @@ function appendStaffToListPreview(jsonData){
 
 			var htm=` <tr data-menu="staffPassengerMenu" context="0" data-selection="`+res+`" id="official_travel_staff_passenger_tr`+res+`" class="contextMenuSelector official_travel_staff_passenger_tr`+res+`">
 								<td>
-									<div class="col col-md-3"><div class="profile-image profile-image-tr" display-image="`+data.profile_image+`" data-mode="staff"></div></div>
-									<div class="col col-md-9"><b>`+data.name+`</b></div></td>
+									
+									<div class="col col-md-9"><b>`+data.name+`</b></div>
+								</td>
 
 								
 								<td>`+((data.designation==null)?'':data.designation)+`</td>
@@ -107,8 +108,9 @@ function appendScholarToListPreview(jsonData){
 
 			var htm=`<tr data-menu="scholarPassengerMenu"  context="0" data-selection="`+res+`" id="official_travel_scholars_passenger_tr`+res+`" class="contextMenuSelector official_travel_scholars_passenger_tr`+data.uid+`">
 								<td>
-									<div class="col col-md-3"><div class="profile-image profile-image-tr" display-image="`+data.profile_image+`" data-mode="scholars"></div></div>
-									<div class="col col-md-9"><b>`+data.full_name+`</b></div></td>
+									
+									<div class="col col-md-9"><b>`+data.full_name+`</b></div>
+								</td>
 
 								
 								<td>`+data.nationality+`</td>
@@ -150,8 +152,9 @@ function appendCustomToListPreview(jsonData){
 
 		var htm=`<tr data-menu="customPassengerMenu" data-selection="`+res+ `" id="official_travel_custom_passenger_tr`+res+`" class="contextMenuSelector official_travel_custom_passenger_tr`+data.id+`">
 						<td>
-							<div class="col col-md-3"><div class="profile-image profile-image-tr" display-image="" data-mode="custom"></div></div>
-							<div class="col col-md-9"><b>`+data.full_name+`</b></div></td>
+							
+							<div class="col col-md-9"><b>`+data.full_name+`</b></div>
+						</td>
 						<td>`+data.designation+`</td>
 						<td>N/A</td>
 					</tr>`

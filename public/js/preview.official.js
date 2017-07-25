@@ -331,8 +331,8 @@ function showOfficialTravelPassengerStaffPreview(id){
 				showTotalPassengerCount()
 				var htm=`<tr data-menu="staffPassengerMenu" context="0" data-selection="`+staff[x].id+`" id="official_travel_staff_passenger_tr`+staff[x].id+`" class="contextMenuSelector official_travel_staff_passenger_tr`+staff[x].id+`">
 									<td>
-										<div class="col col-md-3"><div class="profile-image profile-image-tr" display-image="`+staff[x].profile_image+`" data-mode="staff" style="background: url('/profiler/profile/`+staff[x].profile_image+`') center center no-repeat;background-size:cover;"></div></div>
-										<div class="col col-md-9"><b>`+staff[x].name+`</b></div></td>
+										<div class="col col-md-9"><b>`+staff[x].name+`</b></div>
+									</td>
 
 									
 								<td>`+((staff[x].designation==null)?'N/A':staff[x].designation)+`</td>
@@ -365,8 +365,9 @@ function showOfficialTravelPassengerScholarsPreview(id){
 			var htm=''
 			 htm=`<tr data-menu="scholarPassengerMenu"  context="0" data-selection="`+scholars[x].id+`" id="official_travel_scholars_passenger_tr`+scholars[x].id+`" class="contextMenuSelector official_travel_scholars_passenger_tr`+scholars[x].id+`">
 								<td>
-									<div class="col col-md-3"><div class="profile-image profile-image-tr" display-image="`+scholars[x].profile_image+`" data-mode="scholars"></div></div>
-									<div class="col col-md-9"><b>`+scholars[x].full_name+`</b></div></td>
+									
+									<div class="col col-md-9"><b>`+scholars[x].full_name+`</b></div>
+								</td>
 
 								
 								<td>`+scholars[x].nationality+`</td>
@@ -393,8 +394,9 @@ function showOfficialTravelPassengerCustomPreview(id){
 			showTotalPassengerCount()
 			htm=`<tr data-menu="customPassengerMenu" data-selection="`+official_travel_custom_passenger[x].id+ `" id="official_travel_custom_passenger_tr`+official_travel_custom_passenger[x].id+`" class="contextMenuSelector official_travel_custom_passenger_tr`+official_travel_custom_passenger[x].id+`">
 								<td>
-									<div class="col col-md-3"><div class="profile-image profile-image-tr" display-image="" data-mode="custom"></div></div>
-									<div class="col col-md-9"><b>`+official_travel_custom_passenger[x].full_name+`</b></div></td>
+								
+									<div class="col col-md-9"><b>`+official_travel_custom_passenger[x].full_name+`</b></div>
+								</td>
 								<td>`+official_travel_custom_passenger[x].designation+`</td>
 								<td>N/A</td>
 							</tr>`
