@@ -85,6 +85,9 @@ function showVerifyStatusAdmin(){
 				</p>
 			</div>`;
 	$('.preview-status-section').fadeIn().html(htm);
+		//bind
+	bindReturnPersonal()
+	bindClosePersonal();
 }
 
 
@@ -102,15 +105,11 @@ function showClosedStatusAdmin(){
 
 function showReturnStatusAdmin(){
 	var htm=`
-			<div class="col col-md-1">
-				<div class="status-markings">
-					<span class="glyphicon glyphicon-pushpin"></span>
-				</div>
-			</div>
-			<div class="col col-md-11">
-				<p>
-					This Travel Request was returned. 
-				</p>
+
+			<div class="col col-md-12">
+				
+					<i class="material-icons md-18">undo</i> This Travel Request was returned. 
+				
 			</div>`;
 	$('.preview-status-section').fadeIn().html(htm);
 }
@@ -176,16 +175,11 @@ function showUntouchedStatus(){
 
 function showVerifyStatus(){
 
-	var htm=`<div class="col col-md-1">
-				<div class="status-markings">
-					<span class="glyphicon glyphicon-flag"></span>
-				</div>
-			</div>
-			<div class="col col-md-11">
+	var htm=`
+			<div class="col col-md-12">
 				<p>
 					This Travel Request is waiting for verification
 				</p>
-				<hr/>
 			</div>`;
 	$('.preview-status-section').fadeIn().html(htm);
 }
@@ -208,9 +202,9 @@ function showReturnStatus(){
 	var htm=`
 			<div class="col col-md-11" style="margin-bottom: 20px;">
 
-				<p>
+				
 					<i class="material-icons md-18">undo</i> This Travel Request was returned by admin.Please review the request before resending.
-				</p>
+				
 			</div>`;
 	$('.preview-status-section').fadeIn().html(htm);
 }
@@ -257,6 +251,12 @@ function forwardPersonalTravelRequest(){
 					
 				}else{
 					showVerifyStatus();
+
+
+					//remove bindings
+					unbindRemovePersonalPreview();
+					unbindForwardPersonal()
+					unbindUpdatePersonalPreview()
 				}
 	    	}else{
 	    		//show error
@@ -368,6 +368,7 @@ function closePersonalTravelRequest(){
 	    	if(data==1){
 	    		
 					showClosedStatus();
+					$(selectedElement).addClass('closed')
 				
 	    	}else{
 	    		//show error

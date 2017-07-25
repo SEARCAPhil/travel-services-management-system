@@ -376,10 +376,17 @@ function appendToList(callback=function(){}){
 			if(list[x].trp_status==0) status_message='<i class="material-icons md-18" title="draft">drafts</i>'
 		}
 
+
+
 		if(list[x].status==4){
 			activeClass='closed';
 		}
 
+
+		//for PERSONA LTRAVEL REQUEST ONLY
+		if(list[x].trp_status==4){
+			activeClass='closed';
+		}
 		//append to the DIV
 		htm+=`<dd id="`+list[x].id+`" class="`+activeClass+`">
 			<h4><b>`+list[x].id+`</b>  <small class="text-danger">`+status_message+`</small></h4>

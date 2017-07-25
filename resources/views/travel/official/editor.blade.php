@@ -38,6 +38,10 @@
 </div>
 
 <div class="col col-md-8 col-md-offset-2 preview-content" style="margin-top: 50px;">
+	<div class="col-xs-12"> 
+		<a href="#" onclick="event.preventDefault();$('.automobile-tab[data-type=official]').click();"><i class="material-icons">keyboard_backspace</i> back to list</a>
+	</div>
+
 	<div class="col col-md-8 content-section">
 		<div class="col col-xs-12 col-md-8 preview-title">
 			<div class="col col-md-12 col-xs-7 row">
@@ -146,6 +150,10 @@
 						</select>
 					</p>
 				</div>
+
+
+				<button class="btn btn-success pull-right" onclick="event.preventDefault();$('.automobile-tab[data-type=official]').click();"><i class="material-icons md-18">check_circle</i> done</button>
+
 			</div>
 
 		</div>

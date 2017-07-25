@@ -200,16 +200,19 @@ function showPersonalTravelListPreview(id){
 
 				//allow the user to update the request
 				showReturnStatus()
+				enableStatusDefaultButtonCommandGroup()
+
+
 				bindForwardPersonal()
 				bindUpdatePersonalPreview()
-				bindRemovePersonalPreview()
-				enableStatusDefaultButtonCommandGroup()
+				ubindRemovePersonalPreview()
+				
 			}
 
 
 			//close status
 			if(json[0].trp_status==4){
-				showClosedStatus()
+				//showClosedStatus()
 			}
 		}
 
@@ -623,6 +626,30 @@ function bindUpdatePersonalPreview(){
 		},100);
 	})
 }
+
+
+
+function unbindRemovePersonalPreview(){
+
+	$('.preview-remove').off('click');
+	$('.preview-remove').attr('disabled','disabled').addClass('disabled')
+};
+
+
+function unbindUpdatePersonalPreview(){
+
+	$('.preview-update').off('click');
+	$('.preview-update').attr('disabled','disabled').addClass('disabled')
+}
+
+
+function unbindForwardPersonal(){
+	$('.preview-forward').off('click');
+	$('.preview-forward').attr('disabled','disabled').addClass('disabled')
+}
+
+
+
 
 
 
