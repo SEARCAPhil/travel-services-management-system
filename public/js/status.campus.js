@@ -66,7 +66,6 @@ function showUntouchedStatusAdmin(){
 
 			<div class="col col-md-12">
 				<p>
-					<i class="material-icons md-18 text-success">check_circle</i>
 					This Travel Request is not yet verified. Please review before making any further actions.
 					<button class="btn btn-xs btn-danger preview-return">Return to sender <span class="glyphicon glyphicon-inbox"></span></button> Or
 					<button class="btn btn-xs btn-danger preview-verify"> Verify <span class="glyphicon glyphicon-ok"></span></button>
@@ -87,6 +86,10 @@ function showVerifyStatusAdmin(){
 				</p>
 			</div>`;
 	$('.preview-status-section').css({}).fadeIn().html(htm);
+
+		//bind
+	bindReturnCampus()
+	bindCloseCampus();
 }
 
 
@@ -107,7 +110,7 @@ function showReturnStatusAdmin(){
 
 			<div class="col col-md-12">
 				<p>
-					<i class="material-icons md-18 text-danger">undo</i>
+					<i class="material-icons md-18">undo</i>
 					This Travel Request was returned. 
 				</p>
 			</div>`;
@@ -118,17 +121,11 @@ function showReturnStatusAdmin(){
 
 
 function showClosedStatus(){
-	var htm=`<div class="col col-md-1">
-				<div class="status-markings gray">
-					 <span class="glyphicon glyphicon-lock"></span>
-				</div>
-			</div>
-
-			<div class="col col-md-11 text-muted">
+	var htm=`
+			<div class="col col-md-12">
 				<p>
-					This Travel Request is already closed.
+					<i class="material-icons md-18">lock</i> This Travel Request is already closed.
 				</p>
-				<hr/>
 			</div>`;
 	$('.preview-status-section').fadeIn().html(htm);
 }
@@ -178,16 +175,11 @@ function showUntouchedStatus(){
 
 function showVerifyStatus(){
 
-	var htm=`<div class="col col-md-1">
-				<div class="status-markings">
-					<span class="glyphicon glyphicon-flag"></span>
-				</div>
-			</div>
-			<div class="col col-md-11">
+	var htm=`
+			<div class="col col-md-12">
 				<p>
 					This Travel Request is waiting for verification
 				</p>
-				<hr/>
 			</div>`;
 	$('.preview-status-section').fadeIn().html(htm);
 }
@@ -263,6 +255,11 @@ function forwardCampusTravelRequest(){
 					
 				}else{
 					showVerifyStatus();
+
+					//remove bindings
+					unbindRemoveCampusPreview();
+					unbindForwardCampus()
+					unbindUpdateCampusPreview()
 				}
 	    	}else{
 	    		//show error
@@ -336,6 +333,7 @@ function returnCampusTravelRequest(){
 	    		if(isAdmin()){
 					showReturnStatusAdmin()
 					enableStatusDefaultButtonCommandGroup()
+					unbindRemoveCampusPreview()
 				}
 
 	    	}else{
@@ -372,6 +370,7 @@ function closeCampusTravelRequest(){
 	    	if(data==1){
 	    		
 					showClosedStatus();
+					$(selectedElement).addClass('closed')
 				
 	    	}else{
 	    		//show error
@@ -468,5 +467,27 @@ function disableStatusDefaultButtonCommandGroup(){
 	$('.preview-update').addClass('disabled');
 	$('.preview-forward').addClass('disabled');
 }
+
+
+
+function unbindRemoveCampusPreview(){
+
+	$('.preview-remove').off('click');
+	$('.preview-remove').attr('disabled','disabled').addClass('disabled')
+};
+
+
+function unbindUpdateCampusPreview(){
+
+	$('.preview-update').off('click');
+	$('.preview-update').attr('disabled','disabled').addClass('disabled')
+}
+
+
+function unbindForwardCampus(){
+	$('.preview-forward').off('click');
+	$('.preview-forward').attr('disabled','disabled').addClass('disabled')
+}
+
 
 

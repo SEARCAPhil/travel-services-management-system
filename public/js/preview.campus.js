@@ -161,14 +161,15 @@ function showCampusTravelListPreview(id){
 				showReturnStatus()
 				bindForwardCampus()
 				bindUpdateCampusPreview()
-				bindRemoveCampusPreview()
 				enableStatusDefaultButtonCommandGroup()
+
+				unbindRemoveCampusPreview()
 			}
 
 
 			//close status
 			if(json[0].status==4){
-				showClosedStatus()
+				//showClosedStatus()
 			}
 		}
 
