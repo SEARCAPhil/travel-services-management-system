@@ -42,8 +42,11 @@
 
 {{csrf_field()}}
 
+	<div class="col-md-6 col-sm-8 col-md-offset-2" style="margin-top: 50px;"> 
+		<a href="#" onclick="event.preventDefault();$('.automobile-tab[data-type=official]').click();"><i class="material-icons">keyboard_backspace</i> back to list</a>
+	</div>
 
-	<div class="row col col-md-6 col-sm-8 col-md-offset-2 content-section" style="margin-top: 50px;">
+	<div class="row col col-md-6 col-sm-8 col-md-offset-2 content-section">
 
 		<div class="col col-md-12">
 			<h3 class="page-header">Official Travel Request Form</h3>
@@ -117,6 +120,9 @@
 					<option value="N/A">Select project</option>
 				</select>
 			</p>
+
+
+			<button class="btn btn-success pull-right" onclick="event.preventDefault();$('.automobile-tab[data-type=official]').click();"><i class="material-icons md-18">check_circle</i> done</button>
 		</div>
 
 	</div>
