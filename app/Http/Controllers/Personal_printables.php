@@ -377,7 +377,7 @@ function print_statement_of_account($id){
 
     	#var_dump($calculated_excess_time);
 
-        $overtime_original=$charges->overtime/24;
+        $overtime_original=@$charges->overtime/24;
         $overtime=explode('.', $overtime_original);
         $overtime_days=$overtime[0];
         $overtime_hours='0.'.@$overtime[1];
@@ -511,22 +511,22 @@ $html.='
 			$html.='<tr>
 				<td height="100">
 				<br/><br/>
-					<b>Note:</b> Php '.$charges->gasoline_charge.', base'.$charges->base.' km 
+					<b>Note:</b> Php '.@$charges->gasoline_charge.', base'.@$charges->base.' km 
 				</td>
 
 
 				<td><br/><br/>
-					<b>Php '.$charges->charge.'</b><br/><br/>
-					<b>Charge :</b> Php '.$charges->charge.'<br/>
-					<b>Additional Charge:</b> Php '.$charges->additional_charge.'<br/>
-					<b>Over time :</b> '.@$overtime_days.' day(s) and '.@@$overtime_hours.' hour(s)<br/>
-					<b>Driver\'s Overtime Charge:</b> Php '.round($charges->drivers_overtime_charge,2).'<br/>
+					<b>Php '.@$charges->charge.'</b><br/><br/>
+					<b>Charge :</b> Php '.@$charges->charge.'<br/>
+					<b>Additional Charge:</b> Php '.@$charges->additional_charge.'<br/>
+					<b>Over time :</b> '.@$overtime_days.' day(s) and '.@$overtime_hours.' hour(s)<br/>
+					<b>Driver\'s Overtime Charge:</b> Php '.@round($charges->drivers_overtime_charge,2).'<br/>
 				</td>
 				
 			</tr>';
 			$html.='<tr>
 				<td><input type="date" class="dateSelector"><b>Received by: </b></td>
-				<td><input type="text" class="form-control text"><b>TOTAL : Php '.round($charges->total,2).'</b></td>
+				<td><input type="text" class="form-control text"><b>TOTAL : Php '.@round($charges->total,2).'</b></td>
 				
 			</tr>';
 			$html.='<tr>
