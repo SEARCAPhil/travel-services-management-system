@@ -61,8 +61,9 @@ class Official extends Controller
 
                 $this->pdoObject->beginTransaction();
 
-                $sql="SELECT * FROM tr where tr.requested_by=:id ORDER BY date_created DESC LIMIT :start, 10";
-                $sql2="SELECT count(*) as total FROM tr where tr.requested_by=:id";
+                #exclude deleted items #5
+                $sql="SELECT * FROM tr where tr.requested_by=:id and tr.status!=5  ORDER BY date_created DESC LIMIT :start, 10";
+                $sql2="SELECT count(*) as total FROM tr where tr.requested_by=:id and tr.status!=5";
 
                 $statement=$this->pdoObject->prepare($sql);
                 $statement2=$this->pdoObject->prepare($sql2);
@@ -121,13 +122,13 @@ class Official extends Controller
                 $this->pdoObject->beginTransaction();
 
 
-                $sql="SELECT * FROM tr where status!=0 ORDER BY date_created DESC LIMIT :start, 10";
+                $sql="SELECT * FROM tr where status!=0 and status!=5 ORDER BY date_created DESC LIMIT :start, 10";
                 $statement=$this->pdoObject->prepare($sql);
                 $statement->bindParam(':start',$start_page,\PDO::PARAM_INT);
                 $statement->execute();
 
 
-                $sql2="SELECT count(*) as total FROM tr where status!=0";
+                $sql2="SELECT count(*) as total FROM tr where status!=0 and status!=5";
                 $statement2=$this->pdoObject->prepare($sql2);
                 $statement2->execute();
 
@@ -870,7 +871,7 @@ function ongoing($page=1){
                 $this->pdoObject=DB::connection()->getPdo();
                 $this->id=(int) htmlentities(htmlspecialchars($id));
                 $this->pdoObject->beginTransaction();
-                $remove_rfp_sql="DELETE FROM tr where id=:id";
+                $remove_rfp_sql="UPDATE tr set status=5 where id=:id";
                 $remove_statement=$this->pdoObject->prepare($remove_rfp_sql);
                 $remove_statement->bindParam(':id',$this->id);
                 $remove_statement->execute();
