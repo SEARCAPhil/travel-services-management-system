@@ -46,8 +46,8 @@ class Campus extends Controller
 
             $this->pdoObject->beginTransaction();
 
-            $sql="SELECT * FROM trc where requested_by=:id ORDER BY date_created DESC LIMIT :start, 10";
-            $sql2="SELECT count(*) as total FROM trc where requested_by=:id  ORDER BY date_created DESC";
+            $sql="SELECT * FROM trc where requested_by=:id and trc.status!=5 ORDER BY date_created DESC LIMIT :start, 10";
+            $sql2="SELECT count(*) as total FROM trc where requested_by=:id and trc.status!=5  ORDER BY date_created DESC";
             $statement=$this->pdoObject->prepare($sql);
             $statement2=$this->pdoObject->prepare($sql2);
             $statement->bindParam(':start',$start_page,\PDO::PARAM_INT);
@@ -102,13 +102,13 @@ class Campus extends Controller
 
             $this->pdoObject->beginTransaction();
 
-            $sql="SELECT * FROM trc where status!=0  ORDER BY date_created DESC LIMIT :start, 10";
+            $sql="SELECT * FROM trc where status!=0 and trc.status!=5  ORDER BY date_created DESC LIMIT :start, 10";
 
             $statement=$this->pdoObject->prepare($sql);
             $statement->bindParam(':start',$start_page,\PDO::PARAM_INT);
             $statement->execute();
 
-            $sql2="SELECT count(*) as total FROM trc where status!=0";
+            $sql2="SELECT count(*) as total FROM trc  where status!=0 and trc.status!=5";
             $statement2=$this->pdoObject->prepare($sql2);
             $statement2->execute();
 
@@ -651,7 +651,7 @@ function ongoing($page=1){
             $this->pdoObject=DB::connection()->getPdo();
             $this->id=(int) htmlentities(htmlspecialchars($id));
             $this->pdoObject->beginTransaction();
-            $remove_rfp_sql="DELETE FROM trc where id=:id";
+            $remove_rfp_sql="UPDATE trc set status=5 where id=:id";
             $remove_statement=$this->pdoObject->prepare($remove_rfp_sql);
             $remove_statement->bindParam(':id',$this->id);
             $remove_statement->execute();
