@@ -16,29 +16,30 @@
                 
         	    	<div class="form-group">
         	    		
-                		<label>Mileage In (Start km)</label>
+                		
+                        <b>Mileage In (Start km)</b>
                 		<input type="text" placeholder="km" class="form-control" id="start_km">
                 	</div>
 
                 	<div class="form-group">
-                		<label>Mileage Out (End km)</label>
+                		<b>Mileage Out (End km)</b>
                 		<input type="text" placeholder="km" class="form-control" id="end_km">
                 	</div>
                 	
 
 
                 	<div class="form-group">
-                		<label>Vehicle/Gasoline Charge</label>
+                		<b>Vehicle/Gasoline Charge</b>
                    		<select class="form-control" id="gasoline_charge"></select>
         	    	</div>
 
                 	<div class="form-group">
-                		<label>Drivers Overtime Charge</label>
+                		<b>Drivers Overtime Charge</b>
                 		<select class="form-control"  id="drivers_charge"></select>
                 	</div>
 
                     <div class="form-group">
-                        <label>Drivers Appointment</label>
+                        <b>Drivers Appointment</b>
                         <select class="form-control" id="appointment">
                            <option value="contracted">Contracted</option>
                            <option value="emergency">Emergency</option>

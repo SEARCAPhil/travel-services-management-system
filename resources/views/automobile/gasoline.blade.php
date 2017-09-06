@@ -1,21 +1,31 @@
 <section class="col col-md-12">
 	<h1 style="color:#ff9933"><span class="glyphicon glyphicon-menu-right"></span>Gasoline</h1>
-	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+	<p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
 
 	<!--<p><b>Total liters of Gasoline  :</b> <span style="color:rgb(32,199,150);"> 96 Liter/s</span></p>
 	<p><b>Total amount of Gasoline  :</b> <span style="color:rgb(32,199,150);">Php 1301</span></p>-->
-	<p><span class="btn btn-primary ajaxload" data-toggle="modal" data-target="#info-modal" data-section="#info-modal-dialog" data-content="automobile/modal/refuel"><span class="glyphicon glyphicon-object-align-bottom"></span> Refuel</span></p>
+	<p>
+		<span class="btn btn-success ajaxload" data-toggle="modal" data-target="#info-modal" data-section="#info-modal-dialog" data-content="automobile/modal/refuel"><span class="glyphicon glyphicon-object-align-bottom"></span> 
+		Refuel</span>
+	</p>
 
 	<br/><br/>
 	<div class="row col col-md-12">
-		<h5>Change Date</h5>
-		<select class="form-control" id="ledger-date">
-			<option>2017</option>
-			<option>2016</option>
-			<option>2015</option>
-			<option>2014</option>
 
-		</select>
+		<div class="col col-xs-2">
+			<div class="form-group">
+				<p class="text-success"><i class="material-icons md-18">event</i> DATE </p>
+			</div>
+		</div>
+		<div class="col col-xs-4">
+			<select class="form-control" id="ledger-date" autofocus="autofocus">
+				<option>2017</option>
+				<option>2016</option>
+				<option>2015</option>
+				<option>2014</option>
+
+			</select>
+		</div>
 	</div>
 
 </section>
@@ -38,6 +48,8 @@
 <script type="text/javascript">
 
 $(document).ready(function(){
+	//materialize
+	$.material.init();
 
 	//Bind function for add button in Re-fuel modal
 	unbindAjaxLoad();
@@ -74,13 +86,13 @@ $(document).ready(function(){
 
 			//no error
 			if(error.length===0){
+				$(this).attr('disabled','disabled')
 				ajax_postGasoline(liters,amount,receipt,station,plate_no,function(){
 					formCompleted(plate_no)
+
 				});
-
+				$('#add-gasoline-button').attr('disabled','enabled')
 			}
-
-
 			
 
 		})

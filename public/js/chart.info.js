@@ -1,3 +1,31 @@
+/*---------------------------------------------------------------------
+| AUTO MOBILE INFO TAB
+|--------------------------------------------------------------------*/
+try{
+
+	/*---------------------------------------------------------------------
+	| AUTO MOBILE INFO
+	|--------------------------------------------------------------------*/
+	var automobile_description=JSON.parse($(selectedAutomobile).attr('data-json'));
+	$('#plate_number').html(automobile_description.plate_no)
+	$('#color').val(automobile_description.color)
+	$('#brand').html(automobile_description.brand)
+
+
+
+	//brand logo
+	var logo='';
+	if((automobile_description.brand).toLowerCase().indexOf('toyota')!=-1){ logo='toyota-flat.png'; }
+	if((automobile_description.brand).toLowerCase().indexOf('honda')!=-1){ logo='honda.png'; }
+	if((automobile_description.brand).toLowerCase().indexOf('mitsubishi')!=-1){ logo='mitsubishi.jpg'; }
+	if((automobile_description.brand).toLowerCase().indexOf('hyundai')!=-1){ logo='hyundai.png'; }
+	if((automobile_description.brand).toLowerCase().indexOf('suzuki')!=-1){ logo='suzuki.png'; }
+
+	$('#automobile-brand-logo').html('<img src="img/brands/'+logo+'" width="100%" onerror="this.remove();"/>')
+	
+}catch(e){}
+
+
 
 	var months=['January', 'February', 'March', 'April','May', 'June', 'July', 'August', 'September','October', 'November', 'December'];
 
@@ -11,25 +39,6 @@
 	    labels:months,
 	    datasets:[]
 	};
-
-	try{
-		var automobile_description=JSON.parse($(selectedAutomobile).attr('data-json'));
-		$('#plate_number').html(automobile_description.id)
-		$('#color').val(automobile_description.color)
-		$('#brand').html(automobile_description.brand)
-
-		//brand logo
-		var logo='';
-		if((automobile_description.brand).toLowerCase().indexOf('toyota')!=-1){ logo='toyota-flat.png'; }
-		if((automobile_description.brand).toLowerCase().indexOf('honda')!=-1){ logo='honda.png'; }
-		if((automobile_description.brand).toLowerCase().indexOf('mitsubishi')!=-1){ logo='mitsubishi.jpg'; }
-		if((automobile_description.brand).toLowerCase().indexOf('hyundai')!=-1){ logo='hyundai.png'; }
-		if((automobile_description.brand).toLowerCase().indexOf('suzuki')!=-1){ logo='suzuki.png'; }
-
-		$('#automobile-brand-logo').html('<img src="img/brands/'+logo+'" width="100%" onerror="this.remove();"/>')
-	}catch(e){}
-
-
 	
 
 	function ajax_getAutomobileExpenses(plate_no,year,callback){

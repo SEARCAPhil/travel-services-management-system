@@ -339,13 +339,13 @@ function appendToList(callback=function(){}){
 	$('.list-current_page').val(travel.current_page);
 
 	//NO CONTENT MESSAGE
-	var no_content_message=`<center class="content-section" id="no-content-message" style="margin-top:50px;"><i class="material-icons md-48">accessibility</i><h1>No available content to load</h1><p>Please try to refresh the page<p></center>`;
+	var no_content_message=`<center class="content-section text-muted" id="no-content-message" style="margin-top:50px;"><i class="material-icons md-48">accessibility</i><h1>No available content to load</h1><p>Please try to refresh the page<p></center>`;
 
 	//empty variable
 	var htm='';
 
 	if(list.length<1){
-		//$('.list-section').hide();
+		$('.list-section').hide();
 		$('.preview-section').html(no_content_message)
 	}else{
 		$('.list-section').show();

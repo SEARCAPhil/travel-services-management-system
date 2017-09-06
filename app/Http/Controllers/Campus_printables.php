@@ -12,10 +12,24 @@ use App\Http\Controllers\Charge;
 
 use PDF;
 
+session_start();
+
 error_reporting(0);
 class Campus_printables extends Controller
 {
     
+
+
+	function is_creator($id){
+		if($_SESSION['priv']!='admin'){
+			if($id!=@$_SESSION['id']){
+
+				echo '<br/><br/><center><h3>Sorry! File not found.</h3></center>';
+				exit;
+			}
+		}
+	}
+
 
     function print_travel_request($id){
 
@@ -120,7 +134,7 @@ class Campus_printables extends Controller
 					<p>
 						<label>NOTE:</label> PREPARE ONE DUPLICATE COPY IF TRIP IS BY <u>SEARCA VEHICLE:</u> <label>Original-</label> Unit concerned; <label>Duplicate-</label> Security Guard</p><br/>
 					<p>*Should be indicated per trip</p><br/>
-					<p>*If the trip is by SEARCA service vehicle, recommendation for approval of requisitioner\'s immediate superior and corresponding approval of the HEad of the Facilities Management</p>
+					<p>*If the trip is by SEARCA service vehicle, recommendation for approval of requisitioner\'s immediate superior and corresponding approval of the Head of the Facilities Management</p>
 					<p> Unit are required under the appropriate columns.</p>
 
 
@@ -153,9 +167,19 @@ class Campus_printables extends Controller
 
 		
 
+	#get data
+	$campus_itenerary=new Campus_itenerary();
+	$campus_travel=new Campus();
+	
 
+	$travel_request=@json_decode($campus_travel->show($id))[0];
 
+	$itenerary=@json_decode($campus_itenerary->index($id))[0];
+	
+	
 
+//prevent other users to view this document
+	self::is_creator($travel_request->requested_by);
 
     	// create some HTML content
 $html ='<style>
@@ -164,7 +188,7 @@ $html ='<style>
 			.passenger-table td{}
 			.sa-table{margin-bottom:20px; border:3px solid black;}
 			.sa-table td,.sa-table th{margin-bottom:20px; border:1px solid rgb(20,20,20);}
-			.withLine{border-bottom:1px solid rgb(20,20,20);overflow:hidden;text-align:left;padding-bottom:10px;margin-right:50px;}
+			.withLine{border-bottom:1px solid rgb(20,20,20);overflow:hidden;padding-bottom:10px;}
 		</style>
 
 
@@ -172,13 +196,13 @@ $html ='<style>
 		<table class="table passenger-table" id="table-passenger">
 			
 				<tr>
-					<th><b>Requesitioner :</b></th>
-					<th width="220"></th>
-					<th class="withLine" width="100"></th>
+					<th width="90"><b>Requesitioner : </b></th>
+					<th width="280">'.$travel_request->profile_name.'</th>
+					<th class="withLine" width="120" style="text-align:center;">&nbsp;<b> '.date_format(date_create($travel_request->date_created),'m/d/Y').'</b></th>
 				</tr>
 				<tr>
-					<th><b>Office/Unit/Program/Project :</b></th>
-					<th width="270"></th>
+					<th width="150"><b>Office/Unit/Program/Project :</b></th>
+					<th width="270">'.$travel_request->department.'</th>
 					<th width="100">Date</th>
 				</tr>
 		</table>
@@ -208,10 +232,10 @@ $html.='
 					
 					
 			$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
-				<td><input type="date" class="dateSelector"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="time" class="timeSelector"></td>
+				<td>'.$itenerary->departure_date.'</td>
+				<td>'.$itenerary->location.'</td>
+				<td>'.$itenerary->destination.'</td>
+				<td>'.$itenerary->departure_time.'</td>
 			</tr>';
 
 			$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
@@ -370,7 +394,8 @@ function print_notice_of_charges($id){
 		
 
 
-
+//prevent other users to view this document
+	self::is_creator($travel_request->requested_by);
 
 
     	// create some HTML content
@@ -387,7 +412,7 @@ $html ='<style>
 
 		<table>
 			<tr>
-				<td width="400"></td><td></td><td width="100"><b>NO. '.$itenerary->trc_id.'</b></td>
+				<td width="400"></td><td></td><td width="100"><b>NO. '.$itenerary->trc_id.'</b><br/></td>
 			</tr>
 
 			
@@ -396,10 +421,10 @@ $html ='<style>
 
 		<table>
 			<tr>
-				<td width="400"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b></b></td>
+				<td width="400"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date_format(date_create($itenerary->date_created),'m/d/Y') .'</b></td>
 			</tr>
 			<tr>
-				<td></td><td></td><td style="text-align:center;"><b>Date</b></td>
+				<td></td><td></td><td style="text-align:center;"><b>Date</b><br/></td>
 			</tr>
 
 			
@@ -422,7 +447,7 @@ $html ='<style>
 				<td width="250" class="withLine"></td>
 				<td width="140"></td>
 				<td width="40"><b>Month:</b></td>
-				<td width="250" class="withLine"></td>
+				<td width="250" class="withLine">'.date_format(date_create($itenerary->date_created),'F') .'</td>
 			</tr>
 
 			
@@ -450,12 +475,21 @@ $html.='
 				<td></td>
 				<td height="60">
 				<br/><br/>
-					<b>Total:</b>
+					<b>Total:</b>';
+
+
+					if(strlen(@$charges->notes)>1){
+					 
+					 	$html.='<p>Advance Charging : <b>'.@ucfirst($charges->notes).'</b><br/></p>';
+					 }
+
+
+					$html.='
 				</td>
 
 
 				<td><br/><br/>
-					<b>Php '.@round($charges->total,2).'</b><br/><br/>
+					<b>Php '.@number_format(round($charges->total,2)).'</b><br/><br/>
 					
 				</td>
 				

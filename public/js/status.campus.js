@@ -189,7 +189,7 @@ function showVerifiedStatus(){
 	var htm=`
 			<div class="col col-md-12">
 				<p>
-					<i class="material-icons md-18 text-success">check_circle</i>	This Travel Request has been verified.
+					<i class="material-icons md-18">check_circle</i>	This Travel Request has been verified.
 				</p>
 				
 			</div>`;

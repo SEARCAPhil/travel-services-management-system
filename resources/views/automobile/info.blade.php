@@ -37,12 +37,13 @@ function showAutomobileDetails(){
 			
 			$('#add-button').html('Update')
 			$('#automobile').val(json.brand)
-			$('#plate_number_input').val(json.id)
+			$('#plate_number_input').val(json.plate_no)
 			$('#plate_number_input').attr('disabled','disabled')
 			$('#color').val(json.color)
 
 			//add click event to add button
-			$('#add-button').click(function(){
+			$('#add-button').off('click');
+			$('#add-button').on('click',function(){
 
 				$.ajax({
 					url:'api/automobile/'+plate_no,

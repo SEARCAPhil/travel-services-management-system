@@ -16,9 +16,13 @@ use App\Http\Controllers\Charge;
 
 use PDF;
 
+session_start();
+
 error_reporting(0);
 class Official_printables extends Controller
 {
+
+
 	function is_exist($array,$value){
 		$is_exist=0;
 		for($x=0;$x<count($array);$x++){
@@ -39,6 +43,16 @@ class Official_printables extends Controller
 		}
 
 		return $is_exist;
+	}
+
+	function is_creator($id){
+		if($_SESSION['priv']!='admin'){
+			if($id!=@$_SESSION['id']){
+
+				echo '<br/><br/><center><h3>Sorry! File not found.</h3></center>';
+				exit;
+			}
+		}
 	}
 
     function print_trip_ticket($id){
@@ -225,7 +239,7 @@ class Official_printables extends Controller
 		// set margins
 		$pdf->SetMargins(PDF_MARGIN_LEFT, 35, PDF_MARGIN_RIGHT);
 
-		
+		self::is_creator($travel_request->uid);
 
 
 
@@ -253,7 +267,7 @@ $html ='<style>
 
 		<table>
 			<tr>
-				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b></b></td>
+				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date_format(date_create($travel_request->date_created),'m/d/Y') .'</b></td>
 			</tr>
 			<tr>
 				<td></td><td></td><td style="text-align:center;"><b>Date</b></td>
@@ -491,7 +505,7 @@ $html.='	<article class="col col-md-12">
 						 	<td><b>RICARDO A. MENORCA</b></td>
 						 </tr>
 						 <tr>
-						 	<td>Unit head,General Services</td>
+						 	<td><p>Unit head,General Services</p></td>
 						 </tr>
 					 </table>
 					
@@ -548,13 +562,13 @@ $html.='	<article class="col col-md-12">
 				<br/><br/>
 				<br/><br/>
 					<p>I hereby certify that the vehicle was used solely for the official purpose/s stated above.</p>
-					<br/><br/><br/><br/>
+					<br/><br/><br/><br/><br/>
 					<table style="text-align:center;">
 						 <tr>
-						 	<td><b>RICARDO A. MENORCA</b></td>
+						 	<td><b style="text-transform:uppercase;">'.$travel_request->profile_name.'</b></td>
 						 </tr>
 						 <tr>
-						 	<td>Passenger\'s Signature</td>
+						 	<td><p>Passenger\'s Signature</p></td>
 						 </tr>
 					 </table>
 				</td>
@@ -577,7 +591,14 @@ $html.='	<article class="col col-md-12">
 				<td> <b>For Motorpool Unit\'s Use:</b><br/><br/>
 				 &nbsp; No. of kms. : <b>'.@($charges->end-$charges->start).' km/s </b><br/>
 				 &nbsp; Rate/km : <b>'.@($charges->gasoline_charge).'</b><br/>
-				 &nbsp;Amount : <b>'.@$charges->total.'</b><br/>   
+				 &nbsp;Amount : <b>'.@$charges->total.'</b><br/>  
+				 ';
+
+				 if(strlen(@$charges->notes)>1){
+				 	$html.='<br/><b style="font-size:6px;">NOTE : '.@ucfirst($charges->notes).'</b>';
+				 }
+
+				 $html.='
 				</td>
 
 			</tr>
@@ -609,6 +630,7 @@ $html.='	<article class="col col-md-12">
 
     function print_travel_request($id){
 
+    	
     	#variables
     	global $details;
 
@@ -709,6 +731,7 @@ $html.='	<article class="col col-md-12">
 			//details object
 			global $details;
 
+			self::is_creator($details->requested_by);
 			
 
 			$pdf->SetY(-50);
@@ -829,7 +852,7 @@ $html ='<style>
 
 		<table>
 			<tr>
-				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.$details->date_approved.'</b></td>
+				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date_format(date_create($details->date_created),'m/d/Y') .'</b></td>
 			</tr>
 			<tr>
 				<td></td><td></td><td style="text-align:center;">Date</td>

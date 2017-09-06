@@ -22,7 +22,7 @@ class Automobile extends Controller
 				$statement->execute();
 				$res=Array();
 				while($row=$statement->fetch(\PDO::FETCH_OBJ)){
-					$res[]=Array('id'=>$row->plate_no,'brand'=>$row->manufacturer,'color'=>$row->color,'status'=>$row->availability,'image'=>$row->image);
+					$res[]=Array('id'=>$row->plate_no,'plate_no'=>$row->plate_no,'brand'=>$row->manufacturer,'color'=>$row->color,'status'=>$row->availability,'image'=>$row->image);
 				}
 			
 				return json_encode($res);

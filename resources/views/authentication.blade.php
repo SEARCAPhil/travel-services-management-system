@@ -36,17 +36,17 @@
    }
 
 </style>
-	<section class="col col-xs-12 col-lg-4 col-lg-offset-4 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1" style="margin-top: 15vh;">
+	<section class="col col-xs-12 col-lg-4 col-lg-offset-4 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1" style="margin-top: 10vh;">
 		<div class="col col-md-12 text-center">
 			<form class="form form-horizontal text-center" method="POST" action="/laravel/public/authentication/confirmation">
 				{{csrf_field()}}
 
 				<div class="row">
 		         	<div class="col col-md-12 text-center row">
-		         	 	<p><img src="{{url('/')}}/img/searca.png"  width="60%"></p>
+		         	 	<p><img src="{{url('/')}}/img/logo-new.png"  width="50%"></p>
 		         	</div>
 
-		         	<div class="col col-xs-12 row"><br/>
+		         	<div class="col col-xs-12 row">
 		            	<h1> Sign In </h1>
 		           	 	<p><small><a href="#"  class="text-muted">Travel Services Information System</a></b></small></p>
 		         	</div>

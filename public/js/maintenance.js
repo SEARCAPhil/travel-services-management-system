@@ -105,9 +105,11 @@ function bindMaintenance(){
 
 				//no error
 				if(error.length===0){
+					$(this).attr('disabled','disabled')
 					ajax_postReplaceParts(item,details,amount,receipt,supplier,plate_no,function(){
 						formCompleted()
 					})
+					$('#add-button-replace').attr('disabled','enabled')
 				}
 
 				

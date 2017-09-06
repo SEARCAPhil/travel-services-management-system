@@ -17,12 +17,13 @@ class Calendar extends Controller
 	public function index($date){
 		$id=$_SESSION['id'];
 
-		if($_SESSION['priv']=='admin'){
+		/*if($_SESSION['priv']=='admin'){
 			return self::list_all($date);
 		}else{
 
 			return self::list_by_account($date,$id);
-		}
+		}*/
+		return self::list_all($date);
 		
 	}
 
@@ -51,9 +52,9 @@ class Calendar extends Controller
 		$official_itenerary_class=new Official_itenerary();
 		$personal_class=new Personal();
 		$campus_itenerary_class=new Campus_itenerary();
-		$official=@json_decode($official_itenerary_class->scheduled($date));
-		$personal=@json_decode($personal_class->scheduled($date));
-		$campus=@json_decode($campus_itenerary_class->scheduled($date));
+		$official=@json_decode($official_itenerary_class->scheduled_in_calendar($date));
+		$personal=@json_decode($personal_class->scheduled_in_calendar($date));
+		$campus=@json_decode($campus_itenerary_class->scheduled_in_calendar($date));
 
 		#return $official_itenerary_class->scheduled($date);
 		#return $personal_class->scheduled($date);

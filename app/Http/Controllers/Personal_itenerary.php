@@ -363,7 +363,7 @@ class Personal_itenerary extends Controller
 
             $this->pdoObject=DB::connection()->getPdo();
 
-            $sql="SELECT trp_charge.*,trp_charge_breakdown.charge,trp_charge_breakdown.additional_charge,trp_charge_breakdown.charge,trp_charge_breakdown.drivers_overtime_charge,trp_charge_breakdown.overtime,trp_charge_breakdown.total FROM trp_charge LEFT JOIN trp_charge_breakdown on trp_charge_breakdown.charge_id=trp_charge.id where rid=:id ORDER BY id DESC LIMIT 1";
+            $sql="SELECT trp_charge.*,trp_charge_breakdown.charge,trp_charge_breakdown.notes,trp_charge_breakdown.additional_charge,trp_charge_breakdown.charge,trp_charge_breakdown.drivers_overtime_charge,trp_charge_breakdown.overtime,trp_charge_breakdown.total FROM trp_charge LEFT JOIN trp_charge_breakdown on trp_charge_breakdown.charge_id=trp_charge.id where rid=:id ORDER BY trp_charge_breakdown.id DESC LIMIT 1";
             $statement=$this->pdoObject->prepare($sql);
             $statement->bindParam(':id',$this->id);
             $statement->execute();
@@ -371,7 +371,7 @@ class Personal_itenerary extends Controller
             $res=Array();
 
             while($row=$statement->fetch(\PDO::FETCH_OBJ)){
-                $res[]=Array('id'=>$row->id,'trp_id'=>$row->rid,'start'=>$row->start,'end'=>$row->end,'gc'=>$row->gc,'dc'=>$row->dc,'charge'=>$row->charge,'gasoline_charge'=>$row->gasoline_charge,'drivers_charge'=>$row->drivers_charge,'additional_charge'=>$row->additional_charge,'drivers_overtime_charge'=>$row->drivers_overtime_charge,'overtime'=>$row->overtime,'appointment'=>$row->dca,'base'=>$row->base_km,'days'=>$row->drivers_day_rate,'total'=>$row->total);
+                $res[]=Array('id'=>$row->id,'trp_id'=>$row->rid,'start'=>$row->start,'end'=>$row->end,'gc'=>$row->gc,'dc'=>$row->dc,'charge'=>$row->charge,'gasoline_charge'=>$row->gasoline_charge,'drivers_charge'=>$row->drivers_charge,'additional_charge'=>$row->additional_charge,'drivers_overtime_charge'=>$row->drivers_overtime_charge,'overtime'=>$row->overtime,'appointment'=>$row->dca,'base'=>$row->base_km,'days'=>$row->drivers_day_rate,'total'=>$row->total,'notes'=>$row->notes);
             }
                
 

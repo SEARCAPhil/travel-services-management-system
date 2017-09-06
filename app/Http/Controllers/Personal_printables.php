@@ -15,10 +15,20 @@ use App\Http\Controllers\Directory;
 use App\Http\Controllers\Charge;
 
 use PDF;
+session_start();
+error_reporting(0);
 class Personal_printables extends Controller
 {
     
+	function is_creator($id){
+		if($_SESSION['priv']!='admin'){
+			if($id!=@$_SESSION['id']){
 
+				echo '<br/><br/><center><h3>Sorry! File not found.</h3></center>';
+				exit;
+			}
+		}
+	}
 
     function print_travel_request($id){
 
@@ -47,6 +57,8 @@ class Personal_printables extends Controller
 			$pdf->Cell(0, 0, 'College, Laguna, 4031, Philippines', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
 			$pdf->setFontSize(15);
 			$pdf->Cell(0, 10, 'TRAVEL REQUEST', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
+			$pdf->setFontSize(10);
+			$pdf->Cell(0, 0, '(Personal)', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
 
 
 			$foot='	<article class="col col-md-12" style="font-size:7px;">
@@ -169,8 +181,25 @@ class Personal_printables extends Controller
 		
 
 
+     	#get data
+    	$personal_travel=new Personal();
+     	$itenerary=@json_decode($personal_travel->show($id))[0];
 
 
+     	//var_dump($itenerary);
+
+     	 //passengers
+        $passenger_staff_class=new Personal_staff();
+        $passenger_scholar_class=new Personal_scholars();
+        $passenger_custom_class=new Personal_custom();
+
+
+         $passenger_staff=json_decode($passenger_staff_class->index($itenerary->id));
+        $passenger_scholar=json_decode($passenger_scholar_class->index($itenerary->id));
+        $passenger_custom=json_decode($passenger_custom_class->index($itenerary->id));
+//var_dump($passenger_custom);
+       
+self::is_creator($itenerary->requested_by);
 
     	// create some HTML content
 $html ='<style>
@@ -188,7 +217,7 @@ $html ='<style>
 
 		<table>
 			<tr>
-				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b></b></td>
+				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date_format(date_create($itenerary->date_created),'m/d/Y') .'</b></td>
 			</tr>
 			<tr>
 				<td></td><td></td><td style="text-align:center;">Date</td>
@@ -205,24 +234,24 @@ $html ='<style>
 
 			<tr>
 				<td width="80"><b>Requested By:</b></td>
-				<td width="150" class="withLine"></td>
+				<td width="150" class="withLine">'.$itenerary->profile_name.'</td>
 				<td width="10"></td>
 				<td width="80"><b>Designation :</b></td>
-				<td width="150" class="withLine"></td>
+				<td width="150" class="withLine">'.ucfirst($itenerary->position).'</td>
 			</tr>
 			<tr>
 				<td width="80"><b>Office/Unit:</b></td>
-				<td width="150" class="withLine"></td>
+				<td width="150" class="withLine">'.$itenerary->department.'</td>
 				<td width="10"></td>
 				<td width="80"><b>Destination :</b></td>
-				<td width="150" class="withLine"></td>
+				<td width="150" class="withLine">'.$itenerary->destination.'</td>
 			</tr>
 			<tr>
 				<td width="80"><b>Date of trip/time:</b></td>
-				<td width="150" class="withLine"></td>
+				<td width="150" class="withLine">'.$itenerary->departure_date.' / '.$itenerary->departure_time.'</td>
 				<td width="10"></td>
 				<td width="80"><b>From :</b></td>
-				<td width="150" class="withLine"></td>
+				<td width="150" class="withLine">'.$itenerary->location.'</td>
 			</tr>
 
 			<tr>
@@ -235,7 +264,7 @@ $html ='<style>
 
 			<tr>
 				<td width="80"><b>Type of Vehicle:</b></td>
-				<td width="150"></td>
+				<td width="150">'.$itenerary->class.'</td>
 				<td width="10"></td>
 				<td width="80"></td>
 				<td width="150"></td>
@@ -251,8 +280,14 @@ $html .= '</article>';
 $html.='
 
 	<article>
+
 		<p><b>&nbsp;&nbsp;Purpose:</b></p>
-		<p class="col col-md-12"><p></p></p>
+
+			<table class="table" style="border:none;" cellspacing="3">
+			<tr>
+				<td>'.$itenerary->purpose.'</td>
+			</tr></table>
+
 	</article>
 	<br/>
 	<article>
@@ -262,47 +297,63 @@ $html.='
 				<th><b>Name</b></th><th><b>Designation</b></th><th><b>Office/Unit</b></th>
 			</tr>';
 
-			
+			$total_passenger=0;
+
+			for($x=0;$x<count($passenger_staff);$x++) {
+
+			 	$html.='<tr id="travel{{key}}">
+					<td>'.$passenger_staff[$x]->name.'</td>
+					<td>'.$passenger_staff[$x]->designation.'</td>
+					<td>'.$passenger_staff[$x]->office.'</td>
+
+				</tr>';
+
+				$total_passenger++;
+        		
+        	}
+
+
+        	for($x=0;$x<count($passenger_scholar);$x++) {
+
+			 	$html.='<tr id="travel{{key}}">
+					<td>'.$passenger_scholar[$x]->full_name.'</td>
+					<td>Scholar</td>
+					<td>'.$passenger_scholar[$x]->nationality.'</td>
+
+				</tr>';
+
+				$total_passenger++;
+        		
+        	}
+
+
+        	for($x=0;$x<count($passenger_custom);$x++) {
+
+			 	$html.='<tr id="travel{{key}}">
+					<td>'.$passenger_custom[$x]->full_name.'</td>
+					<td>'.$passenger_custom[$x]->designation.'</td>
+					<td></td>
+
+				</tr>';
+
+				$total_passenger++;
+        		
+        	}
 					
 					
-			$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
-				<td><input type="date" class="dateSelector"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="text" class="form-control text"></td>
+			while ($total_passenger<5) {
+				$total_passenger++;
+				$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
+					<td><input type="date" class="dateSelector"></td>
+					<td><input type="text" class="form-control text"></td>
+					<td><input type="text" class="form-control text"></td>
 
-			</tr>';
-
-			$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
-				<td><input type="date" class="dateSelector"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="text" class="form-control text"></td>
-
-			</tr>';
-			$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
-				<td><input type="date" class="dateSelector"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="text" class="form-control text"></td>
-
-			</tr>';
-			$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
-				<td><input type="date" class="dateSelector"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="text" class="form-control text"></td>
-
-			</tr>';
-			$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
-				<td><input type="date" class="dateSelector"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="text" class="form-control text"></td>
-
-			</tr>';
-			$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
-				<td><input type="date" class="dateSelector"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="text" class="form-control text"></td>
-
-			</tr>';
+				</tr>';
+			}	
 			
+
+			
+		
 			
 
 		$html.='</table>
@@ -313,7 +364,7 @@ $html.='<br/><br/><br/><article>
 		<table>
 			<tr>
 				<td width="100"><b>&nbsp;&nbsp;Mode of Payment:</b></td>
-				<td width="100" class="withLine"></td>
+				<td width="100" class="withLine">'.$itenerary->mode_of_payment.'</td>
 			</tr>
 		</table>
 
@@ -447,8 +498,8 @@ function print_statement_of_account($id){
 		$pdf->SetMargins(PDF_MARGIN_LEFT, 50, PDF_MARGIN_RIGHT);
 
 		
-
-
+	//prevent other users to view this document
+	self::is_creator($itenerary->requested_by);
 
 
 
@@ -479,7 +530,7 @@ $html ='<style>
 				<td width="150" class="withLine">'.$itenerary->department_alias.'</td>
 				<td width="10"></td>
 				<td width="10"><b></b></td>
-				<td width="150" class="withLine"></td>
+				<td width="150" class="withLine" align="center"><b>'.date_format(date_create($itenerary->date_created),'m/d/Y') .'</b></td>
 			</tr>
 
 			<tr>
@@ -511,7 +562,15 @@ $html.='
 			$html.='<tr>
 				<td height="100">
 				<br/><br/>
-					<b>Note:</b> Php '.@$charges->gasoline_charge.', base'.@$charges->base.' km 
+					<b>Note:</b> Php '.@$charges->gasoline_charge.', base'.@$charges->base.' km <br/>
+				';
+				
+				if(strlen(@$charges->notes)>1){
+				 
+				 	$html.='<br/>Advance Charging : <b>'.@ucfirst($charges->notes).'</b>';
+				 }
+
+				$html.='	
 				</td>
 
 

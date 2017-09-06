@@ -7,6 +7,8 @@
 
 
 var selectedAutomobile;
+window.tsis={}
+
 
 
 function modalOpen(target){
@@ -61,9 +63,9 @@ function showAutomobileList(page=1,callback=function(){}){
 				    					<img src="/laravel/public/uploads/automobile/`+auto[x].image+`" onerror="this.src='/laravel/public/img/no-photo-available.jpg'"/>
 				    					<div class="col col-md-12" style="background:rgba(200,200,200,0.1);border-top:1px solid rgba(200,200,200,0.2);">
 				    						<h4 class="page-header">`+auto[x].brand+`</h4>
-				    						<p><small><b>Plate No.</b> <span class="text-muted">`+auto[x].id+`</span></small></p>
+				    						<p><small><b>Plate No.</b> <span class="text-muted">`+auto[x].plate_no+`</span></small></p>
 
-				    						<!--<p><div class="marker marker-danger `+is_unavailable+`">`+auto[x].id+`</div></p>-->`
+				    						<!--<p><div class="marker marker-danger `+is_unavailable+`">`+auto[x].plate_no+`</div></p>-->`
 
 				   if(auto[x].status=='in_use'||auto[x].status=='under_maintenance'){
 				   		htm+=`<p class="text-danger"><b>Unavailable</b></p>`
@@ -89,6 +91,7 @@ function ajax_postAutomobile(brand,plate_number,color,callback){
         alert('Oops Something went wrong.Please try again later');
     })
 }
+
 
 function bindAddAutomobile(){
 	$('.vehicle').off('click');
@@ -146,6 +149,7 @@ function bindAddAutomobile(){
 
 								//preselect automobile for uploading
 								selectedAutomobile=data;
+								window.tsis.selectedAutomobile=data
 
 								//scroll to the last page then show upload cover dialog
 								setTimeout(function(){

@@ -314,7 +314,7 @@ class Campus_itenerary extends Controller
 
 
             $this->pdoObject=DB::connection()->getPdo();
-            $sql="SELECT trc_charge.*,trc_charge_breakdown.charge,trc_charge_breakdown.additional_charge,trc_charge_breakdown.charge,trc_charge_breakdown.drivers_overtime_charge,trc_charge_breakdown.overtime,trc_charge_breakdown.total FROM trc_charge LEFT JOIN trc_charge_breakdown on trc_charge_breakdown.charge_id=trc_charge.id where rid=:id ORDER BY date_modified DESC LIMIT 1";
+            $sql="SELECT trc_charge.*,trc_charge_breakdown.charge,trc_charge_breakdown.notes,trc_charge_breakdown.additional_charge,trc_charge_breakdown.charge,trc_charge_breakdown.drivers_overtime_charge,trc_charge_breakdown.overtime,trc_charge_breakdown.total FROM trc_charge LEFT JOIN trc_charge_breakdown on trc_charge_breakdown.charge_id=trc_charge.id where rid=:id ORDER BY trc_charge_breakdown.id  DESC LIMIT 1";
             $statement=$this->pdoObject->prepare($sql);
             $statement->bindParam(':id',$this->id);
             $statement->execute();
@@ -322,7 +322,7 @@ class Campus_itenerary extends Controller
             $res=Array();
 
             while($row=$statement->fetch(\PDO::FETCH_OBJ)){
-                $res[]=Array('id'=>$row->id,'trp_id'=>$row->rid,'start'=>$row->start,'end'=>$row->end,'gc'=>$row->gc,'dc'=>$row->dc,'charge'=>$row->charge,'gasoline_charge'=>$row->gasoline_charge,'drivers_charge'=>$row->drivers_charge,'additional_charge'=>$row->additional_charge,'drivers_overtime_charge'=>$row->drivers_overtime_charge,'overtime'=>$row->overtime,'appointment'=>$row->dca,'base'=>$row->base_km,'days'=>$row->drivers_day_rate,'total'=>$row->total);
+                $res[]=Array('id'=>$row->id,'trp_id'=>$row->rid,'start'=>$row->start,'end'=>$row->end,'gc'=>$row->gc,'dc'=>$row->dc,'charge'=>$row->charge,'gasoline_charge'=>$row->gasoline_charge,'drivers_charge'=>$row->drivers_charge,'additional_charge'=>$row->additional_charge,'drivers_overtime_charge'=>$row->drivers_overtime_charge,'overtime'=>$row->overtime,'appointment'=>$row->dca,'base'=>$row->base_km,'days'=>$row->drivers_day_rate,'total'=>$row->total,'notes'=>$row->notes);
             }
                
 
@@ -806,5 +806,47 @@ class Campus_itenerary extends Controller
                 return $remove_statement->rowCount()>0?$remove_statement->rowCount():0;
 
         }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+    }
+
+
+    function scheduled_in_calendar($date){
+
+        try{
+                $this->pdoObject=DB::connection()->getPdo();
+               
+                $this->datez=htmlentities(htmlspecialchars($date));
+                
+                $this->pdoObject->beginTransaction();
+                
+
+
+                  $sql="SELECT trc.requested_by,trc.status as trc_status,trc_travel.*,automobile.manufacturer, login_db.account_profile.last_name, login_db.account_profile.first_name FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no  LEFT JOIN login_db.account_profile on login_db.account_profile.id=driver_id LEFT JOIN trc on trc_travel.trc_id=trc.id where departure_date>= :datez1  and departure_date< (:datez2 +INTERVAL 1 MONTH) and (trc.status=2||trc.status=4) ORDER BY departure_date DESC";
+
+
+                $sql3="SELECT * FROM automobile_rent where travel_id=:id and travel_type='tr' ORDER BY travel_id DESC LIMIT 1 ";
+                $statement=$this->pdoObject->prepare($sql);
+                $statement3=$this->pdoObject->prepare($sql3);
+                $statement->bindParam(':datez1',$this->datez);
+                $statement->bindParam(':datez2',$this->datez);
+                $statement->execute();
+                $res=Array();
+                while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+                    //driver
+                    $driver=@$row->first_name. ' '. @$row->last_name;
+                    $statement3->bindValue(':id',$row->id,\PDO::PARAM_INT);
+                    $statement3->execute();
+
+                    while($row3=$statement3->fetch(\PDO::FETCH_OBJ)){
+                        $driver=$row3->drivers_name;    
+                    }
+
+                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->tr_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'returned_time'=>$row->returned_time,'plate_no'=>$row->plate_no,'driver'=>$driver,'type'=>'travel');
+                }
+                $this->pdoObject->commit();
+
+                return json_encode($res);
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
     }
 }
