@@ -26,7 +26,7 @@ class Official_staff extends Controller
                 $this->pdoObject=DB::connection()->getPdo();
                 $this->id=htmlentities(htmlspecialchars($id));
              
-                $sql="SELECT passengers.id,passengers.uid,login_db.account_profile.profile_name,login_db.account_profile.position,login_db.account_profile.profile_image,login_db.department.dept_name,login_db.department.dept_alias  FROM passengers LEFT JOIN login_db.account_profile on login_db.account_profile.uid=passengers.uid LEFT JOIN login_db.department on login_db.department.dept_id=login_db.account_profile.dept_id  where  tr_id=:id and type='staff'";
+                $sql="SELECT passengers.id,passengers.uid,searcaba_login_db.account_profile.profile_name,searcaba_login_db.account_profile.position,searcaba_login_db.account_profile.profile_image,searcaba_login_db.department.dept_name,searcaba_login_db.department.dept_alias  FROM passengers LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.uid=passengers.uid LEFT JOIN searcaba_login_db.department on searcaba_login_db.department.dept_id=searcaba_login_db.account_profile.dept_id  where  tr_id=:id and type='staff'";
                 $statement=$this->pdoObject->prepare($sql);
                 $statement->bindParam(':id',$this->id);
                 $statement->execute();

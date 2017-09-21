@@ -395,7 +395,7 @@ class Campus extends Controller
                 $start_page=$this->page<2?0:( integer)($this->page-1)*10;
 
                 $this->pdoObject->beginTransaction();
-                $sql="SELECT trc.requested_by,trc.status as trc_status,trc_travel.*,automobile.manufacturer, login_db.account_profile.last_name, login_db.account_profile.first_name FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no  LEFT JOIN login_db.account_profile on login_db.account_profile.id=driver_id LEFT JOIN trc on trc_travel.trc_id=trc.id where trc_travel.status='scheduled' and trc.status='2' and departure_date!='0000-00-00' ORDER BY departure_date  DESC LIMIT :start, 10";
+                $sql="SELECT trc.requested_by,trc.status as trc_status,trc_travel.*,automobile.manufacturer, searcaba_login_db.account_profile.last_name, searcaba_login_db.account_profile.first_name FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no  LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.id=driver_id LEFT JOIN trc on trc_travel.trc_id=trc.id where trc_travel.status='scheduled' and trc.status='2' and departure_date!='0000-00-00' ORDER BY departure_date  DESC LIMIT :start, 10";
                 $sql2="SELECT count(*) as total FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no LEFT JOIN trc on trc_travel.trc_id=trc.id   where trc_travel.status='scheduled'  and trc.status='2' and departure_date!='0000-00-00'";
                 $sql3="SELECT * FROM automobile_rent where travel_id=:id and travel_type='trc' ORDER BY travel_id DESC LIMIT 1 ";
                  $sql4="SELECT * FROM account_profile where id=:id LIMIT 1 ";
@@ -474,7 +474,7 @@ function ongoing($page=1){
                 $start_page=$this->page<2?0:( integer)($this->page-1)*10;
                 
                 $this->pdoObject->beginTransaction();
-                $sql="SELECT trc.requested_by,trc.status as trc_status,trc_travel.*,automobile.manufacturer, login_db.account_profile.last_name, login_db.account_profile.first_name FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no  LEFT JOIN login_db.account_profile on login_db.account_profile.id=driver_id LEFT JOIN trc on trc_travel.trc_id=trc.id where trc_travel.status='ongoing' and departure_date!='0000-00-00' ORDER BY departure_date  DESC LIMIT :start, 10";
+                $sql="SELECT trc.requested_by,trc.status as trc_status,trc_travel.*,automobile.manufacturer, searcaba_login_db.account_profile.last_name, searcaba_login_db.account_profile.first_name FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no  LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.id=driver_id LEFT JOIN trc on trc_travel.trc_id=trc.id where trc_travel.status='ongoing' and departure_date!='0000-00-00' ORDER BY departure_date  DESC LIMIT :start, 10";
                 $sql2="SELECT count(*) as total FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no LEFT JOIN trc on trc_travel.trc_id=trc.id   where trc_travel.status='ongoing' and departure_date!='0000-00-00'";
                 $sql3="SELECT * FROM automobile_rent where travel_id=:id and travel_type='trc' ORDER BY travel_id DESC LIMIT 1 ";
                  $sql4="SELECT * FROM account_profile where id=:id LIMIT 1 ";
@@ -551,7 +551,7 @@ function ongoing($page=1){
                 $start_page=$this->page<2?0:( integer)($this->page-1)*10;
                 
                 $this->pdoObject->beginTransaction();
-                $sql="SELECT trc.requested_by,trc.status as trc_status,trc_travel.*,automobile.manufacturer, login_db.account_profile.last_name, login_db.account_profile.first_name FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no  LEFT JOIN login_db.account_profile on login_db.account_profile.id=driver_id LEFT JOIN trc on trc_travel.trc_id=trc.id where trc_travel.status='finished' and departure_date!='0000-00-00' ORDER BY departure_date  DESC LIMIT :start, 10";
+                $sql="SELECT trc.requested_by,trc.status as trc_status,trc_travel.*,automobile.manufacturer, searcaba_login_db.account_profile.last_name, searcaba_login_db.account_profile.first_name FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no  LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.id=driver_id LEFT JOIN trc on trc_travel.trc_id=trc.id where trc_travel.status='finished' and departure_date!='0000-00-00' ORDER BY departure_date  DESC LIMIT :start, 10";
                 $sql2="SELECT count(*) as total FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no LEFT JOIN trc on trc_travel.trc_id=trc.id   where trc_travel.status='finished' and departure_date!='0000-00-00'";
                 $sql3="SELECT * FROM automobile_rent where travel_id=:id and travel_type='trc' ORDER BY travel_id DESC LIMIT 1 ";
                  $sql4="SELECT * FROM account_profile where id=:id LIMIT 1 ";

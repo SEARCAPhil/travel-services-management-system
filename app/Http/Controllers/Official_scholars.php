@@ -22,7 +22,7 @@ class Official_scholars extends Controller
                 $this->pdoObject=DB::connection()->getPdo();
                 $this->id=htmlentities(htmlspecialchars($id));
              
-                $sql="SELECT passengers.id,passengers.uid,ischo_db.personal_tb.*  FROM passengers LEFT JOIN ischo_db.personal_tb on ischo_db.personal_tb.pers_id=passengers.uid  where tr_id=:id and type='scholar'";
+                $sql="SELECT passengers.id,passengers.uid,searcaba_ischo_db.personal_tb.*  FROM passengers LEFT JOIN searcaba_ischo_db.personal_tb on searcaba_ischo_db.personal_tb.pers_id=passengers.uid  where tr_id=:id and type='scholar'";
                 $statement=$this->pdoObject->prepare($sql);
                 $statement->bindParam(':id',$this->id);
                 $statement->execute();

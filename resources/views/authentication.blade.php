@@ -38,7 +38,7 @@
 </style>
 	<section class="col col-xs-12 col-lg-4 col-lg-offset-4 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1" style="margin-top: 10vh;">
 		<div class="col col-md-12 text-center">
-			<form class="form form-horizontal text-center" method="POST" action="/laravel/public/authentication/confirmation">
+			<form class="form form-horizontal text-center" method="POST" action="/trs/public/authentication/confirmation">
 				{{csrf_field()}}
 
 				<div class="row">

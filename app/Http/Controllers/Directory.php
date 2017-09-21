@@ -21,8 +21,8 @@ class Directory extends Controller
 				#set starting limit(page 1=10,page 2=20)
 				$start_page=$this->page<2?0:( integer)($this->page-1)*20;
 				//$this->limit=$limit;
-				$view_account_sql="SELECT * FROM login_db.account_profile LEFT JOIN login_db.department on login_db.department.dept_id=login_db.account_profile.dept_id WHERE login_db.account_profile.profile_name!='' and login_db.account_profile.uid IS NOT NULL  LIMIT :start, 20";
-				$view_account_sql2="SELECT count(*) as total FROM login_db.account_profile LEFT JOIN login_db.department on login_db.department.dept_id=login_db.account_profile.dept_id WHERE login_db.account_profile.profile_name!='' and login_db.account_profile.uid IS NOT NULL";
+				$view_account_sql="SELECT * FROM searcaba_login_db.account_profile LEFT JOIN searcaba_login_db.department on searcaba_login_db.department.dept_id=searcaba_login_db.account_profile.dept_id WHERE searcaba_login_db.account_profile.profile_name!='' and searcaba_login_db.account_profile.uid IS NOT NULL  LIMIT :start, 20";
+				$view_account_sql2="SELECT count(*) as total FROM searcaba_login_db.account_profile LEFT JOIN searcaba_login_db.department on searcaba_login_db.department.dept_id=searcaba_login_db.account_profile.dept_id WHERE searcaba_login_db.account_profile.profile_name!='' and searcaba_login_db.account_profile.uid IS NOT NULL";
 				$view_profile_statement=$this->pdoObject->prepare($view_account_sql);
 				$view_profile_statement2=$this->pdoObject->query($view_account_sql2);
 				$view_profile_statement->bindParam(':start',$start_page,\PDO::PARAM_INT);
@@ -138,7 +138,7 @@ class Directory extends Controller
 				$this->id=htmlentities(htmlspecialchars($id));
 
 				//view users profile from login_db
-				$sql="SELECT login_db.account_profile.uid,login_db.department.dept_id as dept_id FROM login_db.account_profile  LEFT JOIN login_db.department on login_db.department.dept_id=login_db.account_profile.dept_id where uid=:uid LIMIT 1";
+				$sql="SELECT searcaba_login_db.account_profile.uid,searcaba_login_db.department.dept_id as dept_id FROM searcaba_login_db.account_profile  LEFT JOIN searcaba_login_db.department on searcaba_login_db.department.dept_id=searcaba_login_db.account_profile.dept_id where uid=:uid LIMIT 1";
 				$statement=$this->pdoObject->prepare($sql);
 				$statement->bindParam(':uid',$this->id);
 				$statement->execute();
@@ -162,7 +162,7 @@ class Directory extends Controller
 					}
 
 
-					$view_account_sql="SELECT login_db.account_profile.profile_name,login_db.department.dept_name,login_db.signatory.priority,login_db.signatory.uid FROM login_db.signatory LEFT JOIN login_db.account_profile on login_db.account_profile.uid=login_db.signatory.uid LEFT JOIN login_db.department on login_db.signatory.dept_id=department.dept_id where login_db.signatory.dept_id=:id ORDER BY login_db.signatory.priority DESC LIMIT 1";
+					$view_account_sql="SELECT searcaba_login_db.account_profile.profile_name,searcaba_login_db.department.dept_name,searcaba_login_db.signatory.priority,searcaba_login_db.signatory.uid FROM searcaba_login_db.signatory LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.uid=searcaba_login_db.signatory.uid LEFT JOIN searcaba_login_db.department on searcaba_login_db.signatory.dept_id=department.dept_id where searcaba_login_db.signatory.dept_id=:id ORDER BY searcaba_login_db.signatory.priority DESC LIMIT 1";
 					$view_profile_statement=$this->pdoObject->prepare($view_account_sql);
 					$view_profile_statement->bindParam(':id',$res->dept_id);
 					$view_profile_statement->execute();
@@ -219,8 +219,8 @@ class Directory extends Controller
 				#set starting limit(page 1=10,page 2=20)
 				$start_page=$this->page<2?0:( integer)($this->page-1)*20;
 				//$this->limit=$limit;
-				$view_account_sql="SELECT * FROM login_db.account_profile LEFT JOIN login_db.department on login_db.department.dept_id=login_db.account_profile.dept_id WHERE (login_db.account_profile.profile_name LIKE :param1 or login_db.account_profile.first_name LIKE :param2 or login_db.account_profile.last_name LIKE :param3) and login_db.account_profile.profile_name!='' and login_db.account_profile.uid IS NOT NULL  LIMIT :start, 20";
-				$view_account_sql2="SELECT count(*) as total FROM login_db.account_profile LEFT JOIN login_db.department on login_db.department.dept_id=login_db.account_profile.dept_id WHERE (login_db.account_profile.profile_name LIKE :param1 or login_db.account_profile.first_name LIKE :param2 or login_db.account_profile.last_name LIKE :param3) and login_db.account_profile.profile_name!='' and login_db.account_profile.uid IS NOT NULL";
+				$view_account_sql="SELECT * FROM searcaba_login_db.account_profile LEFT JOIN searcaba_login_db.department on searcaba_login_db.department.dept_id=searcaba_login_db.account_profile.dept_id WHERE (searcaba_login_db.account_profile.profile_name LIKE :param1 or searcaba_login_db.account_profile.first_name LIKE :param2 or searcaba_login_db.account_profile.last_name LIKE :param3) and searcaba_login_db.account_profile.profile_name!='' and searcaba_login_db.account_profile.uid IS NOT NULL  LIMIT :start, 20";
+				$view_account_sql2="SELECT count(*) as total FROM searcaba_login_db.account_profile LEFT JOIN searcaba_login_db.department on searcaba_login_db.department.dept_id=searcaba_login_db.account_profile.dept_id WHERE (searcaba_login_db.account_profile.profile_name LIKE :param1 or searcaba_login_db.account_profile.first_name LIKE :param2 or searcaba_login_db.account_profile.last_name LIKE :param3) and searcaba_login_db.account_profile.profile_name!='' and searcaba_login_db.account_profile.uid IS NOT NULL";
 				$view_profile_statement=$this->pdoObject->prepare($view_account_sql);
 				$view_profile_statement2=$this->pdoObject->prepare($view_account_sql2);
 				$view_profile_statement->bindParam(':param1',$param);
@@ -280,8 +280,8 @@ class Directory extends Controller
 				$start_page=$this->page<2?0:( integer)($this->page-1)*20;
 
 				//$this->limit=$limit;
-				$view_account_sql="SELECT * FROM ischo_db.personal_tb where ischo_db.personal_tb.fullname LIKE :param1 or ischo_db.personal_tb.surname LIKE :param2 or ischo_db.personal_tb.firstname LIKE :param3   LIMIT :start, 20";
-				$view_account_sql2="SELECT count(*) as total FROM ischo_db.personal_tb where ischo_db.personal_tb.fullname  LIKE :param1 or ischo_db.personal_tb.surname LIKE :param2 or ischo_db.personal_tb.firstname LIKE :param3  ";
+				$view_account_sql="SELECT * FROM searcaba_ischo_db.personal_tb where searcaba_ischo_db.personal_tb.fullname LIKE :param1 or searcaba_ischo_db.personal_tb.surname LIKE :param2 or searcaba_ischo_db.personal_tb.firstname LIKE :param3   LIMIT :start, 20";
+				$view_account_sql2="SELECT count(*) as total FROM searcaba_ischo_db.personal_tb where searcaba_ischo_db.personal_tb.fullname  LIKE :param1 or searcaba_ischo_db.personal_tb.surname LIKE :param2 or searcaba_ischo_db.personal_tb.firstname LIKE :param3  ";
 				$view_profile_statement=$this->pdoObject->prepare($view_account_sql);
 				$view_profile_statement2=$this->pdoObject->prepare($view_account_sql2);
 				$view_profile_statement->bindParam(':start',$start_page,\PDO::PARAM_INT);
@@ -343,9 +343,9 @@ class Directory extends Controller
 				$start_page=$this->page<2?0:( integer)($this->page-1)*20;
 
 				//$this->limit=$limit;
-				$view_account_sql="SELECT login_db.account_profile.id as profile_id, login_db.account_profile.uid,login_db.account_profile.last_name, login_db.account_profile.first_name,login_db.designation.id,login_db.position.position FROM login_db.account_profile LEFT JOIN login_db.designation on login_db.designation.uid=login_db.account_profile.uid LEFT JOIN login_db.position on login_db.position.id=login_db.designation.pid WHERE login_db.position.position = 'driver' and login_db.designation.active=1 LIMIT :start,20";
+				$view_account_sql="SELECT searcaba_login_db.account_profile.id as profile_id, searcaba_login_db.account_profile.uid,searcaba_login_db.account_profile.last_name, searcaba_login_db.account_profile.first_name,searcaba_login_db.designation.id,searcaba_login_db.position.position FROM searcaba_login_db.account_profile LEFT JOIN searcaba_login_db.designation on searcaba_login_db.designation.uid=searcaba_login_db.account_profile.uid LEFT JOIN searcaba_login_db.position on searcaba_login_db.position.id=searcaba_login_db.designation.pid WHERE searcaba_login_db.position.position = 'driver' and searcaba_login_db.designation.active=1 LIMIT :start,20";
 
-				$view_account_sql2="SELECT count(*) as total FROM login_db.account_profile LEFT JOIN login_db.designation on login_db.designation.uid=login_db.account_profile.uid LEFT JOIN login_db.position on login_db.position.id=login_db.designation.pid WHERE login_db.position.position = 'driver' and login_db.designation.active=1 ";
+				$view_account_sql2="SELECT count(*) as total FROM searcaba_login_db.account_profile LEFT JOIN searcaba_login_db.designation on searcaba_login_db.designation.uid=searcaba_login_db.account_profile.uid LEFT JOIN searcaba_login_db.position on searcaba_login_db.position.id=searcaba_login_db.designation.pid WHERE searcaba_login_db.position.position = 'driver' and searcaba_login_db.designation.active=1 ";
 
 				$view_profile_statement=$this->pdoObject->prepare($view_account_sql);
 				$view_profile_statement2=$this->pdoObject->query($view_account_sql2);

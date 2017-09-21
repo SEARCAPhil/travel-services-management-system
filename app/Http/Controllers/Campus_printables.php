@@ -37,7 +37,7 @@ class Campus_printables extends Controller
     	//get default settings from config/laravel-tcpdf.php
    		$pdf_settings = \Config::get('laravel-tcpdf');
 
-   		$pdf = new \Elibyy\TCPDF\TCPdf($pdf_settings['page_orientation'], $pdf_settings['page_units'], array(210,297), true, 'UTF-8', false);
+   		$pdf = new \Elibyy\TCPDF\TCPDF($pdf_settings['page_orientation'], $pdf_settings['page_units'], array(210,297), true, 'UTF-8', false);
    		
 
 
@@ -332,7 +332,7 @@ function print_notice_of_charges($id){
     	//get default settings from config/laravel-tcpdf.php
    		$pdf_settings = \Config::get('laravel-tcpdf');
 
-   		$pdf = new \Elibyy\TCPDF\TCPdf('L', $pdf_settings['page_units'], array(210,297), true, 'UTF-8', false);
+   		$pdf = new \Elibyy\TCPDF\TCPDF('L', $pdf_settings['page_units'], array(210,297), true, 'UTF-8', false);
    		
 
 
