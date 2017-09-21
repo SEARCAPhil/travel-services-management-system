@@ -180,6 +180,8 @@ function appendCustomListPreviewConfirmation(){
 		<button class="btn btn-danger" id="customPassengerConfirmationButton"><span class="glyphicon glyphicon-ok"></span>&nbsp;Yes</button> <button class="btn btn-default" id="customPassengerConfirmationButtonCancel">No</button>
 	</div>`
 
+	//scroll confirmation to top
+	scrollDialogTop()
 
 	var fullName=$('#customFullName').val();
 	var designation=$('#customDesignation').val();

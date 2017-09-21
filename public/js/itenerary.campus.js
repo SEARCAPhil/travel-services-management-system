@@ -22,6 +22,9 @@ function appendIteneraryListPreviewConfirmation(){
 
 	$('#itenerary-dialog-content').hide();
 	$('#itenerary-confirmation').html(htm)
+
+	//scroll confirmation to top
+	scrollDialogTop()
 	
 	//add event handler in confirmation button
 	$('#iteneraryConfirmationButton').click(function(){

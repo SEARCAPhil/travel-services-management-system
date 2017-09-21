@@ -128,6 +128,16 @@ function showBootstrapDialog(modal,modalSection,url,callback){
 
 }
 
+//forced scroll modal to top
+function scrollDialogTop(){
+	setTimeout(function(){
+		$('.modal').each(function(index,el){
+			$(el).scrollTop(0)
+		})
+	},500)
+
+}
+
 
 /*
 |----------------------------------------------------------------------------
