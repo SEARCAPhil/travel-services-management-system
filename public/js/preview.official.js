@@ -209,7 +209,7 @@ function showOfficialTravelListPreview(id){
 		$('.preview-unit').html(json[0].department)
 		$('.preview-created').html(((json[0].date_created).split(' '))[0])
 		$('.preview-purpose').html(json[0].purpose)
-		$('.preview-cash-advance').html(' &emsp;&emsp;<b>'+json[0].source_of_fund+'</b>')
+		$('.preview-cash-advance').html(' &emsp;&emsp;<b>'+json[0].source_of_fund_value+'</b>')
 
 		$('.preview-print').attr('href','travel/official/print/travel_request/'+json[0].tr)
 
