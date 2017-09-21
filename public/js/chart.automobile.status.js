@@ -48,11 +48,23 @@ function previewLoadingEffectFade(panel){
 |
 |--------------------*/
 $(document).ready(function(){
-	 
+
+	//move onclick event to callback
+	//this will prevent loading of JSON first before the page loads
+	//resulting to empty list
+	$(".automobile-tab").each(function(index,el){
+		var onclick=$(this).attr('onclick');
+	 	$(this).attr('data-callback',onclick);
+	 	$(this).removeAttr('onclick')
+	})
+
+
 	 $(".automobile-tab").on('click',function(){
 
 	 	var target=$(this).attr('href');
 	 	var panel=document.querySelector(target);
+
+	 	$(this).removeAttr('onclick')
 
 	 	//show loading effect
 	 	previewLoadingEffect(panel)
@@ -61,13 +73,15 @@ $(document).ready(function(){
 	 	var callback=$(this).attr('data-callback');
 
 	
-
-
 	 	$(panel).load($(this).attr('data-page'),function(){
 	 		previewLoadingEffectFade(panel)
 	 		
 	 		//callback
-	 		if(typeof callback!='undefined') callback(this)
+	 		if(typeof callback!='undefined'&&window.trs[callback]){
+	 			window.trs[callback]()
+	 		}
+	 		
+	 		
 	 	})
 
 	 	
