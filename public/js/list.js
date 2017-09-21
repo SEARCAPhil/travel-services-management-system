@@ -536,6 +536,10 @@ function bindAddFormNavigationButton(){
 
 }
 
-
+//make available to window
+window.trs=window.trs||{}
+window.trs.showOfficialTravelList=window.trs.showOfficialTravelList||showOfficialTravelList;
+window.trs.showPersonalTravelList=window.trs.showPersonalTravelList||showPersonalTravelList;
+window.trs.showCampusTravelList=window.trs.showCampusTravelList||showCampusTravelList;
 
 

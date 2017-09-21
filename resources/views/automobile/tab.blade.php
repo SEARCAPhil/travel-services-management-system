@@ -56,19 +56,19 @@
  			<?php endif; ?>
 
 
-					<li href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab pull-left col col-md-10 col-lg-9" data-page="travel" data-type="official" onclick="showOfficialTravelList()">&emsp;&emsp;Official </li>
+					<li href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab pull-left col col-md-10 col-lg-9" data-page="travel" data-type="official" onclick="showOfficialTravelList">&emsp;&emsp;Official </li>
 
 
 					<li role="presentation" class="col col-md-1 col-lg-1"><a href="#" class="add-button" data-content="official"><i class="material-icons">add_box</i></a></li>
 
 
-					<li href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab pull-left col col-md-10 col-lg-9" data-page="travel" data-type="personal"  onclick="showPersonalTravelList()">&emsp;&emsp;Personal </li>
+					<li href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab pull-left col col-md-10 col-lg-9" data-page="travel" data-type="personal"  onclick="showPersonalTravelList">&emsp;&emsp;Personal </li>
 
 
 					<li role="presentation" class="col col-md-1  col-lg-1"><a href="#" class="add-button" data-content="personal"><i class="material-icons">add_box</i></a></li>
 
 
-					<li href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab  pull-left col col-md-10 col-lg-9" data-page="travel" data-type="campus"  onclick="showCampusTravelList()">&emsp;&emsp;Campus </li>
+					<li href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab  pull-left col col-md-10 col-lg-9" data-page="travel" data-type="campus"  onclick="showCampusTravelList">&emsp;&emsp;Campus </li>
 
 
 					<li role="presentation" class="col col-md-1  col-lg-1"><a href="#" class="add-button" data-content="campus"><i class="material-icons">add_box</i></a></li>
