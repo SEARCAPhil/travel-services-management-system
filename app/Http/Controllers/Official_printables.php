@@ -296,7 +296,7 @@ $html.='	<article class="col col-md-12">
 			<!--requesting party-->
 			<tr>
 				<td> Requesting Party</td>
-				<td> Source of fund: <b>'.$travel_request->source_of_fund.'</b>'; 
+				<td> Source of fund:  <b> '.$travel_request->source_of_fund.'</b>'; 
 
 			if($travel_request->source_of_fund=='otf'){
 				$html.='<br/><br/><b>'.@$travel_request->projects[0]->project.'</b><br/>';
@@ -997,7 +997,7 @@ $html.='<br/><br/><br/><article>
 		<table>
 			<tr>
 				<td><b>IV. Cash Advance Requested </b></td><td style="text-align:right;">Source of Fund:</td>
-				<td class="withLine">'.$details->source_of_fund.' '.$projects.'</td>
+				<td class="withLine"> '.$details->source_of_fund_value.' '.$projects.'</td>
 			</tr>
 		</table>';
 

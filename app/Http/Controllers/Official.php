@@ -762,10 +762,27 @@ class Official extends Controller
 
 
 
-                
+              $source='Operating funds';
+                switch ($row->source_of_fund) {
+                         case 'opf':
+                             $source='Operating funds';
+                            break;
+                        case 'opfs':
+                            $source='Operating funds (Scholars)';
+                            break;
+                        case 'otf':
+                           $source='Other funds';
+                           break;
+                        case 'otfs':
+                           $source='Other funds (Scholars)';
+                           break;   
+                      default:
+                           $source='Operating funds';
+                          break;
+                  }  
 
 
-
+                $row->source_of_fund_value=$source;
                 $res[]=$row;
 
 

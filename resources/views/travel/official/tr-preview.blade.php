@@ -90,7 +90,7 @@
 
 			<div class="col col-md-12 preview-sections">
 				<div class="col col-md-12 content-header-section">
-					<div class="content-header"> <span><b>Cash Advance</b></span></div>
+					<div class="content-header"> <span><b>Source of fund</b></span></div>
 				</div>
 				<div class="col co-md-12">
 					<div class="preview-cash-advance"></div>

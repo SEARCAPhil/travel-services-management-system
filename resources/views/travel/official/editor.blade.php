@@ -123,9 +123,9 @@
 
 				<div class="col col-md-12 content-header-section">
 					<div class="content-header">
-						<span><b>Cash Advance</b></span> 
-						<i class="material-icons md-18" onclick="$('#fundings').show();return false;">edit</i>
+						<span><b>Source of fund</b></span> 
 					</div>
+					<div class="col col-md-2"><button onclick="$('#fundings').show();return false;" class="btn btn-default btn-xs"><i class="material-icons md-18">edit</i> Change</button></div>
 				</div>
 
 				<div class="col col-md-12">
