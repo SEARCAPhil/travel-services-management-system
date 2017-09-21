@@ -1,6 +1,8 @@
 /vendor
 /node_modules
 /public/storage
+/public/uploads/automobile
 Homestead.yaml
 Homestead.json
 .env
+
