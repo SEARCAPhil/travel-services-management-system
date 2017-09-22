@@ -69,7 +69,7 @@ function showUntouchedStatusAdmin(){
 				<p>
 					This Travel Request is not yet verified. Please review before making any further actions.
 					<button class="btn btn-xs btn-danger preview-return">Return to sender <span class="glyphicon glyphicon-inbox"></span></button> Or
-					<button class="btn btn-xs btn-danger preview-verify"> Verify <span class="glyphicon glyphicon-ok"></span></button>
+					<button class="btn btn-xs btn-danger preview-verify"> Accept <span class="glyphicon glyphicon-ok"></span></button>
 				</p>
 			</div>`;
 	$('.preview-status-section').fadeIn().html(htm);
