@@ -496,7 +496,7 @@ function appendTravelToList(json){
 							htm+=`</ul>
 
 							</li>
-							<li class="dropdown"> <a href="#" class="travel-link advance-menu pull-left dropdown-toggle" data-type="personal" data-toggle="dropdown"  data-content='`+JSON.stringify(data)+`' aria-haspopup="true" aria-expanded="true">Advance Options
+							<li class="dropdown"> <a href="#" class="travel-link advance-menu pull-left dropdown-toggle" data-type="personal" data-toggle="dropdown"  data-content='`+JSON.stringify(data)+`' aria-haspopup="true" aria-expanded="true">Advanced Options
 								 <span class="glyphicon glyphicon-option-vertical"></span> </span>
 								 </a>
 								
@@ -505,7 +505,7 @@ function appendTravelToList(json){
 										<!--<li><a href="#" class="advance-menu-selector" id="rent"><b>Rent</b> a Car</a></li>-->
 									    <li><a href="#" class="advance-menu-selector" id="driver">Assign Driver</a></li>
 									    <li><a href="#" class="advance-menu-selector"  id="charge" data-charge="`+data.id+`">Charge</a></li>
-									    <li><a href="#" class="advance-menu-selector"  id="charge_advance" data-charge="`+data.id+`">Advance Charging</a></li>
+									    <li><a href="#" class="advance-menu-selector"  id="charge_advance" data-charge="`+data.id+`">Override Computation</a></li>
 									  </ul>
 								
 							</li>`;
