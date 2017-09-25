@@ -804,6 +804,7 @@ function advanceMenuDriver(type){
 
 		showDriversList(function(){
 			assignDriver();
+			assignOtherDriver();
 
 		});
 			

@@ -1131,7 +1131,7 @@ class Official extends Controller
 
                 $this->pdoObject->beginTransaction();
 
-                $sql="SELECT tr.status as tr_status,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no,automobile.manufacturer, searcaba_login_db.account_profile.last_name, searcaba_login_db.account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='scheduled' and departure_date!='0000-00-00' and linked='no' and tr.status='2'  ORDER BY travel.id DESC LIMIT :start,10";
+                $sql="SELECT tr.status as tr_status,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,other_driver,travel.id,travel.plate_no,automobile.manufacturer, searcaba_login_db.account_profile.last_name, searcaba_login_db.account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='scheduled' and departure_date!='0000-00-00' and linked='no' and tr.status='2'  ORDER BY travel.id DESC LIMIT :start,10";
 
 
 
@@ -1211,6 +1211,8 @@ class Official extends Controller
 
                     }
 
+                    //override driver by other driver
+                    if(!empty($row->other_driver)) $driver=$row->other_driver;
 
 
                     //requester
@@ -1311,7 +1313,7 @@ function ongoing($page=1){
 
                 $this->pdoObject->beginTransaction();
 
-                $sql="SELECT tr.status as tr_status,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no,automobile.manufacturer, searcaba_login_db.account_profile.last_name, searcaba_login_db.account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='ongoing' and departure_date!='0000-00-00' and linked='no'  ORDER BY travel.id DESC LIMIT :start,10";
+                $sql="SELECT tr.status as tr_status,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no,travel.other_driver,automobile.manufacturer, searcaba_login_db.account_profile.last_name, searcaba_login_db.account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='ongoing' and departure_date!='0000-00-00' and linked='no'  ORDER BY travel.id DESC LIMIT :start,10";
 
 
 
@@ -1391,7 +1393,8 @@ function ongoing($page=1){
 
                     }
 
-
+                    //override driver by other driver
+                    if(!empty($row->other_driver)) $driver=$row->other_driver;
 
                     //requester
 
@@ -1489,7 +1492,7 @@ function ongoing($page=1){
 
                 $this->pdoObject->beginTransaction();
 
-                $sql="SELECT tr.status as tr_status,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no,automobile.manufacturer, searcaba_login_db.account_profile.last_name, searcaba_login_db.account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='finished' and departure_date!='0000-00-00' and linked='no'  ORDER BY travel.id DESC LIMIT :start,10";
+                $sql="SELECT tr.status as tr_status,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no,travel.other_driver,automobile.manufacturer, searcaba_login_db.account_profile.last_name, searcaba_login_db.account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='finished' and departure_date!='0000-00-00' and linked='no'  ORDER BY travel.id DESC LIMIT :start,10";
 
 
 
@@ -1569,7 +1572,8 @@ function ongoing($page=1){
 
                     }
 
-
+                    //override driver by other driver
+                    if(!empty($row->other_driver)) $driver=$row->other_driver;
 
                     //requester
 
