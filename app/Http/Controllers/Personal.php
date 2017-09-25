@@ -535,6 +535,8 @@ class Personal extends Controller
                         $driver=$row3->drivers_name;    
                     }
 
+                    //override driver by other driver
+                    if(!empty($row->other_driver)) $driver=$row->other_driver;
 
                     //requester
                     $statement4->bindValue(':id',$row->requested_by,\PDO::PARAM_INT);
@@ -594,6 +596,7 @@ class Personal extends Controller
                 $statement->execute();
                 $res=Array();
                 while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+
                     //driver
                     $driver=@$row->first_name. ' '. @$row->last_name;
                     $statement3->bindValue(':id',$row->id,\PDO::PARAM_INT);
@@ -753,6 +756,8 @@ function ongoing($page=1){
                         $driver=$row3->drivers_name;    
                     }
 
+                     //override driver by other driver
+                    if(!empty($row->other_driver)) $driver=$row->other_driver;
 
                     //requester
                     $statement4->bindValue(':id',$row->requested_by,\PDO::PARAM_INT);
@@ -843,6 +848,8 @@ function finished($page=1){
                         $driver=$row3->drivers_name;    
                     }
 
+                    //override driver by other driver
+                    if(!empty($row->other_driver)) $driver=$row->other_driver;
 
                     //requester
                     $statement4->bindValue(':id',$row->requested_by,\PDO::PARAM_INT);
