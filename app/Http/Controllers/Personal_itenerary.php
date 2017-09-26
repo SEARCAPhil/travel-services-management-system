@@ -258,6 +258,28 @@ class Personal_itenerary extends Controller
     }  
 
 
+    function update_date_time($id,$departure_date,$departure_time,$arrival_date,$arrival_time){
+        $this->id=htmlentities(htmlspecialchars($id));
+        $this->departure_date=htmlentities(htmlspecialchars($departure_date));
+        $this->departure_time=htmlentities(htmlspecialchars($departure_time));
+        $this->arrival_date=htmlentities(htmlspecialchars($arrival_date));
+        $this->arrival_time=htmlentities(htmlspecialchars($arrival_time));
+
+        $this->pdoObject=DB::connection()->getPdo();
+        //date settings
+        $sql_time="UPDATE trp set departure_date=:departure_date,actual_departure_time=:departure_time,returned_date=:returned_date,returned_time=:returned_time  where id=:id";
+        $sth_time=$this->pdoObject->prepare($sql_time);
+        $sth_time->bindParam(':departure_date',$this->departure_date);
+        $sth_time->bindParam(':departure_time',$this->departure_time);
+        $sth_time->bindParam(':returned_date',$this->arrival_date);
+        $sth_time->bindParam(':returned_time',$this->arrival_time);
+        $sth_time->bindParam(':id',$this->id);
+        $sth_time->execute();
+        $isUpdated=$sth_time->rowCount();
+
+        return $isUpdated;
+
+    }
 
 
      function charge($id,Request $request){
@@ -270,7 +292,14 @@ class Personal_itenerary extends Controller
                 $this->gasoline_charge=htmlentities(htmlspecialchars($request->input('gasoline_charge')));
                 $this->drivers_charge=htmlentities(htmlspecialchars($request->input('drivers_charge')));
                 $this->appointment=htmlentities(htmlspecialchars($request->input('appointment')));
-                 $this->gc=null;
+
+
+                $this->departure_date=htmlentities(htmlspecialchars($request->input('departure_date')));
+                $this->departure_time=htmlentities(htmlspecialchars($request->input('departure_time')));
+                $this->arrival_date=htmlentities(htmlspecialchars($request->input('arrival_date')));
+                $this->arrival_time=htmlentities(htmlspecialchars($request->input('arrival_time')));
+
+                $this->gc=null;
                 $this->dc=null;
                 $this->base=null;
                 $this->drivers_day_rate=null;
@@ -373,12 +402,13 @@ class Personal_itenerary extends Controller
                 self::create_charge_breakdown($lastId,$gasoline_charge['amount'],$gasoline_charge['additional'],$drivers_charge,$total_execess_time,$overall_charge);
 
 
+                $isDateTimeUpdated=self::update_date_time($this->id,$this->departure_date,$this->departure_time,$this->arrival_date,$this->arrival_time);
 
 
                 $this->pdoObject->commit();
 
                 #return
-                echo $lastId;
+                echo $lastId||$isDateTimeUpdated;
             
 
 
@@ -469,6 +499,11 @@ class Personal_itenerary extends Controller
             $this->drivers_charge=htmlentities(htmlspecialchars($request->input('drivers_charge')));
             $this->appointment=htmlentities(htmlspecialchars($request->input('appointment')));
 
+
+            $this->departure_date=htmlentities(htmlspecialchars($request->input('departure_date')));
+            $this->departure_time=htmlentities(htmlspecialchars($request->input('departure_time')));
+            $this->arrival_date=htmlentities(htmlspecialchars($request->input('arrival_date')));
+            $this->arrival_time=htmlentities(htmlspecialchars($request->input('arrival_time')));
         
              
             
@@ -586,14 +621,13 @@ class Personal_itenerary extends Controller
            
 
             $charge_result=self::update_charge_breakdown($id,$gasoline_charge['amount'],$gasoline_charge['additional'],$drivers_charge,$total_execess_time,$overall_charge);
+            #USE rid TO UPDATE TRP
+            #ID is referenced to trp_charge not in trp
+            $isDateTimeUpdated=self::update_date_time($this->rid,$this->departure_date,$this->departure_time,$this->arrival_date,$this->arrival_time);
 
-
-
-
-            $this->pdoObject->commit();
-
-            #return
-            echo $lastId;
+                $this->pdoObject->commit();
+                #return
+                echo $lastId||$isDateTimeUpdated;
         
 
 

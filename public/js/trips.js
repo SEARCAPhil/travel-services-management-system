@@ -447,9 +447,9 @@ function appendTravelToList(json){
 							<hr/>
 							<p>&emsp;Driver : <u class="travel-other-details-driver-`+data.id+`">`+data.driver+`</u> </p>
 							<p>&emsp;Vehicle Plate Number : <u class="travel-other-details-vehicle-`+data.id+`">`+plate_no+`</u></p>
-							<p>&emsp;Departure Time(Actual) : <u>`+data.actual_time+`</u></p>
-							<p>&emsp;Returned Date : <u>`+data.returned_date+`</u></p>
-							<p>&emsp;Returned Time : <u>`+data.returned_time+`</u></p>
+							<p>&emsp;Departure Time(Actual) : <u class="travel-other-details-departure-time-`+data.id+`">`+data.actual_time+`</u></p>
+							<p>&emsp;Returned Date : <u class="travel-other-details-returned-date-`+data.id+`">`+data.returned_date+`</u></p>
+							<p>&emsp;Returned Time : <u class="travel-other-details-returned-time-`+data.id+`">`+data.returned_time+`</u></p>
 							<p><hr/></p>
 						
 					</div>
@@ -814,11 +814,10 @@ function advanceMenuDriver(type){
 
 function advanceMenuCharge(id){
 	showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/charge',function(){
-
-		
-
-
-			
+		setTimeout(function(){
+			showDateAndTimeSettings()
+		},500)
+				
 	});	
 }
 
@@ -1011,4 +1010,39 @@ function bindTravelLinkNavigation(){
 }
 
 
+/*-----------------------------------------------
+| Date and time settigns
+| ----------------------------------------------*/
+function showDateAndTimeSettings(){
+	var content=$(selectedTrips).attr('data-content');
+	var json=JSON.parse(content);
 
+	//departure
+	$('#departure-date-input').val(json.departure_date)
+	$('#departure-time-input').val(json.actual_time)
+
+	//arrival
+	$('#arrival-date-input').val(json.returned_date)
+	$('#arrival-time-input').val(json.returned_time)
+
+
+}
+
+
+function changeDateAndTimeSettings(){
+	var content=$(selectedTrips).attr('data-content');
+	var json=JSON.parse(content);
+
+	//departure
+	json.departure_date=$('#departure-date-input').val()
+	json.actual_time=$('#departure-time-input').val()
+
+	//arrival
+	json.returned_date=$('#arrival-date-input').val()
+	json.returned_time=$('#arrival-time-input').val()
+
+	var jsonEncoded=JSON.stringify(json)
+	//change value
+	$(selectedTrips).attr('data-content',jsonEncoded)
+
+}
