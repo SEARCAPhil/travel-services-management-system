@@ -387,7 +387,28 @@ class Campus_itenerary extends Controller
 
 
 
+    function update_date_time($id,$departure_date,$departure_time,$arrival_date,$arrival_time){
+        $this->id=htmlentities(htmlspecialchars($id));
+        $this->departure_date=htmlentities(htmlspecialchars($departure_date));
+        $this->departure_time=htmlentities(htmlspecialchars($departure_time));
+        $this->arrival_date=htmlentities(htmlspecialchars($arrival_date));
+        $this->arrival_time=htmlentities(htmlspecialchars($arrival_time));
 
+        $this->pdoObject=DB::connection()->getPdo();
+        //date settings
+        $sql_time="UPDATE trc_travel set departure_date=:departure_date,actual_departure_time=:departure_time,returned_date=:returned_date,returned_time=:returned_time  where id=:id";
+        $sth_time=$this->pdoObject->prepare($sql_time);
+        $sth_time->bindParam(':departure_date',$this->departure_date);
+        $sth_time->bindParam(':departure_time',$this->departure_time);
+        $sth_time->bindParam(':returned_date',$this->arrival_date);
+        $sth_time->bindParam(':returned_time',$this->arrival_time);
+        $sth_time->bindParam(':id',$this->id);
+        $sth_time->execute();
+        $isUpdated=$sth_time->rowCount();
+
+        return $isUpdated;
+
+    }
     
 
 
@@ -423,7 +444,10 @@ class Campus_itenerary extends Controller
                 $this->rid=null;
 
             
-
+                $this->departure_date=htmlentities(htmlspecialchars($request->input('departure_date')));
+                $this->departure_time=htmlentities(htmlspecialchars($request->input('departure_time')));
+                $this->arrival_date=htmlentities(htmlspecialchars($request->input('arrival_date')));
+                $this->arrival_time=htmlentities(htmlspecialchars($request->input('arrival_time')));
             
 
             
@@ -615,14 +639,13 @@ class Campus_itenerary extends Controller
 
 
 
+                $isDateTimeUpdated=self::update_date_time($this->id,$this->departure_date,$this->departure_time,$this->arrival_date,$this->arrival_time);
+
 
                 $this->pdoObject->commit();
 
-
-
                 #return
-
-                echo $lastId;
+                echo $lastId||$isDateTimeUpdated;
 
             
 
@@ -797,7 +820,10 @@ class Campus_itenerary extends Controller
                 $this->appointment=htmlentities(htmlspecialchars($request->input('appointment')));
 
 
-
+                $this->departure_date=htmlentities(htmlspecialchars($request->input('departure_date')));
+                $this->departure_time=htmlentities(htmlspecialchars($request->input('departure_time')));
+                $this->arrival_date=htmlentities(htmlspecialchars($request->input('arrival_date')));
+                $this->arrival_time=htmlentities(htmlspecialchars($request->input('arrival_time')));
             
 
                
@@ -1027,12 +1053,11 @@ class Campus_itenerary extends Controller
                 $charge_result=self::update_charge_breakdown($id,$gasoline_charge['amount'],$gasoline_charge['additional'],$drivers_charge,$total_execess_time,$overall_charge);
 
 
+                $isDateTimeUpdated=self::update_date_time($this->rid,$this->departure_date,$this->departure_time,$this->arrival_date,$this->arrival_time);
 
                 $this->pdoObject->commit();
-
                 #return
-
-                echo $is_saved;
+                echo $is_saved||$isDateTimeUpdated;
 
             
 

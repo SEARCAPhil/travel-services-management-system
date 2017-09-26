@@ -380,17 +380,21 @@ class Charge extends Controller
 
             $hours_per_day=($days_to_hours-$regular_hours)>0?($days_to_hours-$regular_hours):0;#deduct 8am-12pm
 
-
-
-
-
-            
+           
 
             #before 8 and after 5 OT
+            $rt_offset=new \Datetime('17:00:00');
+            $rt=new \Datetime($returned_time);
+            $rt_diff=$rt->diff($rt_offset);
 
-            $ot_after=abs($returned_time-'17:00:00'>0?$returned_time-'17:00:00':0);
 
-            $ot_before=abs('08:00:00'-$departure_time>0?'08:00:00'-$departure_time:0);
+            $dt_offset= new \Datetime('08:00:00');
+            $dt=new \Datetime($departure_time);
+            $dt_diff=$dt_offset->diff($dt);
+
+            $ot_after=abs($rt_diff->format('%H')>0?$rt_diff->format('%H'):0);
+
+            $ot_before=abs($dt_diff->format('%H')>0?$dt_diff->format('%H'):0);
 
             $overtime_charge=($ot_before+$ot_after)*$rate;
 
