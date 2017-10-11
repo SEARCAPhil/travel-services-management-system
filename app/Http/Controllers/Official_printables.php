@@ -948,11 +948,12 @@ $html.='
 			$itenerary_total_count=count($itenerary);
 
 			for($a=0;$a<$itenerary_total_count;$a++){
+				$mode_of_transport=$itenerary[$a]->plate_no!='rent_a_car'?'SEARCA Vehicle':'RENT A CAR';
     			$html.='<tr>
 					<td>'.$itenerary[$a]->departure_date.'</td>
 					<td>'.$itenerary[$a]->location.'</td>
 					<td>'.$itenerary[$a]->destination.'</td>
-					<td>'.$itenerary[$a]->plate_no.'</td>
+					<td>'.$mode_of_transport.'</td>
 					<td>'.$itenerary[$a]->departure_time.'</td>
 				</tr>';
     		}
