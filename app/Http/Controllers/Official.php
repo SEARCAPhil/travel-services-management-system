@@ -754,7 +754,7 @@ class Official extends Controller
 
 
 
-                while($row2=$statement2->fetch(\PDO::FETCH_OBJ)){
+                while(($row2=$statement2->fetch(\PDO::FETCH_OBJ))&&$row->source_of_fund=='otf'){
 
                     $row->projects[]=$row2;
 
@@ -773,6 +773,12 @@ class Official extends Controller
                         case 'otf':
                            $source='Other funds';
                            break;
+                        case 'op':
+                           $source='Obligations Payable';
+                           break;
+                        case 'sf':
+                           $source='Special funds';
+                           break;   
                         case 'otfs':
                            $source='Other funds (Scholars)';
                            break;   

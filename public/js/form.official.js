@@ -95,7 +95,9 @@ function bindSourceOfFund(){
 function bindOtf(callback){
 	$('#otf-fundings').off('change');
 	$('#otf-fundings').on('change',function(){
-		
+			//clear name
+			$('#otf-fundings-project-name').val('')
+				
 			var data={_token:$('input[name=_token]').val(),project:$(this).val(),id:form_id}
 
 			$('#officialSourceOfFundSaveStatus').html('saving . . .');
@@ -122,25 +124,64 @@ function bindOtf(callback){
 
 function bindOtfSelection(callback=function(){}){
 	$('#source_of_fund').change(function(e){
-	if($(this).val()=='otf'){
-		$('#otf-funding-section').show();
-		$.get('api/travel/official/projects',function(json){
-			var data=JSON.parse(json);
-			var htm='<option value="N/A">Select project</option>'
+		if($(this).val()=='otf'){
+			$('#otf-fundings-project-name').show().val('');
+			$('#otf-funding-section').show();
+			//custom project name
+			bindOtfProjectInput();
 
-			for(var x=0;x<data.length;x++){
-			
-				htm+='<option>'+data[x].title+'</option>';
-			}
+			$.get('api/travel/official/projects',function(json){
+				var data=JSON.parse(json);
+				var htm='<option value="N/A">Select project</option>'
 
-			$('#otf-fundings').html(htm)
-			callback(json)
-			bindOtf()
-		}).fail(function(){
-			alert('failed loading project list');
-		})
-	}else{
-		$('#otf-funding-section').hide();
-	}
-})
+				for(var x=0;x<data.length;x++){
+				
+					htm+='<option>'+data[x].title+'</option>';
+				}
+
+				$('#otf-fundings').html(htm)
+				callback(json)
+				bindOtf()
+			}).fail(function(){
+				alert('failed loading project list');
+			})
+		}else{
+			$('#otf-funding-section').hide();
+			$('#otf-fundings-project-name').val('')
+		}
+	})
+}
+
+function bindOtfProjectInput(){
+	var timeout;
+
+	$('#otf-fundings-project-name').off('keyup')
+	$('#otf-fundings-project-name').on('keyup',function(){
+		var parent=this;
+		clearTimeout(timeout)
+
+		timeout=setTimeout(function(){
+			var data={_token:$('input[name=_token]').val(),project:$(parent).val(),id:form_id}
+
+			$('#officialSourceOfFundSaveStatus').html('saving . . .');
+			$.ajax({
+				url:'api/travel/official/projects',
+				data:data,
+				method:'POST',
+				success:function(res){
+					if(res>0&&res.length<50){
+						$('#officialSourceOfFundSaveStatus').html('<span class="glyphicon glyphicon-ok text-success"></span>');
+							//enable finished circle on forms
+							changeCircleState('.finished-circle-group')
+							callback(res)
+					}else{
+						$('#officialSourceOfFundSaveStatus').html('<span class="glyphicon glyphicon-remove text-danger"></span>');
+					}
+				},error:function(){
+					$('#officialSourceOfFundSaveStatus').html('<span class="glyphicon glyphicon-remove text-danger"></span>');
+				}
+			});
+		},700)
+
+	})
 }
