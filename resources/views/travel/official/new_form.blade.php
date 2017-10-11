@@ -109,8 +109,11 @@
 			<p><b>Source of funds: <span class="" id="officialSourceOfFundSaveStatus"></span></b></p>
 			<p>
 				<select class="form-control" id="source_of_fund" disabled="disabled">
+					<option value="opf">Select soure of fund</option>
 					<option value="opf">Operating Funds</option>
 					<option value="otf" id="otf">Other Funds</option>
+					<option value="op">Obligations Payable</option>
+					<option value="sf">Special Funds</option>
 					<option value="opfs">Operating Funds(Scholar)</option>
 					<option value="otfs">Other Funds(Scholar)</option>
 				</select>
@@ -118,6 +121,7 @@
 			<p id="otf-funding-section">
 				<select id="otf-fundings" class="form-control">
 					<option value="N/A">Select project</option>
+					<div><input type="text" class="form-control" name="otf-fundings-project-name" id="otf-fundings-project-name" placeholder=" OR input project name" style="display: none;"></div>
 				</select>
 			</p>
 

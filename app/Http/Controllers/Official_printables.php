@@ -296,7 +296,7 @@ $html.='	<article class="col col-md-12">
 			<!--requesting party-->
 			<tr>
 				<td> Requesting Party</td>
-				<td> Source of fund:  <b> '.$travel_request->source_of_fund.'</b>'; 
+				<td> Source of fund:  <b> '.$travel_request->source_of_fund_value.'</b>'; 
 
 			if($travel_request->source_of_fund=='otf'){
 				$html.='<br/><br/><b>'.@$travel_request->projects[0]->project.'</b><br/>';
@@ -941,7 +941,7 @@ $html.='
 		<p><b>III. Brief Itenerary:</b></p><br/>
 		<table class="table sa-table" style="border:none;">
 			<tr>
-				<th>Date</th><th>From</th><th>To</th><th>Time</th>
+				<th>Date</th><th>From</th><th>To</th><th>Mode of transport</th><th>Time</th>
 			</tr>';
 
 			#fetch intenerary result
@@ -952,6 +952,7 @@ $html.='
 					<td>'.$itenerary[$a]->departure_date.'</td>
 					<td>'.$itenerary[$a]->location.'</td>
 					<td>'.$itenerary[$a]->destination.'</td>
+					<td>'.$itenerary[$a]->plate_no.'</td>
 					<td>'.$itenerary[$a]->departure_time.'</td>
 				</tr>';
     		}
@@ -964,6 +965,7 @@ $html.='
     			for($a=0;$a<$remaining_empty_itenerary;$a++){
 					$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
 							<td><input type="date" class="dateSelector"></td>
+							<td><input type="text" class="form-control text"></td>
 							<td><input type="text" class="form-control text"></td>
 							<td><input type="text" class="form-control text"></td>
 							<td><input type="time" class="timeSelector"></td>
