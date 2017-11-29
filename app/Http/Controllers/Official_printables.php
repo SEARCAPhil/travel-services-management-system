@@ -565,8 +565,12 @@ $html.='	<article class="col col-md-12">
 					<br/><br/><br/><br/><br/>
 					<table style="text-align:center;">
 						 <tr>
-						 	<td><b style="text-transform:uppercase;">'.$travel_request->profile_name.'</b></td>
+						 	<td width="20%"></td>
+						 	<td class="withLine" width="60%"><b style="text-transform:uppercase;"></b></td>
+						 	<td width="20%"></td>
 						 </tr>
+					 </table>
+					 <table style="text-align:center;">
 						 <tr>
 						 	<td><p>Passenger\'s Signature</p></td>
 						 </tr>
