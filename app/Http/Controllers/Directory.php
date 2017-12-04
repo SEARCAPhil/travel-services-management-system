@@ -76,8 +76,8 @@ class Directory extends Controller
 				$start_page=$this->page<2?0:( integer)($this->page-1)*20;
 
 				//$this->limit=$limit;
-				$view_account_sql="SELECT * FROM ischo_db.personal_tb LIMIT :start, 20";
-				$view_account_sql2="SELECT count(*) as total FROM ischo_db.personal_tb";
+				$view_account_sql="SELECT * FROM searcaba_ischo_db.personal_tb LIMIT :start, 20";
+				$view_account_sql2="SELECT count(*) as total FROM searcaba_ischo_db.personal_tb";
 				$view_profile_statement=$this->pdoObject->prepare($view_account_sql);
 				$view_profile_statement2=$this->pdoObject->query($view_account_sql2);
 				$view_profile_statement->bindParam(':start',$start_page,\PDO::PARAM_INT);
