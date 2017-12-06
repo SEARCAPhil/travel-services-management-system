@@ -429,6 +429,7 @@ function appendTravelToList(json){
 				 	<p><b><u>`+data.location+`</u></b> - <b><u>`+data.destination+`</u></b></p>
 				 	<p><b>`+data.departure_date+`</b>  - `+data.departure_time+`</p>
 				 	<p><small>`+data.requester+`</small></p>
+				 	<p><span class="badge"># ${data.id}</b></span></p>
 
 				 </div>
 

@@ -5,7 +5,7 @@
 *
 */
 
-
+var ttURL='/trs/public/travel/campus/print/notice_of_charges';
 
 /*
 |----------------------------------------------------------------------------
@@ -203,7 +203,7 @@ function showCampusTravelItenerary(id){
 						</thead>
 						<tbody>
 							<tr>
-								<td>`+official_travel_itenerary[x].location+`</td>
+								<td><a href="#" onclick="event.preventDefault();window.open('${ttURL}/${official_travel_itenerary[x].id}');">`+official_travel_itenerary[x].location+`</a></td>
 								<td>`+official_travel_itenerary[x].destination+`</td>
 								<td>`+official_travel_itenerary[x].departure_date+`</td>
 								<td>`+official_travel_itenerary[x].departure_time+`</td>

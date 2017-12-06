@@ -50,7 +50,7 @@
 
 		<div class="col col-md-12">
 			<h3 class="page-header">Official Travel Request Form</h3>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>	
+			<!--<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>	-->
 			<br/>		
 		</div>
 		
@@ -79,8 +79,8 @@
 
 		<div class="col col-md-12  preview-sections">
 				<p></p><div class="mini-circle"></div> <b>Passengers</b> <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#passenger-modal" id="passengerFormButton"><span class="glyphicon glyphicon-plus"></span></button><p></p>
-				<p>ed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae </p>
-
+				<!--<p>ed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae </p>-->
+				<hr/>
 				<table class="table table-striped passenger-table preview-table table-fluid" id="table-passenger" ng-show="passengersX.length>=1||passengersScholar.length>=1||passengersCustom.length>=1">
 					<thead>
 						<tr>
@@ -98,7 +98,8 @@
 				<button class="btn btn-success btn-xs" data-toggle="modal" data-target="#itenerary-modal" id="iteneraryFormButton"><span class="glyphicon glyphicon-map-marker"></span></button>
 					<div id="officialIteneraryStatus" class="text-muted" style="float:right;height:20px;width:250px;overflow: hidden;position:relative;"></div>
 				</p>
-				<p>ed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam </p>
+				<hr/>
+				<!--<p>ed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam </p>-->
 				<div class="preview-itenerary"></div>
 		</div>
 
@@ -109,7 +110,7 @@
 			<p><b>Source of funds: <span class="" id="officialSourceOfFundSaveStatus"></span></b></p>
 			<p>
 				<select class="form-control" id="source_of_fund" disabled="disabled">
-					<option value="opf">Select soure of fund</option>
+					<option value="opf">Select source of fund</option>
 					<option value="opf">Operating Funds</option>
 					<option value="otf" id="otf">Other Funds</option>
 					<option value="op">Obligations Payable</option>

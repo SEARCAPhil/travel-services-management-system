@@ -162,7 +162,7 @@ class Directory extends Controller
 					}
 
 
-					$view_account_sql="SELECT searcaba_login_db.account_profile.profile_name,searcaba_login_db.department.dept_name,searcaba_login_db.signatory.priority,searcaba_login_db.signatory.uid FROM searcaba_login_db.signatory LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.uid=searcaba_login_db.signatory.uid LEFT JOIN searcaba_login_db.department on searcaba_login_db.signatory.dept_id=department.dept_id where searcaba_login_db.signatory.dept_id=:id ORDER BY searcaba_login_db.signatory.priority DESC LIMIT 1";
+					$view_account_sql="SELECT searcaba_login_db.account_profile.profile_name,searcaba_login_db.department.dept_name,searcaba_login_db.signatory.priority,searcaba_login_db.signatory.uid FROM searcaba_login_db.signatory LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.uid=searcaba_login_db.signatory.uid LEFT JOIN searcaba_login_db.department on searcaba_login_db.signatory.dept_id=department.dept_id where searcaba_login_db.signatory.dept_id=:id ORDER BY searcaba_login_db.signatory.id DESC LIMIT 1";
 					$view_profile_statement=$this->pdoObject->prepare($view_account_sql);
 					$view_profile_statement->bindParam(':id',$res->dept_id);
 					$view_profile_statement->execute();

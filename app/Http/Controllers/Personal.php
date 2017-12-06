@@ -913,6 +913,45 @@ function finished($page=1){
         //
     }
 
+
+    public function update_signatory($id,$name)
+
+    {
+
+        try{
+
+                $this->pdoObject=DB::connection()->getPdo();
+
+                $this->id=(int) htmlentities(htmlspecialchars($id));
+                $this->name=utf8_encode(strip_tags($name));
+
+                $this->pdoObject->beginTransaction();
+
+                $remove_rfp_sql="UPDATE trp set approved_by=:approved_by where id=:id";
+
+                $remove_statement=$this->pdoObject->prepare($remove_rfp_sql);
+
+                $remove_statement->bindParam(':id',$this->id);
+                $remove_statement->bindParam(':approved_by',$this->name);
+
+                $remove_statement->execute();
+
+                $this->pdoObject->commit();
+
+
+
+                return $remove_statement->rowCount()>0?$remove_statement->rowCount():0;
+
+
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+    }
+
+
+
+
+
     /**
      * Remove the specified resource from storage.
      *

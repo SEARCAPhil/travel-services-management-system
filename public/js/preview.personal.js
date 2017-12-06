@@ -5,7 +5,7 @@
 *
 */
 
-
+var ttURL='/trs/public/travel/personal/print/statement_of_account';
 
 /*
 |----------------------------------------------------------------------------
@@ -227,7 +227,7 @@ function showPersonalTravelListPreview(id){
 						</thead>
 						<tbody>
 							<tr>
-								<td>`+json[0].location+`</td>
+								<td><a href="#" onclick="event.preventDefault();window.open('${ttURL}/${json[0].id}');">`+json[0].location+`</a></td>
 								<td>`+json[0].destination+`</td>
 								<td>`+json[0].departure_date+`</td>
 								<td>`+json[0].departure_time+`</td>

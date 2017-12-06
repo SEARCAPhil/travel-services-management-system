@@ -47,7 +47,8 @@ class Official_printables extends Controller
 
 	function is_creator($id){
 		if($_SESSION['priv']!='admin'){
-			if($id!=@$_SESSION['id']){
+			#hack to be able to view the PDF
+			if($id!=@$_SESSION['uid']&&$id!=@$_SESSION['id']){
 
 				echo '<br/><br/><center><h3>Sorry! File not found.</h3></center>';
 				exit;
@@ -72,6 +73,8 @@ class Official_printables extends Controller
     	$official_itenerary=new Official_itenerary();
     	$official_travel=new Official();
     	$charge_travel=new Charge();
+
+    	$GLOBALS['official_travel']=$official_travel;
 
     	$official_staff=new Official_staff();
     	$official_scholars=new Official_scholars();
@@ -238,6 +241,7 @@ class Official_printables extends Controller
 		//settings
 		// set margins
 		$pdf->SetMargins(PDF_MARGIN_LEFT, 35, PDF_MARGIN_RIGHT);
+
 
 		self::is_creator($travel_request->uid);
 
@@ -651,7 +655,7 @@ $html.='	<article class="col col-md-12">
     	$official_scholars=new Official_scholars();
     	$official_custom=new Official_custom();
     
-
+    	$GLOBALS['official']=$official;
 
     	$data=json_decode($official->show($id));
     	$details=$data[0];
@@ -741,6 +745,16 @@ $html.='	<article class="col col-md-12">
 			$pdf->SetY(-50);
 			// Set font
 	        $pdf->SetFont('helvetica', 'N', 9);
+	        
+
+	        //override approved by if approver is one of the passengers
+	        //// HACK!!!!!!!!!!!!!!!!! eeew
+	        if(in_array($details->approved_by,$GLOBALS['passenger_names'])){
+	   
+	        	if($GLOBALS['official']->update_signatory($details->tr,'Gil C. Saguiguit Jr.')){
+	        		$details->approved_by='Gil C. Saguiguit Jr.';	
+	        	}
+	        }
 
 			 $sign = '
 				<style>
@@ -886,8 +900,10 @@ $scholars_total_count=count($scholars);
 $custom_total_count=count($custom);
 
 $passenger_count=0;
-
+$GLOBALS['passenger_names']=array();
 for($a=0;$a<$staff_total_count;$a++){
+	array_push($GLOBALS['passenger_names'], $staff[$a]->name);
+
 	$passenger_count++;
 	$html.='<tr class="tr-passenger">
 			<td class="withLine">'.$staff[$a]->name.'</td>
@@ -942,7 +958,7 @@ $html.='
 	</article>
 	<br/>
 	<article>
-		<p><b>III. Brief Itenerary:</b></p><br/>
+		<p><b>III. Brief Itinerary:</b></p><br/>
 		<table class="table sa-table" style="border:none;">
 			<tr>
 				<th>Date</th><th>From</th><th>To</th><th>Mode of transport</th><th>Time</th>

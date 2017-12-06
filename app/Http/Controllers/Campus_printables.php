@@ -32,7 +32,20 @@ class Campus_printables extends Controller
 
 
     function print_travel_request($id){
+    	
 
+	#get data
+	$campus_itenerary=new Campus_itenerary();
+	$campus_travel=new Campus();
+	
+	$travel_request=@json_decode($campus_travel->show($id))[0];
+
+	$iteneraries=@json_decode($campus_itenerary->index($id));
+	$itenerary=@$iteneraries[0];
+
+	$GLOBALS['travel_request']= $travel_request;
+
+	
 
     	//get default settings from config/laravel-tcpdf.php
    		$pdf_settings = \Config::get('laravel-tcpdf');
@@ -42,7 +55,9 @@ class Campus_printables extends Controller
 
 
    		// Custom Header
-		$pdf->setHeaderCallback(function($pdf) {
+		$pdf->setHeaderCallback(function($pdf){
+
+		
 
 			// Title
 			// set cell margins
@@ -57,7 +72,7 @@ class Campus_printables extends Controller
 			$pdf->Cell(0, 0, 'College, Laguna, 4031, Philippines', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
 
 			$pdf->Cell(0, 10, 'CAMPUS TRAVEL REQUEST', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
-			$pdf->Cell(0, 0, '(For trips within 20 km. radius from SEARCA Headquarter)', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
+			$pdf->Cell(0, 0, '(For trips within 15 km. radius from SEARCA Headquarter)', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
 
 
 			$foot='	<article class="col col-md-12" style="font-size:7px;">
@@ -79,10 +94,10 @@ class Campus_printables extends Controller
 
 
 
-		if ($pdf->getPage() <= $pdf->getAliasNumPage()) {
-			$pdf->SetY(-30);
-			$pdf->Writehtml($foot);
-		}
+			if ($pdf->getPage() <= $pdf->getAliasNumPage()) {
+				$pdf->SetY(-30);
+				$pdf->Writehtml($foot);
+			}
 
 
 
@@ -99,42 +114,57 @@ class Campus_printables extends Controller
 				<style>
 					
 					.withLine{border-bottom:1px solid rgb(20,20,20);overflow:hidden;text-align:left;}
+					.passenger-table, .passenger-table tr td{padding: 0; border-right:30px solid #fff;}
+
 				</style>
 			<article>
 				<br/><br/>
 			
 				<table>
 
-
-
-
 					<tr>
 						<td><b>Approval Recommended</b></td>
 						<td width="160"></td>
-						<td  width="70">  </td>
+						<td  width="70"></td>
 						<td></td>
 
 					</tr>
 
 					<tr>
-						<td width="230">
+						<td width="150">
 							<div class="withLine" style="border 1px solid rgb(20,20,20);"></div>
 						</td>
 						<td width="5"></td>
-						<td width="50"></td>
+						<td width="100">
+							<div class="withLine" style="border 1px solid rgb(20,20,20);"></div>
+						</td>
 						<td width="100"></td>
 						<td width="150"></td>
 						<td width="10"></td>
 						<td width="50"></td>
 						
 					</tr>
+
+					
+				</table>
+
+				<table cellpadding="-5">
+
+					<tr cellpadding="-5">
+						<td>&nbsp;&nbsp;&nbsp;'.@$GLOBALS['travel_request']->approved_by.'</td>
+						<td width="160"></td>
+						<td  width="70"></td>
+					
+
+					</tr>
+
 					
 				</table>
 					<br/><br/><br/><br/>
 					<p>
 						<label>NOTE:</label> PREPARE ONE DUPLICATE COPY IF TRIP IS BY <u>SEARCA VEHICLE:</u> <label>Original-</label> Unit concerned; <label>Duplicate-</label> Security Guard</p><br/>
 					<p>*Should be indicated per trip</p><br/>
-					<p>*If the trip is by SEARCA service vehicle, recommendation for approval of requisitioner\'s immediate superior and corresponding approval of the Head of the Facilities Management</p>
+					<p>*If the trip is by SEARCA service vehicle, recommendation for approval of requisitioner\'s immediate superior and corresponding approval of the Head of the General Services Unit</p>
 					<p> Unit are required under the appropriate columns.</p>
 
 
@@ -167,16 +197,6 @@ class Campus_printables extends Controller
 
 		
 
-	#get data
-	$campus_itenerary=new Campus_itenerary();
-	$campus_travel=new Campus();
-	
-
-	$travel_request=@json_decode($campus_travel->show($id))[0];
-
-	$itenerary=@json_decode($campus_itenerary->index($id))[0];
-	
-	
 
 //prevent other users to view this document
 	self::is_creator($travel_request->requested_by);
@@ -228,46 +248,26 @@ $html.='
 				<th>Date</th><th>From</th><th>To</th><th>Time</th>
 			</tr>';
 
-			
+		$iteneraries_count=0;
+		for($x=0;$x<count($iteneraries);$x++){	
 					
-					
+			$iteneraries_count++;		
 			$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
-				<td>'.$itenerary->departure_date.'</td>
-				<td>'.$itenerary->location.'</td>
-				<td>'.$itenerary->destination.'</td>
-				<td>'.$itenerary->departure_time.'</td>
+				<td>'.$iteneraries[$x]->departure_date.'</td>
+				<td>'.$iteneraries[$x]->location.'</td>
+				<td>'.$iteneraries[$x]->destination.'</td>
+				<td>'.$iteneraries[$x]->departure_time.'</td>
 			</tr>';
+		}
 
+		for($y=0;$y<(5-$iteneraries_count);$y++){
 			$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
 				<td><input type="date" class="dateSelector"></td>
 				<td><input type="text" class="form-control text"></td>
 				<td><input type="text" class="form-control text"></td>
 				<td><input type="time" class="timeSelector"></td>
 			</tr>';
-			$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
-				<td><input type="date" class="dateSelector"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="time" class="timeSelector"></td>
-			</tr>';
-			$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
-				<td><input type="date" class="dateSelector"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="time" class="timeSelector"></td>
-			</tr>';
-			$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
-				<td><input type="date" class="dateSelector"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="time" class="timeSelector"></td>
-			</tr>';
-			$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
-				<td><input type="date" class="dateSelector"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="time" class="timeSelector"></td>
-			</tr>';
+		}
 			
 			
 
@@ -469,13 +469,13 @@ $html.='
 			</tr>';
 
 			
-					
+				
 					
 			$html.='<tr>
 				<td></td>
 				<td height="60">
 				<br/><br/>
-					<b>Total:</b>';
+					<b>'.$itenerary->location.' - '.$itenerary->destination.'</b>';
 
 
 					if(strlen(@$charges->notes)>1){

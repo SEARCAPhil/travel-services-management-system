@@ -32,6 +32,23 @@ class Personal_printables extends Controller
 
     function print_travel_request($id){
 
+    	#get data
+    	$personal_travel=new Personal();
+     	$itenerary=@json_decode($personal_travel->show($id))[0];
+     	$GLOBALS['itenerary']=$itenerary;
+     	$GLOBALS['personal']=$personal_travel;
+
+     	//var_dump($itenerary);
+
+     	 //passengers
+        $passenger_staff_class=new Personal_staff();
+        $passenger_scholar_class=new Personal_scholars();
+        $passenger_custom_class=new Personal_custom();
+
+
+        $passenger_staff=json_decode($passenger_staff_class->index($itenerary->id));
+        $passenger_scholar=json_decode($passenger_scholar_class->index($itenerary->id));
+        $passenger_custom=json_decode($passenger_custom_class->index($itenerary->id));
 
     	//get default settings from config/laravel-tcpdf.php
    		$pdf_settings = \Config::get('laravel-tcpdf');
@@ -92,6 +109,61 @@ class Personal_printables extends Controller
 		// Custom Footer
 		$pdf->setFooterCallback(function($pdf) {
 
+			$approver_designation="Head, GSU";
+
+			$GLOBALS['itenerary']->approved_by=is_null($GLOBALS['itenerary']->approved_by)?'Ricardo A. Menorca':$GLOBALS['itenerary']->approved_by;
+
+			//override approved by if approver is one of the passengers
+	        //// HACK!!!!!!!!!!!!!!!!! eeew
+	        if(in_array(@$GLOBALS['itenerary']->approved_by,$GLOBALS['passenger_names'])){
+	        	//head GSU
+	        	$approver='Ricardo A. Menorca';
+				$approver_designation="Head, GSU";
+
+				//ODDA
+	   			$approver_odda='Adoracion T. Robles';
+	   			$approver_designation_odda="Head, ODDA";
+
+	   			//director
+	   			$approver_director='Gil C. Saguiguit Jr.';
+	   			$approver_designation_director="SEARCA Director";
+
+
+				if($GLOBALS['itenerary']->approved_by==$approver){
+					$approver=$approver_odda;
+					$approver_designation=$approver_designation_odda;
+					//update
+					$GLOBALS['personal']->update_signatory($GLOBALS['itenerary']->id,$approver);
+				}elseif($GLOBALS['itenerary']->approved_by==$approver_odda){
+					$approver=$approver_director;
+					$approver_designation=$approver_designation_director;
+
+					$GLOBALS['personal']->update_signatory($GLOBALS['itenerary']->id,$approver);
+
+				}elseif($GLOBALS['itenerary']->approved_by==$approver_director){
+					$approver=$approver_odda;
+					$approver_designation=$approver_designation_odda;
+					//update
+					$GLOBALS['personal']->update_signatory($GLOBALS['itenerary']->id,$approver);
+				}else{
+						
+				}
+
+	        	
+	        }else{
+				
+			
+	        	//head GSU
+	        	$approver=(empty($GLOBALS['itenerary']->approved_by))||(is_null($GLOBALS['itenerary']->approved_by))?'Ricardo A. Menorca':$GLOBALS['itenerary']->approved_by;
+				
+	
+	        }
+
+
+	      
+
+
+			
 			$pdf->SetY(-50);
 			// Set font
 	        $pdf->SetFont('helvetica', 'N', 9);
@@ -131,7 +203,7 @@ class Personal_printables extends Controller
 							
 						</td>
 						<td width="100"></td>
-						<td width="150">RICARDO A. MENORCA</td>
+						<td width="150">'.strtoupper($approver).'</td>
 						<td width="10"></td>
 						<td width="50"></td>
 						
@@ -144,7 +216,7 @@ class Personal_printables extends Controller
 						<td width="5"></td>
 						<td width="50"></td>
 						<td width="100"></td>
-						<td width="150">Head, GSU</td>
+						<td width="150">'.$approver_designation.'</td>
 						<td width="10"></td>
 						<td width="50"></td>
 						
@@ -181,22 +253,7 @@ class Personal_printables extends Controller
 		
 
 
-     	#get data
-    	$personal_travel=new Personal();
-     	$itenerary=@json_decode($personal_travel->show($id))[0];
 
-
-     	//var_dump($itenerary);
-
-     	 //passengers
-        $passenger_staff_class=new Personal_staff();
-        $passenger_scholar_class=new Personal_scholars();
-        $passenger_custom_class=new Personal_custom();
-
-
-         $passenger_staff=json_decode($passenger_staff_class->index($itenerary->id));
-        $passenger_scholar=json_decode($passenger_scholar_class->index($itenerary->id));
-        $passenger_custom=json_decode($passenger_custom_class->index($itenerary->id));
 //var_dump($passenger_custom);
        
 self::is_creator($itenerary->requested_by);
@@ -298,9 +355,12 @@ $html.='
 			</tr>';
 
 			$total_passenger=0;
+			$GLOBALS['passenger_names']=array();
+
+	
 
 			for($x=0;$x<count($passenger_staff);$x++) {
-
+				array_push($GLOBALS['passenger_names'], $passenger_staff[$x]->name);
 			 	$html.='<tr id="travel{{key}}">
 					<td>'.$passenger_staff[$x]->name.'</td>
 					<td>'.$passenger_staff[$x]->designation.'</td>
@@ -557,10 +617,11 @@ $html.='
 			</tr>';
 
 			
-					
+				
 					
 			$html.='<tr>
-				<td height="100">
+				<td height="100"><br/>
+				<p>'.@$itenerary->location.' - '.@$itenerary->destination.'</p>
 				<br/><br/>
 					<b>Note:</b> Php '.@$charges->gasoline_charge.', base'.@$charges->base.' km <br/>
 				';
