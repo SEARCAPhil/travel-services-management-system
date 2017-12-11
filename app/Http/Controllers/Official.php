@@ -72,12 +72,41 @@ class Official extends Controller
 
         }
 
-        
+    }
+
+
+    public function personal_list($page=1){
+         $auth=new Authentication();
 
 
 
+        if($auth->isAdmin()){
+
+           self::list_all_personal($page); 
+
+        }else{
+
+            self::list_by_account_personal($page);
+
+        }
+    }
 
 
+
+    public function campus_list($page=1){
+         $auth=new Authentication();
+
+
+
+        if($auth->isAdmin()){
+
+           self::list_all_campus($page); 
+
+        }else{
+
+            self::list_by_account_campus($page);
+
+        }
     }
 
 
@@ -96,7 +125,7 @@ class Official extends Controller
 
 
 
-    public function list_by_account($page=1)
+    public function list_by_account($page=1,$type='official')
 
     {
 
@@ -126,9 +155,9 @@ class Official extends Controller
 
                 #exclude deleted items #5
 
-                $sql="SELECT * FROM tr where tr.requested_by=:id and tr.status!=5  ORDER BY date_created DESC LIMIT :start, 10";
+                $sql="SELECT * FROM tr where tr.requested_by=:id and tr.status!=5 and request_type=:type ORDER BY date_created DESC LIMIT :start, 10";
 
-                $sql2="SELECT count(*) as total FROM tr where tr.requested_by=:id and tr.status!=5";
+                $sql2="SELECT count(*) as total FROM tr where tr.requested_by=:id and tr.status!=5 and request_type=:type";
 
 
 
@@ -137,6 +166,11 @@ class Official extends Controller
                 $statement2=$this->pdoObject->prepare($sql2);
 
                 $statement->bindParam(':start',$start_page,\PDO::PARAM_INT);
+
+                $statement->bindParam(':type',$type);
+
+                $statement2->bindParam(':type',$type);
+
 
                 $statement->bindParam(':id',$this->id,\PDO::PARAM_INT);
 
@@ -211,12 +245,28 @@ class Official extends Controller
     }
 
 
+    public function list_by_account_personal($page=1,$type='personal'){
+
+        return self::list_by_account($page,$type);
+    }
+
+    public function list_by_account_campus($page=1,$type='campus'){
+
+        return self::list_by_account($page,$type);
+    }
+
+
+    public function list_all_personal($page=1,$type="personal"){
+       return self::list_all($page,$type);
+    }
+
+     public function list_all_campus($page=1,$type="campus"){
+       return self::list_all($page,$type);
+    }
 
 
 
-
-
-    function list_all($page=1){
+    function list_all($page=1,$type="official"){
 
         
 
@@ -246,11 +296,12 @@ class Official extends Controller
 
 
 
-                $sql="SELECT * FROM tr where status!=0 and status!=5 ORDER BY date_created DESC LIMIT :start, 10";
+                $sql="SELECT * FROM tr where status!=0 and status!=5 and request_type=:type ORDER BY date_created DESC LIMIT :start, 10";
 
                 $statement=$this->pdoObject->prepare($sql);
 
                 $statement->bindParam(':start',$start_page,\PDO::PARAM_INT);
+                $statement->bindParam(':type',$type);
 
                 $statement->execute();
 
@@ -258,9 +309,10 @@ class Official extends Controller
 
 
 
-                $sql2="SELECT count(*) as total FROM tr where status!=0 and status!=5";
+                $sql2="SELECT count(*) as total FROM tr where status!=0 and request_type=:type and status!=5";
 
                 $statement2=$this->pdoObject->prepare($sql2);
+                $statement2->bindParam(':type',$type);
 
                 $statement2->execute();
 
@@ -377,6 +429,8 @@ class Official extends Controller
             //$uid=16;
 
             $purpose=$request->input('purpose');
+            $type=$request->input('type');
+
 
 
 
@@ -384,13 +438,30 @@ class Official extends Controller
 
             $official_signatory=new Directory();
 
-            $signatory=json_decode($official_signatory->signatory($original_uid));
+            $signatory=json_decode($official_signatory->signatory_department($_SESSION['dept']));
 
             
 
             $approved_by=@$signatory[0]->profile_name;
+            $approved_by_id=NULL;
+            $recommended_by_id=NULL;
 
+            if($type=='official'){
+                if(@strip_tags($_SESSION['name'])!=$approved_by){
+                     $approved_by_id=($signatory[0]->account_profile_id);
+                }
+            }
 
+            if($type=='personal'||$type=='campus'){
+                //set to gsu head by default
+                //currently RAM: 31
+                $approved_by_id=31; 
+            }
+
+            if($type=='campus'){
+                //set recommending
+                $recommended_by_id=($signatory[0]->account_profile_id);
+            }
 
             $this->pdoObject=DB::connection()->getPdo();
 
@@ -398,7 +469,7 @@ class Official extends Controller
 
             $this->pdoObject->beginTransaction();
 
-            $sql="INSERT INTO tr(requested_by,purpose,approved_by) values (:requested_by,:purpose,:approved_by)";
+            $sql="INSERT INTO tr(requested_by,purpose,approved_by,request_type,recommended_by) values (:requested_by,:purpose,:approved_by,:request_type,:recommended_by)";
 
             $statement=$this->pdoObject->prepare($sql);
 
@@ -406,7 +477,11 @@ class Official extends Controller
 
             $statement->bindParam(':purpose',$purpose);
 
-            $statement->bindParam(':approved_by',$approved_by);
+            $statement->bindParam(':approved_by',$approved_by_id);
+
+            $statement->bindParam(':recommended_by',$recommended_by_id);
+
+            $statement->bindParam(':request_type',$type);
 
             $statement->execute();
 
@@ -789,11 +864,40 @@ class Official extends Controller
 
 
                 $row->source_of_fund_value=$source;
+
+                //to be approved by
+                
+                $sql3="SELECT * FROM account_profile where id=:id";
+
+                $statement3=$this->pdoObject->prepare($sql3);
+
+                $statement3->bindValue(':id',$row->approved_by);
+
+                $statement3->execute();
+
+                while($row3=$statement3->fetch(\PDO::FETCH_OBJ)){
+                    $row->approved_by_id=$row->approved_by;
+                    $row->approved_by_uid=$row3->uid;
+                    $row->approved_by=$row3->profile_name;
+                    $row->approved_by_position=$row3->position;
+                }
+
+
+                 //approval recommended
+                if(!is_null($row->recommended_by)){
+                     $statement3->bindValue(':id',$row->recommended_by);
+                     $statement3->execute();
+
+                    while($row4=$statement3->fetch(\PDO::FETCH_OBJ)){
+                        $row->recommended_by=$row4->profile_name;
+                        $row->recommended_by_position=$row4->position;
+                    }
+                }
+
+               
+
+
                 $res[]=$row;
-
-
-
-
 
             }
 
@@ -1137,7 +1241,7 @@ class Official extends Controller
 
                 $this->pdoObject->beginTransaction();
 
-                $sql="SELECT tr.status as tr_status,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,other_driver,travel.id,travel.plate_no,automobile.manufacturer, searcaba_login_db.account_profile.last_name, searcaba_login_db.account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='scheduled' and departure_date!='0000-00-00' and linked='no' and tr.status='2'  ORDER BY travel.id DESC LIMIT :start,10";
+                $sql="SELECT tr.status as tr_status,tr.requested_by,tr.request_type,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,other_driver,travel.id,travel.plate_no,automobile.manufacturer, searcaba_login_db.account_profile.last_name, searcaba_login_db.account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='scheduled' and departure_date!='0000-00-00' and linked='no' and tr.status='2'  ORDER BY travel.id DESC LIMIT :start,10";
 
 
 
@@ -1243,7 +1347,7 @@ class Official extends Controller
 
 
 
-                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->tr_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'actual_time'=>$row->actual_departure_time,'returned_date'=>$row->returned_date,'returned_time'=>$row->returned_time,'plate_no'=>$row->plate_no,'manufacturer'=>$row->manufacturer,'type'=>'official','driver'=>$driver,'requester'=>$requester,'department'=>$department,'image'=>$image,'passengers'=>array('staff'=>$passenger_staff,'scholars'=>$passenger_scholar,'custom'=>$passenger_custom));
+                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->tr_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'actual_time'=>$row->actual_departure_time,'returned_date'=>$row->returned_date,'returned_time'=>$row->returned_time,'plate_no'=>$row->plate_no,'manufacturer'=>$row->manufacturer,'type'=>$row->request_type,'driver'=>$driver,'requester'=>$requester,'department'=>$department,'image'=>$image,'passengers'=>array('staff'=>$passenger_staff,'scholars'=>$passenger_scholar,'custom'=>$passenger_custom));
 
 
 
@@ -1694,41 +1798,53 @@ function ongoing($page=1){
     }
 
 
-    public function update_signatory($id,$name)
 
-    {
+     public function payment(Request $request){
 
-        try{
+            $token = $request->input('_token');
+            $payment = htmlentities(htmlspecialchars($request->input('payment')));
+            $id = $request->input('id');
 
-                $this->pdoObject=DB::connection()->getPdo();
+            $pay='cash';
+            switch ($payment) {
+                case 'cash':
+                    $pay='cash';
+                    break;
+                case 'sd':
+                    $pay='sd';
+                    break;
+                default:
+                    $pay='cash';
+                    break;
+            }
 
-                $this->id=(int) htmlentities(htmlspecialchars($id));
-                $this->name=utf8_encode(strip_tags($name));
-
+            try{
+                $this->pdoObject=DB::connection()->getPdo(); 
+                $this->tr=htmlentities(htmlspecialchars($id));
+                
+                #begin transaction
                 $this->pdoObject->beginTransaction();
-
-                $remove_rfp_sql="UPDATE tr set approved_by=:approved_by where id=:id";
-
-                $remove_statement=$this->pdoObject->prepare($remove_rfp_sql);
-
-                $remove_statement->bindParam(':id',$this->id);
-                $remove_statement->bindParam(':approved_by',$this->name);
-
-                $remove_statement->execute();
-
+                
+                $insert_sql="UPDATE tr set mode_of_payment=:p where id=:tr_id";
+                $insert_statement=$this->pdoObject->prepare($insert_sql);
+        
+                #params
+                $insert_statement->bindParam(':tr_id',$this->tr);
+                $insert_statement->bindParam(':p',$pay);
+                
+                
+                #exec the transaction
+                $insert_statement->execute();
+                $lastId=$this->pdoObject->lastInsertId();
                 $this->pdoObject->commit();
 
+                #return
+                return $insert_statement->rowCount()>0?$insert_statement->rowCount():0;
+                
 
 
-                return $remove_statement->rowCount()>0?$remove_statement->rowCount():0;
-
-
-
-        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
-
+            }catch(Exception $e){ echo $e->getMessage();$this->pdoObject->rollback();}
     }
-
-
 
 
 

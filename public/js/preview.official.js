@@ -214,8 +214,30 @@ function showOfficialTravelListPreview(id){
 		$('.preview-created').html(((json[0].date_created).split(' '))[0])
 		$('.preview-purpose').html(json[0].purpose)
 		$('.preview-cash-advance').html(' &emsp;&emsp;<b>'+json[0].source_of_fund_value+'</b>')
+		$('input[name="vtype"]').each(function(index,el){
+			if(el.value==json[0].vehicle_type) $(el).attr('checked','checked')
+			
+		})
 
-		$('.preview-print').attr('href','travel/official/print/travel_request/'+json[0].tr)
+		
+			$('input[name="mode-of-payment"]').each(function(index,el){
+				if(json[0].mode_of_payment=='cash'&&el.value=='cash'){
+					$(el).attr('checked','checked')
+				}else if(json[0].mode_of_payment=='sd'&&el.value=='sd'){
+					$(el).attr('checked','checked')
+				}else{
+
+				}
+			})
+		
+		
+		//.attr('checked','checked')
+		//
+		if(json[0].request_type=="official") $('.preview-print').attr('href','travel/official/print/travel_request/'+json[0].tr)
+		if(json[0].request_type=="personal") $('.preview-print').attr('href','travel/personal/print/travel_request/'+json[0].tr)
+		if(json[0].request_type=="campus") $('.preview-print').attr('href','travel/campus/print/travel_request/'+json[0].tr)
+
+		
 
 		//hide projects for opf
 		if(json[0].source_of_fund!='opf'){
@@ -431,6 +453,13 @@ function showOfficialTravelItenerary(id){
 		for(var x=0; x<official_travel_itenerary.length;x++){
 			itenerary_count++;
 			showTotalIteneraryCount();
+
+
+			//printables
+			if(official_travel_itenerary[x].request_type=="official") ttURL='travel/official/print/travel_request'
+			if(official_travel_itenerary[x].request_type=="personal") ttURL='travel/personal/print/travel_request'
+			if(official_travel_itenerary[x].request_type=="campus") ttURL='travel/campus/print/notice_of_charges'
+
 			var htm=`<details id="official_travel_itenerary`+official_travel_itenerary[x].id+`" data-menu="iteneraryMenu" data-selection="`+official_travel_itenerary[x].id+ `" class="contextMenuSelector official_travel_itenerary`+official_travel_itenerary[x].id+` col col-md-12">
 					<summary>`+official_travel_itenerary[x].location+` - `+official_travel_itenerary[x].destination+`</summary>
 					<table class="table table-fluid" style="background:rgba(250,250,250,0.7);color:rgb(40,40,40);">

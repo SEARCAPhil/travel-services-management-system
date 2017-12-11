@@ -156,10 +156,29 @@
 				</div>
 
 
-				<button class="btn btn-success pull-right" onclick="event.preventDefault();$('.automobile-tab[data-type=official]').click();"><i class="material-icons md-18">check_circle</i> done</button>
-
+			<div class="col col-md-12 preview-sections">
+				<p></p><div class="mini-circle"></div> <b>Type of Vehicle</b> <span id="personalVehicleTypeSaveStatus" class=""></span><p></p>
+				<p class="col col-md-12">
+					<input type="radio" name="vtype" value="1" select-mobi="1" 	class="vehicleTypeFormButton"> SUV 
+					<input type="radio" name="vtype" value="2" select-mobi="2"   class="vehicleTypeFormButton"> Van
+					<input type="radio" name="vtype" value="3" select-mobi="3"  class="vehicleTypeFormButton"> Pick-up	
+				</p>
 			</div>
 
+			<div class="col col-md-12 preview-sections">
+				<p></p><div class="mini-circle"></div> <b>Mode of Payment</b> <span id="paymentSaveStatus" class=""></span><p></p>
+				<p class="col col-md-12">
+					<span>Cash <input type="radio" name="mode-of-payment" class="paymentFormButton" value="cash"></span>
+					<span>Salary Deduction <input type="radio" name="mode-of-payment"  class="paymentFormButton" value="sd"></span>
+				</p>
+			</div>
+
+
+
+				
+
+			</div>
+			<button class="btn btn-success pull-right" onclick="event.preventDefault();$('.automobile-tab[data-type=official]').click();"><i class="material-icons md-18">check_circle</i> done</button>
 		</div>
 
 
@@ -178,8 +197,9 @@ $(document).ready(function(){
 
 	bindOfficialPurposeSaveButton()
 	bindSourceOfFund()
-
 	bindOtfSelection();
+	bindVehicleType()
+	bindPayment()
 
 });
 </script>

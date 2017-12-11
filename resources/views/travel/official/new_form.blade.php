@@ -49,12 +49,12 @@
 	<div class="row col col-md-6 col-sm-8 col-md-offset-2 content-section">
 
 		<div class="col col-md-12">
-			<h3 class="page-header">Official Travel Request Form</h3>
-			<!--<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>	-->
+			<h3 class="page-header">Travel Request Form</h3>
+			<p class="text-muted">Please select the appropriate type of travel that suites you.</p>	
 			<br/>		
 		</div>
 		
-		<div class="col col-md-12 col-xs-12">
+		<div class="col col-md-12 col-xs-12" style="display: none;">
 			<div class="circle done purpose-circle-group">1<span class="circle-label">Purpose<span></div>	
 			<div class="bar done purpose-circle-group"></div>	
 			<div class="circle passenger-circle-group">2<span class="circle-label">Passenger<span></div>
@@ -67,7 +67,11 @@
 		</div>
 
 
-
+		<p class="col col-md-12">
+			<input type="radio" name="request_type" value="official"  checked="checked"> Official 
+			<input type="radio" name="request_type" value="personal"> Personal
+			<input type="radio" name="request_type" value="campus"> Campus	
+		</p>
 		<div class="col col-md-12 preview-sections" >
 
 			<p class="purpose-content"  style="margin-top: 50px;"> 
@@ -127,6 +131,26 @@
 			</p>
 
 
+			<div class="col col-md-12 preview-sections">
+				<p></p><div class="mini-circle"></div> <b>Type of Vehicle</b> <span id="personalVehicleTypeSaveStatus" class=""></span><p></p>
+				<p class="col col-md-12">
+					<input type="radio" name="vtype" value="1" select-mobi="1" checked="checked" 	class="vehicleTypeFormButton"> SUV 
+					<input type="radio" name="vtype" value="2" select-mobi="2" disabled="disabled"  class="vehicleTypeFormButton"> Van
+					<input type="radio" name="vtype" value="3" select-mobi="3" disabled="disabled"  class="vehicleTypeFormButton"> Pick-up	
+				</p>
+			</div>
+
+			<div class="col col-md-12 preview-sections">
+				<p></p><div class="mini-circle"></div> <b>Mode of Payment</b> <span id="paymentSaveStatus" class=""></span><p></p>
+				<p class="col col-md-12">
+					<span>Cash <input type="radio" name="mode-of-payment" disabled="disabled" checked="checked" class="paymentFormButton" value="cash"></span>
+					<span>Salary Deduction <input type="radio" name="mode-of-payment" disabled="disabled" class="paymentFormButton" value="sd"></span>
+				</p>
+			</div>
+
+
+
+
 			<button class="btn btn-success pull-right" onclick="event.preventDefault();$('.automobile-tab[data-type=official]').click();"><i class="material-icons md-18">check_circle</i> done</button>
 		</div>
 
@@ -156,8 +180,9 @@ changeButtonState('#iteneraryFormButton','disabled')
 
 bindOfficialPurposeSaveButton()
 bindSourceOfFund()
-
 bindOtfSelection();
+bindVehicleType()
+bindPayment()
 
 });
 </script>

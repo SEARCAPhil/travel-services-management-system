@@ -26,10 +26,17 @@ function bindOfficialPurposeSaveButton(){
 			setTimeout(function(){  showLoading('#officialPurposeSaveStatus') },1000)
 		}
 		
+		var type='official'
+
+		document.querySelectorAll('input[name="request_type"]').forEach((el,index)=>{
+			if(el.checked){
+				type=el.value
+			}
+		})
 
 		//insert new item to db if not yet saved
 		if(form_id<1){
-			var data={_token:$('input[name=_token]').val(),purpose:$('#form-purpose').val()}
+			var data={_token:$('input[name=_token]').val(),purpose:$('#form-purpose').val(),type:type}
 			$.post('api/travel/official/purpose',data,function(res){
 				if(res>0&&res.length<50){
 					form_id=res;
@@ -42,6 +49,10 @@ function bindOfficialPurposeSaveButton(){
 					//passsenger enable
 					changeCircleState('.passenger-circle-group')
 					changeButtonState('#passengerFormButton','enabled')
+					changeButtonState('#iteneraryFormButton','enabled')
+					changeButtonState(".paymentFormButton",'enabled')
+					changeButtonState('.vehicleTypeFormButton','enabled')
+					changeButtonState('#source_of_fund','enabled')
 				}
 			});
 		}else{
@@ -185,3 +196,82 @@ function bindOtfProjectInput(){
 
 	})
 }
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Bind Save purpose
+|---------------------------------------------------------------------------
+| 
+| Select vehicle type on form
+|
+*/
+
+function bindVehicleType(){
+	$('.vehicleTypeFormButton').on('change',function(){
+		//status
+		$('#personalVehicleTypeSaveStatus').html('saving . . .')
+		var data={_token:$('input[name=_token]').val(),vehicle:$(this).val(),id:form_id}
+
+		$.ajax({
+				url:'api/travel/official/vehicle_type',
+				data:data,
+				method:'PUT',
+				success:function(res){
+					if(res==1){
+						$('#personalVehicleTypeSaveStatus').html('<span class="text-success"><span class="glyphicon glyphicon-ok"></span></span>')	
+
+					}else{
+						//status
+						$('#personalVehicleTypeSaveStatus').html('Changes not saved!.Please try again later')
+						//alert('Sorry!.Please try again later.');
+					}
+				},
+				failed:function(){
+					$('#personalVehicleTypeSaveStatus').html('<span class="text-danger" style="color:rgb(255,10,10);">Changes not saved!.Please try again later</span>')
+				}
+			});
+	})
+
+}
+
+
+
+
+/*
+|----------------------------------------------------------------------------
+| Bind Save payment
+|---------------------------------------------------------------------------
+| 
+| Change Payment type
+|
+*/
+function bindPayment(){
+	$('.paymentFormButton').on('change',function(){
+		//status
+		$('#paymentSaveStatus').html('saving . . .')
+		var data={_token:$('input[name=_token]').val(),payment:$(this).val(),id:form_id}
+
+		$.ajax({
+				url:'api/travel/official/payment',
+				data:data,
+				method:'PUT',
+				success:function(res){
+					if(res==1){
+						$('#paymentSaveStatus').html('<span class="text-success"><span class="glyphicon glyphicon-ok"></span></span>')	
+
+					}else{
+						//status
+						$('#paymentSaveStatus').html('Changes not saved!.Please try again later')
+						//alert('Sorry!.Please try again later.');
+					}
+				},
+				failed:function(){
+					$('#paymentSaveStatus').html('<span class="text-danger" style="color:rgb(255,10,10);">Changes not saved!.Please try again later</span>')
+				}
+			});
+	})
+
+}
+

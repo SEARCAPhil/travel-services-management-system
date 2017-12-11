@@ -34,11 +34,11 @@ class Calendar extends Controller
 		$personal_class=new Personal();
 
 		$official=@json_decode($official_itenerary_class->scheduled_per_user($date,$id));
-		$personal=@json_decode($personal_class->scheduled_per_user($date,$id));
-		$campus=@json_decode($campus_itenerary_class->scheduled_per_user($date,$id));
+		//$personal=@json_decode($personal_class->scheduled_per_user($date,$id));
+		//$campus=@json_decode($campus_itenerary_class->scheduled_per_user($date,$id));
 
-		$merged_data=@array_merge($official,$personal,$campus);
-		return json_encode($merged_data);
+		//$merged_data=@array_merge($official,$personal,$campus);
+		return json_encode($official);
 
 		
 	}
@@ -52,15 +52,15 @@ class Calendar extends Controller
 		$official_itenerary_class=new Official_itenerary();
 		$personal_class=new Personal();
 		$campus_itenerary_class=new Campus_itenerary();
-		$official=@json_decode($official_itenerary_class->scheduled_in_calendar($date));
-		$personal=@json_decode($personal_class->scheduled_in_calendar($date));
-		$campus=@json_decode($campus_itenerary_class->scheduled_in_calendar($date));
+		$official=$official_itenerary_class->scheduled_in_calendar($date);
+		//$personal=@json_decode($personal_class->scheduled_in_calendar($date));
+		//$campus=@json_decode($campus_itenerary_class->scheduled_in_calendar($date));
 
 		#return $official_itenerary_class->scheduled($date);
 		#return $personal_class->scheduled($date);
 
-		$merged_data=array_merge($official,$personal,$campus);
-		return json_encode($merged_data);
+		//$merged_data=array_merge($official,$personal,$campus);
+		return $official;
 
 
 		

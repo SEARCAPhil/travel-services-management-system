@@ -358,11 +358,12 @@ var htm='';
 		for(var x=0; x<json.data.length; x++){
 			var data=json.data[x];
 
+
 			var departure_date=new Date(data.departure_date).getDate();
 
 			htm+=`<div class="row `+data.type+``+data.id+` linked-travel-item linked-travel-item-`+data.id+`">
 				 	<div class="col col-md-1 col-sm-1 ">
-						 <div class="text-center col trip-date `+data.type+`">
+						 <div class="text-center col trip-date `+data.type+`" style="background:#777;">
 						 	`+departure_date+`
 						 </div>
 					</div>
@@ -411,17 +412,25 @@ function appendTravelToList(json){
 		//update total pages
 		$('.list-total-pages').html(json.pages)
 
-		
-
 		for(var x=0; x<json.data.length; x++){
 			var data=json.data[x];
+			var color;
+
+			if(data.type=='personal'){
+				color='rgb(0,150,200)'
+			}else if(data.type=='campus'){
+				color='rgb(200,0,150)'
+			}else{
+				color='rgb(0,200,150)';
+			}
+
 
 			var departure_date=new Date(data.departure_date).getDate();
 			var plate_no=data.plate_no!=null?data.plate_no:'N/A'
 
-			htm+=`<div class="row `+data.type+``+data.id+`" style="margin-bottom: 50px;">
+			htm+=`<div class="row official`+data.id+`" style="margin-bottom: 50px;">
 			 	<div class="col col-md-2 col-lg-1 col-sm-2 ">
-					 <div class="text-center col trip-date `+data.type+`">
+					 <div class="text-center col trip-date `+data.type+`" style="background:${color};">
 					 	`+departure_date+`
 					 </div>
 				</div>
@@ -463,7 +472,7 @@ function appendTravelToList(json){
 
 
 
-					 		if(data.type=='official'&&data.status=='scheduled'){
+					 		if(data.status=='scheduled'){
 								htm+=`<li><a href="#" class="travel-link travel-link-button pull-left" data-type="official" data-link="`+data.id+`"> Link <span class="glyphicon glyphicon-link"></span> </a> </li>`
 							}
 							
@@ -483,7 +492,6 @@ function appendTravelToList(json){
 								    
 								    htm+=`<li class="mark-as-link" data-mark="ongoing"><a href="#">Ongoing</a></li>`
 								}
-
 
 								if(data.status!='finished'){
 								    htm+='<li class="mark-as-link" data-mark="finished"><a href="#">Finished</a></li>'
@@ -620,15 +628,15 @@ function appendTravelToList(json){
 			htm+='<div class="col col-md-10 col-md-offset-1  linked-section linked-section'+data.id+'"></div>';
 			htm+=`</div>`;
 
-			if(data.type=='official'){
-				var parentId=data.id
+			//get linked travel
+			var parentId=data.id
 
-				showLinkedOfficialTravel(parentId,function(id,json){
-					
-					appendToLinkedTravel(json,'.linked-section'+id)
-					bindTravelUnlinkButton();
-				});
-			}
+			showLinkedOfficialTravel(parentId,function(id,json){
+				
+				appendToLinkedTravel(json,'.linked-section'+id)
+				bindTravelUnlinkButton();
+			});
+			
 
 
 
@@ -693,12 +701,22 @@ function appendToListInLinkModal(json,target){
 
 		for(var x=0; x<json.data.length; x++){
 			var data=json.data[x];
+			var color;
+			if(data.type=='personal'){
+				color='rgb(0,150,200)'
+			}else if(data.type=='campus'){
+				color='rgb(200,0,150)'
+			}else{
+				color='rgb(0,200,150)';
+			}
+
+
 
 			var departure_date=new Date(data.departure_date).getDate();
 
 			htm+=`<div class="row link-list" id="`+data.id+`">
 			 	<div class="col col-md-1 col-sm-1 col-xs-2">
-					 <div class="text-center col trip-date `+data.type+`">
+					 <div class="text-center col trip-date `+data.type+`" style="background:${color};">
 					 	`+departure_date+`
 					 </div>
 				</div>

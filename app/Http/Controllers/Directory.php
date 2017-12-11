@@ -207,6 +207,51 @@ class Directory extends Controller
 
 	}
 
+
+	function signatory_department($id){
+		try{
+				$this->pdoObject=DB::connection()->getPdo();
+				
+				$this->id=htmlentities(htmlspecialchars($id));
+
+			
+				$view_account_sql="SELECT account_profile.profile_name,account_profile.id as profile_id,department.dept_name,signatory.priority,signatory.account_profile_id ,account_profile.uid FROM signatory LEFT JOIN  account_profile on  account_profile.id=signatory.account_profile_id LEFT JOIN department on signatory.dept_id=department.dept_id where signatory.dept_id=:id ORDER BY signatory.id DESC LIMIT 1";
+				$view_profile_statement=$this->pdoObject->prepare($view_account_sql);
+				$view_profile_statement->bindParam(':id',$id);
+				$view_profile_statement->execute();
+				$result=NULL;
+
+				$data=NULL;
+				while ($row=$view_profile_statement->fetch(\PDO::FETCH_ASSOC)) {
+
+					#check if user id is the same with its signatory
+					#if so, the user might be the UNIT HEAD
+					#in this case,make the result NULL so it will get the default signatory
+					
+					$result[]=$row;
+					$data=json_encode($result);
+					
+				}
+
+				if(is_null($result)){
+					//director by default
+					$dept=0;
+					$view_profile_statement->bindParam(':id',$dept);
+					$view_profile_statement->execute();
+
+					$row=$view_profile_statement->fetch(\PDO::FETCH_OBJ);
+
+					$result[]=array('profile_name'=>$row->profile_name,'uid'=>$row->uid);
+					$data=json_encode($result);
+				}
+					
+					
+				return $data;
+
+				#return $view_profile_statement->rowCount()>0?$view_profile_statement->rowCount():0;
+		}catch(Exception $e){ echo $e->getMessage(); }
+	}
+
     function staff_search($param,$page=1){
 
     		try{
@@ -459,6 +504,107 @@ class Directory extends Controller
         
     }
 
+
+    public function update_signatory($id,$uid)
+
+    {
+
+        try{
+
+                $this->pdoObject=DB::connection()->getPdo();
+
+                $this->id=(int) htmlentities(htmlspecialchars($id));
+                $this->uid=(int) htmlentities(htmlspecialchars($uid));
+
+                $this->pdoObject->beginTransaction();
+
+                $remove_rfp_sql="UPDATE tr set approved_by=:approved_by where id=:id";
+
+                $remove_statement=$this->pdoObject->prepare($remove_rfp_sql);
+
+                $remove_statement->bindParam(':id',$this->id);
+                $remove_statement->bindParam(':approved_by',$this->uid);
+
+                $remove_statement->execute();
+
+                $this->pdoObject->commit();
+
+
+
+                return $remove_statement->rowCount()>0?$remove_statement->rowCount():0;
+
+
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+    }
+
+
+
+    public function update_approval_recommending($id,$uid)
+
+    {
+
+        try{
+
+                $this->pdoObject=DB::connection()->getPdo();
+
+                $this->id=(int) htmlentities(htmlspecialchars($id));
+                $this->uid=(int) htmlentities(htmlspecialchars($uid));
+
+             
+
+
+                if(!is_null($uid)){
+
+                    $remove_rfp_sql="UPDATE tr set recommended_by=:recommended_by where id=:id";
+
+	                $remove_statement=$this->pdoObject->prepare($remove_rfp_sql);
+
+	                $remove_statement->bindParam(':id',$this->id);
+	                $remove_statement->bindParam(':recommended_by',$this->uid);	
+                }else{
+                	$remove_rfp_sql="UPDATE tr set recommended_by= NULL where id=:id";
+
+	                $remove_statement=$this->pdoObject->prepare($remove_rfp_sql);
+
+	                $remove_statement->bindParam(':id',$this->id);
+                }
+
+
+
+                $remove_statement->execute();
+
+            
+
+                return $remove_statement->rowCount()>0?$remove_statement->rowCount():0;
+
+
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+    }
+
+
+    public function update_signatory_to_odda($id){
+        //static users id
+        //currently set to ATR
+        self::update_signatory($id,25);
+    }
+
+
+    public function update_signatory_to_od($id){
+        //static users id
+        //currently set to GCS
+        self::update_signatory($id,30);
+    }
+
+
+    public function update_approval_recommending_to_null($id){
+        //static users id
+        //currently set to GCS
+        self::update_approval_recommending($id,NULL);
+    }
 
 
 

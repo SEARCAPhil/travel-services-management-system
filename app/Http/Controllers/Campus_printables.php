@@ -33,19 +33,43 @@ class Campus_printables extends Controller
 
     function print_travel_request($id){
     	
+    	    	#variables
+    	global $details;
 
-	#get data
-	$campus_itenerary=new Campus_itenerary();
-	$campus_travel=new Campus();
-	
-	$travel_request=@json_decode($campus_travel->show($id))[0];
+    	$itenerary=Array();
+    	$staff=Array();
+    	$scholars=Array();
+    	$custom=Array();
+    	
 
-	$iteneraries=@json_decode($campus_itenerary->index($id));
-	$itenerary=@$iteneraries[0];
+    	#get data
+    	$official=new Official();
+    	$official_itenerary=new Official_itenerary();
+    	$official_staff=new Official_staff();
+    	$official_scholars=new Official_scholars();
+    	$official_custom=new Official_custom();
+    
+    	$GLOBALS['official']=$official;
 
-	$GLOBALS['travel_request']= $travel_request;
+    	$data=json_decode($official->show($id));
+    	$details=$data[0];
 
-	
+
+    	//var_dump($details);
+    	#get itenerary
+    	if(isset($details->tr)){
+    		$itenerary=json_decode($official_itenerary->index($details->tr));
+    		$staff=json_decode($official_staff->index($details->tr));
+    		$scholars=json_decode($official_scholars->index($details->tr));
+    		$custom=json_decode($official_custom->index($details->tr));
+    		
+
+    	}
+    	
+
+    	
+
+
 
     	//get default settings from config/laravel-tcpdf.php
    		$pdf_settings = \Config::get('laravel-tcpdf');
@@ -57,6 +81,8 @@ class Campus_printables extends Controller
    		// Custom Header
 		$pdf->setHeaderCallback(function($pdf){
 
+			//details object
+			global $details;
 		
 
 			// Title
@@ -70,8 +96,9 @@ class Campus_printables extends Controller
 			$pdf->Cell(0, 0, 'SOUTHEAST ASIAN REGIONAL CENTER FOR GRADUATE STUDY', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
 			$pdf->Cell(0, 0, ' AND RESEARCH IN AGRICULTURE', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
 			$pdf->Cell(0, 0, 'College, Laguna, 4031, Philippines', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
-
+			$pdf->setFontSize(15);
 			$pdf->Cell(0, 10, 'CAMPUS TRAVEL REQUEST', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
+			$pdf->setFontSize(10);
 			$pdf->Cell(0, 0, '(For trips within 15 km. radius from SEARCA Headquarter)', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
 
 
@@ -106,7 +133,12 @@ class Campus_printables extends Controller
 		// Custom Footer
 		$pdf->setFooterCallback(function($pdf) {
 
-			$pdf->SetY(-120);
+			global $details;
+
+			//designation
+			$details->approved_by_position=!empty($details->approved_by_position)?$details->approved_by_position:'HEAD, Motor Pool Unit';
+
+			$pdf->SetY(-70);
 			// Set font
 	        $pdf->SetFont('helvetica', 'N', 9);
 
@@ -123,23 +155,23 @@ class Campus_printables extends Controller
 				<table>
 
 					<tr>
-						<td><b>Approval Recommended</b></td>
+						<td><b>Recommending Approval:</b></td>
 						<td width="160"></td>
-						<td  width="70"></td>
+						<td  width="70"><b>Approved:</b></td>
 						<td></td>
 
 					</tr>
 
 					<tr>
-						<td width="150">
-							<div class="withLine" style="border 1px solid rgb(20,20,20);"></div>
+						<td width="180">
+							<div class="withLine" style="border 1px solid rgb(20,20,20);text-align:center;">'.$details->recommended_by.'</div>
 						</td>
 						<td width="5"></td>
-						<td width="100">
-							<div class="withLine" style="border 1px solid rgb(20,20,20);"></div>
-						</td>
+						
 						<td width="100"></td>
-						<td width="150"></td>
+						<td width="180">
+							<div class="withLine" style="border 1px solid rgb(20,20,20);text-align:center;">'.$details->approved_by.'</div>
+						</td>
 						<td width="10"></td>
 						<td width="50"></td>
 						
@@ -151,21 +183,20 @@ class Campus_printables extends Controller
 				<table cellpadding="-5">
 
 					<tr cellpadding="-5">
-						<td>&nbsp;&nbsp;&nbsp;'.@$GLOBALS['travel_request']->approved_by.'</td>
+						<td  width="180" style="text-align:center;"><b>Unit/Office Head</b></td>
 						<td width="160"></td>
-						<td  width="70"></td>
+						<td  width="90" style="text-align:center;"><b>'.$details->approved_by_position.'</b></td>
 					
 
 					</tr>
-
 					
 				</table>
 					<br/><br/><br/><br/>
-					<p>
-						<label>NOTE:</label> PREPARE ONE DUPLICATE COPY IF TRIP IS BY <u>SEARCA VEHICLE:</u> <label>Original-</label> Unit concerned; <label>Duplicate-</label> Security Guard</p><br/>
-					<p>*Should be indicated per trip</p><br/>
-					<p>*If the trip is by SEARCA service vehicle, recommendation for approval of requisitioner\'s immediate superior and corresponding approval of the Head of the General Services Unit</p>
-					<p> Unit are required under the appropriate columns.</p>
+					<p style="font-size:7px;">
+						<label>NOTE:</label> PREPARE ONE DUPLICATE COPY IF TRIP IS BY <u>SEARCA VEHICLE:</u> <label>Original-</label> Unit concerned; <label>Duplicate-</label> Security Guard<br/>
+					*Should be indicated per trip <br/>
+					 *If the trip is by SEARCA service vehicle, recommendation for approval of requisitioner\'s immediate superior and corresponding approval of the Head of the General Services Unit<br/>
+					Unit are required under the appropriate columns.</p>
 
 
 
@@ -174,8 +205,6 @@ class Campus_printables extends Controller
 
 
 			$pdf->Writehtml($sign);
-
-
 
 
 
@@ -196,10 +225,15 @@ class Campus_printables extends Controller
 		$pdf->SetMargins(PDF_MARGIN_LEFT, 50, PDF_MARGIN_RIGHT);
 
 		
+		$projects='';
+		for($a=0;$a<count($details->projects);$a++){
+
+			$projects.='<p>'.$details->projects[$a]->project.'</p>';
+		}
 
 
 //prevent other users to view this document
-	self::is_creator($travel_request->requested_by);
+	//self::is_creator($travel_request->requested_by);
 
     	// create some HTML content
 $html ='<style>
@@ -216,14 +250,25 @@ $html ='<style>
 		<table class="table passenger-table" id="table-passenger">
 			
 				<tr>
-					<th width="90"><b>Requesitioner : </b></th>
-					<th width="280">'.$travel_request->profile_name.'</th>
-					<th class="withLine" width="120" style="text-align:center;">&nbsp;<b> '.date_format(date_create($travel_request->date_created),'m/d/Y').'</b></th>
+					<td  width="98"><b>Requesting Party : </b></td>
+					<td  width="180" class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$details->profile_name.'</td>
+					<td  width="30" ></td>
+					<td  width="70"><b>Unit/Office:</b></td>
+					<td  width="120"  class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$details->department_alias.'</td>
 				</tr>
 				<tr>
-					<th width="150"><b>Office/Unit/Program/Project :</b></th>
-					<th width="270">'.$travel_request->department.'</th>
-					<th width="100">Date</th>
+					<td  width="98"><b>Date(s) : </b></td>
+					<td  width="180" class="withLine"></td>
+					<td  width="30" ></td>
+					<td  width="70"><b>Charge To:</b></td>
+					<td width="130"  class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$details->source_of_fund_value.' '.$projects.'</td>
+				</tr>
+				<tr>
+					<td  width="98"><b>Time : </b></td>
+					<td  width="180" class="withLine"></td>
+					<td  width="30" ></td>
+					<td  width="70"> </td>
+					<td  width="120"></td>
 				</tr>
 		</table>
 		
@@ -231,16 +276,89 @@ $html ='<style>
 
 			';
 
+$html.='
 
+	<br/>
+	<article>
+		<p><b>Purpose :</b></p>
+		<p class="withLine">'.@ucfirst($details->purpose).'</p><br/>
+	</article>';
 
 
 $html.='
 
+	<p></p><p></p>
 	<article>
-		<p><br/><br/></p>
-		<p class="col col-md-12"><p></p></p>
-	</article>
-	<br/>
+		<p><b>Passengers :</b></p><br/>
+	</article>';
+
+
+$html.='
+						<table class="table passenger-table" id="table-passenger" cellspacing="3">
+					
+							<tr>
+								<th><b>Name</b></th>
+								<th>&nbsp;&nbsp;&nbsp;&nbsp;<b>Designation</b></th>
+								<th>&nbsp;&nbsp;&nbsp;&nbsp;<b>Office/Unit</b></th>
+							</tr>
+					';
+
+	#fetch intenerary result
+	$staff_total_count=count($staff);
+	$scholars_total_count=count($scholars);
+	$custom_total_count=count($custom);
+
+	$passenger_count=0;
+
+
+	for($a=0;$a<$staff_total_count;$a++){
+		$passenger_count++;
+		$html.='<tr class="tr-passenger">
+				<td class="withLine">'.$staff[$a]->name.'</td>
+				<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$staff[$a]->designation.'</td>
+				<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$staff[$a]->alias.'</td>
+			</tr>';	
+	}
+
+
+
+
+	for($a=0;$a<$scholars_total_count;$a++){
+		$passenger_count++;
+		$html.='<tr class="tr-passenger">
+				<td class="withLine">'.$scholars[$a]->full_name.'</td>
+				<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$scholars[$a]->nationality.'</td>
+				<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;<i>Scholar</i></td>
+			</tr>';	
+	}
+
+	for($a=0;$a<$custom_total_count;$a++){
+		$passenger_count++;
+		$html.='<tr class="tr-passenger">
+				<td class="withLine">'.$custom[$a]->full_name.'</td>
+				<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$custom[$a]->designation.'</td>
+				<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;<i>N/A</i></td>
+			</tr>';	
+	}
+
+
+	if($passenger_count<4){
+		$remaining=5-$passenger_count;
+
+		for($a=0;$a<$remaining;$a++){
+			$html.='<tr class="tr-passenger">
+					<td class="withLine"></td>
+					<td class="withLine"></td>
+					<td class="withLine"></td>
+				</tr>';	
+		}
+	}
+
+		
+		$html .= '</table>';
+
+$html.='
+
 	<article>
 		<p><b>Travel(s)</b></p><br/>
 		<table class="table sa-table" style="border:none;">
@@ -248,26 +366,35 @@ $html.='
 				<th>Date</th><th>From</th><th>To</th><th>Time</th>
 			</tr>';
 
-		$iteneraries_count=0;
-		for($x=0;$x<count($iteneraries);$x++){	
-					
-			$iteneraries_count++;		
-			$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
-				<td>'.$iteneraries[$x]->departure_date.'</td>
-				<td>'.$iteneraries[$x]->location.'</td>
-				<td>'.$iteneraries[$x]->destination.'</td>
-				<td>'.$iteneraries[$x]->departure_time.'</td>
-			</tr>';
-		}
+		#fetch intenerary result
+			$itenerary_total_count=count($itenerary);
 
-		for($y=0;$y<(5-$iteneraries_count);$y++){
-			$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
-				<td><input type="date" class="dateSelector"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="text" class="form-control text"></td>
-				<td><input type="time" class="timeSelector"></td>
-			</tr>';
-		}
+			for($a=0;$a<$itenerary_total_count;$a++){
+				$mode_of_transport=$itenerary[$a]->plate_no!='rent_a_car'?'SEARCA Vehicle':'RENT A CAR';
+    			$html.='<tr>
+					<td>'.$itenerary[$a]->departure_date.'</td>
+					<td>'.$itenerary[$a]->location.'</td>
+					<td>'.$itenerary[$a]->destination.'</td>
+					<td>'.$mode_of_transport.'</td>
+					<td>'.$itenerary[$a]->departure_time.'</td>
+				</tr>';
+    		}
+
+
+    		#get field remaining to fill up all itenerary
+    		$remaining_empty_itenerary=5-$itenerary_total_count;
+    		
+    		if($remaining_empty_itenerary>0){
+    			for($a=0;$a<$remaining_empty_itenerary;$a++){
+					$html.='<tr>
+								<td><input type="date" class="dateSelector"></td>
+								<td><input type="text" class="form-control text"></td>
+								<td><input type="text" class="form-control text"></td>
+								<td><input type="text" class="form-control text"></td>
+								<td><input type="time" class="timeSelector"></td>
+							</tr>';
+				}
+    		}
 			
 			
 
@@ -296,33 +423,41 @@ $html.='
 
 function print_notice_of_charges($id){
 
-	
-	#get data
-	$campus_itenerary=new Campus_itenerary();
-	$campus_travel=new Campus();
-	$charge_computation_module=new Charge();
+		global $travel_request;
+
+    	$itenerary=Array();
+    	$charges=Array();
+    	$staff=Array();
+    	$scholars=Array();
+    	$custom=Array();
+
+
+   	
+
+    	#get data
+    	$official_itenerary=new Official_itenerary();
+    	$official_travel=new Official();
+    	$charge_travel=new Charge();
+
+    	$GLOBALS['official_travel']=$official_travel;
+
+    	$official_staff=new Official_staff();
+    	$official_scholars=new Official_scholars();
+    	$official_custom=new Official_custom();
 
 
 
-	$itenerary=@json_decode($campus_itenerary->show($id))[0];
-	$charges=@json_decode($campus_itenerary->show_charges($id))[0];
-	$travel_request=@json_decode($campus_travel->show($itenerary->trc_id))[0];
+    	$itenerary=@json_decode($official_itenerary->show($id))[0];
+    	$charges=@json_decode($official_itenerary->show_charges($id))[0];
+    	$travel_request=@json_decode($official_travel->show($itenerary->tr_id))[0];
 
 
-/*
-	$gasoline_charge=$charge_computation_module->calculate_gasoline_charge($charges->base,$charges->end-$charges->start,$charges->gasoline_charge,$default_rate='25');
-	
 
-	if($charges->appointment=='emergency'){
-		$drivers_charge=($charge_computation_module->calculate_emergency_drivers_charge($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time,$charges->drivers_charge));
-	}else{
-		$drivers_charge=($charge_computation_module->calculate_contracted_drivers_charge($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time,$charges->drivers_charge,$charges->days));
-	}
-
-	$overall_gasoline_charge=@array_sum($gasoline_charge);
-	$overall_charge=$overall_gasoline_charge+$drivers_charge;
-*/
-
+    	 $overtime_original=@$charges->overtime/24;
+        $overtime=explode('.', $overtime_original);
+        $overtime_days=$overtime[0];
+        $overtime_hours='0.'.@$overtime[1];
+    	$overtime_hours=@($overtime_hours*24);
 
 
 
@@ -412,10 +547,8 @@ $html ='<style>
 
 		<table>
 			<tr>
-				<td width="400"></td><td></td><td width="100"><b>NO. '.$itenerary->trc_id.'</b><br/></td>
+				<td width="400"></td><td></td><td width="100"><b>NO. '.$itenerary->id.'</b><br/></td>
 			</tr>
-
-			
 		</table>
 		<br/>
 
@@ -515,7 +648,9 @@ $html.='
 
 				<td>
 					<br/><br/>
-					<b>Conforme:</b>
+					<b>Conforme:</b><br/><br/>
+					<b>'.$travel_request->recommended_by.'</b><br/>
+					'.$travel_request->recommended_by_position.'<br/>
 
 				</td>
 				

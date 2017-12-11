@@ -186,7 +186,7 @@ function showPersonalTravelList(page=1){
 		appendToList(function(data){
 
 			//attach click event
-			attachClickEventToList('travel/personal/preview/',function(e){
+			attachClickEventToList('travel/official/preview/',function(e){
 
 				//get target id
 				var targetId;
@@ -197,13 +197,12 @@ function showPersonalTravelList(page=1){
 				}else{
 					targetId=e.currentTarget.id;
 				}
-				//console.log(e.target.id)
-				//set active page
-				active_page='personal_preview';
-				showPersonalTravelListPreview(targetId)
-				showPersonalTravelPassengerStaffPreview(targetId)
-				showPersonalTravelPassengerScholarsPreview(targetId)
-				showPersonalTravelPassengerCustomPreview(targetId)
+				//get all necessary information of the request
+				showOfficialTravelListPreview(targetId)
+				showOfficialTravelPassengerStaffPreview(targetId)
+				showOfficialTravelPassengerScholarsPreview(targetId)
+				showOfficialTravelPassengerCustomPreview(targetId)
+				showOfficialTravelItenerary(targetId)
 			})
 		});
 	});
@@ -221,7 +220,7 @@ function showCampusTravelList(page=1){
 		appendToList(function(data){
 
 			//attach click event
-			attachClickEventToList('travel/campus/preview/',function(e){
+			attachClickEventToList('travel/official/preview/',function(e){
 
 				//get target id
 				var targetId;
@@ -235,8 +234,12 @@ function showCampusTravelList(page=1){
 				//console.log(e.target.id)
 				//set active page
 				active_page='campus_preview';
-				showCampusTravelListPreview(targetId)
-				showCampusTravelItenerary(targetId)
+				//get all necessary information of the request
+				showOfficialTravelListPreview(targetId)
+				showOfficialTravelPassengerStaffPreview(targetId)
+				showOfficialTravelPassengerScholarsPreview(targetId)
+				showOfficialTravelPassengerCustomPreview(targetId)
+				showOfficialTravelItenerary(targetId)
 			})
 		});
 	});

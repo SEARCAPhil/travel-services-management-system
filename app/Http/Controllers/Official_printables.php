@@ -745,16 +745,8 @@ $html.='	<article class="col col-md-12">
 			$pdf->SetY(-50);
 			// Set font
 	        $pdf->SetFont('helvetica', 'N', 9);
-	        
 
-	        //override approved by if approver is one of the passengers
-	        //// HACK!!!!!!!!!!!!!!!!! eeew
-	        if(in_array($details->approved_by,$GLOBALS['passenger_names'])){
-	   
-	        	if($GLOBALS['official']->update_signatory($details->tr,'Gil C. Saguiguit Jr.')){
-	        		$details->approved_by='Gil C. Saguiguit Jr.';	
-	        	}
-	        }
+	       
 
 			 $sign = '
 				<style>

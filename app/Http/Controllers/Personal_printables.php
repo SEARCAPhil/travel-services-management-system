@@ -32,23 +32,59 @@ class Personal_printables extends Controller
 
     function print_travel_request($id){
 
+    
+
+    	#variables
+    	global $details;
+
+    	$itenerary=Array();
+    	$staff=Array();
+    	$scholars=Array();
+    	$custom=Array();
+    	
+
     	#get data
-    	$personal_travel=new Personal();
-     	$itenerary=@json_decode($personal_travel->show($id))[0];
-     	$GLOBALS['itenerary']=$itenerary;
-     	$GLOBALS['personal']=$personal_travel;
+    	$official=new Official();
+    	$official_itenerary=new Official_itenerary();
+    	$official_staff=new Official_staff();
+    	$official_scholars=new Official_scholars();
+    	$official_custom=new Official_custom();
+    
+    	$GLOBALS['official']=$official;
 
-     	//var_dump($itenerary);
-
-     	 //passengers
-        $passenger_staff_class=new Personal_staff();
-        $passenger_scholar_class=new Personal_scholars();
-        $passenger_custom_class=new Personal_custom();
+    	$data=json_decode($official->show($id));
+    	$details=$data[0];
 
 
-        $passenger_staff=json_decode($passenger_staff_class->index($itenerary->id));
-        $passenger_scholar=json_decode($passenger_scholar_class->index($itenerary->id));
-        $passenger_custom=json_decode($passenger_custom_class->index($itenerary->id));
+    	//var_dump($details);
+    	#get itenerary
+    	if(isset($details->tr)){
+    		$itenerary=json_decode($official_itenerary->index($details->tr));
+    		$staff=json_decode($official_staff->index($details->tr));
+    		$scholars=json_decode($official_scholars->index($details->tr));
+    		$custom=json_decode($official_custom->index($details->tr));
+    		
+
+    	}
+
+    	//vehicle
+    	switch($details->vehicle_type){
+    		case 1:
+    			$vehicle='SUV';
+    			break;
+    		case 2:
+    			$vehicle='Van';
+    			break;
+    		case 3:
+    			$vehicle='Pick-up';
+    			break;
+    		default:
+    			$vehicle='SUV';
+    		break;
+    	}
+    	
+
+    	#var_dump($details);
 
     	//get default settings from config/laravel-tcpdf.php
    		$pdf_settings = \Config::get('laravel-tcpdf');
@@ -103,65 +139,12 @@ class Personal_printables extends Controller
 		}
 
 
-
 		});
 
 		// Custom Footer
 		$pdf->setFooterCallback(function($pdf) {
 
-			$approver_designation="Head, GSU";
-
-			$GLOBALS['itenerary']->approved_by=is_null($GLOBALS['itenerary']->approved_by)?'Ricardo A. Menorca':$GLOBALS['itenerary']->approved_by;
-
-			//override approved by if approver is one of the passengers
-	        //// HACK!!!!!!!!!!!!!!!!! eeew
-	        if(in_array(@$GLOBALS['itenerary']->approved_by,$GLOBALS['passenger_names'])){
-	        	//head GSU
-	        	$approver='Ricardo A. Menorca';
-				$approver_designation="Head, GSU";
-
-				//ODDA
-	   			$approver_odda='Adoracion T. Robles';
-	   			$approver_designation_odda="Head, ODDA";
-
-	   			//director
-	   			$approver_director='Gil C. Saguiguit Jr.';
-	   			$approver_designation_director="SEARCA Director";
-
-
-				if($GLOBALS['itenerary']->approved_by==$approver){
-					$approver=$approver_odda;
-					$approver_designation=$approver_designation_odda;
-					//update
-					$GLOBALS['personal']->update_signatory($GLOBALS['itenerary']->id,$approver);
-				}elseif($GLOBALS['itenerary']->approved_by==$approver_odda){
-					$approver=$approver_director;
-					$approver_designation=$approver_designation_director;
-
-					$GLOBALS['personal']->update_signatory($GLOBALS['itenerary']->id,$approver);
-
-				}elseif($GLOBALS['itenerary']->approved_by==$approver_director){
-					$approver=$approver_odda;
-					$approver_designation=$approver_designation_odda;
-					//update
-					$GLOBALS['personal']->update_signatory($GLOBALS['itenerary']->id,$approver);
-				}else{
-						
-				}
-
-	        	
-	        }else{
-				
-			
-	        	//head GSU
-	        	$approver=(empty($GLOBALS['itenerary']->approved_by))||(is_null($GLOBALS['itenerary']->approved_by))?'Ricardo A. Menorca':$GLOBALS['itenerary']->approved_by;
-				
-	
-	        }
-
-
-	      
-
+			global $details;
 
 			
 			$pdf->SetY(-50);
@@ -203,7 +186,7 @@ class Personal_printables extends Controller
 							
 						</td>
 						<td width="100"></td>
-						<td width="150">'.strtoupper($approver).'</td>
+						<td width="150">'.strtoupper($details->approved_by).'</td>
 						<td width="10"></td>
 						<td width="50"></td>
 						
@@ -216,7 +199,7 @@ class Personal_printables extends Controller
 						<td width="5"></td>
 						<td width="50"></td>
 						<td width="100"></td>
-						<td width="150">'.$approver_designation.'</td>
+						<td width="150">'.ucwords($details->approved_by_position).'</td>
 						<td width="10"></td>
 						<td width="50"></td>
 						
@@ -256,7 +239,7 @@ class Personal_printables extends Controller
 
 //var_dump($passenger_custom);
        
-self::is_creator($itenerary->requested_by);
+//self::is_creator($itenerary->requested_by);
 
     	// create some HTML content
 $html ='<style>
@@ -274,7 +257,7 @@ $html ='<style>
 
 		<table>
 			<tr>
-				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date_format(date_create($itenerary->date_created),'m/d/Y') .'</b></td>
+				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date_format(date_create($itenerary[0]->date_created),'m/d/Y') .'</b></td>
 			</tr>
 			<tr>
 				<td></td><td></td><td style="text-align:center;">Date</td>
@@ -291,24 +274,24 @@ $html ='<style>
 
 			<tr>
 				<td width="80"><b>Requested By:</b></td>
-				<td width="150" class="withLine">'.$itenerary->profile_name.'</td>
+				<td width="150" class="withLine">'.$details->profile_name.'</td>
 				<td width="10"></td>
 				<td width="80"><b>Designation :</b></td>
-				<td width="150" class="withLine">'.ucfirst($itenerary->position).'</td>
+				<td width="150" class="withLine">'.$details->position.'</td>
 			</tr>
 			<tr>
 				<td width="80"><b>Office/Unit:</b></td>
-				<td width="150" class="withLine">'.$itenerary->department.'</td>
+				<td width="150" class="withLine">'.$details->department_alias.'</td>
 				<td width="10"></td>
 				<td width="80"><b>Destination :</b></td>
-				<td width="150" class="withLine">'.$itenerary->destination.'</td>
+				<td width="150" class="withLine">'.$itenerary[0]->destination.'</td>
 			</tr>
 			<tr>
 				<td width="80"><b>Date of trip/time:</b></td>
-				<td width="150" class="withLine">'.$itenerary->departure_date.' / '.$itenerary->departure_time.'</td>
+				<td width="150" class="withLine">'.$itenerary[0]->departure_date.' / '.$itenerary[0]->departure_time.'</td>
 				<td width="10"></td>
 				<td width="80"><b>From :</b></td>
-				<td width="150" class="withLine">'.$itenerary->location.'</td>
+				<td width="150" class="withLine">'.$itenerary[0]->location.'</td>
 			</tr>
 
 			<tr>
@@ -321,7 +304,7 @@ $html ='<style>
 
 			<tr>
 				<td width="80"><b>Type of Vehicle:</b></td>
-				<td width="150">'.$itenerary->class.'</td>
+				<td width="150">'.$vehicle.'</td>
 				<td width="10"></td>
 				<td width="80"></td>
 				<td width="150"></td>
@@ -340,10 +323,11 @@ $html.='
 
 		<p><b>&nbsp;&nbsp;Purpose:</b></p>
 
-			<table class="table" style="border:none;" cellspacing="3">
-			<tr>
-				<td>'.$itenerary->purpose.'</td>
-			</tr></table>
+			<table class="table sa-table" style="border:none;" cellspacing="3">
+				<tr>
+					<td>'.@ucfirst($details->purpose).'</td>
+				</tr>
+			</table>
 
 	</article>
 	<br/>
@@ -354,63 +338,57 @@ $html.='
 				<th><b>Name</b></th><th><b>Designation</b></th><th><b>Office/Unit</b></th>
 			</tr>';
 
-			$total_passenger=0;
-			$GLOBALS['passenger_names']=array();
-
-	
-
-			for($x=0;$x<count($passenger_staff);$x++) {
-				array_push($GLOBALS['passenger_names'], $passenger_staff[$x]->name);
-			 	$html.='<tr id="travel{{key}}">
-					<td>'.$passenger_staff[$x]->name.'</td>
-					<td>'.$passenger_staff[$x]->designation.'</td>
-					<td>'.$passenger_staff[$x]->office.'</td>
-
-				</tr>';
-
-				$total_passenger++;
-        		
-        	}
-
-
-        	for($x=0;$x<count($passenger_scholar);$x++) {
-
-			 	$html.='<tr id="travel{{key}}">
-					<td>'.$passenger_scholar[$x]->full_name.'</td>
-					<td>Scholar</td>
-					<td>'.$passenger_scholar[$x]->nationality.'</td>
-
-				</tr>';
-
-				$total_passenger++;
-        		
-        	}
-
-
-        	for($x=0;$x<count($passenger_custom);$x++) {
-
-			 	$html.='<tr id="travel{{key}}">
-					<td>'.$passenger_custom[$x]->full_name.'</td>
-					<td>'.$passenger_custom[$x]->designation.'</td>
-					<td></td>
-
-				</tr>';
-
-				$total_passenger++;
-        		
-        	}
-					
-					
-			while ($total_passenger<5) {
-				$total_passenger++;
-				$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
-					<td><input type="date" class="dateSelector"></td>
-					<td><input type="text" class="form-control text"></td>
-					<td><input type="text" class="form-control text"></td>
-
-				</tr>';
-			}	
 			
+#fetch intenerary result
+$staff_total_count=count($staff);
+$scholars_total_count=count($scholars);
+$custom_total_count=count($custom);
+
+$passenger_count=0;
+$GLOBALS['passenger_names']=array();
+for($a=0;$a<$staff_total_count;$a++){
+	array_push($GLOBALS['passenger_names'], $staff[$a]->name);
+
+	$passenger_count++;
+	$html.='<tr class="tr-passenger">
+			<td class="withLine">'.$staff[$a]->name.'</td>
+			<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$staff[$a]->designation.'</td>
+			<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$staff[$a]->alias.'</td>
+		</tr>';	
+}
+
+for($a=0;$a<$scholars_total_count;$a++){
+	$passenger_count++;
+	$html.='<tr class="tr-passenger">
+			<td class="withLine">'.$scholars[$a]->full_name.'</td>
+			<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$scholars[$a]->nationality.'</td>
+			<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;<i>Scholar</i></td>
+		</tr>';	
+}
+
+for($a=0;$a<$custom_total_count;$a++){
+	$passenger_count++;
+	$html.='<tr class="tr-passenger">
+			<td class="withLine">'.$custom[$a]->full_name.'</td>
+			<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$custom[$a]->designation.'</td>
+			<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;<i>N/A</i></td>
+		</tr>';	
+}
+
+
+if($passenger_count<4){
+	$remaining=5-$passenger_count;
+
+	for($a=0;$a<$remaining;$a++){
+		$html.='<tr class="tr-passenger">
+				<td class="withLine"></td>
+				<td class="withLine"></td>
+				<td class="withLine"></td>
+			</tr>';	
+	}
+}
+
+
 
 			
 		
@@ -420,11 +398,54 @@ $html.='
 		
 	</article>';
 
+
+	$html.='
+
+	<article>
+		<p><b>&nbsp;&nbsp;Charge To: Personal</b></p><br/>
+		
+	</article>';
+
+
+
+$html.='<br/><br/><br/><article>
+		<table>
+			<tr>
+				<td width="30">&nbsp;&nbsp;</td>
+				<td width="222" class="withLine"></td>
+				<td width="30">&nbsp;&nbsp;</td>
+				<td width="222" class="withLine"></td>
+			</tr>
+
+			<tr>
+				<td width="30">&nbsp;&nbsp;</td>
+				<td width="222" style="text-align:center;">Name</td>
+				<td width="30">&nbsp;&nbsp;</td>
+				<td width="222" style="text-align:center;">Signature</td>
+			</tr>
+
+
+		</table>
+
+		<table>
+			<tr>
+				<td></td><td style="text-align:right;"></td><td></td>
+			</tr>
+		</table>
+		
+		
+		
+	</article>
+
+</section>';
+
+
+
 $html.='<br/><br/><br/><article>
 		<table>
 			<tr>
 				<td width="100"><b>&nbsp;&nbsp;Mode of Payment:</b></td>
-				<td width="100" class="withLine">'.$itenerary->mode_of_payment.'</td>
+				<td width="100" class="withLine">'.@ucwords($details->mode_of_payment).'</td>
 			</tr>
 		</table>
 
@@ -456,45 +477,44 @@ $html.='<br/><br/><br/><article>
 
 
 function print_statement_of_account($id){
-     	#get data
-    	$personal_travel=new Personal();
-     	$itenerary=@json_decode($personal_travel->show($id))[0];
-     	$personal_itenerary=new Personal_itenerary();
+     	
+		global $travel_request;
 
-     	$charge_computation_module=new Charge();
-
-    	$charges=@json_decode($personal_itenerary->show_charges($id))[0];
-
-    	/*
-    	$gasoline_charge=$charge_computation_module->calculate_gasoline_charge($charges->base,$charges->end-$charges->start,$charges->gasoline_charge,$default_rate='25');
-    	
-
-    	if($charges->appointment=='emergency'){
-    		$drivers_charge=($charge_computation_module->calculate_emergency_drivers_charge($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time,$charges->drivers_charge));
-    	}else{
-			$drivers_charge=($charge_computation_module->calculate_contracted_drivers_charge($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time,$charges->drivers_charge,$charges->days));
-    	}
-
-    	$overall_gasoline_charge=@array_sum($gasoline_charge);
-    	$overall_charge=$overall_gasoline_charge+$drivers_charge;
+    	$itenerary=Array();
+    	$charges=Array();
+    	$staff=Array();
+    	$scholars=Array();
+    	$custom=Array();
 
 
-    	#prevent wrong calculation if returned date is < departure_date
-        if($itenerary->departure_date<$itenerary->returned_date){
-            $calculated_excess_time=$charge_computation_module->calculate_excess_time($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time);
-        }*/
+   	
 
-    	
+    	#get data
+    	$official_itenerary=new Official_itenerary();
+    	$official_travel=new Official();
+    	$charge_travel=new Charge();
 
-    	#var_dump($calculated_excess_time);
+    	$GLOBALS['official_travel']=$official_travel;
 
-        $overtime_original=@$charges->overtime/24;
+    	$official_staff=new Official_staff();
+    	$official_scholars=new Official_scholars();
+    	$official_custom=new Official_custom();
+
+
+
+    	$itenerary=@json_decode($official_itenerary->show($id))[0];
+    	$charges=@json_decode($official_itenerary->show_charges($id))[0];
+    	$travel_request=@json_decode($official_travel->show($itenerary->tr_id))[0];
+
+
+
+    	 $overtime_original=@$charges->overtime/24;
         $overtime=explode('.', $overtime_original);
         $overtime_days=$overtime[0];
         $overtime_hours='0.'.@$overtime[1];
     	$overtime_hours=@($overtime_hours*24);
 
-     	#var_dump($itenerary);
+
 
     	//get default settings from config/laravel-tcpdf.php
    		$pdf_settings = \Config::get('laravel-tcpdf');
@@ -559,7 +579,7 @@ function print_statement_of_account($id){
 
 		
 	//prevent other users to view this document
-	self::is_creator($itenerary->requested_by);
+	//self::is_creator($itenerary->requested_by);
 
 
 
@@ -580,17 +600,17 @@ $html ='<style>
 
 			<tr>
 				<td width="80"><b>Requesitioner:</b></td>
-				<td width="150" class="withLine">'.$itenerary->profile_name.'</td>
+				<td width="150" class="withLine">'.$travel_request->profile_name.'</td>
 				<td width="10"></td>
 				<td width="80"><b></b></td>
-				<td width="150" ><b>No. '.$itenerary->id.'</b></td>
+				<td width="150" ><b>No. '.$travel_request->id.'</b></td>
 			</tr>
 			<tr>
 				<td width="150"><b>Office/Unit/Program/Project :</b></td>
-				<td width="150" class="withLine">'.$itenerary->department_alias.'</td>
+				<td width="150" class="withLine">'.$travel_request->department_alias.'</td>
 				<td width="10"></td>
 				<td width="10"><b></b></td>
-				<td width="150" class="withLine" align="center"><b>'.date_format(date_create($itenerary->date_created),'m/d/Y') .'</b></td>
+				<td width="150" class="withLine" align="center"><b>'.date_format(date_create($travel_request->date_created),'m/d/Y') .'</b></td>
 			</tr>
 
 			<tr>
@@ -617,18 +637,18 @@ $html.='
 			</tr>';
 
 			
-				
+			
 					
 			$html.='<tr>
 				<td height="100"><br/>
-				<p>'.@$itenerary->location.' - '.@$itenerary->destination.'</p>
+				<p>'.$itenerary->location.' - '.$itenerary->destination.'</p>
 				<br/><br/>
 					<b>Note:</b> Php '.@$charges->gasoline_charge.', base'.@$charges->base.' km <br/>
 				';
 				
 				if(strlen(@$charges->notes)>1){
 				 
-				 	$html.='<br/>Advance Charging : <b>'.@ucfirst($charges->notes).'</b>';
+				 	$html.='<br/>Advance Charging : <b>'.@$charges->notes.'</b>';
 				 }
 
 				$html.='	
@@ -636,11 +656,11 @@ $html.='
 
 
 				<td><br/><br/>
-					<b>Php '.@$charges->charge.'</b><br/><br/>
-					<b>Charge :</b> Php '.@$charges->charge.'<br/>
+					<b>Php '.@$charges->gasoline_charge.'</b><br/><br/>
+					<b>Charge :</b> Php '.$charges->gasoline_charge.'<br/>
 					<b>Additional Charge:</b> Php '.@$charges->additional_charge.'<br/>
 					<b>Over time :</b> '.@$overtime_days.' day(s) and '.@$overtime_hours.' hour(s)<br/>
-					<b>Driver\'s Overtime Charge:</b> Php '.@round($charges->drivers_overtime_charge,2).'<br/>
+					<b>Driver\'s Overtime Charge:</b> Php '.@round($charges->drivers_charge,2).'<br/>
 				</td>
 				
 			</tr>';
