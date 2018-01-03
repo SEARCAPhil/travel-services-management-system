@@ -50,7 +50,7 @@
 
 		<div class="col col-md-12">
 			<h3 class="page-header">Travel Request Form</h3>
-			<p class="text-muted">Please select the appropriate type of travel that suites you.</p>	
+			<p class="text-muted">Please select the type of travel that suites you.</p>	
 			<br/>		
 		</div>
 		
@@ -131,7 +131,7 @@
 			</p>
 
 
-			<div class="col col-md-12 preview-sections">
+			<div class="col col-md-12 preview-sections show-for show-for-trp-only">
 				<p></p><div class="mini-circle"></div> <b>Type of Vehicle</b> <span id="personalVehicleTypeSaveStatus" class=""></span><p></p>
 				<p class="col col-md-12">
 					<input type="radio" name="vtype" value="1" select-mobi="1" checked="checked" 	class="vehicleTypeFormButton"> SUV 
@@ -140,7 +140,7 @@
 				</p>
 			</div>
 
-			<div class="col col-md-12 preview-sections">
+			<div class="col col-md-12 preview-sections show-for show-for-trp-only">
 				<p></p><div class="mini-circle"></div> <b>Mode of Payment</b> <span id="paymentSaveStatus" class=""></span><p></p>
 				<p class="col col-md-12">
 					<span>Cash <input type="radio" name="mode-of-payment" disabled="disabled" checked="checked" class="paymentFormButton" value="cash"></span>
@@ -149,10 +149,23 @@
 			</div>
 
 
+			<div class="col col-md-12 preview-sections">
+				<p></p><div class="mini-circle"></div> <b>Notes</b>
+				<button class="btn btn-success btn-xs" id="notesSaveButton" disabled="disabled"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+					<div id="notesSaveStatus" class="text-muted" style="float:right;height:20px;width:250px;overflow: hidden;position:relative;"></div>
+				</p>
+				<hr/>
+				<!--<p>ed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam </p>-->
+				<textarea class="col col-md-12 col-xs-12 preview-notes" id="form-notes" rows="15" cols="10" placeholder="Notes"></textarea>	
+			</div>
+
 
 
 			<button class="btn btn-success pull-right" onclick="event.preventDefault();$('.automobile-tab[data-type=official]').click();"><i class="material-icons md-18">check_circle</i> done</button>
 		</div>
+
+
+		
 
 	</div>
 
@@ -183,6 +196,7 @@ bindSourceOfFund()
 bindOtfSelection();
 bindVehicleType()
 bindPayment()
-
+bindRequestType()
+bindNotesSaveButton()
 });
 </script>

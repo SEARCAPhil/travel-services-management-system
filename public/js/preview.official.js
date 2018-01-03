@@ -212,8 +212,14 @@ function showOfficialTravelListPreview(id){
 		$('.preview-name').html(json[0].profile_name)
 		$('.preview-unit').html(json[0].department)
 		$('.preview-created').html(((json[0].date_created).split(' '))[0])
-		$('.preview-purpose').html(json[0].purpose)
+		$('.preview-purpose').html(json[0].purpose.replace(/[\n]/g,'<br/>'))
 		$('.preview-cash-advance').html(' &emsp;&emsp;<b>'+json[0].source_of_fund_value+'</b>')
+
+		if(json[0].notes){
+			var n=json[0].notes.replace(/[\n]/g,'<br/>');
+			$('.preview-notes').html(n)
+		}
+		
 		$('input[name="vtype"]').each(function(index,el){
 			if(el.value==json[0].vehicle_type) $(el).attr('checked','checked')
 			
@@ -230,6 +236,12 @@ function showOfficialTravelListPreview(id){
 				}
 			})
 		
+		if(json[0].request_type=='official'||json[0].request_type=='campus'){
+			$('.show-for-trp-only').hide()
+		}else{
+			$('.show-for-trp-only').show()
+		} 
+
 		
 		//.attr('checked','checked')
 		//
@@ -456,7 +468,7 @@ function showOfficialTravelItenerary(id){
 
 
 			//printables
-			if(official_travel_itenerary[x].request_type=="official") ttURL='travel/official/print/travel_request'
+			if(official_travel_itenerary[x].request_type=="official") ttURL='travel/official/print/trip_ticket'
 			if(official_travel_itenerary[x].request_type=="personal") ttURL='travel/personal/print/travel_request'
 			if(official_travel_itenerary[x].request_type=="campus") ttURL='travel/campus/print/notice_of_charges'
 

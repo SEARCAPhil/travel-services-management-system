@@ -97,7 +97,7 @@
 				</div>
 			</div>
 
-			<div class="col col-md-12 preview-sections">
+			<div class="col col-md-12 preview-sections  show-for show-for-trp-only">
 				<div class="col col-md-12 content-header-section">
 					<div class="content-header"><span class="pull-left"><b>Type of Vehicle</b></span> &emsp;</div>
 				</div>
@@ -109,7 +109,7 @@
 				</p>
 			</div>
 
-			<div class="col col-md-12 preview-sections">
+			<div class="col col-md-12 preview-sections show-for show-for-trp-only">
 				<div class="col col-md-12 content-header-section">
 					<div class="content-header"> <span class="pull-left"><b>Mode of Payment</b></span> &emsp;</div>
 				</div>
@@ -117,6 +117,18 @@
 					<span>Cash <input type="radio" name="mode-of-payment" disabled="disabled" value="cash"></span>
 					<span>Salary Deduction <input type="radio" name="mode-of-payment" disabled="disabled" value="sd"></span>
 				</p>
+			</div>
+
+
+			<div class="col col-md-12 preview-sections">
+				<div class="col col-md-12 content-header-section">
+					<div class="content-header"> <span class="pull-left"><b>Notes</b></span> </div>
+				</div>
+				<div class="col col-md-12">
+				
+					<p class="preview-notes"></p>
+				</div>
+				
 			</div>
 
 

@@ -156,7 +156,7 @@
 				</div>
 
 
-			<div class="col col-md-12 preview-sections">
+			<div class="col col-md-12 preview-sections  show-for show-for-trp-only">
 				<p></p><div class="mini-circle"></div> <b>Type of Vehicle</b> <span id="personalVehicleTypeSaveStatus" class=""></span><p></p>
 				<p class="col col-md-12">
 					<input type="radio" name="vtype" value="1" select-mobi="1" 	class="vehicleTypeFormButton"> SUV 
@@ -165,7 +165,7 @@
 				</p>
 			</div>
 
-			<div class="col col-md-12 preview-sections">
+			<div class="col col-md-12 preview-sections  show-for show-for-trp-only">
 				<p></p><div class="mini-circle"></div> <b>Mode of Payment</b> <span id="paymentSaveStatus" class=""></span><p></p>
 				<p class="col col-md-12">
 					<span>Cash <input type="radio" name="mode-of-payment" class="paymentFormButton" value="cash"></span>
@@ -173,7 +173,18 @@
 				</p>
 			</div>
 
+			<div class="col col-md-12 content-header-section" style="margin-top: 80px;">
+				<div class="content-header">
+					<b>Notes</b> <span id="notesSaveStatus" class=""></span>
+				</div>
+				
+				<p>&emsp;<button class="btn btn-default btn-xs" id="notesSaveButton"><span class="glyphicon glyphicon-floppy-disk"></span></button></p>
+				
 
+				<hr/>
+				<!--<p>ed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam </p>-->
+				<textarea class="col col-md-12 col-xs-12 preview-notes" id="form-notes" rows="15" cols="10" placeholder="Notes"></textarea>	
+			</div>
 
 				
 
@@ -200,6 +211,8 @@ $(document).ready(function(){
 	bindOtfSelection();
 	bindVehicleType()
 	bindPayment()
+	bindRequestType()
+	bindNotesSaveButton()
 
 });
 </script>

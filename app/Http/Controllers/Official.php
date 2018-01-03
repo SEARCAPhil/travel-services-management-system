@@ -749,6 +749,52 @@ class Official extends Controller
 
 
 
+    public function update_notes(Request $request){
+
+
+
+        try{
+
+            $id=$request->input('id');
+
+            $notes=$request->input('notes');
+
+
+
+            $this->pdoObject=DB::connection()->getPdo();
+
+
+
+            $this->pdoObject->beginTransaction();
+
+            $sql="UPDATE tr set notes=:notes where id=:id";
+
+            $statement=$this->pdoObject->prepare($sql);
+
+            $statement->bindParam(':notes',$notes);
+
+            $statement->bindParam(':id',$id);
+
+            $statement->execute();
+
+            $isUpdated=$statement->rowCount();
+
+            $this->pdoObject->commit();
+
+
+
+            echo $isUpdated;
+
+
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+
+
+    }
+
+
+
     /**
 
      * Store a newly created resource in storage.

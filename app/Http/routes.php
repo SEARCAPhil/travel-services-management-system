@@ -205,6 +205,12 @@ Route::get('api/travel/official/search/{param}',['uses' =>'Official@search']);
 Route::post('api/travel/official/purpose',['uses' =>'Official@create_purpose']);
 Route::put('api/travel/official/purpose',['uses' =>'Official@update_purpose']);
 
+
+
+#notes
+Route::put('api/travel/official/notes',['uses' =>'Official@update_notes']);
+
+
 #source of fund
 Route::put('api/travel/official/fund',['uses' =>'Official@update_source_of_fund']);
 

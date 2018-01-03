@@ -24,7 +24,7 @@
 	</nav>
 @endsection
 @section('status')
-	<div class="col col-md-3 col-sm-4 col-lg-2" style="background: rgb(60,60,60);min-height: 1080px;box-shadow: 0px 5px 15px rgba(200,200,200,0.3);">
+	<div class="col col-md-3 col-sm-4 col-lg-2" style="background: rgb(60,60,60);min-height: 1080px; height:100vh;box-shadow: 0px 5px 15px rgba(200,200,200,0.3);">
 
 		<div class="col col-md-12 col-xs-12 col-sm-12">
  			<ul class="list-unstyled main-menu main-menu-list pull-left">

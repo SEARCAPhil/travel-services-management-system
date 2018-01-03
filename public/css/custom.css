@@ -758,3 +758,7 @@ margin-right: -60%;
 transform: rotate(-95deg);
 border-top:4px solid rgb(32,199,150);
 }
+
+.show-for{
+	display: none;
+}

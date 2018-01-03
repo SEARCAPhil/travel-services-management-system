@@ -53,6 +53,7 @@ function bindOfficialPurposeSaveButton(){
 					changeButtonState(".paymentFormButton",'enabled')
 					changeButtonState('.vehicleTypeFormButton','enabled')
 					changeButtonState('#source_of_fund','enabled')
+					changeButtonState('#notesSaveButton','enabled')
 				}
 			});
 		}else{
@@ -272,6 +273,67 @@ function bindPayment(){
 				}
 			});
 	})
-
 }
 
+
+function bindRequestType(){
+	$('[name="request_type"]').off('change')
+	$('[name="request_type"]').on('change',function(){ 
+
+		if(this.value=='official'){
+			$('.show-for-trp-only').hide()
+		}
+
+
+		if(this.value=='personal'){
+			$('.show-for-trp-only').show()
+		}
+
+		if(this.value=='campus'){
+			$('.show-for-trp-only').hide()
+		}
+
+	})
+}
+
+
+/*
+|----------------------------------------------------------------------------
+| Bind NOTES
+|---------------------------------------------------------------------------
+*/
+
+function bindNotesSaveButton(){
+	$('#notesSaveButton').off('click')
+	$('#notesSaveButton').on('click',function(e){
+		e.preventDefault();
+
+		if($('#form-notes').val().length<2){
+			alert('Sorry!Unable to handle request.Please check all the fields if not empty.')
+			return 0;
+		} else{
+			//loading
+			showLoading('#notesSaveStatus',' <span>saving . . .</span>&emsp;<span><img src="img/loading.png" class="loading-circle" width="10px"/></span>')
+			setTimeout(function(){  showLoading('#notesSaveStatus') },1000)
+		}
+		
+
+		//update
+		var data={_token:$('input[name=_token]').val(),notes:$('#form-notes').val(),id:form_id}
+
+
+		$.ajax({
+			url:'api/travel/official/notes',
+			data:data,
+			method:'PUT',
+			success:function(res){
+				if(res>0&&res.length<50){
+					alert('Updated Successfully!')
+				}else{
+					alert('Sorry!Unable to handle request.Please try again later.')
+				}
+			}
+		});	
+
+	})
+}

@@ -479,11 +479,10 @@ function print_notice_of_charges($id){
 			$pdf->setFontSize(8);
 			$pdf->Ln(10);
 			$pdf->setFontSize(9);
-			//$this->image("../model/img/Logo Searca.png",20,'',15);
-			//$this->Cell(0, 0, '<img src="../model/img/Logo Searca.png"/>', 0, 2, 'L', 0, '', 0, false, 'T', 'B');
+			$pdf->image("img/logo-new.png",130,'',35);
+			//$pdf->Cell(0, 0, '<img src="img/logo-new.png"/>', 0, 2, 'L', 0, '', 0, false, 'T', 'B');
 			//$this->Cell(0, 0, 'Southeast Asian Ministers of Education Organization', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
-			$pdf->Cell(0, 0, 'SOUTHEAST ASIAN REGIONAL CENTER FOR GRADUATE STUDY', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
-			$pdf->Cell(0, 0, ' AND RESEARCH IN AGRICULTURE', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
+			$pdf->Cell(0, 15, 'SOUTHEAST ASIAN REGIONAL CENTER FOR GRADUATE STUDY AND RESEARCH IN AGRICULTURE', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
 			$pdf->Cell(0, 0, 'College, Laguna, 4031, Philippines', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
 			$pdf->setFontSize(15);
 			$pdf->Cell(0, 10, 'NOTICE OF CHARGES', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
@@ -533,6 +532,34 @@ function print_notice_of_charges($id){
 	self::is_creator($travel_request->requested_by);
 
 
+$projects='';
+for($a=0;$a<count($travel_request->projects);$a++){
+
+	$projects.='<p>'.$travel_request->projects[$a]->project.'</p>';
+}
+
+$fund='';
+
+switch ($travel_request->source_of_fund) {
+	case 'opf':
+		$fund='Operating Funds';
+		break;
+	case 'otf':
+		$fund='Other Funds';
+		break;
+	case 'otfs':
+		$fund='Other Funds (Scholars)';
+		break;
+	case 'sf':
+		$fund='Special Funds';
+		break;
+
+	default:
+		# code...
+		break;
+}
+
+
     	// create some HTML content
 $html ='<style>
 			.passenger-table{margin-bottom:20px; }
@@ -576,11 +603,11 @@ $html ='<style>
 				<td width="250" class="withLine">'.$travel_request->department.'</td>
 			</tr>
 			<tr>
-				<td width="50"><b>For:</b></td>
+				<td width="50"><b>Purpose:</b></td>
 				<td width="250" class="withLine"></td>
 				<td width="140"></td>
 				<td width="40"><b>Month:</b></td>
-				<td width="250" class="withLine">'.date_format(date_create($itenerary->date_created),'F') .'</td>
+				<td width="250" class="withLine">'.date_format(date_create($itenerary->date_created),'F') .' '.date_format(date_create($itenerary->date_created),'Y') .'</td>
 			</tr>
 
 			
@@ -608,7 +635,7 @@ $html.='
 				<td></td>
 				<td height="60">
 				<br/><br/>
-					<b>'.$itenerary->location.' - '.$itenerary->destination.'</b>';
+					<b>'.$itenerary->location.' - '.$itenerary->destination.'</b><br/><br/><b>'.$fund.'</b> '.$projects;
 
 
 					if(strlen(@$charges->notes)>1){
@@ -622,26 +649,40 @@ $html.='
 
 
 				<td><br/><br/>
-					<b>Php '.@number_format(round($charges->total,2)).'</b><br/><br/>
+					Php '.@number_format(round($charges->total,2)).'<br/><br/>
 					
 				</td>
 				
 			</tr>';
 
 			$html.='<tr>
+				<td colspan="2" style="text-align:right;">
+					TOTAL
+				</td>
+
+
+				<td>
+					<b>Php '.@number_format(round($charges->total,2)).'</b>
+					
+				</td>
+				
+			</tr>';
+
+
+			$html.='<tr>
 				<td><br/><br/>
 					
-
-					Prepared by:<br/><br/>
-					<b>VAN-ALLEN S. LIMBACO</b><br/>
-					Transport Service Assistant<br/><br/>
+					<b>Prepared By:</b>
+					<br/><br/>
+					<b  style="text-align:center;">VAN-ALLEN S. LIMBACO</b><br/>
+					<span style="text-align:center;font-size:9px;">Transport Service Assistant</span><br/><br/>
 
 				</td>
 				<td>
 					<br/><br/>
 					<b>Certified By:</b><br/><br/>
-					<b>RICARDO A. MENORCA</b><br/>
-					HEAD, GSU
+					<b style="text-align:center;">RICARDO A. MENORCA</b><br/>
+					<span style="text-align:center;font-size:9px;">Unit Head, General Services</span>
 					<br/><br/>
 
 				</td>
@@ -649,8 +690,8 @@ $html.='
 				<td>
 					<br/><br/>
 					<b>Conforme:</b><br/><br/>
-					<b>'.$travel_request->recommended_by.'</b><br/>
-					'.$travel_request->recommended_by_position.'<br/>
+					<b style="text-align:center;">'.$travel_request->recommended_by.'</b><br/>
+					<span style="text-align:center;font-size:9px;">'.$travel_request->recommended_by_position.'</span><br/>
 
 				</td>
 				
