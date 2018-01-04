@@ -233,6 +233,7 @@ class Directory extends Controller
 					
 				}
 
+
 				if(is_null($result)){
 					//director by default
 					$dept=0;
@@ -589,14 +590,14 @@ class Directory extends Controller
     public function update_signatory_to_odda($id){
         //static users id
         //currently set to ATR
-        self::update_signatory($id,25);
+        self::update_signatory($id,3);
     }
 
 
     public function update_signatory_to_od($id){
         //static users id
         //currently set to GCS
-        self::update_signatory($id,30);
+        self::update_signatory($id,2);
     }
 
 

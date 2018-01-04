@@ -35,7 +35,6 @@ use App\Http\Controllers\Directory;
 @session_start();
 
 
-
 class Official extends Controller
 
 {
@@ -437,10 +436,8 @@ class Official extends Controller
             #get signatory
 
             $official_signatory=new Directory();
-
             $signatory=json_decode($official_signatory->signatory_department($_SESSION['dept']));
 
-            
 
             $approved_by=@$signatory[0]->profile_name;
             $approved_by_id=NULL;
@@ -454,8 +451,8 @@ class Official extends Controller
 
             if($type=='personal'||$type=='campus'){
                 //set to gsu head by default
-                //currently RAM: 31
-                $approved_by_id=31; 
+                //currently RAM: 5
+                $approved_by_id=5; 
             }
 
             if($type=='campus'){

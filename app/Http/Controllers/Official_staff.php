@@ -112,7 +112,7 @@ class Official_staff extends Controller
                     //set current signatory to OODA deputy
                     //otherwise leave it as is
                     ///currently OODA =25
-                    //GSU HEAD profile_id=31 , uid=105
+                    //GSU HEAD profile_id=5 , uid=105
                     if($uid==105){
                         $directory_class->update_signatory_to_odda($tr->tr); 
                         $directory_class->update_approval_recommending_to_null($tr->tr);    
@@ -252,9 +252,9 @@ class Official_staff extends Controller
                 if($tr->request_type=='personal'||$tr->request_type=='campus'){
                     //if GSU head will be removed on the list 
                     // revert to default
-                    // GSU HEAD default profile_id=31
+                    // GSU HEAD default profile_id=5 , uid=105
                     if($pass->uid==105){
-                        $directory_class->update_signatory($tr->tr,31);
+                        $directory_class->update_signatory($tr->tr,5);
                         $directory_class->update_approval_recommending($tr->tr,$signatory[0]->profile_id);       
                     }
 

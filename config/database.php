@@ -64,6 +64,9 @@ return [
             'prefix' => '',
             'strict' => false,
             'engine' => null,
+            'options' => [
+                PDO::MYSQL_ATTR_INIT_COMMAND => 'SET time_zone = \'+00:00\';'
+            ]
         ],
 
         'pgsql' => [
