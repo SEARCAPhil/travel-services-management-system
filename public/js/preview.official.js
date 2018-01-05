@@ -469,7 +469,7 @@ function showOfficialTravelItenerary(id){
 
 			//printables
 			if(official_travel_itenerary[x].request_type=="official") ttURL='travel/official/print/trip_ticket'
-			if(official_travel_itenerary[x].request_type=="personal") ttURL='travel/personal/print/travel_request'
+			if(official_travel_itenerary[x].request_type=="personal") ttURL='travel/personal/print/statement_of_account'
 			if(official_travel_itenerary[x].request_type=="campus") ttURL='travel/campus/print/notice_of_charges'
 
 			var htm=`<details id="official_travel_itenerary`+official_travel_itenerary[x].id+`" data-menu="iteneraryMenu" data-selection="`+official_travel_itenerary[x].id+ `" class="contextMenuSelector official_travel_itenerary`+official_travel_itenerary[x].id+` col col-md-12">
