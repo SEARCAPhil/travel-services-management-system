@@ -163,13 +163,13 @@ class Campus_printables extends Controller
 					</tr>
 
 					<tr>
-						<td width="180">
+						<td width="180"><br/>
 							<div class="withLine" style="border 1px solid rgb(20,20,20);text-align:center;">'.$details->recommended_by.'</div>
 						</td>
 						<td width="5"></td>
 						
 						<td width="100"></td>
-						<td width="180">
+						<td width="180"><br/>
 							<div class="withLine" style="border 1px solid rgb(20,20,20);text-align:center;">'.$details->approved_by.'</div>
 						</td>
 						<td width="10"></td>
@@ -235,8 +235,31 @@ class Campus_printables extends Controller
 //prevent other users to view this document
 	//self::is_creator($travel_request->requested_by);
 
+
     	// create some HTML content
 $html ='<style>
+
+			.sa-table{margin-bottom:20px; border:1px solid rgb(80,80,80);}
+			.sa-table td{margin-bottom:20px; border:1px solid rgb(80,80,80);}
+			.withLine{border-bottom:1px solid rgb(20,20,20);overflow:hidden;text-align:left;padding-bottom:10px;margin-right:50px;}
+		</style>
+
+
+	<article>
+
+		<table>
+			<tr>
+				<td width="220"></td><td></td><td width="100" style="text-align:right;font-weight:bold;border:1px solid fefefe;"><b>&nbsp;NO. '.$id.'&nbsp;</b>&nbsp;</td>
+			</tr>
+
+			
+		</table>
+		<br/>
+
+	</article>';
+
+    	// create some HTML content
+$html .='<style>
 			.passenger-table{margin-bottom:20px; }
 			.passenger-table td, .passenger-table th{padding: 0; border-right:30px solid #fff;}
 			.passenger-table td{}
@@ -559,9 +582,28 @@ switch ($travel_request->source_of_fund) {
 		break;
 }
 
-
-    	// create some HTML content
 $html ='<style>
+
+			.sa-table{margin-bottom:20px; border:1px solid rgb(80,80,80);}
+			.sa-table td{margin-bottom:20px; border:1px solid rgb(80,80,80);}
+			.withLine{border-bottom:1px solid rgb(20,20,20);overflow:hidden;text-align:left;padding-bottom:10px;margin-right:50px;}
+		</style>
+
+
+	<article>
+
+		<table>
+			<tr>
+				<td width="400"></td><td></td><td width="100" style="text-align:right;font-weight:bold;border:1px solid fefefe;"><b>&nbsp;NO. '.$id.'&nbsp;</b>&nbsp;</td>
+			</tr>
+
+			
+		</table>
+		<br/>
+
+	</article>';
+    	// create some HTML content
+$html .='<style>
 			.passenger-table{margin-bottom:20px; }
 			.passenger-table td, .passenger-table th{padding: 0; border-right:30px solid #fff;}
 			.passenger-table td{}
@@ -572,11 +614,6 @@ $html ='<style>
 
 	<article>
 
-		<table>
-			<tr>
-				<td width="400"></td><td></td><td width="100"><b>NO. '.$itenerary->id.'</b><br/></td>
-			</tr>
-		</table>
 		<br/>
 
 		<table>

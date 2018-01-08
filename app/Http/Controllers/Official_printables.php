@@ -247,8 +247,6 @@ class Official_printables extends Controller
 
 
 
-
-
     	// create some HTML content
 $html ='<style>
 
@@ -262,11 +260,27 @@ $html ='<style>
 
 		<table>
 			<tr>
-				<td width="220"></td><td></td><td width="100"><b>NO. '.$id.'</b></td>
+				<td width="220"></td><td></td><td width="100" style="text-align:right;font-weight:bold;border:1px solid fefefe;"><b>&nbsp;NO. '.$id.'&nbsp;</b>&nbsp;</td>
 			</tr>
 
 			
 		</table>
+		<br/>
+
+	</article>';
+
+    	// create some HTML content
+$html .='<style>
+
+			.sa-table{margin-bottom:20px; border:1px solid rgb(80,80,80);}
+			.sa-table td{margin-bottom:20px; border:1px solid rgb(80,80,80);}
+			.withLine{border-bottom:1px solid rgb(20,20,20);overflow:hidden;text-align:left;padding-bottom:10px;margin-right:50px;}
+		</style>
+
+
+	<article>
+
+
 		<br/>
 
 		<table>
@@ -845,10 +859,31 @@ $html.='	<article class="col col-md-12">
 
 
 
+    	// create some HTML content
+$html ='<style>
+
+			.sa-table{margin-bottom:20px; border:1px solid rgb(80,80,80);}
+			.sa-table td{margin-bottom:20px; border:1px solid rgb(80,80,80);}
+			.withLine{border-bottom:1px solid rgb(20,20,20);overflow:hidden;text-align:left;padding-bottom:10px;margin-right:50px;}
+		</style>
+
+
+	<article>
+
+		<table>
+			<tr>
+				<td width="220"></td><td></td><td width="100" style="text-align:right;font-weight:bold;border:1px solid fefefe;"><b>&nbsp;NO. '.$id.'&nbsp;</b>&nbsp;</td>
+			</tr>
+
+			
+		</table>
+		<br/>
+
+	</article>';
 
 
     	// create some HTML content
-$html ='<style>
+$html .='<style>
 			.passenger-table{margin-bottom:20px; }
 			.passenger-table td, .passenger-table th{padding: 0; border-right:30px solid #fff;}
 			.passenger-table td{}
