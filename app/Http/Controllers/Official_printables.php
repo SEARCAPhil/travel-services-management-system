@@ -756,7 +756,7 @@ $html.='	<article class="col col-md-12">
 			self::is_creator($details->requested_by);
 			
 
-			$pdf->SetY(-50);
+			$pdf->SetY(-60);
 			// Set font
 	        $pdf->SetFont('helvetica', 'N', 9);
 
@@ -775,7 +775,7 @@ $html.='	<article class="col col-md-12">
 				<tr>
 						<td></td>
 						<td width="160"></td>
-						<td><b>Requested By : </b>  </td><td></td>
+						<td><b>Requested By : </b><br/>  </td><td></td>
 
 					</tr>
 					<tr>
@@ -788,9 +788,9 @@ $html.='	<article class="col col-md-12">
 
 
 					<tr>
-						<td><b>Approval Recommended</b></td>
+						<td><br/><br/><b>Approval Recommended</b><br/></td>
 						<td width="160"></td>
-						<td  width="70"><b>Approved:</b>  </td>
+						<td  width="70"><br/><br/><b>Approved:</b>  </td>
 						<td></td>
 
 					</tr>
@@ -999,7 +999,7 @@ $html.='
     			$html.='<tr>
 					<td>'.$itenerary[$a]->departure_date.'</td>
 					<td>'.$itenerary[$a]->location.'</td>
-					<td>'.$itenerary[$a]->destination.'</td>
+					<td>'.html_entity_decode($itenerary[$a]->destination).'</td>
 					<td>'.$mode_of_transport.'</td>
 					<td>'.$itenerary[$a]->departure_time.'</td>
 				</tr>';
