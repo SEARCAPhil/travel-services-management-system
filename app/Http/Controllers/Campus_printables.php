@@ -398,7 +398,6 @@ $html.='
 					<td>'.$itenerary[$a]->departure_date.'</td>
 					<td>'.$itenerary[$a]->location.'</td>
 					<td>'.$itenerary[$a]->destination.'</td>
-					<td>'.$mode_of_transport.'</td>
 					<td>'.$itenerary[$a]->departure_time.'</td>
 				</tr>';
     		}
