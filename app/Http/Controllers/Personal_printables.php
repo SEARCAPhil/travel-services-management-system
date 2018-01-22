@@ -254,7 +254,7 @@ $html ='<style>
 
 		<table>
 			<tr>
-				<td width="220"></td><td></td><td width="100" style="text-align:right;font-weight:bold;border:1px solid fefefe;"><b>&nbsp;NO. '.$id.'&nbsp;</b>&nbsp;</td>
+				<td width="220"></td><td></td><td width="100" style="text-align:right;font-weight:bold;font-size:12px;font-style:italic;color:gray;"><b>&nbsp;NO. '.$id.'&nbsp;</b>&nbsp;</td>
 			</tr>
 
 			
@@ -279,7 +279,7 @@ $html .='<style>
 
 		<table>
 			<tr>
-				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date_format(date_create($itenerary[0]->date_created),'m/d/Y') .'</b></td>
+				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date('m/d/Y').'</b></td>
 			</tr>
 			<tr>
 				<td></td><td></td><td style="text-align:center;">Date</td>
@@ -393,7 +393,7 @@ for($a=0;$a<$custom_total_count;$a++){
 	$html.='<tr class="tr-passenger">
 			<td class="withLine">'.$custom[$a]->full_name.'</td>
 			<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$custom[$a]->designation.'</td>
-			<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;<i>N/A</i></td>
+			<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		</tr>';	
 }
 
@@ -625,14 +625,14 @@ $html ='<style>
 				<td width="150" class="withLine">'.$travel_request->profile_name.'</td>
 				<td width="10"></td>
 				<td width="80"><b></b></td>
-				<td width="150" style="font-weight:bold;border:1px solid fefefe;"> <b>No. '.$travel_request->id.'</b></td>
+				<td width="150" style="font-weight:bold;font-size:12px;font-style:italic;color:gray;"> <b>No. '.$travel_request->id.'</b></td>
 			</tr>
 			<tr>
 				<td width="150"><b>Office/Unit/Program/Project :</b></td>
 				<td width="150" class="withLine">'.$travel_request->department_alias.'</td>
 				<td width="10"></td>
 				<td width="10"><b></b></td>
-				<td width="150" class="withLine" align="center"><b>'.date_format(date_create($travel_request->date_created),'m/d/Y') .'</b></td>
+				<td width="150" class="withLine" align="center"><b>'.date('m/d/Y') .'</b></td>
 			</tr>
 
 			<tr>

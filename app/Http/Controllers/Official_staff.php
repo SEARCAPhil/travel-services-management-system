@@ -83,7 +83,7 @@ class Official_staff extends Controller
                 
                 if($tr->request_type=='official'){
                     //if approving is one of the passengers
-                    if($tr->approved_by_uid==$uid){ 
+                    if(@$tr->approved_by_uid==$uid){ 
                         
                             //change signatory to ODDA here
                             // approver is the unit head by default, if he/she is one of the passengers,

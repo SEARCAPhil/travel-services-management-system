@@ -95,7 +95,7 @@ class Campus_printables extends Controller
 			//$this->Cell(0, 0, 'Southeast Asian Ministers of Education Organization', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
 			$pdf->Cell(0, 0, 'SOUTHEAST ASIAN REGIONAL CENTER FOR GRADUATE STUDY', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
 			$pdf->Cell(0, 0, ' AND RESEARCH IN AGRICULTURE', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
-			$pdf->Cell(0, 0, 'College, Laguna, 4031, Philippines', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
+			$pdf->Cell(0, 0, 'College, Los Baños, Laguna, 4031, Philippines', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
 			$pdf->setFontSize(15);
 			$pdf->Cell(0, 10, 'CAMPUS TRAVEL REQUEST', 0, 2, 'C', 0, '', 0, false, 'T', 'B');
 			$pdf->setFontSize(10);
@@ -249,7 +249,7 @@ $html ='<style>
 
 		<table>
 			<tr>
-				<td width="220"></td><td></td><td width="100" style="text-align:right;font-weight:bold;border:1px solid fefefe;"><b>&nbsp;NO. '.$id.'&nbsp;</b>&nbsp;</td>
+				<td width="220"></td><td></td><td width="100" style="text-align:right;font-weight:bold;font-size:12px;font-style:italic;color:gray;"><b>&nbsp;NO. '.$id.'&nbsp;</b>&nbsp;</td>
 			</tr>
 
 			
@@ -593,7 +593,7 @@ $html ='<style>
 
 		<table>
 			<tr>
-				<td width="400"></td><td></td><td width="100" style="text-align:right;font-weight:bold;border:1px solid fefefe;"><b>&nbsp;NO. '.$id.'&nbsp;</b>&nbsp;</td>
+				<td width="400"></td><td></td><td width="100" style="text-align:right;font-weight:bold;font-size:12px;font-style:italic;color:gray;"><b>&nbsp;NO. '.$id.'&nbsp;</b>&nbsp;</td>
 			</tr>
 
 			
@@ -617,7 +617,7 @@ $html .='<style>
 
 		<table>
 			<tr>
-				<td width="400"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date_format(date_create($itenerary->date_created),'m/d/Y') .'</b></td>
+				<td width="400"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date('m/d/Y') .'</b></td>
 			</tr>
 			<tr>
 				<td></td><td></td><td style="text-align:center;"><b>Date</b><br/></td>

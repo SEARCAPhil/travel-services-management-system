@@ -260,7 +260,7 @@ $html ='<style>
 
 		<table>
 			<tr>
-				<td width="220"></td><td></td><td width="100" style="text-align:right;font-weight:bold;border:1px solid fefefe;"><b>&nbsp;NO. '.$id.'&nbsp;</b>&nbsp;</td>
+				<td width="220"></td><td></td><td width="100" style="text-align:right;font-weight:bold;font-size:12px;font-style:italic;color:gray;"><b>&nbsp;NO. '.$id.'&nbsp;</b>&nbsp;</td>
 			</tr>
 
 			
@@ -285,7 +285,7 @@ $html .='<style>
 
 		<table>
 			<tr>
-				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date_format(date_create($travel_request->date_created),'m/d/Y') .'</b></td>
+				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date('m/d/Y').'</b></td>
 			</tr>
 			<tr>
 				<td></td><td></td><td style="text-align:center;"><b>Date</b></td>
@@ -305,7 +305,7 @@ $html.='	<article class="col col-md-12">
 
 				</td>
 				<td>
-					<p><label> <b>Date:</b></label> <span> </span></p>
+					<p><label> <b>ADS # : </b></label> <span> </span></p>
 					
 				</td>				
 			</tr>
@@ -313,7 +313,7 @@ $html.='	<article class="col col-md-12">
 
 			<!--requesting party-->
 			<tr>
-				<td> Requesting Party</td>
+				<td> Requesting Party : <b>'.$travel_request->profile_name.'</b></td>
 				<td> Source of fund:  <b> '.$travel_request->source_of_fund_value.'</b>'; 
 
 			if($travel_request->source_of_fund=='otf'){
@@ -368,11 +368,12 @@ $html.='	<article class="col col-md-12">
 	}
 
 	for($a=0;$a<$custom_total_count;$a++){
+
 		$passenger_count++;
 		$html.='<tr class="tr-passenger">
 				<td class="withLine">'.$custom[$a]->full_name.'</td>
 				<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$custom[$a]->designation.'</td>
-				<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;<i>N/A</i></td>
+				<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			</tr>';	
 	}
 
@@ -544,41 +545,40 @@ $html.='	<article class="col col-md-12">
 
 				<td> 
 					<br/><br/>
-				<table>
+				<table cellspacing="10">
 					<tr>
 						<td width="80">Date</td>
-						<td width="100"><b>'.$itenerary->departure_date.'</b></td>
+						<td width="80"><b>'.$itenerary->departure_date.'</b></td>
 						<td><b>'.$itenerary->returned_date.'</b></td>
 					</tr>
 					<tr>
 						<td width="80">Time</td>
-						<td width="100"><b>'.$itenerary->departure_time.'</b></td>
+						<td width="80"><b>'.$itenerary->departure_time.'</b></td>
 						<td><b>'.$itenerary->returned_time.'</b></td>
 					</tr>
 					<tr>
 						<td width="80">Mileage Reading</td>
-						<td width="100">'.@$charges->start.'</td>
+						<td width="80">'.@$charges->start.'</td>
 						<td>'.@$charges->end.'</td>
 					</tr>
 					<tr>
 						<td width="80">Signature of driver</td>
-						<td width="100"></td>
+						<td width="80"></td>
 						<td></td>
 					</tr>
 					<tr>
 						<td width="80">Attested by;</td>
-						<td width="100"></td>
+						<td width="80"></td>
 						<td></td>
 					</tr>
 					<tr>
 						<td width="80">Guard-on-duty</td>
-						<td width="100"></td>
+						<td width="80"></td>
 						<td></td>
 					</tr>
 				</table>
 				<br/><br/>
-				<br/><br/>
-				<br/><br/>
+
 					<p>I hereby certify that the vehicle was used solely for the official purpose/s stated above.</p>
 					<br/><br/><br/><br/><br/>
 					<table style="text-align:center;">
@@ -756,7 +756,7 @@ $html.='	<article class="col col-md-12">
 			self::is_creator($details->requested_by);
 			
 
-			$pdf->SetY(-60);
+			$pdf->SetY(-57);
 			// Set font
 	        $pdf->SetFont('helvetica', 'N', 9);
 
@@ -872,7 +872,7 @@ $html ='<style>
 
 		<table>
 			<tr>
-				<td width="220"></td><td></td><td width="100" style="text-align:right;font-weight:bold;border:1px solid fefefe;"><b>&nbsp;NO. '.$id.'&nbsp;</b>&nbsp;</td>
+				<td width="220"></td><td></td><td width="100" style="text-align:right;font-weight:bold;font-size:12px;font-style:italic;color:gray;"><b>&nbsp;NO. '.$id.'&nbsp;</b>&nbsp;</td>
 			</tr>
 
 			
@@ -897,7 +897,7 @@ $html .='<style>
 
 		<table>
 			<tr>
-				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date_format(date_create($details->date_created),'m/d/Y') .'</b></td>
+				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date('m/d/Y').'</b></td>
 			</tr>
 			<tr>
 				<td></td><td></td><td style="text-align:center;">Date</td>
@@ -949,11 +949,17 @@ for($a=0;$a<$scholars_total_count;$a++){
 }
 
 for($a=0;$a<$custom_total_count;$a++){
+
+	#prevent too long designation
+	if(strlen($custom[$a]->designation)>=32){
+		$custom[$a]->designation=substr($custom[$a]->designation, 0,28).'...';
+	}
+		
 	$passenger_count++;
 	$html.='<tr class="tr-passenger">
 			<td class="withLine">'.$custom[$a]->full_name.'</td>
 			<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$custom[$a]->designation.'</td>
-			<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;<i>N/A</i></td>
+			<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		</tr>';	
 }
 

@@ -1,10 +1,4 @@
-<div class="col col-md-8 col-sm-8">
-	<p class="row col col-md-10" style="display: none;">
-		<b class="text-danger">Page /<span class="list-total-pages">1</span></b>
-		<input type="number" class="form-control list-current-page" value="1">
-	</p>
 
-</div>
 <div class="col col-md-9 col-sm-10 col-lg-6 col-lg-offset-2" style="margin-top: 50px;">
 	<ul class="list-unstyled travel-link-ul">
 		<li class="active"><a href="#" class="trip-link" data-type="Scheduled">Scheduled</a> </li>
@@ -16,6 +10,13 @@
 
 		 <div class="col col-md-12">
 		 	<div class="verified_travel_result"></div>
+		 	<div class="col col-md-8 col-sm-8">
+				<p class="row col col-md-10">
+					<b class="text-danger">Page /<span class="list-total-pages">1</span></b>
+					<input type="number" class="form-control list-current-page" value="1">
+				</p>
+
+			</div>
 		 </div>
 	</div>
 </div>

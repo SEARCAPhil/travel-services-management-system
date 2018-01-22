@@ -296,6 +296,50 @@ function bindRequestType(){
 	})
 }
 
+function bindShowSignatorySelector(){
+	var data={_token:$('input[name=_token]').val()}
+		$.ajax({
+			url:'api/directory/signatories',
+			data:data,
+			method:'GET',
+			success:function(res){
+				var res = JSON.parse(res)
+				if(res.length>0){
+					var opt
+					for(var x=0;x<res.length; x++){
+						console.log(res[x])
+						opt+=`<option value="${res[x].account_profile_id}">${res[x].profile_name}</option>`
+					}
+					$('#form-signatory').html(opt)
+				}else{
+					alert('Sorry!Unable to show signatories.Please try again later.')
+				}
+			}
+		});	
+
+}
+
+function bindChangeSignatory(){
+	$('#signatorySaveButton').off('click')
+	$('#signatorySaveButton').on('click',function(){
+		var data={_token:$('input[name=_token]').val(),value:$('#form-signatory').val(),id:form_id}
+		$.ajax({
+			url:'api/travel/official/signatory',
+			data:data,
+			method:'PUT',
+			success:function(res){
+				var res = JSON.parse(res)
+				if(res==1){
+					$('.preview-signatory').html(`<b>${$('#form-signatory')[0].selectedOptions[0].innerText}</b>`)
+				
+				}else{
+					alert('Sorry!Unable to change signatory.Please try again later.')
+				}
+			}
+		});	
+	})
+}
+
 
 /*
 |----------------------------------------------------------------------------

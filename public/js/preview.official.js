@@ -214,6 +214,7 @@ function showOfficialTravelListPreview(id){
 		$('.preview-created').html(((json[0].date_created).split(' '))[0])
 		$('.preview-purpose').html(json[0].purpose.replace(/[\n]/g,'<br/>'))
 		$('.preview-cash-advance').html(' &emsp;&emsp;<b>'+json[0].source_of_fund_value+'</b>')
+		$('.preview-signatory').html(' &emsp;&emsp;<b>'+json[0].approved_by+'</b>')
 
 		if(json[0].notes){
 			var n=json[0].notes.replace(/[\n]/g,'<br/>');

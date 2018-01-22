@@ -390,13 +390,30 @@ function appendToList(callback=function(){}){
 		if(list[x].trp_status==4){
 			activeClass='closed';
 		}
-		//append to the DIV
-		htm+=`<dd id="`+list[x].id+`" class="`+activeClass+`">
+
+		if(localStorage.getItem('priv')=='admin'){
+			//append to the DIV
+			htm+=`<dd id="`+list[x].id+`" class="`+activeClass+`">
+				<h4><b>`+list[x].id+`</b>  <small class="text-danger">`+status_message+`</small></h4>
+				<p><small><b>Date created : </b>`+list[x].date_created+`</small><br/>
+					<small><b>Requested by : </b><span class="badge">`+list[x].profile_name+`</span></small>
+				<p><div class="list-active-status" style="float:left;"></div></p>
+				<div style="clear:both;"></div>
+				`
+		}else{
+			htm+=`<dd id="`+list[x].id+`" class="`+activeClass+`">
+
 			<h4><b>`+list[x].id+`</b>  <small class="text-danger">`+status_message+`</small></h4>
+
 			<p><small>`+purpose+`</small></p>
+
 			<p><div class="list-active-status" style="float:left;"></div></p>
+
 			<div style="clear:both;"></div>
+
 			`
+		}
+
 
 			htm+=`</dd>`
 

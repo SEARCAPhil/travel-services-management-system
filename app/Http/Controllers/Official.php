@@ -295,7 +295,7 @@ class Official extends Controller
 
 
 
-                $sql="SELECT * FROM tr where status!=0 and status!=5 and request_type=:type ORDER BY date_created DESC LIMIT :start, 10";
+                $sql="SELECT tr.*,account_profile.profile_name FROM tr LEFT JOIN account_profile on account_profile.id = tr.requested_by where status!=0 and status!=5 and request_type=:type ORDER BY date_created DESC LIMIT :start, 10";
 
                 $statement=$this->pdoObject->prepare($sql);
 
@@ -733,6 +733,50 @@ class Official extends Controller
             $this->pdoObject->commit();
 
 
+
+            echo $isUpdated;
+
+
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+
+
+    } 
+
+
+
+    public function update_signatory(Request $request){
+
+
+
+        try{
+
+            $id=$request->input('id');
+
+            $value=$request->input('value');
+
+
+
+            $this->pdoObject=DB::connection()->getPdo();
+
+
+
+            $this->pdoObject->beginTransaction();
+
+            $sql="UPDATE tr set approved_by=:approved_by where id=:id";
+
+            $statement=$this->pdoObject->prepare($sql);
+
+            $statement->bindParam(':approved_by',$value);
+
+            $statement->bindParam(':id',$id);
+
+            $statement->execute();
+
+            $isUpdated=$statement->rowCount();
+
+            $this->pdoObject->commit();
 
             echo $isUpdated;
 

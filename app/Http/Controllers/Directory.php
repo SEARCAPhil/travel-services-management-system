@@ -208,6 +208,9 @@ class Directory extends Controller
 	}
 
 
+
+
+
 	function signatory_department($id){
 		try{
 				$this->pdoObject=DB::connection()->getPdo();
@@ -253,6 +256,36 @@ class Directory extends Controller
 		}catch(Exception $e){ echo $e->getMessage(); }
 	}
 
+	function signatory_list(){
+		try{
+				$this->pdoObject=DB::connection()->getPdo();
+				
+				
+
+			
+				$view_account_sql="SELECT account_profile.profile_name,account_profile.id as profile_id,department.dept_name,signatory.priority,signatory.account_profile_id ,account_profile.uid FROM signatory LEFT JOIN  account_profile on  account_profile.id=signatory.account_profile_id LEFT JOIN department on signatory.dept_id=department.dept_id where account_profile.profile_name IS NOT NULL  GROUP BY account_profile.uid ORDER BY signatory.id ";
+				$view_profile_statement=$this->pdoObject->prepare($view_account_sql);
+				$view_profile_statement->execute();
+				$result=NULL;
+
+				$data=NULL;
+				while ($row=$view_profile_statement->fetch(\PDO::FETCH_ASSOC)) {
+
+					#check if user id is the same with its signatory
+					#if so, the user might be the UNIT HEAD
+					#in this case,make the result NULL so it will get the default signatory
+					
+					$result[]=$row;
+					$data=json_encode($result);
+					
+				}
+					
+				return $data;
+
+				#return $view_profile_statement->rowCount()>0?$view_profile_statement->rowCount():0;
+		}catch(Exception $e){ echo $e->getMessage(); }
+	}
+
     function staff_search($param,$page=1){
 
     		try{
@@ -282,7 +315,7 @@ class Directory extends Controller
 
 				while ($row=$view_profile_statement->fetch(\PDO::FETCH_ASSOC)) {
 
-					$result[]=['uid'=>$row['uid'],'name'=>utf8_decode($row['profile_name']),'email'=>$row['profile_email'],'designation'=>$row['position'],'office'=>$row['dept_name'],'profile_image'=>$row['profile_image']];
+					$result[]=['uid'=>$row['uid'],'name'=>html_entity_decode($row['profile_name']),'email'=>$row['profile_email'],'designation'=>$row['position'],'office'=>$row['dept_name'],'profile_image'=>$row['profile_image']];
 					#$result[]=array('uid'=>$row['uid'],'about'=>$description);
 
 				}

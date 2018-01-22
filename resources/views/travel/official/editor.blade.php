@@ -186,6 +186,36 @@
 				<textarea class="col col-md-12 col-xs-12 preview-notes" id="form-notes" rows="15" cols="10" placeholder="Notes"></textarea>	
 			</div>
 
+
+			<div class="col col-md-12 content-header-section" style="margin-top: 80px;">
+
+				<details>
+					<summary>Advance options</summary>
+					<br/><br/>
+					<div class="col col-md-12">
+						<div>
+							<b> <i class="material-icons md-18">note</i> Signatory :</b>
+							<span class="preview-signatory"></span>
+						</div>
+						<div class="col col-md-2"><button onclick="$('#signatory').show();return false;" class="btn btn-default btn-xs"><i class="material-icons md-18">edit</i> Change</button></div>
+					</div>	
+					
+					
+
+					<div class="col col-md-12" id="signatory" style="display:none;margin-top: 20px;">
+
+						<!--<p>ed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam </p>-->
+						<select class="col col-md-12 col-xs-12 form-control" id="form-signatory">
+							<option>(default)</option>
+						</select>
+
+						<p>&emsp;<button class="btn btn-default btn-xs" id="signatorySaveButton"><span class="glyphicon glyphicon-floppy-disk"></span> SAVE</button></p>
+					
+
+					</div>
+				</details>	
+			</div>
+
 				
 
 			</div>
@@ -213,6 +243,8 @@ $(document).ready(function(){
 	bindPayment()
 	bindRequestType()
 	bindNotesSaveButton()
+	bindShowSignatorySelector()
+	bindChangeSignatory()
 
 });
 </script>

@@ -335,7 +335,7 @@ Route::post('api/travel/personal/charge/advance/{id}',['uses' =>'Personal_itener
 
 
 ######################################################################################
-#Staff and scholars directory
+#Staff ,scholars and signatories' directory
 ######################################################################################
 
 Route::get('api/directory/staff/{page?}',['uses' =>'Directory@staff']);
@@ -343,7 +343,11 @@ Route::get('api/directory/staff/search/{param}',['uses' =>'Directory@staff_searc
 Route::get('api/directory/scholars/{page?}',['uses' =>'Directory@scholars']);
 Route::get('api/directory/scholars/search/{param}/',['uses' =>'Directory@scholar_search']);
 Route::get('api/directory/drivers/{page?}',['uses' =>'Directory@drivers']);
+Route::get('api/directory/signatories/',['uses' =>'Directory@signatory_list']);
 Route::get('api/directory/vehicles/{page?}',['uses' =>'Directory@vehicles']);
+
+Route::put('api/travel/official/signatory',['uses' =>'Official@update_signatory']);
+
 
 
 
