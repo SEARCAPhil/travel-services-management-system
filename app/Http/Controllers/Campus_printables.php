@@ -65,6 +65,8 @@ class Campus_printables extends Controller
     		
 
     	}
+
+    	$fundings = @json_decode($official->get_fundings($details->tr));
     	
 
     	
@@ -276,23 +278,27 @@ $html .='<style>
 					<td  width="98"><b>Requesting Party : </b></td>
 					<td  width="180" class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$details->profile_name.'</td>
 					<td  width="30" ></td>
-					<td  width="70"><b>Unit/Office:</b></td>
+					<td  width="60"><b>Unit/Office:</b></td>
 					<td  width="120"  class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$details->department_alias.'</td>
 				</tr>
 				<tr>
-					<td  width="98"><b>Date(s) : </b></td>
-					<td  width="180" class="withLine"></td>
+					<td  width="98"><b>Request Date : </b></td>
+					<td  width="180">&nbsp;&nbsp;&nbsp;&nbsp;<u>'.date('m/d/Y') .' </u></td>
 					<td  width="30" ></td>
 					<td  width="70"><b>Charge To:</b></td>
-					<td width="130"  class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$details->source_of_fund_value.' '.$projects.'</td>
+					<td width="120">';
+					
+					$f='';
+			
+				for($x=0;$x<count($fundings);$x++){
+					$f.='<span style="font-size:8px;padding-left:100px;text-decoration:underline;">'.$fundings[$x]->fund.' - '.$fundings[$x]->cost_center.' - '.$fundings[$x]->line_item.'</span><br/>';
+				}	
+
+				$html.=$f;
+
+					$html.='</td>
 				</tr>
-				<tr>
-					<td  width="98"><b>Time : </b></td>
-					<td  width="180" class="withLine"></td>
-					<td  width="30" ></td>
-					<td  width="70"> </td>
-					<td  width="120"></td>
-				</tr>
+				
 		</table>
 		
 	</article>
@@ -482,6 +488,9 @@ function print_notice_of_charges($id){
     	$overtime_hours=@($overtime_hours*24);
 
 
+    	$fundings = @json_decode($official_travel->get_fundings($itenerary->tr_id));
+
+
 
 
 
@@ -668,10 +677,23 @@ $html.='
 				
 					
 			$html.='<tr>
-				<td></td>
+				<td><br/><br/>&nbsp;&nbsp;&nbsp;'.$itenerary->departure_date.'</td>
 				<td height="60">
 				<br/><br/>
-					<b>'.$itenerary->location.' - '.$itenerary->destination.'</b><br/><br/><b>'.$fund.'</b> '.$projects;
+					<b>&nbsp;&nbsp;'.$itenerary->location.' - '.$itenerary->destination.'</b><br/><br/>';
+
+					$f='';
+			
+			for($x=0;$x<count($fundings);$x++){
+				$f.='<span style="font-size:8px;">&nbsp;&nbsp;'.$fundings[$x]->fund.' - '.$fundings[$x]->cost_center.' - '.$fundings[$x]->line_item.'</span><br/>';
+			}	
+
+			$html.=$f;
+
+			if($travel_request->source_of_fund=='otf'){
+				$html.='<br/><br/><b>'.@$travel_request->projects[0]->project.'</b><br/>';
+			}
+
 
 
 					if(strlen(@$charges->notes)>1){
@@ -684,7 +706,7 @@ $html.='
 				</td>
 
 
-				<td><br/><br/>
+				<td><br/><br/>&nbsp;&nbsp;
 					Php '.@number_format(round($charges->total,2)).'<br/><br/>
 					
 				</td>

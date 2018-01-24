@@ -20,6 +20,12 @@
 		<li class="list-group-item removeIteneraryButton"><span class="glyphicon glyphicon-remove basket"></span> Remove</li>
 	</ul>
 </div>
+
+<div class="contextMenu" id="fundingMenu">
+	<ul class="list-group">		
+		<li class="list-group-item removeFundButton"><span class="glyphicon glyphicon-remove basket"></span> Remove</li>
+	</ul>
+</div>
 <div class="modal fade" id="custom-passenger-modal">
 	<div class="modal-dialog" id="passenger-modal-dialog">
 			
@@ -38,6 +44,12 @@
 	</div>
 </div>
 
+<div class="modal fade" id="funding-modal">
+	<div class="modal-dialog" id="itenerary-modal-dialog">
+			@include('travel/modal/funds')
+	</div>
+</div>
+
 <div class="preview-content">
 
 {{csrf_field()}}
@@ -50,7 +62,7 @@
 
 		<div class="col col-md-12">
 			<h3 class="page-header">Travel Request Form</h3>
-			<p class="text-muted">Please select the type of travel that suites you.</p>	
+			<p class="text-muted">Please select prefered travel type.</p>	
 			<br/>		
 		</div>
 		
@@ -111,18 +123,12 @@
 		<div class="col col-md-12 preview-sections">
 			<p></p><div class="mini-circle"></div> <b>Cash Advance</b>
 			<br/><br/>
-			<p><b>Source of funds: <span class="" id="officialSourceOfFundSaveStatus"></span></b></p>
 			<p>
-				<select class="form-control" id="source_of_fund" disabled="disabled">
-					<option value="opf">Select source of fund</option>
-					<option value="opf">Operating Funds</option>
-					<option value="otf" id="otf">Other Funds</option>
-					<option value="op">Obligations Payable</option>
-					<option value="sf">Special Funds</option>
-					<option value="opfs">Operating Funds(Scholar)</option>
-					<option value="otfs">Other Funds(Scholar)</option>
-				</select>
+				<b>Source of funds: <span class="" id="officialSourceOfFundSaveStatus"></span></b> 
+				<button class="btn btn-success btn-xs" data-toggle="modal" data-target="#funding-modal" id="sourceOfFundFormButton" disabled="disabled"><span class="glyphicon glyphicon-plus"></span></button>
+
 			</p>
+			<p class="source_of_fund_section"></p>
 			<p id="otf-funding-section">
 				<select id="otf-fundings" class="form-control">
 					<option value="N/A">Select project</option>

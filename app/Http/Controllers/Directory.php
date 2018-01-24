@@ -641,6 +641,29 @@ class Directory extends Controller
     }
 
 
+    public function line_items()
+    {
+
+        try{
+                $this->pdoObject=DB::connection()->getPdo();
+                $sql="SELECT * FROM line_item";
+                $statement=$this->pdoObject->prepare($sql);
+                $statement->execute();
+                $res=Array();
+                while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+                    $res[]=$row;
+                }
+               
+
+                echo json_encode($res);
+
+        }catch(Exception $e){echo $e->getMessage();}
+
+
+        
+    }
+
+
 
 
 

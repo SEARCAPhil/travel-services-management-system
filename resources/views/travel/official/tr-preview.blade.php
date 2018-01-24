@@ -93,7 +93,7 @@
 					<div class="content-header"> <span><b>Source of fund</b></span></div>
 				</div>
 				<div class="col co-md-12">
-					<div class="preview-cash-advance"></div>
+					<div class="source_of_fund_section col-md-12"></div>
 				</div>
 			</div>
 

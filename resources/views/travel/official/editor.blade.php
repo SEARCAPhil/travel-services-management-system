@@ -19,6 +19,11 @@
 		<li class="list-group-item removeIteneraryButton"><span class="glyphicon glyphicon-remove basket"></span> Remove</li>
 	</ul>
 </div>
+<div class="contextMenu" id="fundingMenu">
+	<ul class="list-group">		
+		<li class="list-group-item removeFundButton"><span class="glyphicon glyphicon-remove basket"></span> Remove</li>
+	</ul>
+</div>
 <div class="modal fade" id="custom-passenger-modal">
 	<div class="modal-dialog" id="passenger-modal-dialog">
 			
@@ -34,6 +39,11 @@
 <div class="modal fade" id="itenerary-modal">
 	<div class="modal-dialog" id="itenerary-modal-dialog">
 			@include('travel/modal/itenerary')
+	</div>
+</div>
+<div class="modal fade" id="funding-modal">
+	<div class="modal-dialog" id="itenerary-modal-dialog">
+			@include('travel/modal/funds')
 	</div>
 </div>
 
@@ -123,37 +133,19 @@
 
 				<div class="col col-md-12 content-header-section">
 					<div class="content-header">
-						<span><b>Source of fund</b></span> 
+						<p><b>Source of funds: <span class="" id="officialSourceOfFundSaveStatus"></span></b>
+					</p> 
 					</div>
-					<div class="col col-md-2"><button onclick="$('#fundings').show();return false;" class="btn btn-default btn-xs"><i class="material-icons md-18">edit</i> Change</button></div>
+					<div class="col col-md-2"><button class="btn btn-default btn-xs" data-toggle="modal" data-target="#funding-modal" id="sourceOfFundFormButton"><span class="glyphicon glyphicon-plus"></span></button></div>
 				</div>
 
 				<div class="col col-md-12">
-					<div class="preview-cash-advance">
+					<div class="preview-cash-advance source_of_fund_section">
 
 					</div>
 				</div>
 
-				<div class="col col-md-12" id="fundings" style="display:none;margin-top: 50px;">
-					<p><b>Source of funds: <span class="" id="officialSourceOfFundSaveStatus"></span></b></p>
-					<p>
-						<select class="form-control" id="source_of_fund">
-							<option value="opf">Select soure of fund</option>
-							<option value="opf">Operating Funds</option>
-							<option value="otf" id="otf">Other Funds</option>
-							<option value="op">Obligations Payable</option>
-							<option value="sf">Special Funds</option>
-							<option value="opfs">Operating Funds(Scholar)</option>
-							<option value="otfs">Other Funds(Scholar)</option>
-						</select>
-					</p>
-					<p id="otf-funding-section">
-						<select id="otf-fundings" class="form-control">
-							<option value="N/A">Select project</option>
-						</select>
-						<div><input type="text" class="form-control" name="otf-fundings-project-name" id="otf-fundings-project-name" placeholder=" OR input project name" style="display: none;"></div>
-					</p>
-				</div>
+				
 
 
 			<div class="col col-md-12 preview-sections  show-for show-for-trp-only">

@@ -54,6 +54,7 @@ function bindOfficialPurposeSaveButton(){
 					changeButtonState('.vehicleTypeFormButton','enabled')
 					changeButtonState('#source_of_fund','enabled')
 					changeButtonState('#notesSaveButton','enabled')
+					changeButtonState('#sourceOfFundFormButton','enabled')
 				}
 			});
 		}else{
@@ -82,8 +83,64 @@ function bindOfficialPurposeSaveButton(){
 }
 
 
-function bindSourceOfFund(){
-	$('#source_of_fund').off('change');
+function bindSourceOfFund(){ 
+
+	ajax_getLineItem(function(data){
+
+		for(var x=0;x<data.length;x++){
+
+			$('#line_item').append(`<option value="${data[x].line2desc}">${data[x].line2desc.length>0?data[x].line2desc:'Select Line Item'}</option>`)
+		}
+	})
+
+	$('.modal-submit-funding').on('click',function(){
+		var source_of_fund = $('#source_of_fund_field').val()
+		var cost_center = $('#cost_center_field').val()
+		var line_item = $('#line_item').val()
+
+
+		//show loading
+		showLoading('#officialSourceOfFundSaveStatus',' <span>saving . . .</span>&emsp;<span><img src="img/loading.png" class="loading-circle" width="10px"/></span>')
+					
+
+		//POST
+		var data={_token:$('input[name=_token]').val(),fund:source_of_fund,cost_center:cost_center,line_item:line_item,tr_id:form_id}
+		$.ajax({
+			url:'api/travel/official/fund',
+			data:data,
+			method:'POST',
+			success:function(res){
+				var res = JSON.parse(res)
+				if(res>0){
+					//success
+					$('.source_of_fund_section').append(`<p data-menu="fundingMenu" data-selection="${res}" class="contextMenuSelector"><b>${source_of_fund}</b> - <u>${cost_center.length>0?cost_center:'N/A'}</u> - <u>${line_item}</u></p>`)
+					//bind menu
+					setTimeout(function(){ unbindContext(); context(); },1000);
+					setTimeout(function(){
+							bindRemoveFund();
+					},2000);
+
+					$('#officialSourceOfFundSaveStatus').html('<span class="glyphicon glyphicon-ok text-success"></span>');
+					
+					//rest form
+					$('#funding-form')[0].reset()	
+							
+				}else{
+					alert('Sorry!Unable to Add funding.Please try again later.')
+					$('#officialSourceOfFundSaveStatus').html('<span class="glyphicon glyphicon-remove text-danger"></span>');
+				}
+			},error:function(){
+				alert('Sorry!Unable to Add funding.Please try again later.')
+				$('#officialSourceOfFundSaveStatus').html('<span class="glyphicon glyphicon-remove text-danger"></span>');
+			}
+		});	
+		
+
+	})
+	//$('#sourceOfFundFormButton').on('click',function(){
+		//$('#preview-modal-dialog').load('travel/modal/remove',function(data){
+	//})
+	/*$('#source_of_fund').off('change');
 	$('#source_of_fund').on('change',function(){
 					//update
 			var data={_token:$('input[name=_token]').val(),source_of_fund:$(this).val(),id:form_id}
@@ -100,7 +157,7 @@ function bindSourceOfFund(){
 					}
 				}
 			});
-	});
+	});*/
 }
 
 

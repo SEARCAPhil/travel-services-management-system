@@ -92,6 +92,10 @@ class Official_printables extends Controller
     	$scholars=json_decode($official_scholars->index($itenerary->tr_id));
     	$custom=json_decode($official_custom->index($itenerary->tr_id));
 
+    	$fundings = @json_decode($official_travel->get_fundings($itenerary->tr_id));
+
+    	
+
 
     	#charges comutation
     	/*var_dump($charges);
@@ -314,7 +318,16 @@ $html.='	<article class="col col-md-12">
 			<!--requesting party-->
 			<tr>
 				<td> Requesting Party : <b>'.$travel_request->profile_name.'</b></td>
-				<td> Source of fund:  <b> '.$travel_request->source_of_fund_value.'</b>'; 
+
+				<td> Source of fund:  '; 
+
+			$f='';
+			
+			for($x=0;$x<count($fundings);$x++){
+				$f.='<br/><b>'.$fundings[$x]->fund.' - '.$fundings[$x]->cost_center.' - '.$fundings[$x]->line_item.'</b>';
+			}	
+
+			$html.=$f;
 
 			if($travel_request->source_of_fund=='otf'){
 				$html.='<br/><br/><b>'.@$travel_request->projects[0]->project.'</b><br/>';
@@ -395,8 +408,10 @@ $html.='	<article class="col col-md-12">
 
 
 
+		$dt = new \DateTime($itenerary->departure_time);
+		$rt = new \DateTime($itenerary->returned_time);
 								
-					
+		
 				
 		$html .= '</table><br/><br/>';
 
@@ -553,8 +568,8 @@ $html.='	<article class="col col-md-12">
 					</tr>
 					<tr>
 						<td width="80">Time</td>
-						<td width="80"><b>'.$itenerary->departure_time.'</b></td>
-						<td><b>'.$itenerary->returned_time.'</b></td>
+						<td width="80"><b>'.$dt->format('h:i:s').'</b></td>
+						<td><b>'.$rt->format('h:i:s').'</b></td>
 					</tr>
 					<tr>
 						<td width="80">Mileage Reading</td>
@@ -675,6 +690,8 @@ $html.='	<article class="col col-md-12">
     	$details=$data[0];
 
 
+
+
     	//var_dump($details);
     	#get itenerary
     	if(isset($details->tr)){
@@ -687,6 +704,7 @@ $html.='	<article class="col col-md-12">
     	}
     	
 
+    	$fundings = @json_decode($official->get_fundings($id));
     	
 
 
@@ -1002,12 +1020,13 @@ $html.='
 
 			for($a=0;$a<$itenerary_total_count;$a++){
 				$mode_of_transport=$itenerary[$a]->plate_no!='rent_a_car'?'SEARCA Vehicle':'RENT A CAR';
+				$dt = new \DateTime($itenerary[$a]->departure_time);
     			$html.='<tr>
 					<td>'.$itenerary[$a]->departure_date.'</td>
 					<td>'.$itenerary[$a]->location.'</td>
 					<td>'.html_entity_decode($itenerary[$a]->destination).'</td>
 					<td>'.$mode_of_transport.'</td>
-					<td>'.$itenerary[$a]->departure_time.'</td>
+					<td>'.$dt->format('h:i:s').'</td>
 				</tr>';
     		}
 
@@ -1048,13 +1067,27 @@ for($a=0;$a<count($details->projects);$a++){
 }
 
 
+$f='';
+			
+for($x=0;$x<count($fundings);$x++){
+	$f.='<b style="font-size:8px;"> '.$fundings[$x]->fund.' - '.$fundings[$x]->cost_center.' - '.$fundings[$x]->line_item.''.(count($fundings)>0&&count($fundings)>$x+1?',':'').'</b><br/>';
+}	
+
+
+
+
 
 $html.='<br/><br/><br/><article>
 		<table>
 			<tr>
-				<td><b>IV. Cash Advance Requested </b></td><td style="text-align:right;">Source of Fund:</td>
-				<td class="withLine"> '.$details->source_of_fund_value.' '.$projects.'</td>
-			</tr>
+				<td><b>IV. Cash Advance Requested </b></td><td style="text-align:right;">Source of Fund:</td>';
+
+				$html.='<td class="withLine">';
+				$html.=$f;
+				$html.='</td>';
+			
+
+		$html.='</tr>
 		</table>';
 
 		

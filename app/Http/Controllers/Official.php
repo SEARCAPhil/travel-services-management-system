@@ -595,6 +595,55 @@ class Official extends Controller
     }
 
 
+    public function add_source_of_fund(Request $request){
+
+
+
+        try{
+
+            $tr_id=$request->input('tr_id');
+
+            $source=$request->input('fund');
+            $cost_center=$request->input('cost_center');
+            $line_item=$request->input('line_item');
+
+
+
+            $this->pdoObject=DB::connection()->getPdo();
+
+
+
+            $this->pdoObject->beginTransaction();
+
+            $sql="INSERT INTO fundings(tr_id,fund,cost_center,line_item) values(:tr_id,:fund,:cost_center,:line_item)";
+
+            $statement=$this->pdoObject->prepare($sql);
+
+            $statement->bindParam(':fund',$source);
+            $statement->bindParam(':cost_center',$cost_center);
+            $statement->bindParam(':line_item',$line_item);
+
+            $statement->bindParam(':tr_id',$tr_id);
+
+            $statement->execute();
+
+            $lastId=$this->pdoObject->lastInsertId();
+
+            $this->pdoObject->commit();
+
+
+
+            echo $lastId;
+
+
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+
+
+    }
+
+
 
 
 
@@ -1932,6 +1981,86 @@ function ongoing($page=1){
 
             }catch(Exception $e){ echo $e->getMessage();$this->pdoObject->rollback();}
     }
+
+
+
+    public function get_fundings($id)
+
+    {
+
+        try{
+
+            $this->id=htmlentities(htmlspecialchars($id));
+
+            $this->pdoObject=DB::connection()->getPdo();
+
+
+
+            $sql="SELECT * from fundings where tr_id=:id";
+
+            $statement=$this->pdoObject->prepare($sql);
+            $statement->bindParam(':id',$this->id);
+
+            $statement->execute();
+
+            $res=Array();
+
+            while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+
+                $res[]=$row;
+
+            }
+
+           
+
+
+
+            return json_encode($res);
+
+
+
+        }catch(Exception $e){echo $e->getMessage();}
+
+        
+
+    }
+
+
+    public function delete_source_of_fund($id)
+
+    {
+
+        try{
+
+                $this->pdoObject=DB::connection()->getPdo();
+
+                $this->id=(int) htmlentities(htmlspecialchars($id));
+
+                $this->pdoObject->beginTransaction();
+
+                $remove_rfp_sql="DELETE FROM fundings where id=:id";
+
+                $remove_statement=$this->pdoObject->prepare($remove_rfp_sql);
+
+                $remove_statement->bindParam(':id',$this->id);
+
+                $remove_statement->execute();
+
+                $this->pdoObject->commit();
+
+
+
+                return $remove_statement->rowCount();
+
+
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+    }
+
+
+
+
 
 
 

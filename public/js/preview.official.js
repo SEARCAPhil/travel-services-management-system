@@ -157,6 +157,41 @@ function ajax_getOfficialTravelItenerary(id,callback){
 
 /*
 |----------------------------------------------------------------------------
+| AJAX Line Item functions
+|---------------------------------------------------------------------------
+|
+| Get the official travel request's itenerary
+|
+|
+*/
+
+
+function ajax_getLineItem(callback){
+	$.get('api/directory/line_item',function(json){
+		official_travel_itenerary=JSON.parse(json)
+		callback(official_travel_itenerary);
+		return official_travel_itenerary;
+	})
+}
+
+
+
+
+
+function ajax_getSourceOfFund(id,callback){
+	$.get('api/travel/official/fund/'+id,function(json){
+		official_travel_itenerary=JSON.parse(json)
+		callback(official_travel_itenerary);
+		return official_travel_itenerary;
+	})
+}
+
+
+
+
+
+/*
+|----------------------------------------------------------------------------
 | Count Display
 |---------------------------------------------------------------------------
 |
@@ -213,7 +248,7 @@ function showOfficialTravelListPreview(id){
 		$('.preview-unit').html(json[0].department)
 		$('.preview-created').html(((json[0].date_created).split(' '))[0])
 		$('.preview-purpose').html(json[0].purpose.replace(/[\n]/g,'<br/>'))
-		$('.preview-cash-advance').html(' &emsp;&emsp;<b>'+json[0].source_of_fund_value+'</b>')
+		//$('.preview-cash-advance').html(' &emsp;&emsp;<b>'+json[0].source_of_fund_value+'</b>')
 		$('.preview-signatory').html(' &emsp;&emsp;<b>'+json[0].approved_by+'</b>')
 
 		if(json[0].notes){
@@ -253,11 +288,32 @@ function showOfficialTravelListPreview(id){
 		
 
 		//hide projects for opf
-		if(json[0].source_of_fund!='opf'){
+		/*if(json[0].source_of_fund!='opf'){
 			for(var x=0;x<json[0].projects.length;x++){
-				$('.preview-cash-advance').append('&emsp;<p>'+json[0].projects[x].project+'</p>');
+				$('.source_of_fund_section').append('&emsp;<p>'+json[0].projects[x].project+'</p>');
 			}	
-		}
+		}*/
+
+
+		ajax_getSourceOfFund(json[0].tr,function(data){
+			for(var x=0;x<data.length;x++){
+				var f
+				if(data[x].fund=='opf') f = 'Operating Funds'
+				if(data[x].fund=='otf') f = 'Other Funds'
+				if(data[x].fund=='otfs') f = 'Other Funds (Scholar)'
+				if(data[x].fund=='opfs') f = 'Operating Funds (Scholar)'
+				if(data[x].fund=='sf') f = 'Special Funds'
+				if(data[x].fund=='op') f = 'Obligations Payable'
+
+				$('.source_of_fund_section').append(`<p data-menu="fundingMenu" data-selection="${data[x].id}" class="contextMenuSelector"><b>${f}</b> - <u>${data[x].cost_center.length>0?data[x].cost_center:'N/A'}</u> - <u>${data[x].line_item}</u></p>`)
+				
+					//bind menu
+					setTimeout(function(){ unbindContext(); context(); },1000);
+					setTimeout(function(){
+							bindRemoveFund();
+					},2000);	
+			}
+		})
 
 		
 
@@ -481,7 +537,16 @@ function showOfficialTravelItenerary(id){
 						</thead>
 						<tbody>
 							<tr>
-								<td><a href="#" onclick="event.preventDefault();window.open('${ttURL}/${official_travel_itenerary[x].id}');">`+official_travel_itenerary[x].location+`</a></td>
+								<td>
+									<a href="#" onclick="event.preventDefault();window.open('${ttURL}/${official_travel_itenerary[x].id}');">`+official_travel_itenerary[x].location+`</a><br/>
+									`
+									if(official_travel_itenerary[x].request_type=='official'){
+										htm+=`<button class="btn btn-xs btn-danger" onclick="event.preventDefault();window.open('travel/campus/print/notice_of_charges/${official_travel_itenerary[x].id}');">NOC</button>`
+		
+										htm+=`<button class="btn btn-xs btn-danger" onclick="event.preventDefault();window.open('${ttURL}/${official_travel_itenerary[x].id}');">TT</button>`
+									}
+
+				htm+=				`</td>
 								<td>`+official_travel_itenerary[x].destination+`</td>
 								<td>`+official_travel_itenerary[x].departure_date+`</td>
 								<td>`+official_travel_itenerary[x].departure_time+`</td>
@@ -640,6 +705,18 @@ function removeOfficialTravelItenerary(id){
 }
 
 
+function removeFund(id){
+	$('#preview-modal').on('show.bs.modal', function (e) {
+	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
+	    	removeContextListElement('api/travel/official/fund/',id);
+	    })
+	});
+
+	$('#preview-modal').modal('toggle');
+	
+}
+
+
 
 
 
@@ -694,6 +771,14 @@ function bindRemoveOfficialPreview(){
 			
 	})
 
+}
+
+function bindRemoveFund(){
+	$('.removeFundButton').off('click');
+	$('.removeFundButton').on('click',function(){
+		var context=($(contextSelectedElement).attr('data-selection'));
+		removeFund(context)
+	})
 }
 
 

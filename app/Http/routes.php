@@ -214,6 +214,10 @@ Route::put('api/travel/official/notes',['uses' =>'Official@update_notes']);
 #source of fund
 Route::put('api/travel/official/fund',['uses' =>'Official@update_source_of_fund']);
 
+Route::post('api/travel/official/fund',['uses' =>'Official@add_source_of_fund']);
+Route::delete('api/travel/official/fund/{id}',['uses' =>'Official@delete_source_of_fund']);
+Route::get('api/travel/official/fund/{id}',['uses' =>'Official@get_fundings']);
+
 
 
 #itenerary
@@ -349,9 +353,10 @@ Route::get('api/directory/vehicles/{page?}',['uses' =>'Directory@vehicles']);
 Route::put('api/travel/official/signatory',['uses' =>'Official@update_signatory']);
 
 
-
-
-
+######################################################################################
+#LINE ITEM
+######################################################################################
+Route::get('api/directory/line_item/',['uses' =>'Directory@line_items']);
 
 
 
