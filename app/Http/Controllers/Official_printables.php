@@ -403,12 +403,18 @@ $html.='	<article class="col col-md-12">
 		}
 	}
 
+	/*------------------------------------------
+	| TEMPORARY FIX FOR OVERRIDING SIGNATORIES
+	|
+	|-------------------------------------------*/
+
+	$approved_by = isset($_GET['approved_by'])?htmlentities(htmlspecialchars($_GET['approved_by'])):'Ricardo A. Menorca';
+	$approved_by_position = isset($_GET['position'])?htmlentities(htmlspecialchars($_GET['position'])):'Unit head,General Services';
 
 
 
 
-
-		$dt = new \DateTime($itenerary->departure_time);
+		$dt = new \DateTime($itenerary->actual_departure_time);
 		$rt = new \DateTime($itenerary->returned_time);
 								
 		
@@ -536,10 +542,10 @@ $html.='	<article class="col col-md-12">
 
 					 <table style="text-align:center;">
 						 <tr>
-						 	<td><b>RICARDO A. MENORCA</b></td>
+						 	<td><b>'.strtoupper($approved_by).'</b></td>
 						 </tr>
 						 <tr>
-						 	<td><p>Unit head,General Services</p></td>
+						 	<td><p>'.$approved_by_position.'</p></td>
 						 </tr>
 					 </table>
 					
@@ -568,8 +574,8 @@ $html.='	<article class="col col-md-12">
 					</tr>
 					<tr>
 						<td width="80">Time</td>
-						<td width="80"><b>'.$dt->format('h:i:s').'</b></td>
-						<td><b>'.$rt->format('h:i:s').'</b></td>
+						<td width="80"><b><!--'.$dt->format('h:i:s').'--></b></td>
+						<td><b><!--'.$rt->format('h:i:s').'--></b></td>
 					</tr>
 					<tr>
 						<td width="80">Mileage Reading</td>
@@ -1022,11 +1028,11 @@ $html.='
 				$mode_of_transport=$itenerary[$a]->plate_no!='rent_a_car'?'SEARCA Vehicle':'RENT A CAR';
 				$dt = new \DateTime($itenerary[$a]->departure_time);
     			$html.='<tr>
-					<td>'.$itenerary[$a]->departure_date.'</td>
+					<td>'.@date_format(date_create($itenerary[$a]->departure_date),'m-d-y').'</td>
 					<td>'.$itenerary[$a]->location.'</td>
 					<td>'.html_entity_decode($itenerary[$a]->destination).'</td>
 					<td>'.$mode_of_transport.'</td>
-					<td>'.$dt->format('h:i:s').'</td>
+					<td>'.$dt->format('h:i:s A').'</td>
 				</tr>';
     		}
 

@@ -35,6 +35,7 @@ class Campus_printables extends Controller
     	
     	    	#variables
     	global $details;
+    	global $staff;
 
     	$itenerary=Array();
     	$staff=Array();
@@ -136,6 +137,15 @@ class Campus_printables extends Controller
 		$pdf->setFooterCallback(function($pdf) {
 
 			global $details;
+			global $staff;
+
+			//clear recommended if one of the passengers
+			for($x=0;$x<count($staff);$x++){
+				if(trim($details->recommended_by)==$staff[$x]->name){
+					$details->recommended_by = '';
+					break;
+				}
+			}
 
 			//designation
 			$details->approved_by_position=!empty($details->approved_by_position)?$details->approved_by_position:'HEAD, Motor Pool Unit';
@@ -186,7 +196,7 @@ class Campus_printables extends Controller
 
 					<tr cellpadding="-5">
 						<td  width="180" style="text-align:center;"><b>Unit/Office Head</b></td>
-						<td width="160"></td>
+						<td width="150"></td>
 						<td  width="90" style="text-align:center;"><b>'.$details->approved_by_position.'</b></td>
 					
 
