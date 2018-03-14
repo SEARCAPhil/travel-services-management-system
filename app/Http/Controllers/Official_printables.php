@@ -422,7 +422,7 @@ $html.='	<article class="col col-md-12">
 		$html .= '</table><br/><br/>';
 
 			$html .= '	</td>
-				<td> Purposes/Places to be visited: <b>'.htmlspecialchars($travel_request->purpose).'</b>
+				<td> Purposes/Places to be visited: <b>'.htmlspecialchars(strip_tags($travel_request->purpose)).'</b>
 				</td>
 
 			</tr>
