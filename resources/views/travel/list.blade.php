@@ -28,7 +28,7 @@
 
 
 </div>
-<div class=" list-section col col col-md-3 col-lg-2 col-sm-9 hidden-sm hidden-xs row">
+<div class=" list-section col col col-md-3 col-lg-3 col-sm-9 hidden-sm hidden-xs row">
 	<div class="col col-xs-12">
 		<input type="text" class="form-control" placeholder="Search" id="searchInput" autofocus="">
 	</div>

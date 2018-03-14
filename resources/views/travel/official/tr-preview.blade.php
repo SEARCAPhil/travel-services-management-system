@@ -93,8 +93,42 @@
 					<div class="content-header"> <span><b>Source of fund</b></span></div>
 				</div>
 				<div class="col co-md-12">
-					<div class="preview-cash-advance"></div>
+					<div class="source_of_fund_section col-md-12"></div>
 				</div>
+			</div>
+
+			<div class="col col-md-12 preview-sections  show-for show-for-trp-only">
+				<div class="col col-md-12 content-header-section">
+					<div class="content-header"><span class="pull-left"><b>Type of Vehicle</b></span> &emsp;</div>
+				</div>
+
+				<p class="col col-md-12">
+					<input type="radio" name="vtype" value="1" select-mobi="1" disabled="disabled"> SUV&emsp;
+					<input type="radio" name="vtype" value="2" select-mobi="2" disabled="disabled"> Van
+					<input type="radio" name="vtype" value="3" select-mobi="3" disabled="disabled"> Pick-up	
+				</p>
+			</div>
+
+			<div class="col col-md-12 preview-sections show-for show-for-trp-only">
+				<div class="col col-md-12 content-header-section">
+					<div class="content-header"> <span class="pull-left"><b>Mode of Payment</b></span> &emsp;</div>
+				</div>
+				<p class="col col-md-12">
+					<span>Cash <input type="radio" name="mode-of-payment" disabled="disabled" value="cash"></span>
+					<span>Salary Deduction <input type="radio" name="mode-of-payment" disabled="disabled" value="sd"></span>
+				</p>
+			</div>
+
+
+			<div class="col col-md-12 preview-sections">
+				<div class="col col-md-12 content-header-section">
+					<div class="content-header"> <span class="pull-left"><b>Notes</b></span> </div>
+				</div>
+				<div class="col col-md-12">
+				
+					<p class="preview-notes"></p>
+				</div>
+				
 			</div>
 
 

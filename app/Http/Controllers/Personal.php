@@ -239,6 +239,30 @@ class Personal extends Controller
     }
 
 
+     public function update_signatory(Request $request){
+
+        try{
+            $id=$request->input('id');
+            $value=$request->input('value');
+
+            $this->pdoObject=DB::connection()->getPdo();
+
+            $this->pdoObject->beginTransaction();
+            $sql="UPDATE trp set purpose=:purpose where id=:id";
+            $statement=$this->pdoObject->prepare($sql);
+            $statement->bindParam(':purpose',$purpose);
+            $statement->bindParam(':id',$id);
+            $statement->execute();
+            $isUpdated=$statement->rowCount();
+            $this->pdoObject->commit();
+
+            echo $isUpdated;
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+    } 
+
+
 
 
     /**

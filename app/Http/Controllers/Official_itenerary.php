@@ -24,7 +24,7 @@ class Official_itenerary extends Controller
                 $this->pdoObject=DB::connection()->getPdo();
                 $this->id=htmlentities(htmlspecialchars($id));
                 $this->pdoObject->beginTransaction();
-                $sql="SELECT travel.* FROM travel where tr_id=:id";
+                $sql="SELECT tr.request_type,travel.* FROM travel left join tr on travel.tr_id=tr.id where tr_id=:id";
                 $statement=$this->pdoObject->prepare($sql);
                 $statement->bindParam(':id',$this->id);
                 $statement->execute();
@@ -119,7 +119,7 @@ class Official_itenerary extends Controller
                 $start_page=$this->page<2?0:( integer)($this->page-1)*10;
 
                 $this->pdoObject->beginTransaction();
-                $sql="SELECT tr.status as tr_status,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no,automobile.manufacturer, searcaba_login_db.account_profile.last_name, searcaba_login_db.account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='scheduled' and departure_date!='0000-00-00' and linked='no' and tr.status='2' and travel.id!=:id  ORDER BY travel.id DESC LIMIT :start,10";
+                $sql="SELECT tr.status as tr_status,tr.request_type,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no,automobile.manufacturer, searcaba_login_db.account_profile.last_name, searcaba_login_db.account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='scheduled' and departure_date!='0000-00-00' and linked='no' and tr.status='2' and travel.id!=:id  ORDER BY travel.id DESC LIMIT :start,10";
 
                 $sql2="SELECT count(*) as total FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='scheduled' and departure_date!='0000-00-00' and linked='no' and tr.status='2'";
 
@@ -172,7 +172,7 @@ class Official_itenerary extends Controller
                         $department=$row4->department_alias;
                     }
 
-                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->tr_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'actual_time'=>$row->actual_departure_time,'returned_date'=>$row->returned_date,'returned_time'=>$row->returned_time,'plate_no'=>$row->plate_no,'manufacturer'=>$row->manufacturer,'type'=>'official','driver'=>$driver,'requester'=>$requester,'department'=>$department,'image'=>$image,'passengers'=>array('staff'=>$passenger_staff,'scholars'=>$passenger_scholar,'custom'=>$passenger_custom));
+                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->tr_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'actual_time'=>$row->actual_departure_time,'returned_date'=>$row->returned_date,'returned_time'=>$row->returned_time,'plate_no'=>$row->plate_no,'manufacturer'=>$row->manufacturer,'type'=>$row->request_type,'driver'=>$driver,'requester'=>$requester,'department'=>$department,'image'=>$image,'passengers'=>array('staff'=>$passenger_staff,'scholars'=>$passenger_scholar,'custom'=>$passenger_custom));
 
                     
                 }
@@ -977,6 +977,47 @@ class Official_itenerary extends Controller
         return 0;
 
    }
+
+
+
+    public function vehicle_type(Request $request){
+        $token = $request->input('_token');
+        $vehicle = $request->input('vehicle');
+        $id = $request->input('id');
+
+        try{
+            $this->pdoObject=DB::connection()->getPdo();
+            $this->tr=htmlentities(htmlspecialchars($id));
+            $this->p=htmlentities(htmlspecialchars($vehicle));
+            #for update only
+            
+            
+
+            #begin transaction
+            $this->pdoObject->beginTransaction();
+            
+            $insert_sql="UPDATE tr set vehicle_type=:p where id=:tr_id";
+            $insert_statement=$this->pdoObject->prepare($insert_sql);
+    
+            #params
+            $insert_statement->bindParam(':tr_id',$this->tr);
+            $insert_statement->bindParam(':p',$this->p);
+            
+            
+            #exec the transaction
+            $insert_statement->execute();
+            $lastId=$this->pdoObject->lastInsertId();
+            $this->pdoObject->commit();
+
+            #return
+            return $insert_statement->rowCount()>0?$insert_statement->rowCount():0;
+            
+
+
+        }catch(Exception $e){ echo $e->getMessage();$this->pdoObject->rollback();}
+
+    }
+
 
 
 

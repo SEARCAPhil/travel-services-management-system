@@ -24,7 +24,7 @@
 	</nav>
 @endsection
 @section('status')
-	<div class="col col-md-3 col-sm-4 col-lg-2" style="background: rgb(60,60,60);min-height: 1080px;box-shadow: 0px 5px 15px rgba(200,200,200,0.3);">
+	<div class="col col-md-3 col-sm-4 col-lg-2" style="background: rgb(60,60,60);min-height: 1080px; height:100vh;box-shadow: 0px 5px 15px rgba(200,200,200,0.3);">
 
 		<div class="col col-md-12 col-xs-12 col-sm-12">
  			<ul class="list-unstyled main-menu main-menu-list pull-left">
@@ -59,20 +59,19 @@
 					<li href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab pull-left col col-md-10 col-lg-9" data-page="travel" data-type="official" onclick="showOfficialTravelList">&emsp;&emsp;Official </li>
 
 
-					<li role="presentation" class="col col-md-1 col-lg-1"><a href="#" class="add-button" data-content="official"><i class="material-icons">add_box</i></a></li>
+					
 
 
 					<li href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab pull-left col col-md-10 col-lg-9" data-page="travel" data-type="personal"  onclick="showPersonalTravelList">&emsp;&emsp;Personal </li>
 
 
-					<li role="presentation" class="col col-md-1  col-lg-1"><a href="#" class="add-button" data-content="personal"><i class="material-icons">add_box</i></a></li>
-
+					
 
 					<li href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  class="automobile-tab  pull-left col col-md-10 col-lg-9" data-page="travel" data-type="campus"  onclick="showCampusTravelList">&emsp;&emsp;Campus </li>
 
 
-					<li role="presentation" class="col col-md-1  col-lg-1"><a href="#" class="add-button" data-content="campus"><i class="material-icons">add_box</i></a></li>
-
+					<li role="presentation"></li>
+					<li role="presentation"><a href="#" class="add-button" data-content="official">Form<i class="material-icons">add_box</i></a></li>
 
 
  				<li href="#profile" aria-controls="profile" role="tab" data-toggle="tab"  class="automobile-tab col col-md-12" data-page="calendar">

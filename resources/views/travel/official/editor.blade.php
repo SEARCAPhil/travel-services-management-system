@@ -19,6 +19,11 @@
 		<li class="list-group-item removeIteneraryButton"><span class="glyphicon glyphicon-remove basket"></span> Remove</li>
 	</ul>
 </div>
+<div class="contextMenu" id="fundingMenu">
+	<ul class="list-group">		
+		<li class="list-group-item removeFundButton"><span class="glyphicon glyphicon-remove basket"></span> Remove</li>
+	</ul>
+</div>
 <div class="modal fade" id="custom-passenger-modal">
 	<div class="modal-dialog" id="passenger-modal-dialog">
 			
@@ -34,6 +39,11 @@
 <div class="modal fade" id="itenerary-modal">
 	<div class="modal-dialog" id="itenerary-modal-dialog">
 			@include('travel/modal/itenerary')
+	</div>
+</div>
+<div class="modal fade" id="funding-modal">
+	<div class="modal-dialog" id="itenerary-modal-dialog">
+			@include('travel/modal/funds')
 	</div>
 </div>
 
@@ -123,43 +133,85 @@
 
 				<div class="col col-md-12 content-header-section">
 					<div class="content-header">
-						<span><b>Source of fund</b></span> 
+						<p><b>Source of funds: <span class="" id="officialSourceOfFundSaveStatus"></span></b>
+					</p> 
 					</div>
-					<div class="col col-md-2"><button onclick="$('#fundings').show();return false;" class="btn btn-default btn-xs"><i class="material-icons md-18">edit</i> Change</button></div>
+					<div class="col col-md-2"><button class="btn btn-default btn-xs" data-toggle="modal" data-target="#funding-modal" id="sourceOfFundFormButton"><span class="glyphicon glyphicon-plus"></span></button></div>
 				</div>
 
 				<div class="col col-md-12">
-					<div class="preview-cash-advance">
+					<div class="preview-cash-advance source_of_fund_section">
 
 					</div>
 				</div>
 
-				<div class="col col-md-12" id="fundings" style="display:none;margin-top: 50px;">
-					<p><b>Source of funds: <span class="" id="officialSourceOfFundSaveStatus"></span></b></p>
-					<p>
-						<select class="form-control" id="source_of_fund">
-							<option value="opf">Select soure of fund</option>
-							<option value="opf">Operating Funds</option>
-							<option value="otf" id="otf">Other Funds</option>
-							<option value="op">Obligations Payable</option>
-							<option value="sf">Special Funds</option>
-							<option value="opfs">Operating Funds(Scholar)</option>
-							<option value="otfs">Other Funds(Scholar)</option>
-						</select>
-					</p>
-					<p id="otf-funding-section">
-						<select id="otf-fundings" class="form-control">
-							<option value="N/A">Select project</option>
-						</select>
-						<div><input type="text" class="form-control" name="otf-fundings-project-name" id="otf-fundings-project-name" placeholder=" OR input project name" style="display: none;"></div>
-					</p>
-				</div>
+				
 
 
-				<button class="btn btn-success pull-right" onclick="event.preventDefault();$('.automobile-tab[data-type=official]').click();"><i class="material-icons md-18">check_circle</i> done</button>
-
+			<div class="col col-md-12 preview-sections  show-for show-for-trp-only">
+				<p></p><div class="mini-circle"></div> <b>Type of Vehicle</b> <span id="personalVehicleTypeSaveStatus" class=""></span><p></p>
+				<p class="col col-md-12">
+					<input type="radio" name="vtype" value="1" select-mobi="1" 	class="vehicleTypeFormButton"> SUV 
+					<input type="radio" name="vtype" value="2" select-mobi="2"   class="vehicleTypeFormButton"> Van
+					<input type="radio" name="vtype" value="3" select-mobi="3"  class="vehicleTypeFormButton"> Pick-up	
+				</p>
 			</div>
 
+			<div class="col col-md-12 preview-sections  show-for show-for-trp-only">
+				<p></p><div class="mini-circle"></div> <b>Mode of Payment</b> <span id="paymentSaveStatus" class=""></span><p></p>
+				<p class="col col-md-12">
+					<span>Cash <input type="radio" name="mode-of-payment" class="paymentFormButton" value="cash"></span>
+					<span>Salary Deduction <input type="radio" name="mode-of-payment"  class="paymentFormButton" value="sd"></span>
+				</p>
+			</div>
+
+			<div class="col col-md-12 content-header-section" style="margin-top: 80px;">
+				<div class="content-header">
+					<b>Notes</b> <span id="notesSaveStatus" class=""></span>
+				</div>
+				
+				<p>&emsp;<button class="btn btn-default btn-xs" id="notesSaveButton"><span class="glyphicon glyphicon-floppy-disk"></span></button></p>
+				
+
+				<hr/>
+				<!--<p>ed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam </p>-->
+				<textarea class="col col-md-12 col-xs-12 preview-notes" id="form-notes" rows="15" cols="10" placeholder="Notes"></textarea>	
+			</div>
+
+
+			<div class="col col-md-12 content-header-section" style="margin-top: 80px;">
+
+				<details>
+					<summary>Advance options</summary>
+					<br/><br/>
+					<div class="col col-md-12">
+						<div>
+							<b> <i class="material-icons md-18">note</i> Signatory :</b>
+							<span class="preview-signatory"></span>
+						</div>
+						<div class="col col-md-2"><button onclick="$('#signatory').show();return false;" class="btn btn-default btn-xs"><i class="material-icons md-18">edit</i> Change</button></div>
+					</div>	
+					
+					
+
+					<div class="col col-md-12" id="signatory" style="display:none;margin-top: 20px;">
+
+						<!--<p>ed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam </p>-->
+						<select class="col col-md-12 col-xs-12 form-control" id="form-signatory">
+							<option>(default)</option>
+						</select>
+
+						<p>&emsp;<button class="btn btn-default btn-xs" id="signatorySaveButton"><span class="glyphicon glyphicon-floppy-disk"></span> SAVE</button></p>
+					
+
+					</div>
+				</details>	
+			</div>
+
+				
+
+			</div>
+			<button class="btn btn-success pull-right" onclick="event.preventDefault();$('.automobile-tab[data-type=official]').click();"><i class="material-icons md-18">check_circle</i> done</button>
 		</div>
 
 
@@ -178,8 +230,13 @@ $(document).ready(function(){
 
 	bindOfficialPurposeSaveButton()
 	bindSourceOfFund()
-
 	bindOtfSelection();
+	bindVehicleType()
+	bindPayment()
+	bindRequestType()
+	bindNotesSaveButton()
+	bindShowSignatorySelector()
+	bindChangeSignatory()
 
 });
 </script>

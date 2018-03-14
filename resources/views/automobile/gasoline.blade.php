@@ -1,7 +1,6 @@
 <section class="col col-md-12">
 	<h1 style="color:#ff9933"><span class="glyphicon glyphicon-menu-right"></span>Gasoline</h1>
-	<p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-
+	
 	<!--<p><b>Total liters of Gasoline  :</b> <span style="color:rgb(32,199,150);"> 96 Liter/s</span></p>
 	<p><b>Total amount of Gasoline  :</b> <span style="color:rgb(32,199,150);">Php 1301</span></p>-->
 	<p>
@@ -19,6 +18,8 @@
 		</div>
 		<div class="col col-xs-4">
 			<select class="form-control" id="ledger-date" autofocus="autofocus">
+				<option>Select year</option>
+				<option>2018</option>
 				<option>2017</option>
 				<option>2016</option>
 				<option>2015</option>

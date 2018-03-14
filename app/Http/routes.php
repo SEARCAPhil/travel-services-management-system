@@ -205,8 +205,18 @@ Route::get('api/travel/official/search/{param}',['uses' =>'Official@search']);
 Route::post('api/travel/official/purpose',['uses' =>'Official@create_purpose']);
 Route::put('api/travel/official/purpose',['uses' =>'Official@update_purpose']);
 
+
+
+#notes
+Route::put('api/travel/official/notes',['uses' =>'Official@update_notes']);
+
+
 #source of fund
 Route::put('api/travel/official/fund',['uses' =>'Official@update_source_of_fund']);
+
+Route::post('api/travel/official/fund',['uses' =>'Official@add_source_of_fund']);
+Route::delete('api/travel/official/fund/{id}',['uses' =>'Official@delete_source_of_fund']);
+Route::get('api/travel/official/fund/{id}',['uses' =>'Official@get_fundings']);
 
 
 
@@ -240,6 +250,12 @@ Route::put('api/travel/official/driver/{id}',['uses' =>'Official_itenerary@updat
 #plate number
 Route::put('api/travel/official/vehicle/{id}',['uses' =>'Official_itenerary@update_plate_no']);
 
+#vehicle type
+Route::put('api/travel/official/vehicle_type',['uses' =>'Official_itenerary@vehicle_type']);
+
+#payment
+Route::put('api/travel/official/payment',['uses' =>'Official@payment']);
+
 /**CHARGE**/
 Route::get('api/travel/official/charges/{id}',['uses' =>'Official_itenerary@show_charges']);
 Route::put('api/travel/official/charges/{id}',['uses' =>'Official_itenerary@update_charges']);
@@ -257,7 +273,7 @@ Route::post('api/travel/official/charge/advance/{id}',['uses' =>'Official_itener
 ######################################################################################
 #Personal
 ######################################################################################
-Route::get('/api/travel/personal/{page?}',['uses' =>'Personal@index'])->middleware('auth_custom');
+Route::get('/api/travel/personal/{page?}',['uses' =>'Official@personal_list'])->middleware('auth_custom');
 Route::get('api/travel/personal/preview/{id}',['uses' =>'Personal@show'])->middleware('auth_custom');
 Route::get('api/travel/personal/search/{param}',['uses' =>'Personal@search'])->middleware('auth_custom');
 
@@ -323,7 +339,7 @@ Route::post('api/travel/personal/charge/advance/{id}',['uses' =>'Personal_itener
 
 
 ######################################################################################
-#Staff and scholars directory
+#Staff ,scholars and signatories' directory
 ######################################################################################
 
 Route::get('api/directory/staff/{page?}',['uses' =>'Directory@staff']);
@@ -331,11 +347,16 @@ Route::get('api/directory/staff/search/{param}',['uses' =>'Directory@staff_searc
 Route::get('api/directory/scholars/{page?}',['uses' =>'Directory@scholars']);
 Route::get('api/directory/scholars/search/{param}/',['uses' =>'Directory@scholar_search']);
 Route::get('api/directory/drivers/{page?}',['uses' =>'Directory@drivers']);
+Route::get('api/directory/signatories/',['uses' =>'Directory@signatory_list']);
 Route::get('api/directory/vehicles/{page?}',['uses' =>'Directory@vehicles']);
 
+Route::put('api/travel/official/signatory',['uses' =>'Official@update_signatory']);
 
 
-
+######################################################################################
+#LINE ITEM
+######################################################################################
+Route::get('api/directory/line_item/',['uses' =>'Directory@line_items']);
 
 
 
@@ -346,7 +367,7 @@ Route::get('api/directory/vehicles/{page?}',['uses' =>'Directory@vehicles']);
 ######################################################################################
 Route::post('api/travel/campus/',['uses' =>'Campus@create']);
 Route::get('api/travel/campus/preview/{id}',['uses' =>'Campus@show']);
-Route::get('/api/travel/campus/{page?}',['uses' =>'Campus@index']);
+Route::get('/api/travel/campus/{page?}',['uses' =>'Official@campus_list']);
 Route::get('api/travel/campus/search/{param}',['uses' =>'Campus@search']);
 Route::delete('api/travel/campus/{id}',['uses' =>'Campus@destroy']);
 #itenerary

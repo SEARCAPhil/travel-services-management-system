@@ -133,10 +133,10 @@ function appendScholarToListPreview(jsonData){
 
 function appendCustomToListPreview(jsonData){
 	var a={}
-	a={id:1,full_name:'kenneth',designation:'director'}
+	a={id:1,full_name:'kenneth',designation:'test'}
 	a.id=1;
 	a.full_name='kenneth'
-	a.designation="IT Director"
+	a.designation="Test"
 	var data=JSON.parse(JSON.stringify(jsonData))
 
 	var id=form_id

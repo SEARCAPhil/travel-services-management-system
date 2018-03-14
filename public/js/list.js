@@ -186,7 +186,7 @@ function showPersonalTravelList(page=1){
 		appendToList(function(data){
 
 			//attach click event
-			attachClickEventToList('travel/personal/preview/',function(e){
+			attachClickEventToList('travel/official/preview/',function(e){
 
 				//get target id
 				var targetId;
@@ -197,13 +197,12 @@ function showPersonalTravelList(page=1){
 				}else{
 					targetId=e.currentTarget.id;
 				}
-				//console.log(e.target.id)
-				//set active page
-				active_page='personal_preview';
-				showPersonalTravelListPreview(targetId)
-				showPersonalTravelPassengerStaffPreview(targetId)
-				showPersonalTravelPassengerScholarsPreview(targetId)
-				showPersonalTravelPassengerCustomPreview(targetId)
+				//get all necessary information of the request
+				showOfficialTravelListPreview(targetId)
+				showOfficialTravelPassengerStaffPreview(targetId)
+				showOfficialTravelPassengerScholarsPreview(targetId)
+				showOfficialTravelPassengerCustomPreview(targetId)
+				showOfficialTravelItenerary(targetId)
 			})
 		});
 	});
@@ -221,7 +220,7 @@ function showCampusTravelList(page=1){
 		appendToList(function(data){
 
 			//attach click event
-			attachClickEventToList('travel/campus/preview/',function(e){
+			attachClickEventToList('travel/official/preview/',function(e){
 
 				//get target id
 				var targetId;
@@ -235,8 +234,12 @@ function showCampusTravelList(page=1){
 				//console.log(e.target.id)
 				//set active page
 				active_page='campus_preview';
-				showCampusTravelListPreview(targetId)
-				showCampusTravelItenerary(targetId)
+				//get all necessary information of the request
+				showOfficialTravelListPreview(targetId)
+				showOfficialTravelPassengerStaffPreview(targetId)
+				showOfficialTravelPassengerScholarsPreview(targetId)
+				showOfficialTravelPassengerCustomPreview(targetId)
+				showOfficialTravelItenerary(targetId)
 			})
 		});
 	});
@@ -387,13 +390,30 @@ function appendToList(callback=function(){}){
 		if(list[x].trp_status==4){
 			activeClass='closed';
 		}
-		//append to the DIV
-		htm+=`<dd id="`+list[x].id+`" class="`+activeClass+`">
+
+		if(localStorage.getItem('priv')=='admin'){
+			//append to the DIV
+			htm+=`<dd id="`+list[x].id+`" class="`+activeClass+`">
+				<h4><b>`+list[x].id+`</b>  <small class="text-danger">`+status_message+`</small></h4>
+				<p><small><b>Date created : </b>`+list[x].date_created+`</small><br/>
+					<small><b>Requested by : </b><span class="badge">`+list[x].profile_name+`</span></small>
+				<p><div class="list-active-status" style="float:left;"></div></p>
+				<div style="clear:both;"></div>
+				`
+		}else{
+			htm+=`<dd id="`+list[x].id+`" class="`+activeClass+`">
+
 			<h4><b>`+list[x].id+`</b>  <small class="text-danger">`+status_message+`</small></h4>
+
 			<p><small>`+purpose+`</small></p>
+
 			<p><div class="list-active-status" style="float:left;"></div></p>
+
 			<div style="clear:both;"></div>
+
 			`
+		}
+
 
 			htm+=`</dd>`
 

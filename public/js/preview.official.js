@@ -157,6 +157,41 @@ function ajax_getOfficialTravelItenerary(id,callback){
 
 /*
 |----------------------------------------------------------------------------
+| AJAX Line Item functions
+|---------------------------------------------------------------------------
+|
+| Get the official travel request's itenerary
+|
+|
+*/
+
+
+function ajax_getLineItem(callback){
+	$.get('api/directory/line_item',function(json){
+		official_travel_itenerary=JSON.parse(json)
+		callback(official_travel_itenerary);
+		return official_travel_itenerary;
+	})
+}
+
+
+
+
+
+function ajax_getSourceOfFund(id,callback){
+	$.get('api/travel/official/fund/'+id,function(json){
+		official_travel_itenerary=JSON.parse(json)
+		callback(official_travel_itenerary);
+		return official_travel_itenerary;
+	})
+}
+
+
+
+
+
+/*
+|----------------------------------------------------------------------------
 | Count Display
 |---------------------------------------------------------------------------
 |
@@ -212,17 +247,73 @@ function showOfficialTravelListPreview(id){
 		$('.preview-name').html(json[0].profile_name)
 		$('.preview-unit').html(json[0].department)
 		$('.preview-created').html(((json[0].date_created).split(' '))[0])
-		$('.preview-purpose').html(json[0].purpose)
-		$('.preview-cash-advance').html(' &emsp;&emsp;<b>'+json[0].source_of_fund_value+'</b>')
+		$('.preview-purpose').html(json[0].purpose.replace(/[\n]/g,'<br/>'))
+		//$('.preview-cash-advance').html(' &emsp;&emsp;<b>'+json[0].source_of_fund_value+'</b>')
+		$('.preview-signatory').html(' &emsp;&emsp;<b>'+json[0].approved_by+'</b>')
 
-		$('.preview-print').attr('href','travel/official/print/travel_request/'+json[0].tr)
+		if(json[0].notes){
+			var n=json[0].notes.replace(/[\n]/g,'<br/>');
+			$('.preview-notes').html(n)
+		}
+		
+		$('input[name="vtype"]').each(function(index,el){
+			if(el.value==json[0].vehicle_type) $(el).attr('checked','checked')
+			
+		})
+
+		
+			$('input[name="mode-of-payment"]').each(function(index,el){
+				if(json[0].mode_of_payment=='cash'&&el.value=='cash'){
+					$(el).attr('checked','checked')
+				}else if(json[0].mode_of_payment=='sd'&&el.value=='sd'){
+					$(el).attr('checked','checked')
+				}else{
+
+				}
+			})
+		
+		if(json[0].request_type=='official'||json[0].request_type=='campus'){
+			$('.show-for-trp-only').hide()
+		}else{
+			$('.show-for-trp-only').show()
+		} 
+
+		
+		//.attr('checked','checked')
+		//
+		if(json[0].request_type=="official") $('.preview-print').attr('href','travel/official/print/travel_request/'+json[0].tr)
+		if(json[0].request_type=="personal") $('.preview-print').attr('href','travel/personal/print/travel_request/'+json[0].tr)
+		if(json[0].request_type=="campus") $('.preview-print').attr('href','travel/campus/print/travel_request/'+json[0].tr)
+
+		
 
 		//hide projects for opf
-		if(json[0].source_of_fund!='opf'){
+		/*if(json[0].source_of_fund!='opf'){
 			for(var x=0;x<json[0].projects.length;x++){
-				$('.preview-cash-advance').append('&emsp;<p>'+json[0].projects[x].project+'</p>');
+				$('.source_of_fund_section').append('&emsp;<p>'+json[0].projects[x].project+'</p>');
 			}	
-		}
+		}*/
+
+
+		ajax_getSourceOfFund(json[0].tr,function(data){
+			for(var x=0;x<data.length;x++){
+				var f
+				if(data[x].fund=='opf') f = 'Operating Funds'
+				if(data[x].fund=='otf') f = 'Other Funds'
+				if(data[x].fund=='otfs') f = 'Other Funds (Scholar)'
+				if(data[x].fund=='opfs') f = 'Operating Funds (Scholar)'
+				if(data[x].fund=='sf') f = 'Special Funds'
+				if(data[x].fund=='op') f = 'Obligations Payable'
+
+				$('.source_of_fund_section').append(`<p data-menu="fundingMenu" data-selection="${data[x].id}" class="contextMenuSelector"><b>${f}</b> - <u>${data[x].cost_center.length>0?data[x].cost_center:'N/A'}</u> - <u>${data[x].line_item}</u></p>`)
+				
+					//bind menu
+					setTimeout(function(){ unbindContext(); context(); },1000);
+					setTimeout(function(){
+							bindRemoveFund();
+					},2000);	
+			}
+		})
 
 		
 
@@ -431,6 +522,13 @@ function showOfficialTravelItenerary(id){
 		for(var x=0; x<official_travel_itenerary.length;x++){
 			itenerary_count++;
 			showTotalIteneraryCount();
+
+
+			//printables
+			if(official_travel_itenerary[x].request_type=="official") ttURL='travel/official/print/trip_ticket'
+			if(official_travel_itenerary[x].request_type=="personal") ttURL='travel/personal/print/statement_of_account'
+			if(official_travel_itenerary[x].request_type=="campus") ttURL='travel/campus/print/notice_of_charges'
+
 			var htm=`<details id="official_travel_itenerary`+official_travel_itenerary[x].id+`" data-menu="iteneraryMenu" data-selection="`+official_travel_itenerary[x].id+ `" class="contextMenuSelector official_travel_itenerary`+official_travel_itenerary[x].id+` col col-md-12">
 					<summary>`+official_travel_itenerary[x].location+` - `+official_travel_itenerary[x].destination+`</summary>
 					<table class="table table-fluid" style="background:rgba(250,250,250,0.7);color:rgb(40,40,40);">
@@ -439,7 +537,16 @@ function showOfficialTravelItenerary(id){
 						</thead>
 						<tbody>
 							<tr>
-								<td><a href="#" onclick="event.preventDefault();window.open('${ttURL}/${official_travel_itenerary[x].id}');">`+official_travel_itenerary[x].location+`</a></td>
+								<td>
+									<a href="#" onclick="event.preventDefault();window.open('${ttURL}/${official_travel_itenerary[x].id}');">`+official_travel_itenerary[x].location+`</a><br/>
+									`
+									if(official_travel_itenerary[x].request_type=='official'){
+										htm+=`<button class="btn btn-xs btn-danger" onclick="event.preventDefault();window.open('travel/campus/print/notice_of_charges/${official_travel_itenerary[x].id}');">NOC</button>`
+		
+										htm+=`<button class="btn btn-xs btn-danger" onclick="event.preventDefault();window.open('${ttURL}/${official_travel_itenerary[x].id}');">TT</button>`
+									}
+
+				htm+=				`</td>
 								<td>`+official_travel_itenerary[x].destination+`</td>
 								<td>`+official_travel_itenerary[x].departure_date+`</td>
 								<td>`+official_travel_itenerary[x].departure_time+`</td>
@@ -598,6 +705,18 @@ function removeOfficialTravelItenerary(id){
 }
 
 
+function removeFund(id){
+	$('#preview-modal').on('show.bs.modal', function (e) {
+	    $('#preview-modal-dialog').load('travel/modal/remove',function(data){
+	    	removeContextListElement('api/travel/official/fund/',id);
+	    })
+	});
+
+	$('#preview-modal').modal('toggle');
+	
+}
+
+
 
 
 
@@ -652,6 +771,14 @@ function bindRemoveOfficialPreview(){
 			
 	})
 
+}
+
+function bindRemoveFund(){
+	$('.removeFundButton').off('click');
+	$('.removeFundButton').on('click',function(){
+		var context=($(contextSelectedElement).attr('data-selection'));
+		removeFund(context)
+	})
 }
 
 

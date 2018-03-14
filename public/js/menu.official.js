@@ -33,46 +33,6 @@
 	}
 
 
-
-	function assignPersonalPlateNumber(id,plate_number,vehicle_name){
-		$.ajax({
-
-			url:'api/travel/personal/vehicle/'+id,
-			method:'PUT',
-			data: { _token: $("input[name=_token]").val(),id:id,plate_no:plate_number},
-			success:function(data){
-
-
-				if(data==1){
-					$('.travel-other-details-read-more-'+id).click();
-					$('.travel-other-details-vehicle-'+id).html(vehicle_name+' '+plate_number+' <span class="glyphicon glyphicon-ok text-success"></span>')
-				}else{
-					alert('Oops! Something went wrong.Try to refresh the page')
-				}
-			}
-		})
-	}
-
-
-	function assignCampusPlateNumber(id,plate_number,vehicle_name){
-		$.ajax({
-
-			url:'api/travel/campus/vehicle/'+id,
-			method:'PUT',
-			data: { _token: $("input[name=_token]").val(),id:id,plate_no:plate_number},
-			success:function(data){
-
-
-				if(data==1){
-					$('.travel-other-details-read-more-'+id).click();
-					$('.travel-other-details-vehicle-'+id).html(vehicle_name+' '+plate_number+' <span class="glyphicon glyphicon-ok text-success"></span>')
-				}else{
-					alert('Oops! Something went wrong.Try to refresh the page')
-				}
-			}
-		})
-	}
-
 	function showVehicleList(callback){
 		ajax_getVehiclesList(function(vehicleList){
 			var htm='';
@@ -124,19 +84,9 @@
 
 			if($(target).attr('data-event')=='dblclick'){
 
-				if(type=='official'){
-					assignOfficialPlateNumber(id,plate_no,vehicle_name)
-				}
 
-				if(type=='personal'){
-					assignPersonalPlateNumber(id,plate_no,vehicle_name)
-				}
-
-				
-
-				if(type=='campus'){
-					assignCampusPlateNumber(id,plate_no,vehicle_name)
-				}
+				assignOfficialPlateNumber(id,plate_no,vehicle_name)
+	
 				
 				$('#preview-modal').modal('hide');
 			}  
@@ -176,22 +126,8 @@
 
 			if($(target).attr('data-event')=='dblclick'){
 
-				if(type=='official'){
 					assignOfficialDriver(id,driver,driver_name);
-				}
-
-				if(type=='personal'){
-
-					assignPersonalDriver(id,driver,driver_name);
-				}
-
-
-				if(type=='campus'){
-			
-					assignCampusDriver(id,driver,driver_name);
-				}
-
-
+				
 				$('#preview-modal').modal('hide');
 			}  
 
@@ -249,48 +185,7 @@
 		})
 	}
 
-	function assignPersonalDriver(id,driver,driver_name){
-		$.ajax({
 
-			url:'api/travel/personal/driver/'+id,
-			method:'PUT',
-			data: { _token: $("input[name=_token]").val(),id:id,driver:driver,driver_name:driver_name},
-			success:function(data){
-
-
-				if(data==1){
-					$('.travel-other-details-read-more-'+id).click();
-					$('.travel-other-details-driver-'+id).html(driver_name+' <span class="glyphicon glyphicon-ok text-success"></span>')
-				}else{
-					alert('Oops! Something went wrong.Try to refresh the page')
-				}
-
-				$('#preview-modal').modal('hide');
-			}
-		})
-	}
-
-
-	function assignCampusDriver(id,driver,driver_name){
-		$.ajax({
-
-			url:'api/travel/campus/driver/'+id,
-			method:'PUT',
-			data: { _token: $("input[name=_token]").val(),id:id,driver:driver,driver_name:driver_name},
-			success:function(data){
-
-
-				if(data==1){
-					$('.travel-other-details-read-more-'+id).click();
-					$('.travel-other-details-driver-'+id).html(driver_name+' <span class="glyphicon glyphicon-ok text-success"></span>')
-				}else{
-					alert('Oops! Something went wrong.Try to refresh the page')
-				}
-
-				$('#preview-modal').modal('hide');
-			}
-		})
-	}
 
 
 	function showDriversList(callback){
@@ -340,20 +235,8 @@
 
 			previewLoadingEffect('#preview-modal-dialog .modal-body')
 
-			if(type=='official'){
-					assignOfficialDriver(id,driver,driver_name);
-			}
-
-			if(type=='personal'){
-
-				assignPersonalDriver(id,driver,driver_name);
-			}
-
-
-			if(type=='campus'){
-		
-				assignCampusDriver(id,driver,driver_name);
-			}
+			assignOfficialDriver(id,driver,driver_name);
+			
 
 		})
 	}
