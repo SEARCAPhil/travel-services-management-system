@@ -2,6 +2,7 @@
 
 ###Instructions
 * Download or clone this repository and extract to your webserver
+* RENAME folder ro `trs`
 * create a copy of .env.example and rename to .env
 * Run **"composer install"**
 * Create laravel key using **"php artisan key:generate"**
