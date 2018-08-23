@@ -546,6 +546,13 @@ function showOfficialTravelItenerary(id){
 										htm+=`<button class="btn btn-xs btn-danger" onclick="event.preventDefault();window.open('${ttURL}/${official_travel_itenerary[x].id}');">TT</button>`
 									}
 
+									if(official_travel_itenerary[x].request_type=='personal'){
+										htm+=`<button class="btn btn-xs btn-danger" onclick="event.preventDefault();window.open('travel/official/print/trip_ticket/${official_travel_itenerary[x].id}');">TT</button>`
+									}
+
+									htm+=`<button class="btn btn-xs btn-danger" onclick="event.preventDefault();window.open('https://form.jotform.me/81214740186453');">Feedback form</button>`
+								
+
 				htm+=				`</td>
 								<td>`+official_travel_itenerary[x].destination+`</td>
 								<td>`+official_travel_itenerary[x].departure_date+`</td>
