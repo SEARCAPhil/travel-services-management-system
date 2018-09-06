@@ -6,4 +6,5 @@ storage/framework/sessions
 Homestead.yaml
 Homestead.json
 .env
+public/*.module.js
 

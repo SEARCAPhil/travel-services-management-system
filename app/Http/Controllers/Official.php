@@ -138,7 +138,7 @@ class Official extends Controller
 
                 $this->page=$page>1?$page:1;
 
-                $this->id=$_SESSION['id'];
+                $this->id=$_SESSION['profile_id'];
 
                 #set starting limit(page 1=10,page 2=20)
 

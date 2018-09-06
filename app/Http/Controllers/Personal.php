@@ -239,7 +239,7 @@ class Personal extends Controller
     }
 
 
-     public function update_signatory(Request $request){
+     /*public function update_signatory(Request $request){
 
         try{
             $id=$request->input('id');
@@ -260,7 +260,7 @@ class Personal extends Controller
 
         }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
 
-    } 
+    }*/ 
 
 
 
