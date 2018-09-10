@@ -413,17 +413,15 @@ class Official extends Controller
 
     public function create_purpose(Request $request){
 
-
-
         try{
 
-            $uid=$_SESSION['id'];
+            $uid = $_SESSION['profile_id'];
 
 
 
             //uid saved in login_db
 
-            $original_uid=($_SESSION['uid']);
+            //$original_uid=($_SESSION['uid']);
 
             //$uid=16;
 

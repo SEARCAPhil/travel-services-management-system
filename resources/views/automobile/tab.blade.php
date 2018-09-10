@@ -16,7 +16,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top top-navbar">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<a class="navbar-brand"  style="margin-left:0;color: #009688;"><i class="material-icons">menu</i></a>
+				<a class="navbar-brand"  style="margin-left:0;color: #f5b80e;"><i class="material-icons">menu</i></a>
 				<a class="navbar-brand"  style="margin-left:0;"></a>
 			</div>
 			
@@ -71,7 +71,7 @@
 
 
 					<li role="presentation"></li>
-					<li role="presentation"><a href="#" class="add-button" data-content="official">Form<i class="material-icons">add_box</i></a></li>
+					<li role="presentation">&emsp;&emsp;<a href="#" class="add-button" data-content="official">Form<i class="material-icons">add_box</i></a></li>
 
 
  				<li href="#profile" aria-controls="profile" role="tab" data-toggle="tab"  class="automobile-tab col col-md-12" data-page="calendar">
@@ -87,7 +87,7 @@
  			</ul>
 
  			<ul class="list-unstyled main-menu main-menu-list pull-left">
- 				<li id="new"><a href="authentication/logout">Sign-out<i class="material-icons" style="width: 24px;">keyboard_backspace</i></a></li>
+ 				<li id="new" ><a href="authentication/logout" style="color: #f5b80e;">Sign-out<i class="material-icons" style="width: 24px;">keyboard_backspace</i></a></li>
  			</ul>
 
  			

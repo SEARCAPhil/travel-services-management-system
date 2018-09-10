@@ -1,6 +1,6 @@
-<div class="col col-md-12 preview-status-section"></div>	
+<div class="row preview-status-section"></div>	
 
-<div class="col col-md-12"  style="margin-bottom: 10px;margin-top: 20px;">
+<div class="row"  style="margin-bottom: 10px;box-shadow: 0px 10px 25px rgba(200,200,200,0.2);padding-bottom:15px;padding-left: 50px;">
 	<small>
 		<ul class="list-unstyled preview-menu-li">
 
@@ -37,7 +37,7 @@
 
 			<div class="col col-md-12 preview-sections">
 				<div class="col col-md-12 content-header-section">
-					<div class="content-header"> <b>Purpose</b></div>
+					<div class="content-header"> <i class="material-icons md-18">label</i><b>Purpose</b></div>
 				</div>
 				
 				<div class="col col-md-12">
@@ -51,7 +51,7 @@
 
 				<div class="col col-md-12 content-header-section">
 					<div class="content-header">
-						<span class="pull-left"><b>Passengers</b></span> &emsp;
+						<span class="pull-left"><i class="material-icons md-18">label</i> <b>Passengers</b></span> &emsp;
 						<span class="label label-success  passenger-count">?</span>
 					</div>
 				</div>
@@ -76,7 +76,7 @@
 
 			<div class="col col-md-12 preview-sections">
 				<div class="col col-md-12 content-header-section">
-					<div class="content-header"> <span class="pull-left"><b>Itinerary</b></span> &emsp;
+					<div class="content-header"> <span class="pull-left"><i class="material-icons md-18">label</i><b>Itinerary</b></span> &emsp;
 				<span class="label label-success itenerary-count"> ? </span></div>
 				</div>
 
@@ -90,7 +90,7 @@
 
 			<div class="col col-md-12 preview-sections">
 				<div class="col col-md-12 content-header-section">
-					<div class="content-header"> <span><b>Source of fund</b></span></div>
+					<div class="content-header"> <i class="material-icons md-18">label</i><span><b>Source of fund</b></span></div>
 				</div>
 				<div class="col co-md-12">
 					<div class="source_of_fund_section col-md-12"></div>
@@ -111,7 +111,7 @@
 
 			<div class="col col-md-12 preview-sections show-for show-for-trp-only">
 				<div class="col col-md-12 content-header-section">
-					<div class="content-header"> <span class="pull-left"><b>Mode of Payment</b></span> &emsp;</div>
+					<div class="content-header"> <i class="material-icons md-18">label</i><span class="pull-left"><b>Mode of Payment</b></span> &emsp;</div>
 				</div>
 				<p class="col col-md-12">
 					<span>Cash <input type="radio" name="mode-of-payment" disabled="disabled" value="cash"></span>
@@ -122,7 +122,7 @@
 
 			<div class="col col-md-12 preview-sections">
 				<div class="col col-md-12 content-header-section">
-					<div class="content-header"> <span class="pull-left"><b>Notes</b></span> </div>
+					<div class="content-header"> <span class="pull-left"><i class="material-icons md-18">label</i><b>Notes</b></span> </div>
 				</div>
 				<div class="col col-md-12">
 				

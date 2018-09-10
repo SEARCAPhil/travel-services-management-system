@@ -146,6 +146,7 @@ class Authentication extends Controller
        $_SESSION['id'] = $data['id'];
        $_SESSION['token'] = $data['token'];
        $_SESSION['profile_id'] = $data['profile_id'];
+       $_SESSION['uid'] = $data['profile_id'];
        $_SESSION['dept'] = $data['fields']->department;
        $_SESSION['priv'] = $data['role'];
        $_SESSION['position'] = $data['fields']->jobTitle;

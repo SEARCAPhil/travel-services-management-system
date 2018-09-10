@@ -50,7 +50,7 @@
 	</div>
 </div>
 
-<div class="preview-content">
+<div class="preview-content" style="height: 100vh; overflow-y: auto;padding-bottom:60px;">
 
 {{csrf_field()}}
 

@@ -47,7 +47,7 @@
 	</div>
 </div>
 
-<div class="col col-md-8 col-md-offset-2 preview-content" style="margin-top: 50px;">
+<div class="col col-md-8 col-md-offset-2 preview-content" style="margin-top: 50px;height:100vh; overflow-y: auto;padding-bottom:160px;">
 	<div class="col-xs-12"> 
 		<a href="#" onclick="event.preventDefault();$('.automobile-tab[data-type=official]').click();"><i class="material-icons">keyboard_backspace</i> back to list</a>
 	</div>
@@ -182,7 +182,7 @@
 			<div class="col col-md-12 content-header-section" style="margin-top: 80px;">
 
 				<details>
-					<summary>Advance options</summary>
+					<summary>Advanced options</summary>
 					<br/><br/>
 					<div class="col col-md-12">
 						<div>

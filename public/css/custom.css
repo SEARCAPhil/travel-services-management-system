@@ -54,7 +54,8 @@
 /*global*/
 
 body{
-
+	background: #fff;
+	overflow: hidden;
 }
 summary{
   outline:none;
@@ -211,7 +212,11 @@ input:focus,input:active,textarea:focus,textarea:active,select:active,select:foc
 
 
 
-
+.list-section {
+	height: 100vh;
+	border-right: 1px solid rgba(200,200,200,0.6);
+	overflow-y: auto;
+}
 
 
 
@@ -381,9 +386,7 @@ padding: 5px;
 	
 	/*font-weight: bold;*/
 	transition: border 0.2s ease-in-out;
-
 	padding:5px;
-	border:1px solid #ccc;
 	background: rgba(245,245,245,0.7)
 
 
@@ -425,6 +428,7 @@ padding: 5px;
 .preview-table{
 
 }
+
 .preview-sections{
 	margin-top: 10px;
 	margin-bottom: 25px;
@@ -433,9 +437,15 @@ padding: 5px;
 	padding-top: 15px;
 	margin-bottom: 10px;
 	background-image: none;
-	background: rgba(220,20,60,0.9);
+	background: #455a64;
 	color:rgb(255,255,255);
 	display: none;
+}
+.preview-section{
+	max-height: 100vh;
+	overflow-y: auto;
+	padding-bottom: 50px;
+	min-height: 150px;
 }
 
 .status-markings{
@@ -469,7 +479,9 @@ padding: 5px;
 
 .content-header{
 	float: left;
-	width: 200px;background: #009688;padding: 8px;color:rgb(250,250,250);
+	width: 200px;
+	color: #009688;
+	padding: 8px;
 }
 
 .purpose-content{
