@@ -12,7 +12,7 @@
 <div class="col col-md-6 col-lg-3 col-sm-8"><br/>
 	<div class="col col-md-8 col-sm-12 content-section">
 		
-			<center  class="chart-section">
+			<center class="chart-section">
 				<h1>Current Status</h1>
 				<canvas id="myChart" width="400" height="200"></canvas>
 				

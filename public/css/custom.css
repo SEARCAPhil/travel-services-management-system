@@ -558,24 +558,18 @@ padding: 5px;
 	display: block;
 	width:150px;
 	text-align: center !important;
-	background: rgb(160,160,160);
 	padding: 5px;
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
-	border-right: 1px solid rgba(100,100,100,0.3);
-
-
+	background: none;
 }
 
 .travel-link-ul li.active{
-	background: #fff !important;
 	
 }
 
 
 .travel-link-ul li a{
 	margin-right: 5px;	
-	color: rgb(255,255,255) !important;
+	color: rgb(40,40,40) !important;
 }
 
 
@@ -774,4 +768,12 @@ border-top:4px solid rgb(32,199,150);
 
 .show-for{
 	display: none;
+}
+
+.text-smaller {
+	font-size: small;
+}
+
+.text-gray {
+	color: rgba(220, 220, 220, 0.8) !important;
 }

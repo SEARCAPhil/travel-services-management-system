@@ -446,8 +446,8 @@ function appendTravelToList(json){
 
 				 	<div class="col col-lg-offset-1 col-md-offset-2 col-md-10 col-sm-offset-1 col-sm-11">
 						<small>
-							<a href="#" class="travel-link advance-menu pull-left  travel-other-details-read-more travel-other-details-read-more-`+data.id+`" title="Read other details" data-target="travel-other-details-`+data.id+`">
-								<span class="glyphicon glyphicon-option-horizontal"></span>
+							<a href="#" class="travel-link advance-menu pull-right  travel-other-details-read-more travel-other-details-read-more-`+data.id+`" title="Read other details" data-target="travel-other-details-`+data.id+`">
+								click to read full details
 							</a>
 						</small>
 					</div>

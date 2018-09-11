@@ -1,17 +1,15 @@
 <div class="row preview-status-section"></div>	
 
-<div class="row"  style="margin-bottom: 10px;box-shadow: 0px 10px 25px rgba(200,200,200,0.2);padding-bottom:15px;padding-left: 50px;">
-	<small>
+<div class="row"  style="margin-bottom: 10px;box-shadow: 0px 10px 25px rgba(200,200,200,0.2);padding-bottom:15px;padding-left: 50px;font-size: 12px;">
+	<section>
 		<ul class="list-unstyled preview-menu-li">
-
-			
 			<li class="preview-command"><a href="#" target="_blank" class="preview-print" title="print"><span class="glyphicon glyphicon-print"></span> Print</a></li>
 			<li class="preview-remove preview-command disabled" title="remove"><span class="glyphicon glyphicon-remove"></span> Remove</li>
 			<li class="preview-update preview-command disabled" title="update"><span class="glyphicon glyphicon-pencil"></span> Update</li>
 			<li class="text-danger preview-forward preview-command disabled" title="send"> <span class="glyphicon glyphicon-send"></span> Send</li>
 
 		</ul>
-	</small>
+</section>
 	
 </div>
 

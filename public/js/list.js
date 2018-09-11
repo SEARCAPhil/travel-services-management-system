@@ -399,7 +399,7 @@ function appendToList(callback=function(){}){
 			activeClass='closed';
 		}
 
-		if(localStorage.getItem('priv')=='admin'){
+		if(localStorage.getItem('role')=='admin'){
 			//append to the DIV
 			htm+=`<dd id="`+list[x].id+`" class="`+activeClass+`">
 			<span style="font-size: 12px;padding:4px;" class="pull-right">${status_message}</span>
