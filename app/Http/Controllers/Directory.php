@@ -10,6 +10,8 @@ use App\Http\Requests;
 
 class Directory extends Controller
 {
+	public $ischo_db = 'trsdev_ischo_db';
+
     function staff($page=1){
 
     	try{	
@@ -76,8 +78,8 @@ class Directory extends Controller
 				$start_page=$this->page<2?0:( integer)($this->page-1)*20;
 
 				//$this->limit=$limit;
-				$view_account_sql="SELECT * FROM searcaba_ischo_db.personal_tb LIMIT :start, 20";
-				$view_account_sql2="SELECT count(*) as total FROM searcaba_ischo_db.personal_tb";
+				$view_account_sql="SELECT * FROM {$this->ischo_db}.personal_tb LIMIT :start, 20";
+				$view_account_sql2="SELECT count(*) as total FROM {$this->ischo_db}.personal_tb";
 				$view_profile_statement=$this->pdoObject->prepare($view_account_sql);
 				$view_profile_statement2=$this->pdoObject->query($view_account_sql2);
 				$view_profile_statement->bindParam(':start',$start_page,\PDO::PARAM_INT);
@@ -359,8 +361,8 @@ class Directory extends Controller
 				$start_page=$this->page<2?0:( integer)($this->page-1)*20;
 
 				//$this->limit=$limit;
-				$view_account_sql="SELECT * FROM searcaba_ischo_db.personal_tb where searcaba_ischo_db.personal_tb.fullname LIKE :param1 or searcaba_ischo_db.personal_tb.surname LIKE :param2 or searcaba_ischo_db.personal_tb.firstname LIKE :param3   LIMIT :start, 20";
-				$view_account_sql2="SELECT count(*) as total FROM searcaba_ischo_db.personal_tb where searcaba_ischo_db.personal_tb.fullname  LIKE :param1 or searcaba_ischo_db.personal_tb.surname LIKE :param2 or searcaba_ischo_db.personal_tb.firstname LIKE :param3  ";
+				$view_account_sql="SELECT * FROM {$this->ischo_db}.personal_tb where {$this->ischo_db}.personal_tb.fullname LIKE :param1 or {$this->ischo_db}.personal_tb.surname LIKE :param2 or {$this->ischo_db}.personal_tb.firstname LIKE :param3   LIMIT :start, 20";
+				$view_account_sql2="SELECT count(*) as total FROM {$this->ischo_db}.personal_tb where {$this->ischo_db}.personal_tb.fullname  LIKE :param1 or {$this->ischo_db}.personal_tb.surname LIKE :param2 or {$this->ischo_db}.personal_tb.firstname LIKE :param3  ";
 				$view_profile_statement=$this->pdoObject->prepare($view_account_sql);
 				$view_profile_statement2=$this->pdoObject->prepare($view_account_sql2);
 				$view_profile_statement->bindParam(':start',$start_page,\PDO::PARAM_INT);

@@ -135,7 +135,7 @@
             <br/>
             <br/>
             <p>
-                <small>By signing in to TRS you are agree/accept to <span class="text-success">Users License agreement</span> and <span class="text-success">Data policy</span> settings of SEARCA</small>
+                <small>By signing in to TRS you are agree to <span class="text-success">Users License agreement</span> and <span class="text-success">Data policy</span> settings of SEARCA</small>
             </p>
 						
         </div> 
@@ -143,6 +143,6 @@
     </section>
 
 <!--end content-->
-</artice>
+</article>
 
 <script type="text/javascript" src="{{url('/')}}/js/auth.es.module.js"></script>
