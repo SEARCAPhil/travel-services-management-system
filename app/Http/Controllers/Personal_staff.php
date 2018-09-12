@@ -52,7 +52,7 @@ class Personal_staff extends Controller
 
                 $this->id=htmlentities(htmlspecialchars($id));
 
-                $sql="SELECT trp_passengers.id,trp_passengers.uid,searcaba_login_db.account_profile.profile_name,searcaba_login_db.account_profile.position,searcaba_login_db.account_profile.profile_image,searcaba_login_db.department.dept_name  FROM trp_passengers LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.uid=trp_passengers.uid LEFT JOIN searcaba_login_db.department on searcaba_login_db.department.dept_id=searcaba_login_db.account_profile.dept_id  where  trp_id=:id and type='staff'";
+                $sql="SELECT trp_passengers.id,trp_passengers.uid,account_profile.profile_name,account_profile.position,account_profile.profile_image,department.dept_name  FROM trp_passengers LEFT JOIN account_profile on account_profile.uid=trp_passengers.uid LEFT JOIN department on department.dept_id=account_profile.dept_id  where  trp_id=:id and type='staff'";
 
                 $statement=$this->pdoObject->prepare($sql);
 
