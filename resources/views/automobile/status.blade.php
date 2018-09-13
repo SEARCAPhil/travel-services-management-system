@@ -1,88 +1,60 @@
 
 
- <div class="col col-md-7 col-sm-8 col-lg-5 col-lg-offset-1"><br/>
+ <div class="col col-md-7 col-sm-8 col-lg-5 col-lg-offset-1" style="height: 100vh; overflow: auto;"><br/>
 	<div class="col col-md-12 content-section">
-		<h1>Gasoline Expense per Month</h1>
-		<p><small>The graph below shows the annual gasoline expense of motorpool for year <span class="year"></span></small></p>
-		<canvas id="myChart2" width="400" height="200"></canvas>
+		<h1>Today's Trips</h1>
+		<p><small>All land travel scheduled today <span id="today-span" class="text-danger"></span></small></p>
+		<hr/>
 	</div>
+
+	<div class="col col-md-12 content-section" id ="todays-trip-section"></div>
 </div>
 
+<script>
+	var d = new Date()
+	var month = d.getMonth() < 10 ? `0${d.getMonth()}` : d.getMonth()
+	var day = d.getDay() < 10 ? `0${d.getDay()}` : d.getDay()	
+	var todaysDate = `${d.getFullYear()}-${month}-${day}`
 
-<div class="col col-md-6 col-lg-3 col-sm-8"><br/>
-	<div class="col col-md-8 col-sm-12 content-section">
-		
-			<center class="chart-section">
-				<h1>Current Status</h1>
-				<canvas id="myChart" width="400" height="200"></canvas>
+	function getReserved(res){
+
+		return new Promise((resolve, reject) => {
+			$.get('api/travel/calendar/'+res,function(json){
+				var data = JSON.parse(json);
+
+				resolve(data)
+			})
+		})
+	}
+
+	$(document).ready(function() { 
+		document.getElementById('today-span').innerHTML = todaysDate
+		getReserved(d.getFullYear()+'-'+(d.getMonth()+1)+'-'+1).then(res => {
+			const targ = document.getElementById('todays-trip-section')
+			targ.innerHTML = ''
+			let num = 0
+			
 				
-			</center>
-			<div class="col col-md-12 col-sm-12"><br/>
-				<ul class="list-unstyled status-indicator">
-					<li class="col col-md-3"><div class="status-box blue"></div><small class="text-muted">Cars</small></li>
-					<li class="col col-md-3"><div class="status-box green"></div><small class="text-muted">Available</small></li>
-					<li class="col col-md-3"><div class="status-box red"></div><small class="text-muted">Unavailable</small></li>
-				</ul>
-			</div>
-		
-		
-	</div>
-</div>
-
-
-
-<script type="text/javascript" src="js/Chart.min.js"></script>
-<script type="text/javascript" src="js/Chart.status.js"></script>
-<script>
-$(document).ready(function(){
-	appendToChart(new Date().getFullYear());
-	$('.year').html(new Date().getFullYear())
-})
-</script>
-
-<script>
-$(document).ready(function(){
-
-
-	getautomobileStatus(function(){
-		var ctx = document.getElementById("myChart");
-		Chart.defaults.global.legend.display = false;
-		var data = {
-		    labels:['Total number of automobile','Available','Unavailable'],
-		    datasets: [
-		        {
-		            data: [total_automobile, available_automobile,in_use_automobile],
-		            backgroundColor: [
-		                "rgb(32,122,199)",
-		                "rgb(32,199,150)",
-		                "rgb(255,82,87)"
-		            ],
-		            hoverBackgroundColor: [
-		                "#FF6384",
-		                "#36A2EB",
-		                "#FFCE56"
-		            ]
-		        }]
-		};
-
-		// And for a doughnut chart
-		var myDoughnutChart = new Chart(ctx, {
-		    type: 'doughnut',
-		    data: data,
-		   
-		});
-
-
-		//status box
-		$('.status-box.blue').html(total_automobile)
-		$('.status-box.green').html(available_automobile)
-		$('.status-box.red').html(in_use_automobile)
-
-	});
-
-
-
-	
-})
-
+				res.forEach((trip, index) => {
+					if (trip.departure_date == todaysDate) {
+						targ.innerHTML += `<div class="col-sm-12 row">
+							<p style="color: green;">${trip.location} - ${trip.destination}</p>
+							<p class="text-muted">${trip.departure_date}emsp; ${trip.departure_time}</p>
+							<p><span class="badge">#${trip.tr_id}</span>&emsp;<span class="text-muted">John Kenneth Abella</span></p>
+							<hr/>
+						</div>`
+						num++
+					}
+				})
+			
+				setTimeout(() => {
+					if(num == 0) {
+						targ.innerHTML = `<section  style="padding:10px;text-align: center;">
+						<img src="img/bag.png" width="150px"/>
+						<h3 class="text-muted">No trip scheduled for today.</h3>
+						<span class="text-muted"> Have a nice day!</span></section>`
+					}
+				}, 600);
+		})
+	})
 </script>

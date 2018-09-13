@@ -29,11 +29,9 @@
 		<div class="col col-md-12 col-xs-12 col-sm-12">
  			<ul class="list-unstyled main-menu main-menu-list pull-left">
 
- 			<?php if(@$_SESSION["priv"]=='admin'): ?>
  				<li href="#status" aria-controls="status" role="tab" data-toggle="tab" class="automobile-tab col col-md-12 col-sm-12" data-page="status">
- 					<i class="material-icons" style="width: 24px;">dashboard</i> Dashboard 	
+ 					<i class="material-icons" style="width: 24px;">dashboard</i> Today's Trip <span class="badge badge-danger">new</span>	
  				</li>
- 			<?php endif; ?>
 
  			<?php if(@$_SESSION["priv"]=='admin'): ?>
  				<li  href="#home" aria-controls="home" role="tab" data-toggle="tab" class="automobile-tab col col-md-12 col-sm-12" data-page="automobile">

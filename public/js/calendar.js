@@ -193,7 +193,7 @@
 								<small style="line-height: 12px;">
 									<span class="text-success">`+reserved[x].location +` - `+reserved[x].destination + `</span><br/> 
 									<input type="time" class="timeSelector" style="margin:0;background:none;border:none;padding:none;" value="`+reserved[x].departure_time+`" disabled="disabled">
-
+									<span class="badge">${reserved[x].tr_id}</span>
 								`
 
 
@@ -201,7 +201,8 @@
 						
 						//hide driver
 						
-						htm+=`<br/><span class="text-muted">`+reserved[x].driver+`<span></small><hr/>`
+						htm+=`<br/><span class="text-muted">`+reserved[x].driver+`<span><br/>
+						</small><hr/>`
 						
 						
 						htm+=`</div>`
