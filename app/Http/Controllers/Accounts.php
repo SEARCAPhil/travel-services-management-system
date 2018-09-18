@@ -29,8 +29,8 @@ class Accounts extends Controller
 		return $this->DB->lastInsertId();
   }
   
-	public function create_profile($id, $profile_name, $last_name, $first_name, $middle_name, $email, $department, $department_alias, $position){
-		$SQL = 'INSERT INTO account_profile(uid, profile_name, last_name, first_name, middle_name, profile_email, department, department_alias, position) VALUES (:account_id, :profile_name, :last_name, :first_name, :middle_name, :email, :department, :department_alias, :position)';
+	public function create_profile($id, $profile_name, $last_name, $first_name, $middle_name, $email, $department, $department_alias, $position, $dept_id){
+		$SQL = 'INSERT INTO account_profile(uid, profile_name, last_name, first_name, middle_name, profile_email, department, department_alias, position, dept_id) VALUES (:account_id, :profile_name, :last_name, :first_name, :middle_name, :email, :department, :department_alias, :position, :dept_id)';
     $sth = $this->DB->prepare($SQL);
     
 		$sth->bindParam(':account_id',$id,\PDO::PARAM_INT);
@@ -41,6 +41,26 @@ class Accounts extends Controller
 		$sth->bindParam(':email',$email);
 		$sth->bindParam(':department',$department);
 		$sth->bindParam(':department_alias',$department_alias);
+		$sth->bindParam(':dept_id', $dept_id, \PDO::PARAM_INT);
+		$sth->bindParam(':position',$position);
+		$sth->execute();
+		
+		return $this->DB->lastInsertId();
+	}
+	
+	public function update_profile($id, $profile_name, $last_name, $first_name, $middle_name, $email, $department, $department_alias, $position, $dept_id){
+		$SQL = 'UPDATE account_profile SET profile_name = :profile_name, last_name = :last_name, first_name = :first_name, middle_name = :middle_name, profile_email = :profile_email, department = :department, department_alias = :department_alias, position = :position, dept_id = :dept_id WHERE id = :id';
+    $sth = $this->DB->prepare($SQL);
+    
+		$sth->bindParam(':id', $id ,\PDO::PARAM_INT);
+		$sth->bindParam(':profile_name',$profile_name);
+		$sth->bindParam(':last_name',$last_name);
+		$sth->bindParam(':first_name',$first_name);
+		$sth->bindParam(':middle_name',$middle_name);
+		$sth->bindParam(':profile_email',$email);
+		$sth->bindParam(':department',$department);
+		$sth->bindParam(':department_alias',$department_alias);
+		$sth->bindParam(':dept_id', $dept_id, \PDO::PARAM_INT);
 		$sth->bindParam(':position',$position);
 		$sth->execute();
 		

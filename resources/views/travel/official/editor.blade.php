@@ -184,8 +184,8 @@
 				<details>
 					<summary>Advanced options</summary>
 					<br/><br/>
-					<div class="col col-md-12">
-						<div>
+					<div class="col col-md-12 row">
+						<div class="col col-md-10">
 							<b> <i class="material-icons md-18">note</i> Signatory :</b>
 							<span class="preview-signatory"></span>
 						</div>

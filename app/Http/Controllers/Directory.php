@@ -215,9 +215,9 @@ class Directory extends Controller
 
 	function signatory_department($id){
 		try{
-				$this->pdoObject=DB::connection()->getPdo();
+				$this->pdoObject = DB::connection()->getPdo();
 				
-				$this->id=htmlentities(htmlspecialchars($id));
+				$this->id = htmlentities(htmlspecialchars($id));
 
 			
 				$view_account_sql="SELECT account_profile.profile_name,account_profile.id as profile_id,department.dept_name,signatory.priority,signatory.account_profile_id ,account_profile.uid FROM signatory LEFT JOIN  account_profile on  account_profile.id=signatory.account_profile_id LEFT JOIN department on signatory.dept_id=department.dept_id where signatory.dept_id=:id ORDER BY signatory.id DESC LIMIT 1";
@@ -535,9 +535,24 @@ class Directory extends Controller
                 echo json_encode($res);
 
         }catch(Exception $e){echo $e->getMessage();}
+ 
+	}
+	
+	public function departments_list()
+    {
 
-
-        
+        try{
+                $this->pdoObject = DB::connection()->getPdo();
+                $sql="SELECT * FROM department WHERE is_active = 1";
+                $statement=$this->pdoObject->prepare($sql);
+                $statement->execute();
+                $res=Array();
+                while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+                    $res[]=$row;
+                }
+               
+                return $res;
+        }catch(Exception $e){echo $e->getMessage();} 
     }
 
 

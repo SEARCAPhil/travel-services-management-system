@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Authentication;
 use App\Http\Controllers\Accounts;
 use App\Http\Controllers\Sessions;
+use App\Http\Controllers\Directory;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
@@ -50,11 +51,23 @@ class Authentication extends Controller
       </div><br/>'));*/
   }
 
+  public function map_department ($dept_name) {
+    $dept_id = null;
+    $Dir = new Directory(DB::connection()->getPdo());
+    $department_list = $Dir->departments_list();
+    foreach($department_list as $key => $value) {
+      # compare department assigned in OWA against in TRS
+      if($value->dept_name === $dept_name) $dept_id = $value->dept_id;
+    }
+    return $dept_id;
+  }
 
   public function login(Request $request)
   {
     $Ses = new Sessions(DB::connection()->getPdo());
     $Acc = new Accounts(DB::connection()->getPdo());
+    $Dir = new Directory(DB::connection()->getPdo());
+
     //browsers , curl, etc...
     $agent = isset($_SERVER['HTTP_USER_AGENT'])?$_SERVER['HTTP_USER_AGENT']:null;
     // token, salt
@@ -63,6 +76,15 @@ class Authentication extends Controller
 
     $input = @json_decode($request->getContent())->data;
     $credential = $Acc->loginO365($input->mail,$input->id);
+    $department_list = $Dir->departments_list();
+    $dept_id = self::map_department($credential->department);
+    $department_alias = explode(' ', @$input->department);
+    $dept_alias = '';
+    
+    foreach($department_alias as $key => $value) {
+      $dept_alias.=  strtoupper(substr($value, 0, 1));
+    }
+    
 
     // set OPENID
     if(is_null($credential->openID) || empty($credential->openID)) $Acc->setOpenID($credential->uid, $input->id);
@@ -80,7 +102,7 @@ class Authentication extends Controller
       if($accountId > 0) {
 
         // create_profile($id, $profile_name, $last_name, $first_name, $middle_name, $email, $department, $department_alias, $position)
-        $profileId = (int) @$Acc->create_profile($accountId, $input->displayName, $input->surname, $input->givenName, $input->givenName, $input->mail, $input->department, $input->department, $input->jobTitle);
+        $profileId = (int) @$Acc->create_profile($accountId, $input->displayName, $input->surname, $input->givenName, $input->givenName, $input->mail, $input->department, $dept_alias, $input->jobTitle, $dept_id);
         $sessionId = $Ses->set($token,$accountId,$agent);
         
         if($sessionId) {
@@ -89,6 +111,7 @@ class Authentication extends Controller
           $result['id'] = $accountId;
           $result['profile_id'] = $profileId;
           $result['fields'] = $input;
+          $result['dept_id'] = $dept_id;
         }
 
         return $result;
@@ -98,12 +121,17 @@ class Authentication extends Controller
       // proceed to login
       // no need to register again
       $sessionId = $Ses->set($token,$credential->uid,$agent);
+
+      // update profile
+      $isUpdated = (int) $Acc->update_profile($credential->profile_id, $input->displayName, $input->surname, $input->givenName, $input->givenName, $input->mail, $input->department, $dept_alias, $input->jobTitle, $dept_id);
+
       if($sessionId) {
         $result['token'] = $token;
         $result['role'] = $credential->role;
         $result['fields'] = $input;
         $result['id'] = $credential->uid;
         $result['profile_id'] = $credential->profile_id;
+        $result['dept_id'] = $dept_id;
       }	
 
       return $result;
@@ -152,6 +180,7 @@ class Authentication extends Controller
        $_SESSION['position'] = $data['fields']->jobTitle;
        $_SESSION['unit'] = $data['fields']->department;
        $_SESSION['name'] = $data['fields']->displayName;
+       $_SESSION['dept_id'] = $data['dept_id'];
 
        // echo "authenticating . . .";
 

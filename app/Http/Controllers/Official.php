@@ -433,10 +433,10 @@ class Official extends Controller
 
             #get signatory
 
-            $official_signatory=new Directory();
-            $signatory=json_decode($official_signatory->signatory_department($_SESSION['dept']));
+            $official_signatory = new Directory();
+            $signatory = json_decode($official_signatory->signatory_department($_SESSION['dept_id']));
 
-
+var_dump($signatory); exit;
             $approved_by=@$signatory[0]->profile_name;
             $approved_by_id=NULL;
             $recommended_by_id=NULL;
