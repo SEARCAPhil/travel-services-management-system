@@ -434,7 +434,7 @@ class Official extends Controller
             #get signatory
 
             $official_signatory = new Directory();
-            $signatory = is_null($_SESSION['dept_id']) ? array() : json_decode($official_signatory->signatory_department($_SESSION['dept_id']));
+            $signatory = is_null($_SESSION['dept_id']) ? array() : @json_decode($official_signatory->signatory_department($_SESSION['dept_id']));
 
             $approved_by = @$signatory[0]->profile_name;
             $approved_by_id = NULL;
@@ -442,11 +442,11 @@ class Official extends Controller
 
             if($type=='official'){
                 if(@strip_tags($_SESSION['name'])!=$approved_by){
-                     $approved_by_id=($signatory[0]->account_profile_id);
+                     $approved_by_id = @($signatory[0]->account_profile_id);
                 }
             }
 
-            if($type=='personal'||$type=='campus'){
+            if($type =='personal' || $type == 'campus'){
                 //set to gsu head by default
                 //currently RAM: 5
                 $approved_by_id=5; 
@@ -454,7 +454,7 @@ class Official extends Controller
 
             if($type=='campus'){
                 //set recommending
-                $recommended_by_id=($signatory[0]->account_profile_id);
+                $recommended_by_id = @($signatory[0]->account_profile_id);
             }
 
             $this->pdoObject=DB::connection()->getPdo();
