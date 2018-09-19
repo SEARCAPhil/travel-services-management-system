@@ -220,8 +220,8 @@ function showTotalIteneraryCount(){
 */
 
 function isAdmin(){
-	var priv=localStorage.getItem('priv');
-	return priv==='admin';
+	var priv = localStorage.getItem('role');
+	return priv === 'admin';
 }
 
 
@@ -540,8 +540,9 @@ function showOfficialTravelItenerary(id){
 								<td>
 									<a href="#" onclick="event.preventDefault();window.open('${ttURL}/${official_travel_itenerary[x].id}');">`+official_travel_itenerary[x].location+`</a><br/>
 									`
+									htm+=`<button class="btn btn-xs btn-danger" onclick="event.preventDefault();window.open('travel/campus/print/notice_of_charges/${official_travel_itenerary[x].id}');">NOC</button>`
+
 									if(official_travel_itenerary[x].request_type=='official'){
-										htm+=`<button class="btn btn-xs btn-danger" onclick="event.preventDefault();window.open('travel/campus/print/notice_of_charges/${official_travel_itenerary[x].id}');">NOC</button>`
 		
 										htm+=`<button class="btn btn-xs btn-danger" onclick="event.preventDefault();window.open('${ttURL}/${official_travel_itenerary[x].id}');">TT</button>`
 									}
@@ -550,10 +551,14 @@ function showOfficialTravelItenerary(id){
 										htm+=`<button class="btn btn-xs btn-danger" onclick="event.preventDefault();window.open('travel/official/print/trip_ticket/${official_travel_itenerary[x].id}');">TT</button>`
 									}
 
+									if(official_travel_itenerary[x].request_type=='campus'){
+										htm+=`<button class="btn btn-xs btn-danger" onclick="event.preventDefault();window.open('${ttURL}/${official_travel_itenerary[x].id}');">TT</button>`
+									}
+
 									htm+=`<button class="btn btn-xs btn-danger" onclick="event.preventDefault();window.open('https://form.jotform.me/81214740186453');">Feedback form</button>`
 								
 
-				htm+=				`</td>
+								htm+=				`</td>
 								<td>`+official_travel_itenerary[x].destination+`</td>
 								<td>`+official_travel_itenerary[x].departure_date+`</td>
 								<td>`+official_travel_itenerary[x].departure_time+`</td>
