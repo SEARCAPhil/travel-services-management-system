@@ -249,9 +249,14 @@ function showOfficialTravelListPreview(id){
 		$('.preview-purpose').html(json[0].purpose.replace(/[\n]/g,'<br/>'))
 		$('.preview-profile-image').each(function(i) {
 			// profile image
-			$('.preview-profile-image')[i].style.background = `url("uploads/profile/${json[0].profile_image}.jpeg") no-repeat`
-			$('.preview-profile-image')[i].style.backgroundSize = 'cover'
-			if (json[0].profile_image) $('.preview-profile-image')[i].parentNode.classList.remove('hide')
+			var img = document.createElement('img')
+			img.src = `uploads/profile/${json[0].profile_image}.jpeg`
+			img.setAttribute('width', '100%')
+			img.setAttribute('onerror', `this.src="img/user-account-empty.png"`)
+			$('.preview-profile-image')[i].append(img)
+			//$('.preview-profile-image')[i].style.background = `url("uploads/profile/${json[0].profile_image}.jpeg") no-repeat`
+			//$('.preview-profile-image')[i].style.backgroundSize = 'cover'
+			$('.preview-profile-image')[i].parentNode.classList.remove('hide')
 		})
 		
 		//$('.preview-cash-advance').html(' &emsp;&emsp;<b>'+json[0].source_of_fund_value+'</b>')
