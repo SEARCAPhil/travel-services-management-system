@@ -53,8 +53,11 @@
 	</div>
 
 	<div class="col col-md-8 content-section">
-		<div class="col col-xs-12 col-md-8 preview-title">
-			<div class="col col-md-12 col-xs-7 row">
+		<div class="col col-xs-12 col-md-12 preview-title">
+			<div class="col col-lg-3 col-md-4 hide">
+				<div class="profile-image profile-image-lg preview-profile-image" style="background: rgba(200,200,200,0.4);"></div>
+			</div>
+			<div class="col col-lg-8 col-md-8 col-xs-7 row">
 				<h3 class="preview-name">. . .</h3>
 				<small class="preview-unit">. . .</small>
 				<small class="preview-created">. . .</small>

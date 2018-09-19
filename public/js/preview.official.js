@@ -242,12 +242,18 @@ function isAdmin(){
 function showOfficialTravelListPreview(id){
 	//call ajax function 
 	ajax_getOfficialTravelListPreview(id,function(json){
-
 		$('.preview-id').html(json[0].tr)
 		$('.preview-name').html(json[0].profile_name)
 		$('.preview-unit').html(json[0].department)
 		$('.preview-created').html(((json[0].date_created).split(' '))[0])
 		$('.preview-purpose').html(json[0].purpose.replace(/[\n]/g,'<br/>'))
+		$('.preview-profile-image').each(function(i) {
+			// profile image
+			$('.preview-profile-image')[i].style.background = `url("uploads/profile/${json[0].profile_image}.jpeg") no-repeat`
+			$('.preview-profile-image')[i].style.backgroundSize = 'cover'
+			if (json[0].profile_image) $('.preview-profile-image')[i].parentNode.classList.remove('hide')
+		})
+		
 		//$('.preview-cash-advance').html(' &emsp;&emsp;<b>'+json[0].source_of_fund_value+'</b>')
 		$('.preview-signatory').html(' &emsp;&emsp;<b>'+json[0].approved_by+'</b>')
 

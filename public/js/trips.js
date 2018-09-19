@@ -437,8 +437,7 @@ function appendTravelToList(json){
 				 <div class="col col-md-10 col-sm-10">
 				 	<p><b><u>`+data.location+`</u></b> - <b><u>`+data.destination+`</u></b></p>
 				 	<p><b>`+data.departure_date+`</b>  - `+data.departure_time+`</p>
-				 	<p><small>`+data.requester+`</small></p>
-				 	<p><span class="badge"># ${data.id}</b></span></p>
+				 	<p><span class="badge">`+data.requester+`</span> <span class="badge">TT # ${data.id}</b></span> <span class="badge">TR # ${data.tr_id}</b></span></p>
 
 				 </div>
 
@@ -566,7 +565,7 @@ function appendTravelToList(json){
 
 						 <div class="row  verified-travel-passenger">
 							<div class="col col-md-1 col-sm-1">
-						 		<div class="profile-image  profileImage profile-image-requester" display-image="`+official_staff[a].profile_image+`" data-mode="staff" style="background: url(&quot;/profiler/profile/`+official_staff[a].profile_image+`&quot;) center center / cover no-repeat;"></div>
+						 		<div class="profile-image  profileImage profile-image-requester" display-image="`+official_staff[a].profile_image+`" data-mode="staff" style="background: url(uploads/profile/${official_staff[a].profile_image}.jpeg) center center / cover no-repeat;"></div>
 						 	</div>
 
 						 	<div class="col col-md-10 col-sm-10">

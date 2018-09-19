@@ -164,7 +164,7 @@ Route::put('api/travel/official/verified/{id}',['uses' =>'Trips@update_status'])
 
 
 
-/**authentication**/
+/** authentication **/
 
 #login
 Route::get('/authentication',function(){
@@ -181,6 +181,10 @@ Route::post('authentication/confirmation',['uses' =>'Authentication@index']);
 #logout
 Route::get('authentication/logout',['uses' =>'Authentication@logout']);
 
+
+/** Profile */
+# profile image
+Route::post('/profile/image/', ['uses' =>'Profile@image']);
 
 /**API**/
 ######################################################################################

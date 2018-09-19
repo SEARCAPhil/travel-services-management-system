@@ -48,8 +48,8 @@ class Accounts extends Controller
 		return $this->DB->lastInsertId();
 	}
 	
-	public function update_profile($id, $profile_name, $last_name, $first_name, $middle_name, $email, $department, $department_alias, $position, $dept_id){
-		$SQL = 'UPDATE account_profile SET profile_name = :profile_name, last_name = :last_name, first_name = :first_name, middle_name = :middle_name, profile_email = :profile_email, department = :department, department_alias = :department_alias, position = :position, dept_id = :dept_id WHERE id = :id';
+	public function update_profile($id, $profile_name, $last_name, $first_name, $middle_name, $email, $department, $department_alias, $position, $dept_id, $profile_image = null){
+		$SQL = 'UPDATE account_profile SET profile_name = :profile_name, last_name = :last_name, first_name = :first_name, middle_name = :middle_name, profile_email = :profile_email, department = :department, department_alias = :department_alias, position = :position, dept_id = :dept_id, profile_image = :profile_image WHERE id = :id';
     $sth = $this->DB->prepare($SQL);
     
 		$sth->bindParam(':id', $id ,\PDO::PARAM_INT);
@@ -62,6 +62,7 @@ class Accounts extends Controller
 		$sth->bindParam(':department_alias',$department_alias);
 		$sth->bindParam(':dept_id', $dept_id, \PDO::PARAM_INT);
 		$sth->bindParam(':position',$position);
+		$sth->bindParam(':profile_image',$profile_image);
 		$sth->execute();
 		
 		return $this->DB->lastInsertId();

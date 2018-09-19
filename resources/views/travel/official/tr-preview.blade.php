@@ -19,7 +19,9 @@
 
 		
 		<div class="col col-md-12 preview-title row" >
-
+			<div class="col col-md-2 hide">
+				<div class="profile-image profile-image-lg preview-profile-image" style="background: rgba(200,200,200,0.4);"></div>
+			</div>
 			<div class="col col-md-9">
 				<h3 class="preview-name"></h3>
 				<small class="preview-unit">. . .</small><br/>

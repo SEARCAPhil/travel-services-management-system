@@ -71,6 +71,10 @@ input:focus,input:active,textarea:focus,textarea:active,select:active,select:foc
   outline: none !important;
 }
 
+.badge{
+	font-weight: normal;
+}
+
 .automobile-color {
 	-webkit-appearance: none;
 	border: none;
@@ -508,8 +512,8 @@ padding: 5px;
     
 }
 .profile-image.profile-image-lg{
-	width:150px;
-	height: 150px;
+	width: 100px;
+	height: 100px;
 }
 
 /*calendar*/

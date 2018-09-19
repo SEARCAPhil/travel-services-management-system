@@ -123,7 +123,7 @@ class Authentication extends Controller
       $sessionId = $Ses->set($token,$credential->uid,$agent);
 
       // update profile
-      $isUpdated = (int) $Acc->update_profile($credential->profile_id, $input->displayName, $input->surname, $input->givenName, $input->givenName, $input->mail, $input->department, $dept_alias, $input->jobTitle, $dept_id);
+      $isUpdated = (int) $Acc->update_profile($credential->profile_id, $input->displayName, $input->surname, $input->givenName, $input->givenName, $input->mail, $input->department, $dept_alias, $input->jobTitle, $dept_id, $input->id);
 
       if($sessionId) {
         $result['token'] = $token;

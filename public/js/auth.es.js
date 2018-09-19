@@ -91,6 +91,34 @@ const loginOnPremise = (data) => {
 
 }
 
+const saveProfileImageToServer = (id, data) => {
+  return new Promise((resolve, reject) => {
+    XHR.then(res => {
+     const XHReq = new res.default()
+     const payload = {
+       url:`${ApiConfig.default.url}/profile/image`,
+       method:'POST',
+       body: JSON.stringify({
+           data,
+           id,
+       }),
+       headers: {
+         'X-CSRF-TOKEN': document.querySelector('.main-login').id
+       }
+     }
+
+    XHReq.request(payload).then((json) => {
+      const data = JSON.parse(json)
+      try{
+          resolve(data) 
+      }catch(err) {
+          reject(err)
+      } 
+     })
+    })
+  })
+}
+
 // get msgraph
 const getGraph = (token)  => {
   fetch('https://graph.microsoft.com/beta/me/',{ 
@@ -109,9 +137,12 @@ const getGraph = (token)  => {
           reader.readAsDataURL(blob); 
           reader.onloadend = function() {
             //let img = document.createElement('img')
-           // img.src = reader.result
+            // img.src = reader.result
             data.image = reader.result
-            loginOnPremise(data)              
+            loginOnPremise(data)
+
+            // save image
+            return saveProfileImageToServer(data.id, reader.result)             
           }
          
         })
