@@ -1064,3 +1064,40 @@ function changeDateAndTimeSettings(){
 	$(selectedTrips).attr('data-content',jsonEncoded)
 
 }
+
+
+/*-----------------------------------------------
+| Search
+| ----------------------------------------------*/
+function bindSearchTrips () {
+	let timeout = {}
+	document.getElementById('travel-search-input').addEventListener('keyup', (e) => {
+		clearTimeout(timeout)
+		timeout = setTimeout(() => {
+			if (!e.target.value.length) {
+				showVerifiedRecentTravel(1)
+			} else {
+				showSearchedTravel(e.target.value, 1)
+			}
+			
+		}, 800)
+	})
+}
+
+function showSearchedTravel(param, page=1){
+
+	//clear result section
+	$('.verified_travel_result').html('Loading . . .');
+
+	ajax_getVerifiedTravel(`travel/verified/search/${param}/`,page,function(json){
+		appendTravelToList(json);
+		//next page
+		setTimeout(function(){
+			tripsPager(function(val){
+				showSearchedTravel(param, val)
+			});
+
+		},800)
+	})
+
+}

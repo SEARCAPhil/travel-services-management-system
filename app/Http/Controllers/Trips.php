@@ -63,6 +63,13 @@ class Trips extends Controller
         echo json_encode($data); 
     }
 
+    public function search($param, $page){
+        $official_class = new Official();
+        $official_recent = @json_decode($official_class->search_trips($param, $page));
+        $data=Array('total'=>$official_recent->total,'pages'=>$official_recent->pages,'current_page'=>$page,'data'=>$official_recent->data);           
+        echo json_encode($data); 
+    }
+
 
 
 

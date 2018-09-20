@@ -149,6 +149,7 @@ Route::get('/verified',function(){
 Route::get('travel/verified/scheduled/{page?}',['uses'=>'Trips@show_recent']);
 Route::get('travel/verified/ongoing/{page?}',['uses'=>'Trips@show_ongoing']);
 Route::get('travel/verified/finished/{page?}',['uses'=>'Trips@show_finished']);
+Route::get('travel/verified/search/{param}/{page?}',['uses'=>'Trips@search']);
 
 /**RECENTLY VERIFIED TRAVEL REQUEST [OFFICIAL ONLY]**/
 Route::get('api/travel/official/verified/scheduled/{page}/{id}',['uses'=>'Official_itenerary@recent']);

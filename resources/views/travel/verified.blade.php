@@ -5,12 +5,16 @@
 		<li class="active"><a href="#" class="trip-link" data-type="Scheduled">Scheduled</a> </li>
 		<li><a href="#" class="trip-link" data-type="Ongoing">Ongoing</a> </li>
 		<li><a href="#" class="trip-link" data-type="Finished">Finished</a></li>
+		<li style="width: 50%;"><div class="col col-md-1"><i class="material-icons">search</i></div>
+		<div class="col col-md-5"><input type="text" class="form-control" placeholder="Search" id="travel-search-input"/></div></li>
 	</ul>
 </section>
 
 <div class="col col-md-9 col-sm-10 col-lg-8 col-lg-offset-1" style="height: 90vh; overflow-y: auto;padding-bottom: 5vh;">
 	
 	<div class="col col-md-12 trip-section content-section">
+		
+		<br/><br/>
 		 <h3 class="page-header"><span class="verified_travel_title">Scheduled</span> trips and travels</h3><br/>
 
 		 <div class="col col-md-12">
@@ -33,5 +37,6 @@
 $(document).ready(function(){
 	showVerifiedRecentTravel(1)
 	bindTravelLinkNavigation()
+	bindSearchTrips()
 })
 </script>
