@@ -285,9 +285,10 @@ function updateVerifiedTravel(id,status,type){
 		$('.modal-submit').on('click',function(){
 
 			ajax_updateVerifiedTravel('api/travel/official/verified/',id,status,type,function(){
-				if(type=='official') $('.official'+id).slideUp();
+				/*if(type=='official') $('.official'+id).slideUp();
 				if(type=='personal') $('.personal'+id).slideUp();
-				if(type=='campus') $('.campus'+id).slideUp();
+				if(type=='campus') $('.campus'+id).slideUp();*/
+				$('.official'+id).slideUp();
 			})
 
 		})

@@ -1746,7 +1746,7 @@ function ongoing($page=1){
 
                 $this->pdoObject->beginTransaction();
 
-                $sql="SELECT tr.status as tr_status,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no,travel.other_driver,automobile.manufacturer, account_profile.last_name, account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN account_profile on account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='ongoing' and departure_date!='0000-00-00' and linked='no'  ORDER BY travel.id DESC LIMIT :start,10";
+                $sql="SELECT tr.status as tr_status,tr.requested_by,travel.status,tr.request_type,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no,travel.other_driver,automobile.manufacturer, account_profile.last_name, account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN account_profile on account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='ongoing' and departure_date!='0000-00-00' and linked='no'  ORDER BY travel.id DESC LIMIT :start,10";
 
 
 
@@ -1851,7 +1851,7 @@ function ongoing($page=1){
 
 
 
-                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->tr_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'actual_time'=>$row->actual_departure_time,'returned_date'=>$row->returned_date,'returned_time'=>$row->returned_time,'plate_no'=>$row->plate_no,'manufacturer'=>$row->manufacturer,'type'=>'official','driver'=>$driver,'requester'=>$requester,'department'=>$department,'image'=>$image,'passengers'=>array('staff'=>$passenger_staff,'scholars'=>$passenger_scholar,'custom'=>$passenger_custom));
+                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->tr_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'actual_time'=>$row->actual_departure_time,'returned_date'=>$row->returned_date,'returned_time'=>$row->returned_time,'plate_no'=>$row->plate_no,'manufacturer'=>$row->manufacturer,'type'=>$row->request_type,'driver'=>$driver,'requester'=>$requester,'department'=>$department,'image'=>$image,'passengers'=>array('staff'=>$passenger_staff,'scholars'=>$passenger_scholar,'custom'=>$passenger_custom));
 
 
 
@@ -1925,7 +1925,7 @@ function ongoing($page=1){
 
                 $this->pdoObject->beginTransaction();
 
-                $sql="SELECT tr.status as tr_status,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no,travel.other_driver,automobile.manufacturer, account_profile.last_name, account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN account_profile on account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='finished' and departure_date!='0000-00-00' and linked='no'  ORDER BY travel.id DESC LIMIT :start,10";
+                $sql="SELECT tr.status as tr_status,tr.request_type,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no,travel.other_driver,automobile.manufacturer, account_profile.last_name, account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN account_profile on account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='finished' and departure_date!='0000-00-00' and linked='no'  ORDER BY travel.id DESC LIMIT :start,10";
 
 
 
@@ -2030,7 +2030,7 @@ function ongoing($page=1){
 
 
 
-                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->tr_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'actual_time'=>$row->actual_departure_time,'returned_date'=>$row->returned_date,'returned_time'=>$row->returned_time,'plate_no'=>$row->plate_no,'manufacturer'=>$row->manufacturer,'type'=>'official','driver'=>$driver,'requester'=>$requester,'department'=>$department,'image'=>$image,'passengers'=>array('staff'=>$passenger_staff,'scholars'=>$passenger_scholar,'custom'=>$passenger_custom));
+                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->tr_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'actual_time'=>$row->actual_departure_time,'returned_date'=>$row->returned_date,'returned_time'=>$row->returned_time,'plate_no'=>$row->plate_no,'manufacturer'=>$row->manufacturer,'type'=>$row->request_type,'driver'=>$driver,'requester'=>$requester,'department'=>$department,'image'=>$image,'passengers'=>array('staff'=>$passenger_staff,'scholars'=>$passenger_scholar,'custom'=>$passenger_custom));
 
 
 

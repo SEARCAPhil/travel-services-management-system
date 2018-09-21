@@ -136,9 +136,10 @@ class Trips extends Controller
         if(!empty($status)){
 
             #filter by status
-            if($type=='official') echo $official_class->update_status($id,$status); 
+            echo $official_class->update_status($id,$status); 
+            /*if($type=='official') echo $official_class->update_status($id,$status); 
             if($type=='personal') echo $personal_class->update_status($id,$status);
-            if($type=='campus') echo $campus_class->update_status($id,$status); 
+            if($type=='campus') echo $campus_class->update_status($id,$status); */
 
         }
         
