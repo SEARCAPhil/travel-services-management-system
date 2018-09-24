@@ -279,7 +279,7 @@ class Official extends Controller
 
                 $this->page=$page>1?$page:1;
 
-                $this->id=$_SESSION['id'];
+                $this->id=$_SESSION['profile_id'];
 
                 #set starting limit(page 1=10,page 2=20)
 
@@ -295,11 +295,12 @@ class Official extends Controller
 
 
 
-                $sql="SELECT tr.*,account_profile.profile_name FROM tr LEFT JOIN account_profile on account_profile.id = tr.requested_by where status!=0 and status!=5 and request_type=:type ORDER BY date_created DESC LIMIT :start, 10";
+                $sql="SELECT tr.*,account_profile.profile_name FROM tr LEFT JOIN account_profile on account_profile.id = tr.requested_by where (status!=0 and status!=5) or (status != 5 and requested_by = :id) and request_type=:type ORDER BY date_created DESC LIMIT :start, 10";
 
                 $statement=$this->pdoObject->prepare($sql);
 
                 $statement->bindParam(':start',$start_page,\PDO::PARAM_INT);
+                $statement->bindParam(':id',$this->id,\PDO::PARAM_INT);
                 $statement->bindParam(':type',$type);
 
                 $statement->execute();
@@ -308,10 +309,11 @@ class Official extends Controller
 
 
 
-                $sql2="SELECT count(*) as total FROM tr where status!=0 and request_type=:type and status!=5";
+                $sql2="SELECT count(*) as total FROM tr where (status!=0 and status!=5) or (status != 5 and requested_by = :id) and request_type=:type ";
 
                 $statement2=$this->pdoObject->prepare($sql2);
                 $statement2->bindParam(':type',$type);
+                $statement2->bindParam(':id',$this->id,\PDO::PARAM_INT);
 
                 $statement2->execute();
 
