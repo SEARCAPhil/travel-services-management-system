@@ -13,10 +13,11 @@
 				<form class="form">
                 	{{csrf_field()}}
 
-                
-        	    	<div class="form-group">
-        	    		
-                		
+                    <div class="form-group">
+                        <p class="page-header text-info"><b><i class="material-icons">watch</i> Mileage settings</b></p>
+                    </div>
+
+        	    	<div class="form-group">	
                         <b>Mileage In (Start km)</b>
                 		<input type="text" placeholder="km" class="form-control" id="start_km">
                 	</div>
@@ -46,6 +47,30 @@
                         </select>
                         <input type="hidden" id="action">
                     </div>
+
+
+                    <div class="form-group">
+                        <p class="page-header text-info"><b><i class="material-icons">watch</i> Date and Time settings</b></p>
+                    </div>
+
+                    <div class="form-group">
+                        <b>Departure Date</b>
+                        <input type="date" class="form-control" id="departure-date-input">
+                    </div>
+                    <div class="form-group">
+                        <b>Departure Time (Actual)</b>
+                        <input type="time" class="form-control" id="departure-time-input">
+                    </div>
+
+                    <div class="form-group">
+                        <b>Arrival Date</b>
+                        <input type="date" class="form-control" id="arrival-date-input">
+                    </div>
+                    <div class="form-group">
+                        <b>Arrival Time</b>
+                        <input type="time" class="form-control" id="arrival-time-input">
+                    </div>
+
 
                 	
                 </form>

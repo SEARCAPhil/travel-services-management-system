@@ -31,58 +31,21 @@ class Trips extends Controller
         $official_class=new Official();
         $official_recent=@json_decode($official_class->recent($page));
 
-        #var_dump($official_recent->data);
 
 
-        $personal_class=new Personal();
-        $personal_recent=@json_decode($personal_class->recent($page));
-
-
-        $campus_class=new Campus();
-        $campus_recent=@json_decode($campus_class->recent($page));
-
-
-        $merged_data=array_merge($official_recent->data,$personal_recent->data,$campus_recent->data);
-
-
-        $count=count($merged_data);
-
-        $no_pages=1;
-
-        $no_pages=(max($official_recent->pages,$personal_recent->pages,$campus_recent->pages));
-
-        $data=Array('total'=>$count,'pages'=>$no_pages,'current_page'=>$page,'data'=>$merged_data);
+        $data=Array('total'=>$official_recent->total,'pages'=>$official_recent->pages,'current_page'=>$page,'data'=>$official_recent->data);
                 
         echo json_encode($data); 
     }
 
 
     public function ongoing($page){
-
         $official_class=new Official();
         $official_recent=@json_decode($official_class->ongoing($page));
 
-        #var_dump($official_recent->data);
 
 
-        $personal_class=new Personal();
-        $personal_recent=@json_decode($personal_class->ongoing($page));
-
-
-        $campus_class=new Campus();
-        $campus_recent=@json_decode($campus_class->ongoing($page));
-
-
-        $merged_data=array_merge($official_recent->data,$personal_recent->data,$campus_recent->data);
-
-
-        $count=count($merged_data);
-
-        $no_pages=1;
-
-        $no_pages=(max($official_recent->pages,$personal_recent->pages,$campus_recent->pages));
-
-        $data=Array('total'=>$count,'pages'=>$no_pages,'current_page'=>$page,'data'=>$merged_data);
+        $data=Array('total'=>$official_recent->total,'pages'=>$official_recent->pages,'current_page'=>$page,'data'=>$official_recent->data);
                 
         echo json_encode($data); 
     }
@@ -93,27 +56,9 @@ class Trips extends Controller
         $official_class=new Official();
         $official_recent=@json_decode($official_class->finished($page));
 
-        #var_dump($official_recent->data);
 
 
-        $personal_class=new Personal();
-        $personal_recent=@json_decode($personal_class->finished($page));
-
-
-        $campus_class=new Campus();
-        $campus_recent=@json_decode($campus_class->finished($page));
-
-
-        $merged_data=array_merge($official_recent->data,$personal_recent->data,$campus_recent->data);
-
-
-        $count=count($merged_data);
-
-        $no_pages=1;
-
-        $no_pages=(max($official_recent->pages,$personal_recent->pages,$campus_recent->pages));
-
-        $data=Array('total'=>$count,'pages'=>$no_pages,'current_page'=>$page,'data'=>$merged_data);
+        $data=Array('total'=>$official_recent->total,'pages'=>$official_recent->pages,'current_page'=>$page,'data'=>$official_recent->data);
                 
         echo json_encode($data); 
     }

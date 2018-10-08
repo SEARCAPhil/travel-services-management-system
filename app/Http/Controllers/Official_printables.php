@@ -47,7 +47,8 @@ class Official_printables extends Controller
 
 	function is_creator($id){
 		if($_SESSION['priv']!='admin'){
-			if($id!=@$_SESSION['id']){
+			#hack to be able to view the PDF
+			if($id!=@$_SESSION['uid']&&$id!=@$_SESSION['id']){
 
 				echo '<br/><br/><center><h3>Sorry! File not found.</h3></center>';
 				exit;
@@ -73,6 +74,8 @@ class Official_printables extends Controller
     	$official_travel=new Official();
     	$charge_travel=new Charge();
 
+    	$GLOBALS['official_travel']=$official_travel;
+
     	$official_staff=new Official_staff();
     	$official_scholars=new Official_scholars();
     	$official_custom=new Official_custom();
@@ -88,6 +91,10 @@ class Official_printables extends Controller
     	$staff=json_decode($official_staff->index($itenerary->tr_id));
     	$scholars=json_decode($official_scholars->index($itenerary->tr_id));
     	$custom=json_decode($official_custom->index($itenerary->tr_id));
+
+    	$fundings = @json_decode($official_travel->get_fundings($itenerary->tr_id));
+
+    	
 
 
     	#charges comutation
@@ -239,9 +246,8 @@ class Official_printables extends Controller
 		// set margins
 		$pdf->SetMargins(PDF_MARGIN_LEFT, 35, PDF_MARGIN_RIGHT);
 
+
 		self::is_creator($travel_request->uid);
-
-
 
 
 
@@ -258,16 +264,32 @@ $html ='<style>
 
 		<table>
 			<tr>
-				<td width="220"></td><td></td><td width="100"><b>NO. '.$id.'</b></td>
+				<td width="220"></td><td></td><td width="100" style="text-align:right;font-weight:bold;font-size:12px;font-style:italic;color:gray;"><b>&nbsp;NO. '.$id.'&nbsp;</b>&nbsp;</td>
 			</tr>
 
 			
 		</table>
 		<br/>
 
+	</article>';
+
+    	// create some HTML content
+$html .='<style>
+
+			.sa-table{margin-bottom:20px; border:1px solid rgb(80,80,80);}
+			.sa-table td{margin-bottom:20px; border:1px solid rgb(80,80,80);}
+			.withLine{border-bottom:1px solid rgb(20,20,20);overflow:hidden;text-align:left;padding-bottom:10px;margin-right:50px;}
+		</style>
+
+
+	<article>
+
+
+		<br/>
+
 		<table>
 			<tr>
-				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date_format(date_create($travel_request->date_created),'m/d/Y') .'</b></td>
+				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date('m/d/Y').'</b></td>
 			</tr>
 			<tr>
 				<td></td><td></td><td style="text-align:center;"><b>Date</b></td>
@@ -287,7 +309,7 @@ $html.='	<article class="col col-md-12">
 
 				</td>
 				<td>
-					<p><label> <b>Date:</b></label> <span> </span></p>
+					<p><label> <b>ADS # : </b></label> <span> </span></p>
 					
 				</td>				
 			</tr>
@@ -295,8 +317,17 @@ $html.='	<article class="col col-md-12">
 
 			<!--requesting party-->
 			<tr>
-				<td> Requesting Party</td>
-				<td> Source of fund: <b>'.$travel_request->source_of_fund.'</b>'; 
+				<td> Requesting Party : <b>'.$travel_request->profile_name.'</b></td>
+
+				<td> Source of fund:  '; 
+
+			$f='';
+			
+			for($x=0;$x<count($fundings);$x++){
+				$f.='<br/><b>'.$fundings[$x]->fund.' - '.$fundings[$x]->cost_center.' - '.$fundings[$x]->line_item.'</b>';
+			}	
+
+			$html.=$f;
 
 			if($travel_request->source_of_fund=='otf'){
 				$html.='<br/><br/><b>'.@$travel_request->projects[0]->project.'</b><br/>';
@@ -350,11 +381,12 @@ $html.='	<article class="col col-md-12">
 	}
 
 	for($a=0;$a<$custom_total_count;$a++){
+
 		$passenger_count++;
 		$html.='<tr class="tr-passenger">
 				<td class="withLine">'.$custom[$a]->full_name.'</td>
 				<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$custom[$a]->designation.'</td>
-				<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;<i>N/A</i></td>
+				<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			</tr>';	
 	}
 
@@ -371,18 +403,26 @@ $html.='	<article class="col col-md-12">
 		}
 	}
 
+	/*------------------------------------------
+	| TEMPORARY FIX FOR OVERRIDING SIGNATORIES
+	|
+	|-------------------------------------------*/
+
+	$approved_by = isset($_GET['approved_by'])?htmlentities(htmlspecialchars($_GET['approved_by'])):'Ricardo A. Menorca';
+	$approved_by_position = isset($_GET['position'])?htmlentities(htmlspecialchars($_GET['position'])):'Unit head,General Services';
 
 
 
 
-
+		$dt = new \DateTime($itenerary->actual_departure_time);
+		$rt = new \DateTime($itenerary->returned_time);
 								
-					
+		
 				
 		$html .= '</table><br/><br/>';
 
 			$html .= '	</td>
-				<td> Purposes/Places to be visited: <b>'.htmlspecialchars($travel_request->purpose).'</b>
+				<td> Purposes/Places to be visited: <b>'.htmlspecialchars(strip_tags($travel_request->purpose)).'</b>
 				</td>
 
 			</tr>
@@ -502,10 +542,10 @@ $html.='	<article class="col col-md-12">
 
 					 <table style="text-align:center;">
 						 <tr>
-						 	<td><b>RICARDO A. MENORCA</b></td>
+						 	<td><b>'.strtoupper($approved_by).'</b></td>
 						 </tr>
 						 <tr>
-						 	<td><p>Unit head,General Services</p></td>
+						 	<td><p>'.$approved_by_position.'</p></td>
 						 </tr>
 					 </table>
 					
@@ -526,47 +566,50 @@ $html.='	<article class="col col-md-12">
 
 				<td> 
 					<br/><br/>
-				<table>
+				<table cellspacing="10">
 					<tr>
 						<td width="80">Date</td>
-						<td width="100"><b>'.$itenerary->departure_date.'</b></td>
+						<td width="80"><b>'.$itenerary->departure_date.'</b></td>
 						<td><b>'.$itenerary->returned_date.'</b></td>
 					</tr>
 					<tr>
 						<td width="80">Time</td>
-						<td width="100"><b>'.$itenerary->departure_time.'</b></td>
-						<td><b>'.$itenerary->returned_time.'</b></td>
+						<td width="80"><b><!--'.$dt->format('h:i:s').'--></b></td>
+						<td><b><!--'.$rt->format('h:i:s').'--></b></td>
 					</tr>
 					<tr>
 						<td width="80">Mileage Reading</td>
-						<td width="100">'.@$charges->start.'</td>
+						<td width="80">'.@$charges->start.'</td>
 						<td>'.@$charges->end.'</td>
 					</tr>
 					<tr>
 						<td width="80">Signature of driver</td>
-						<td width="100"></td>
+						<td width="80"></td>
 						<td></td>
 					</tr>
 					<tr>
 						<td width="80">Attested by;</td>
-						<td width="100"></td>
+						<td width="80"></td>
 						<td></td>
 					</tr>
 					<tr>
 						<td width="80">Guard-on-duty</td>
-						<td width="100"></td>
+						<td width="80"></td>
 						<td></td>
 					</tr>
 				</table>
 				<br/><br/>
-				<br/><br/>
-				<br/><br/>
+
 					<p>I hereby certify that the vehicle was used solely for the official purpose/s stated above.</p>
 					<br/><br/><br/><br/><br/>
 					<table style="text-align:center;">
 						 <tr>
-						 	<td><b style="text-transform:uppercase;">'.$travel_request->profile_name.'</b></td>
+						 	<td width="20%"></td>
+						 	<td class="withLine" width="60%"><b style="text-transform:uppercase;"></b></td>
+						 	<td width="20%"></td>
 						 </tr>
+					 </table>
+					 <table style="text-align:center;">
 						 <tr>
 						 	<td><p>Passenger\'s Signature</p></td>
 						 </tr>
@@ -647,10 +690,12 @@ $html.='	<article class="col col-md-12">
     	$official_scholars=new Official_scholars();
     	$official_custom=new Official_custom();
     
-
+    	$GLOBALS['official']=$official;
 
     	$data=json_decode($official->show($id));
     	$details=$data[0];
+
+
 
 
     	//var_dump($details);
@@ -665,6 +710,7 @@ $html.='	<article class="col col-md-12">
     	}
     	
 
+    	$fundings = @json_decode($official->get_fundings($id));
     	
 
 
@@ -734,9 +780,11 @@ $html.='	<article class="col col-md-12">
 			self::is_creator($details->requested_by);
 			
 
-			$pdf->SetY(-50);
+			$pdf->SetY(-57);
 			// Set font
 	        $pdf->SetFont('helvetica', 'N', 9);
+
+	       
 
 			 $sign = '
 				<style>
@@ -751,7 +799,7 @@ $html.='	<article class="col col-md-12">
 				<tr>
 						<td></td>
 						<td width="160"></td>
-						<td><b>Requested By : </b>  </td><td></td>
+						<td><b>Requested By : </b><br/>  </td><td></td>
 
 					</tr>
 					<tr>
@@ -764,9 +812,9 @@ $html.='	<article class="col col-md-12">
 
 
 					<tr>
-						<td><b>Approval Recommended</b></td>
+						<td><br/><br/><b>Approval Recommended</b><br/></td>
 						<td width="160"></td>
-						<td  width="70"><b>Approved:</b>  </td>
+						<td  width="70"><br/><br/><b>Approved:</b>  </td>
 						<td></td>
 
 					</tr>
@@ -835,10 +883,31 @@ $html.='	<article class="col col-md-12">
 
 
 
+    	// create some HTML content
+$html ='<style>
+
+			.sa-table{margin-bottom:20px; border:1px solid rgb(80,80,80);}
+			.sa-table td{margin-bottom:20px; border:1px solid rgb(80,80,80);}
+			.withLine{border-bottom:1px solid rgb(20,20,20);overflow:hidden;text-align:left;padding-bottom:10px;margin-right:50px;}
+		</style>
+
+
+	<article>
+
+		<table>
+			<tr>
+				<td width="220"></td><td></td><td width="100" style="text-align:right;font-weight:bold;font-size:12px;font-style:italic;color:gray;"><b>&nbsp;NO. '.$id.'&nbsp;</b>&nbsp;</td>
+			</tr>
+
+			
+		</table>
+		<br/>
+
+	</article>';
 
 
     	// create some HTML content
-$html ='<style>
+$html .='<style>
 			.passenger-table{margin-bottom:20px; }
 			.passenger-table td, .passenger-table th{padding: 0; border-right:30px solid #fff;}
 			.passenger-table td{}
@@ -852,7 +921,7 @@ $html ='<style>
 
 		<table>
 			<tr>
-				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date_format(date_create($details->date_created),'m/d/Y') .'</b></td>
+				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date('m/d/Y').'</b></td>
 			</tr>
 			<tr>
 				<td></td><td></td><td style="text-align:center;">Date</td>
@@ -882,8 +951,10 @@ $scholars_total_count=count($scholars);
 $custom_total_count=count($custom);
 
 $passenger_count=0;
-
+$GLOBALS['passenger_names']=array();
 for($a=0;$a<$staff_total_count;$a++){
+	array_push($GLOBALS['passenger_names'], $staff[$a]->name);
+
 	$passenger_count++;
 	$html.='<tr class="tr-passenger">
 			<td class="withLine">'.$staff[$a]->name.'</td>
@@ -902,11 +973,17 @@ for($a=0;$a<$scholars_total_count;$a++){
 }
 
 for($a=0;$a<$custom_total_count;$a++){
+
+	#prevent too long designation
+	if(strlen($custom[$a]->designation)>=32){
+		$custom[$a]->designation=substr($custom[$a]->designation, 0,28).'...';
+	}
+		
 	$passenger_count++;
 	$html.='<tr class="tr-passenger">
 			<td class="withLine">'.$custom[$a]->full_name.'</td>
 			<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$custom[$a]->designation.'</td>
-			<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;<i>N/A</i></td>
+			<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		</tr>';	
 }
 
@@ -938,21 +1015,24 @@ $html.='
 	</article>
 	<br/>
 	<article>
-		<p><b>III. Brief Itenerary:</b></p><br/>
+		<p><b>III. Brief Itinerary:</b></p><br/>
 		<table class="table sa-table" style="border:none;">
 			<tr>
-				<th>Date</th><th>From</th><th>To</th><th>Time</th>
+				<th>Date</th><th>From</th><th>To</th><th>Mode of transport</th><th>Time</th>
 			</tr>';
 
 			#fetch intenerary result
 			$itenerary_total_count=count($itenerary);
 
 			for($a=0;$a<$itenerary_total_count;$a++){
+				$mode_of_transport=$itenerary[$a]->plate_no!='rent_a_car'?'SEARCA Vehicle':'RENT A CAR';
+				$dt = new \DateTime($itenerary[$a]->departure_time);
     			$html.='<tr>
-					<td>'.$itenerary[$a]->departure_date.'</td>
+					<td>'.@date_format(date_create($itenerary[$a]->departure_date),'m-d-y').'</td>
 					<td>'.$itenerary[$a]->location.'</td>
-					<td>'.$itenerary[$a]->destination.'</td>
-					<td>'.$itenerary[$a]->departure_time.'</td>
+					<td>'.html_entity_decode($itenerary[$a]->destination).'</td>
+					<td>'.$mode_of_transport.'</td>
+					<td>'.$dt->format('h:i:s A').'</td>
 				</tr>';
     		}
 
@@ -964,6 +1044,7 @@ $html.='
     			for($a=0;$a<$remaining_empty_itenerary;$a++){
 					$html.='<tr ng-repeat="(key, value) in [0,1,2,3,4,5]" id="travel{{key}}">
 							<td><input type="date" class="dateSelector"></td>
+							<td><input type="text" class="form-control text"></td>
 							<td><input type="text" class="form-control text"></td>
 							<td><input type="text" class="form-control text"></td>
 							<td><input type="time" class="timeSelector"></td>
@@ -992,13 +1073,27 @@ for($a=0;$a<count($details->projects);$a++){
 }
 
 
+$f='';
+			
+for($x=0;$x<count($fundings);$x++){
+	$f.='<b style="font-size:8px;"> '.$fundings[$x]->fund.' - '.$fundings[$x]->cost_center.' - '.$fundings[$x]->line_item.''.(count($fundings)>0&&count($fundings)>$x+1?',':'').'</b><br/>';
+}	
+
+
+
+
 
 $html.='<br/><br/><br/><article>
 		<table>
 			<tr>
-				<td><b>IV. Cash Advance Requested </b></td><td style="text-align:right;">Source of Fund:</td>
-				<td class="withLine">'.$details->source_of_fund.' '.$projects.'</td>
-			</tr>
+				<td><b>IV. Cash Advance Requested </b></td><td style="text-align:right;">Source of Fund:</td>';
+
+				$html.='<td class="withLine">';
+				$html.=$f;
+				$html.='</td>';
+			
+
+		$html.='</tr>
 		</table>';
 
 		

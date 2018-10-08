@@ -133,10 +133,10 @@ function appendScholarToListPreview(jsonData){
 
 function appendCustomToListPreview(jsonData){
 	var a={}
-	a={id:1,full_name:'kenneth',designation:'director'}
+	a={id:1,full_name:'kenneth',designation:'test'}
 	a.id=1;
 	a.full_name='kenneth'
-	a.designation="IT Director"
+	a.designation="Test"
 	var data=JSON.parse(JSON.stringify(jsonData))
 
 	var id=form_id
@@ -180,6 +180,8 @@ function appendCustomListPreviewConfirmation(){
 		<button class="btn btn-danger" id="customPassengerConfirmationButton"><span class="glyphicon glyphicon-ok"></span>&nbsp;Yes</button> <button class="btn btn-default" id="customPassengerConfirmationButtonCancel">No</button>
 	</div>`
 
+	//scroll confirmation to top
+	scrollDialogTop()
 
 	var fullName=$('#customFullName').val();
 	var designation=$('#customDesignation').val();

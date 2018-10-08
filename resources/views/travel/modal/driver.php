@@ -11,7 +11,7 @@
 	</div>
 
 	<div class="modal-footer">
-		<button class="btn btn-primary modal-submit"  data-dismiss="modal" aria-label="Proceed">Proceed</button>
+		<!--<button class="btn btn-primary modal-submit"  data-dismiss="modal" aria-label="Proceed">Proceed</button>-->
 		<button class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancel</button>
 	</div>
 

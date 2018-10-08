@@ -239,6 +239,30 @@ class Personal extends Controller
     }
 
 
+     public function update_signatory(Request $request){
+
+        try{
+            $id=$request->input('id');
+            $value=$request->input('value');
+
+            $this->pdoObject=DB::connection()->getPdo();
+
+            $this->pdoObject->beginTransaction();
+            $sql="UPDATE trp set purpose=:purpose where id=:id";
+            $statement=$this->pdoObject->prepare($sql);
+            $statement->bindParam(':purpose',$purpose);
+            $statement->bindParam(':id',$id);
+            $statement->execute();
+            $isUpdated=$statement->rowCount();
+            $this->pdoObject->commit();
+
+            echo $isUpdated;
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+    } 
+
+
 
 
     /**
@@ -535,6 +559,8 @@ class Personal extends Controller
                         $driver=$row3->drivers_name;    
                     }
 
+                    //override driver by other driver
+                    if(!empty($row->other_driver)) $driver=$row->other_driver;
 
                     //requester
                     $statement4->bindValue(':id',$row->requested_by,\PDO::PARAM_INT);
@@ -594,6 +620,7 @@ class Personal extends Controller
                 $statement->execute();
                 $res=Array();
                 while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+
                     //driver
                     $driver=@$row->first_name. ' '. @$row->last_name;
                     $statement3->bindValue(':id',$row->id,\PDO::PARAM_INT);
@@ -753,6 +780,8 @@ function ongoing($page=1){
                         $driver=$row3->drivers_name;    
                     }
 
+                     //override driver by other driver
+                    if(!empty($row->other_driver)) $driver=$row->other_driver;
 
                     //requester
                     $statement4->bindValue(':id',$row->requested_by,\PDO::PARAM_INT);
@@ -843,6 +872,8 @@ function finished($page=1){
                         $driver=$row3->drivers_name;    
                     }
 
+                    //override driver by other driver
+                    if(!empty($row->other_driver)) $driver=$row->other_driver;
 
                     //requester
                     $statement4->bindValue(':id',$row->requested_by,\PDO::PARAM_INT);
@@ -905,6 +936,45 @@ function finished($page=1){
     {
         //
     }
+
+
+    public function update_signatory($id,$name)
+
+    {
+
+        try{
+
+                $this->pdoObject=DB::connection()->getPdo();
+
+                $this->id=(int) htmlentities(htmlspecialchars($id));
+                $this->name=utf8_encode(strip_tags($name));
+
+                $this->pdoObject->beginTransaction();
+
+                $remove_rfp_sql="UPDATE trp set approved_by=:approved_by where id=:id";
+
+                $remove_statement=$this->pdoObject->prepare($remove_rfp_sql);
+
+                $remove_statement->bindParam(':id',$this->id);
+                $remove_statement->bindParam(':approved_by',$this->name);
+
+                $remove_statement->execute();
+
+                $this->pdoObject->commit();
+
+
+
+                return $remove_statement->rowCount()>0?$remove_statement->rowCount():0;
+
+
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+    }
+
+
+
+
 
     /**
      * Remove the specified resource from storage.

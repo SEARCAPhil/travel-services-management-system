@@ -358,11 +358,12 @@ var htm='';
 		for(var x=0; x<json.data.length; x++){
 			var data=json.data[x];
 
+
 			var departure_date=new Date(data.departure_date).getDate();
 
 			htm+=`<div class="row `+data.type+``+data.id+` linked-travel-item linked-travel-item-`+data.id+`">
 				 	<div class="col col-md-1 col-sm-1 ">
-						 <div class="text-center col trip-date `+data.type+`">
+						 <div class="text-center col trip-date `+data.type+`" style="background:#777;">
 						 	`+departure_date+`
 						 </div>
 					</div>
@@ -411,17 +412,25 @@ function appendTravelToList(json){
 		//update total pages
 		$('.list-total-pages').html(json.pages)
 
-		
-
 		for(var x=0; x<json.data.length; x++){
 			var data=json.data[x];
+			var color;
+
+			if(data.type=='personal'){
+				color='rgb(0,150,200)'
+			}else if(data.type=='campus'){
+				color='rgb(200,0,150)'
+			}else{
+				color='rgb(0,200,150)';
+			}
+
 
 			var departure_date=new Date(data.departure_date).getDate();
 			var plate_no=data.plate_no!=null?data.plate_no:'N/A'
 
-			htm+=`<div class="row `+data.type+``+data.id+`" style="margin-bottom: 50px;">
+			htm+=`<div class="row official`+data.id+`" style="margin-bottom: 50px;">
 			 	<div class="col col-md-2 col-lg-1 col-sm-2 ">
-					 <div class="text-center col trip-date `+data.type+`">
+					 <div class="text-center col trip-date `+data.type+`" style="background:${color};">
 					 	`+departure_date+`
 					 </div>
 				</div>
@@ -429,6 +438,7 @@ function appendTravelToList(json){
 				 	<p><b><u>`+data.location+`</u></b> - <b><u>`+data.destination+`</u></b></p>
 				 	<p><b>`+data.departure_date+`</b>  - `+data.departure_time+`</p>
 				 	<p><small>`+data.requester+`</small></p>
+				 	<p><span class="badge"># ${data.id}</b></span></p>
 
 				 </div>
 
@@ -447,9 +457,9 @@ function appendTravelToList(json){
 							<hr/>
 							<p>&emsp;Driver : <u class="travel-other-details-driver-`+data.id+`">`+data.driver+`</u> </p>
 							<p>&emsp;Vehicle Plate Number : <u class="travel-other-details-vehicle-`+data.id+`">`+plate_no+`</u></p>
-							<p>&emsp;Departure Time(Actual) : <u>`+data.actual_time+`</u></p>
-							<p>&emsp;Returned Date : <u>`+data.returned_date+`</u></p>
-							<p>&emsp;Returned Time : <u>`+data.returned_time+`</u></p>
+							<p>&emsp;Departure Time(Actual) : <u class="travel-other-details-departure-time-`+data.id+`">`+data.actual_time+`</u></p>
+							<p>&emsp;Returned Date : <u class="travel-other-details-returned-date-`+data.id+`">`+data.returned_date+`</u></p>
+							<p>&emsp;Returned Time : <u class="travel-other-details-returned-time-`+data.id+`">`+data.returned_time+`</u></p>
 							<p><hr/></p>
 						
 					</div>
@@ -462,7 +472,7 @@ function appendTravelToList(json){
 
 
 
-					 		if(data.type=='official'&&data.status=='scheduled'){
+					 		if(data.status=='scheduled'){
 								htm+=`<li><a href="#" class="travel-link travel-link-button pull-left" data-type="official" data-link="`+data.id+`"> Link <span class="glyphicon glyphicon-link"></span> </a> </li>`
 							}
 							
@@ -483,7 +493,6 @@ function appendTravelToList(json){
 								    htm+=`<li class="mark-as-link" data-mark="ongoing"><a href="#">Ongoing</a></li>`
 								}
 
-
 								if(data.status!='finished'){
 								    htm+='<li class="mark-as-link" data-mark="finished"><a href="#">Finished</a></li>'
 								}
@@ -496,7 +505,7 @@ function appendTravelToList(json){
 							htm+=`</ul>
 
 							</li>
-							<li class="dropdown"> <a href="#" class="travel-link advance-menu pull-left dropdown-toggle" data-type="personal" data-toggle="dropdown"  data-content='`+JSON.stringify(data)+`' aria-haspopup="true" aria-expanded="true">Advance Options
+							<li class="dropdown"> <a href="#" class="travel-link advance-menu pull-left dropdown-toggle" data-type="personal" data-toggle="dropdown"  data-content='`+JSON.stringify(data)+`' aria-haspopup="true" aria-expanded="true">Advanced Options
 								 <span class="glyphicon glyphicon-option-vertical"></span> </span>
 								 </a>
 								
@@ -505,7 +514,7 @@ function appendTravelToList(json){
 										<!--<li><a href="#" class="advance-menu-selector" id="rent"><b>Rent</b> a Car</a></li>-->
 									    <li><a href="#" class="advance-menu-selector" id="driver">Assign Driver</a></li>
 									    <li><a href="#" class="advance-menu-selector"  id="charge" data-charge="`+data.id+`">Charge</a></li>
-									    <li><a href="#" class="advance-menu-selector"  id="charge_advance" data-charge="`+data.id+`">Advance Charging</a></li>
+									    <li><a href="#" class="advance-menu-selector"  id="charge_advance" data-charge="`+data.id+`">Override Computation</a></li>
 									  </ul>
 								
 							</li>`;
@@ -619,15 +628,15 @@ function appendTravelToList(json){
 			htm+='<div class="col col-md-10 col-md-offset-1  linked-section linked-section'+data.id+'"></div>';
 			htm+=`</div>`;
 
-			if(data.type=='official'){
-				var parentId=data.id
+			//get linked travel
+			var parentId=data.id
 
-				showLinkedOfficialTravel(parentId,function(id,json){
-					
-					appendToLinkedTravel(json,'.linked-section'+id)
-					bindTravelUnlinkButton();
-				});
-			}
+			showLinkedOfficialTravel(parentId,function(id,json){
+				
+				appendToLinkedTravel(json,'.linked-section'+id)
+				bindTravelUnlinkButton();
+			});
+			
 
 
 
@@ -692,12 +701,22 @@ function appendToListInLinkModal(json,target){
 
 		for(var x=0; x<json.data.length; x++){
 			var data=json.data[x];
+			var color;
+			if(data.type=='personal'){
+				color='rgb(0,150,200)'
+			}else if(data.type=='campus'){
+				color='rgb(200,0,150)'
+			}else{
+				color='rgb(0,200,150)';
+			}
+
+
 
 			var departure_date=new Date(data.departure_date).getDate();
 
 			htm+=`<div class="row link-list" id="`+data.id+`">
 			 	<div class="col col-md-1 col-sm-1 col-xs-2">
-					 <div class="text-center col trip-date `+data.type+`">
+					 <div class="text-center col trip-date `+data.type+`" style="background:${color};">
 					 	`+departure_date+`
 					 </div>
 				</div>
@@ -804,6 +823,7 @@ function advanceMenuDriver(type){
 
 		showDriversList(function(){
 			assignDriver();
+			assignOtherDriver();
 
 		});
 			
@@ -813,11 +833,10 @@ function advanceMenuDriver(type){
 
 function advanceMenuCharge(id){
 	showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/charge',function(){
-
-		
-
-
-			
+		setTimeout(function(){
+			showDateAndTimeSettings()
+		},500)
+				
 	});	
 }
 
@@ -1010,4 +1029,39 @@ function bindTravelLinkNavigation(){
 }
 
 
+/*-----------------------------------------------
+| Date and time settigns
+| ----------------------------------------------*/
+function showDateAndTimeSettings(){
+	var content=$(selectedTrips).attr('data-content');
+	var json=JSON.parse(content);
 
+	//departure
+	$('#departure-date-input').val(json.departure_date)
+	$('#departure-time-input').val(json.actual_time)
+
+	//arrival
+	$('#arrival-date-input').val(json.returned_date)
+	$('#arrival-time-input').val(json.returned_time)
+
+
+}
+
+
+function changeDateAndTimeSettings(){
+	var content=$(selectedTrips).attr('data-content');
+	var json=JSON.parse(content);
+
+	//departure
+	json.departure_date=$('#departure-date-input').val()
+	json.actual_time=$('#departure-time-input').val()
+
+	//arrival
+	json.returned_date=$('#arrival-date-input').val()
+	json.returned_time=$('#arrival-time-input').val()
+
+	var jsonEncoded=JSON.stringify(json)
+	//change value
+	$(selectedTrips).attr('data-content',jsonEncoded)
+
+}

@@ -378,6 +378,7 @@ function searchInputPassenger(){
 
 
 function searchInputScholar(){
+	var timeOut;
 	$('#searchInputScholar').on('keyup',function(){
 		var that=this
 		clearTimeout(timeOut)

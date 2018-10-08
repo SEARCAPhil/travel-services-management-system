@@ -33,46 +33,6 @@
 	}
 
 
-
-	function assignPersonalPlateNumber(id,plate_number,vehicle_name){
-		$.ajax({
-
-			url:'api/travel/personal/vehicle/'+id,
-			method:'PUT',
-			data: { _token: $("input[name=_token]").val(),id:id,plate_no:plate_number},
-			success:function(data){
-
-
-				if(data==1){
-					$('.travel-other-details-read-more-'+id).click();
-					$('.travel-other-details-vehicle-'+id).html(vehicle_name+' '+plate_number+' <span class="glyphicon glyphicon-ok text-success"></span>')
-				}else{
-					alert('Oops! Something went wrong.Try to refresh the page')
-				}
-			}
-		})
-	}
-
-
-	function assignCampusPlateNumber(id,plate_number,vehicle_name){
-		$.ajax({
-
-			url:'api/travel/campus/vehicle/'+id,
-			method:'PUT',
-			data: { _token: $("input[name=_token]").val(),id:id,plate_no:plate_number},
-			success:function(data){
-
-
-				if(data==1){
-					$('.travel-other-details-read-more-'+id).click();
-					$('.travel-other-details-vehicle-'+id).html(vehicle_name+' '+plate_number+' <span class="glyphicon glyphicon-ok text-success"></span>')
-				}else{
-					alert('Oops! Something went wrong.Try to refresh the page')
-				}
-			}
-		})
-	}
-
 	function showVehicleList(callback){
 		ajax_getVehiclesList(function(vehicleList){
 			var htm='';
@@ -124,19 +84,9 @@
 
 			if($(target).attr('data-event')=='dblclick'){
 
-				if(type=='official'){
-					assignOfficialPlateNumber(id,plate_no,vehicle_name)
-				}
 
-				if(type=='personal'){
-					assignPersonalPlateNumber(id,plate_no,vehicle_name)
-				}
-
-				
-
-				if(type=='campus'){
-					assignCampusPlateNumber(id,plate_no,vehicle_name)
-				}
+				assignOfficialPlateNumber(id,plate_no,vehicle_name)
+	
 				
 				$('#preview-modal').modal('hide');
 			}  
@@ -176,22 +126,8 @@
 
 			if($(target).attr('data-event')=='dblclick'){
 
-				if(type=='official'){
 					assignOfficialDriver(id,driver,driver_name);
-				}
-
-				if(type=='personal'){
-
-					assignPersonalDriver(id,driver,driver_name);
-				}
-
-
-				if(type=='campus'){
-			
-					assignCampusDriver(id,driver,driver_name);
-				}
-
-
+				
 				$('#preview-modal').modal('hide');
 			}  
 
@@ -199,12 +135,41 @@
 		})
 	}
 
+
+	function assignOtherDriver(){
+		var content=$(selectedTrips).attr('data-content');
+		var json=JSON.parse(content);
+		var id=json.id;
+		var type=json.type;
+		var current_status=json.status;
+		var timeout;
+		$('.other-driver-button').hide();
+		$('.other-driver').on('keyup',function(){
+			clearTimeout(timeout);
+			var parent=$('.other-driver');
+			timeout=setTimeout(function(){
+				if($(parent).val().length<1){
+					$('.other-driver-button').hide();
+				}else{
+					$('.other-driver-button').show();
+				}
+
+				bindAssignOtherDriver(type,id,'n/a',$(parent).val())
+
+			},700)
+
+		})
+
+	}
+
+
+
 	function assignOfficialDriver(id,driver,driver_name){
 		$.ajax({
 
 			url:'api/travel/official/driver/'+id,
 			method:'PUT',
-			data: { _token: $("input[name=_token]").val(),id:id,driver:driver},
+			data: { _token: $("input[name=_token]").val(),id:id,driver:driver,driver_name:driver_name},
 			success:function(data){
 
 
@@ -214,48 +179,13 @@
 				}else{
 					alert('Oops! Something went wrong.Try to refresh the page')
 				}
-			}
-		})
-	}
 
-	function assignPersonalDriver(id,driver,driver_name){
-		$.ajax({
-
-			url:'api/travel/personal/driver/'+id,
-			method:'PUT',
-			data: { _token: $("input[name=_token]").val(),id:id,driver:driver},
-			success:function(data){
-
-
-				if(data==1){
-					$('.travel-other-details-read-more-'+id).click();
-					$('.travel-other-details-driver-'+id).html(driver_name+' <span class="glyphicon glyphicon-ok text-success"></span>')
-				}else{
-					alert('Oops! Something went wrong.Try to refresh the page')
-				}
+				$('#preview-modal').modal('hide');
 			}
 		})
 	}
 
 
-	function assignCampusDriver(id,driver,driver_name){
-		$.ajax({
-
-			url:'api/travel/campus/driver/'+id,
-			method:'PUT',
-			data: { _token: $("input[name=_token]").val(),id:id,driver:driver},
-			success:function(data){
-
-
-				if(data==1){
-					$('.travel-other-details-read-more-'+id).click();
-					$('.travel-other-details-driver-'+id).html(driver_name+' <span class="glyphicon glyphicon-ok text-success"></span>')
-				}else{
-					alert('Oops! Something went wrong.Try to refresh the page')
-				}
-			}
-		})
-	}
 
 
 	function showDriversList(callback){
@@ -274,6 +204,20 @@
 				}
 
 
+				htm+=`
+							<div class="row"><div class="col col-md-1 col-sm-1 col-xs-1">
+	
+					 		</div>`
+					htm+=`<div class="col col-md-8 col-sm-8 col-xs-8">
+							<p>
+								<input type="text" class="form-control other-driver" placeholder="Other : Specify Driver(Rent a Car only)"/>
+							</p>
+						</div>
+						<div class="col col-md-2 col-sm-2 col-xs-2"><button class="btn btn-xs btn-default other-driver-button">SAVE</button></div>
+						</div>`
+
+
+
 				$('.driver-section').append(htm)
 
 
@@ -283,4 +227,19 @@
 
 			});
 	}
+
+
+	function bindAssignOtherDriver(type,id,driver,driver_name){
+		$('.other-driver-button').off('click')
+		$('.other-driver-button').on('click',function(){
+
+			previewLoadingEffect('#preview-modal-dialog .modal-body')
+
+			assignOfficialDriver(id,driver,driver_name);
+			
+
+		})
+	}
+
+
 		

@@ -383,7 +383,8 @@ padding: 5px;
 	transition: border 0.2s ease-in-out;
 
 	padding:5px;
-	border:1px dashed #ccc;
+	border:1px solid #ccc;
+	background: rgba(245,245,245,0.7)
 
 
 }
@@ -757,4 +758,8 @@ vertical-align: text-bottom;
 margin-right: -60%;
 transform: rotate(-95deg);
 border-top:4px solid rgb(32,199,150);
+}
+
+.show-for{
+	display: none;
 }

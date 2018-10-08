@@ -24,7 +24,7 @@ class Official_itenerary extends Controller
                 $this->pdoObject=DB::connection()->getPdo();
                 $this->id=htmlentities(htmlspecialchars($id));
                 $this->pdoObject->beginTransaction();
-                $sql="SELECT travel.* FROM travel where tr_id=:id";
+                $sql="SELECT tr.request_type,travel.* FROM travel left join tr on travel.tr_id=tr.id where tr_id=:id";
                 $statement=$this->pdoObject->prepare($sql);
                 $statement->bindParam(':id',$this->id);
                 $statement->execute();
@@ -119,7 +119,7 @@ class Official_itenerary extends Controller
                 $start_page=$this->page<2?0:( integer)($this->page-1)*10;
 
                 $this->pdoObject->beginTransaction();
-                $sql="SELECT tr.status as tr_status,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no,automobile.manufacturer, searcaba_login_db.account_profile.last_name, searcaba_login_db.account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='scheduled' and departure_date!='0000-00-00' and linked='no' and tr.status='2' and travel.id!=:id  ORDER BY travel.id DESC LIMIT :start,10";
+                $sql="SELECT tr.status as tr_status,tr.request_type,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no,automobile.manufacturer, searcaba_login_db.account_profile.last_name, searcaba_login_db.account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='scheduled' and departure_date!='0000-00-00' and linked='no' and tr.status='2' and travel.id!=:id  ORDER BY travel.id DESC LIMIT :start,10";
 
                 $sql2="SELECT count(*) as total FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='scheduled' and departure_date!='0000-00-00' and linked='no' and tr.status='2'";
 
@@ -172,7 +172,7 @@ class Official_itenerary extends Controller
                         $department=$row4->department_alias;
                     }
 
-                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->tr_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'actual_time'=>$row->actual_departure_time,'returned_date'=>$row->returned_date,'returned_time'=>$row->returned_time,'plate_no'=>$row->plate_no,'manufacturer'=>$row->manufacturer,'type'=>'official','driver'=>$driver,'requester'=>$requester,'department'=>$department,'image'=>$image,'passengers'=>array('staff'=>$passenger_staff,'scholars'=>$passenger_scholar,'custom'=>$passenger_custom));
+                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->tr_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'actual_time'=>$row->actual_departure_time,'returned_date'=>$row->returned_date,'returned_time'=>$row->returned_time,'plate_no'=>$row->plate_no,'manufacturer'=>$row->manufacturer,'type'=>$row->request_type,'driver'=>$driver,'requester'=>$requester,'department'=>$department,'image'=>$image,'passengers'=>array('staff'=>$passenger_staff,'scholars'=>$passenger_scholar,'custom'=>$passenger_custom));
 
                     
                 }
@@ -397,16 +397,24 @@ class Official_itenerary extends Controller
 
 
      public function update_driver($id,Request $request){
+        $this->id=htmlentities(htmlspecialchars($id));
+        $this->token = $request->input('_token');
+        $this->driver = $request->input('driver');
+        $this->driver_name = $request->input('driver_name');
 
+        //assign other driver if driver param is a string
+       if(gettype($this->driver)==='string'&&$this->driver=='n/a'){
+            return self::update_other_driver($this->id,$this->driver_name);
+       }
+       
+        
         try{
-            $this->id=htmlentities(htmlspecialchars($id));
-            $this->token = $request->input('_token');
-            $this->driver = $request->input('driver');
+
 
             $this->pdoObject=DB::connection()->getPdo();
 
             $this->pdoObject->beginTransaction();
-            $sql="UPDATE travel set driver_id=:driver where id=:id";
+            $sql="UPDATE travel set driver_id=:driver ,other_driver='' where id=:id";
             $statement=$this->pdoObject->prepare($sql);
             $statement->bindParam(':driver',$this->driver);
             $statement->bindParam(':id',$this->id);
@@ -418,7 +426,33 @@ class Official_itenerary extends Controller
 
         }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
 
-    } 
+    }
+
+
+    public function update_other_driver($id,$driver){
+
+        try{
+            $this->id=htmlentities(htmlspecialchars($id));
+            $this->driver=htmlentities(htmlspecialchars($driver));
+            $this->driver_id=null;
+
+            $this->pdoObject=DB::connection()->getPdo();
+
+            $this->pdoObject->beginTransaction();
+            $sql="UPDATE travel set driver_id=:driver_id,other_driver=:driver where id=:id";
+            $statement=$this->pdoObject->prepare($sql);
+            $statement->bindParam(':driver_id',$this->driver_id);
+            $statement->bindParam(':driver',$this->driver);
+            $statement->bindParam(':id',$this->id);
+            $statement->execute();
+            $isUpdated=$statement->rowCount();
+            $this->pdoObject->commit();
+
+            return $isUpdated;
+
+        }catch(Exception $e){$this->pdoObject->rollback();return $e->getMessage();}
+
+    }  
 
 
     public function update_plate_no($id,Request $request){
@@ -446,17 +480,47 @@ class Official_itenerary extends Controller
     } 
 
 
+    function update_date_time($id,$departure_date,$departure_time,$arrival_date,$arrival_time){
+        $this->id=htmlentities(htmlspecialchars($id));
+        $this->departure_date=htmlentities(htmlspecialchars($departure_date));
+        $this->departure_time=htmlentities(htmlspecialchars($departure_time));
+        $this->arrival_date=htmlentities(htmlspecialchars($arrival_date));
+        $this->arrival_time=htmlentities(htmlspecialchars($arrival_time));
+
+        $this->pdoObject=DB::connection()->getPdo();
+        //date settings
+        $sql_time="UPDATE travel set departure_date=:departure_date,actual_departure_time=:departure_time,returned_date=:returned_date,returned_time=:returned_time  where id=:id";
+        $sth_time=$this->pdoObject->prepare($sql_time);
+        $sth_time->bindParam(':departure_date',$this->departure_date);
+        $sth_time->bindParam(':departure_time',$this->departure_time);
+        $sth_time->bindParam(':returned_date',$this->arrival_date);
+        $sth_time->bindParam(':returned_time',$this->arrival_time);
+        $sth_time->bindParam(':id',$this->id);
+        $sth_time->execute();
+        $isUpdated=$sth_time->rowCount();
+
+        return $isUpdated;
+
+    }
+
+
      function charge($id,Request $request){
 
             try{
                 $this->token = $request->input('_token');
-                 $this->id=htmlentities(htmlspecialchars($id));
+                $this->id=htmlentities(htmlspecialchars($id));
                 $this->in=htmlentities(htmlspecialchars($request->input('in')));
                 $this->out=htmlentities(htmlspecialchars($request->input('out')));
                 $this->gasoline_charge=htmlentities(htmlspecialchars($request->input('gasoline_charge')));
                 $this->drivers_charge=htmlentities(htmlspecialchars($request->input('drivers_charge')));
                 $this->appointment=htmlentities(htmlspecialchars($request->input('appointment')));
-                
+
+
+                $this->departure_date=htmlentities(htmlspecialchars($request->input('departure_date')));
+                $this->departure_time=htmlentities(htmlspecialchars($request->input('departure_time')));
+                $this->arrival_date=htmlentities(htmlspecialchars($request->input('arrival_date')));
+                $this->arrival_time=htmlentities(htmlspecialchars($request->input('arrival_time')));
+                        
 
 
                 $this->gc=null;
@@ -515,8 +579,12 @@ class Official_itenerary extends Controller
                     $insert_statement->bindParam(':dc',$this->drivers_charge); 
                     $insert_statement->bindParam(':base_km',$this->base); 
                     $insert_statement->bindParam(':drivers_day_rate',$this->drivers_day_rate); 
+                    
                     #exec the transaction
                     $insert_statement->execute();
+
+
+                  
                    
                 }
 
@@ -565,13 +633,13 @@ class Official_itenerary extends Controller
 
                 self::create_charge_breakdown($lastId,$gasoline_charge['amount'],$gasoline_charge['additional'],$drivers_charge,$total_execess_time,$overall_charge);
 
-
+                $isDateTimeUpdated=self::update_date_time($this->id,$this->departure_date,$this->departure_time,$this->arrival_date,$this->arrival_time);
 
 
                 $this->pdoObject->commit();
 
                 #return
-                echo $lastId;
+                echo $lastId||$isDateTimeUpdated;
             
 
 
@@ -664,7 +732,10 @@ class Official_itenerary extends Controller
                 $this->appointment=htmlentities(htmlspecialchars($request->input('appointment')));
 
             
-               
+                $this->departure_date=htmlentities(htmlspecialchars($request->input('departure_date')));
+                $this->departure_time=htmlentities(htmlspecialchars($request->input('departure_time')));
+                $this->arrival_date=htmlentities(htmlspecialchars($request->input('arrival_date')));
+                $this->arrival_time=htmlentities(htmlspecialchars($request->input('arrival_time')));
             
                 $this->gc=null;
                 $this->dc=null;
@@ -746,7 +817,7 @@ class Official_itenerary extends Controller
                 $itenerary=@json_decode(self::show($this->rid))[0];
 
 
-                $gasoline_charge=$charge_travel->calculate_gasoline_charge($this->base,$this->out-$this->in,$this->gc,$default_rate='25');
+                $gasoline_charge=$charge_travel->calculate_gasoline_charge($this->base,(($this->out-$this->in)>=0?$this->out-$this->in:0),$this->gc,$default_rate='25');
         
 
                 if($this->appointment=='emergency'){
@@ -777,10 +848,11 @@ class Official_itenerary extends Controller
                
 
                 $charge_result=self::update_charge_breakdown($id,$gasoline_charge['amount'],$gasoline_charge['additional'],$drivers_charge,$total_execess_time,$overall_charge);
+                $isDateTimeUpdated=self::update_date_time($this->id,$this->departure_date,$this->departure_time,$this->arrival_date,$this->arrival_time);
 
                 $this->pdoObject->commit();
                 #return
-                echo $is_saved;
+                echo $is_saved||$isDateTimeUpdated;
             
 
 
@@ -905,6 +977,47 @@ class Official_itenerary extends Controller
         return 0;
 
    }
+
+
+
+    public function vehicle_type(Request $request){
+        $token = $request->input('_token');
+        $vehicle = $request->input('vehicle');
+        $id = $request->input('id');
+
+        try{
+            $this->pdoObject=DB::connection()->getPdo();
+            $this->tr=htmlentities(htmlspecialchars($id));
+            $this->p=htmlentities(htmlspecialchars($vehicle));
+            #for update only
+            
+            
+
+            #begin transaction
+            $this->pdoObject->beginTransaction();
+            
+            $insert_sql="UPDATE tr set vehicle_type=:p where id=:tr_id";
+            $insert_statement=$this->pdoObject->prepare($insert_sql);
+    
+            #params
+            $insert_statement->bindParam(':tr_id',$this->tr);
+            $insert_statement->bindParam(':p',$this->p);
+            
+            
+            #exec the transaction
+            $insert_statement->execute();
+            $lastId=$this->pdoObject->lastInsertId();
+            $this->pdoObject->commit();
+
+            #return
+            return $insert_statement->rowCount()>0?$insert_statement->rowCount():0;
+            
+
+
+        }catch(Exception $e){ echo $e->getMessage();$this->pdoObject->rollback();}
+
+    }
+
 
 
 

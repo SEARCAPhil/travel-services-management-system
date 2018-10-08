@@ -20,6 +20,12 @@
 		<li class="list-group-item removeIteneraryButton"><span class="glyphicon glyphicon-remove basket"></span> Remove</li>
 	</ul>
 </div>
+
+<div class="contextMenu" id="fundingMenu">
+	<ul class="list-group">		
+		<li class="list-group-item removeFundButton"><span class="glyphicon glyphicon-remove basket"></span> Remove</li>
+	</ul>
+</div>
 <div class="modal fade" id="custom-passenger-modal">
 	<div class="modal-dialog" id="passenger-modal-dialog">
 			
@@ -38,6 +44,12 @@
 	</div>
 </div>
 
+<div class="modal fade" id="funding-modal">
+	<div class="modal-dialog" id="itenerary-modal-dialog">
+			@include('travel/modal/funds')
+	</div>
+</div>
+
 <div class="preview-content">
 
 {{csrf_field()}}
@@ -49,12 +61,12 @@
 	<div class="row col col-md-6 col-sm-8 col-md-offset-2 content-section">
 
 		<div class="col col-md-12">
-			<h3 class="page-header">Official Travel Request Form</h3>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>	
+			<h3 class="page-header">Travel Request Form</h3>
+			<p class="text-muted">Please select prefered travel type.</p>	
 			<br/>		
 		</div>
 		
-		<div class="col col-md-12 col-xs-12">
+		<div class="col col-md-12 col-xs-12" style="display: none;">
 			<div class="circle done purpose-circle-group">1<span class="circle-label">Purpose<span></div>	
 			<div class="bar done purpose-circle-group"></div>	
 			<div class="circle passenger-circle-group">2<span class="circle-label">Passenger<span></div>
@@ -67,7 +79,11 @@
 		</div>
 
 
-
+		<p class="col col-md-12">
+			<input type="radio" name="request_type" value="official"  checked="checked"> Official 
+			<input type="radio" name="request_type" value="personal"> Personal
+			<input type="radio" name="request_type" value="campus"> Campus	
+		</p>
 		<div class="col col-md-12 preview-sections" >
 
 			<p class="purpose-content"  style="margin-top: 50px;"> 
@@ -79,8 +95,8 @@
 
 		<div class="col col-md-12  preview-sections">
 				<p></p><div class="mini-circle"></div> <b>Passengers</b> <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#passenger-modal" id="passengerFormButton"><span class="glyphicon glyphicon-plus"></span></button><p></p>
-				<p>ed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae </p>
-
+				<!--<p>ed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae </p>-->
+				<hr/>
 				<table class="table table-striped passenger-table preview-table table-fluid" id="table-passenger" ng-show="passengersX.length>=1||passengersScholar.length>=1||passengersCustom.length>=1">
 					<thead>
 						<tr>
@@ -98,7 +114,8 @@
 				<button class="btn btn-success btn-xs" data-toggle="modal" data-target="#itenerary-modal" id="iteneraryFormButton"><span class="glyphicon glyphicon-map-marker"></span></button>
 					<div id="officialIteneraryStatus" class="text-muted" style="float:right;height:20px;width:250px;overflow: hidden;position:relative;"></div>
 				</p>
-				<p>ed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam </p>
+				<hr/>
+				<!--<p>ed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam </p>-->
 				<div class="preview-itenerary"></div>
 		</div>
 
@@ -106,24 +123,55 @@
 		<div class="col col-md-12 preview-sections">
 			<p></p><div class="mini-circle"></div> <b>Cash Advance</b>
 			<br/><br/>
-			<p><b>Source of funds: <span class="" id="officialSourceOfFundSaveStatus"></span></b></p>
 			<p>
-				<select class="form-control" id="source_of_fund" disabled="disabled">
-					<option value="opf">Operating Funds</option>
-					<option value="otf" id="otf">Other Funds</option>
-					<option value="opfs">Operating Funds(Scholar)</option>
-					<option value="otfs">Other Funds(Scholar)</option>
-				</select>
+				<b>Source of funds: <span class="" id="officialSourceOfFundSaveStatus"></span></b> 
+				<button class="btn btn-success btn-xs" data-toggle="modal" data-target="#funding-modal" id="sourceOfFundFormButton" disabled="disabled"><span class="glyphicon glyphicon-plus"></span></button>
+
 			</p>
+			<p class="source_of_fund_section"></p>
 			<p id="otf-funding-section">
 				<select id="otf-fundings" class="form-control">
 					<option value="N/A">Select project</option>
+					<div><input type="text" class="form-control" name="otf-fundings-project-name" id="otf-fundings-project-name" placeholder=" OR input project name" style="display: none;"></div>
 				</select>
 			</p>
+
+
+			<div class="col col-md-12 preview-sections show-for show-for-trp-only">
+				<p></p><div class="mini-circle"></div> <b>Type of Vehicle</b> <span id="personalVehicleTypeSaveStatus" class=""></span><p></p>
+				<p class="col col-md-12">
+					<input type="radio" name="vtype" value="1" select-mobi="1" checked="checked" 	class="vehicleTypeFormButton"> SUV 
+					<input type="radio" name="vtype" value="2" select-mobi="2" disabled="disabled"  class="vehicleTypeFormButton"> Van
+					<input type="radio" name="vtype" value="3" select-mobi="3" disabled="disabled"  class="vehicleTypeFormButton"> Pick-up	
+				</p>
+			</div>
+
+			<div class="col col-md-12 preview-sections show-for show-for-trp-only">
+				<p></p><div class="mini-circle"></div> <b>Mode of Payment</b> <span id="paymentSaveStatus" class=""></span><p></p>
+				<p class="col col-md-12">
+					<span>Cash <input type="radio" name="mode-of-payment" disabled="disabled" checked="checked" class="paymentFormButton" value="cash"></span>
+					<span>Salary Deduction <input type="radio" name="mode-of-payment" disabled="disabled" class="paymentFormButton" value="sd"></span>
+				</p>
+			</div>
+
+
+			<div class="col col-md-12 preview-sections">
+				<p></p><div class="mini-circle"></div> <b>Notes</b>
+				<button class="btn btn-success btn-xs" id="notesSaveButton" disabled="disabled"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+					<div id="notesSaveStatus" class="text-muted" style="float:right;height:20px;width:250px;overflow: hidden;position:relative;"></div>
+				</p>
+				<hr/>
+				<!--<p>ed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam </p>-->
+				<textarea class="col col-md-12 col-xs-12 preview-notes" id="form-notes" rows="15" cols="10" placeholder="Notes"></textarea>	
+			</div>
+
 
 
 			<button class="btn btn-success pull-right" onclick="event.preventDefault();$('.automobile-tab[data-type=official]').click();"><i class="material-icons md-18">check_circle</i> done</button>
 		</div>
+
+
+		
 
 	</div>
 
@@ -151,8 +199,10 @@ changeButtonState('#iteneraryFormButton','disabled')
 
 bindOfficialPurposeSaveButton()
 bindSourceOfFund()
-
 bindOtfSelection();
-
+bindVehicleType()
+bindPayment()
+bindRequestType()
+bindNotesSaveButton()
 });
 </script>
