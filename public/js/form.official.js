@@ -367,7 +367,15 @@ function bindShowSignatorySelector(){
 						console.log(res[x])
 						opt+=`<option value="${res[x].account_profile_id}">${res[x].profile_name}</option>`
 					}
-					$('#form-signatory').html(opt)
+					// add empty signatory
+					setTimeout(() => {
+						opt+=`<option value="">Leave Blank</option>`
+						$('#form-signatory').html(opt)
+					}, 100)
+					
+
+					
+
 				}else{
 					alert('Sorry!Unable to show signatories.Please try again later.')
 				}

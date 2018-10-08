@@ -1,9 +1,10 @@
 /vendor
 /node_modules
 /public/storage
-/public/uploads/automobile
+/public/uploads/automobile/
 storage/framework/sessions
 Homestead.yaml
 Homestead.json
 .env
+public/*.module.js
 

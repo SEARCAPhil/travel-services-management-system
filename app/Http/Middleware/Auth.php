@@ -17,8 +17,6 @@ class Auth
      */
     public function handle($request, Closure $next)
     {
-
-
         if(isset($_SESSION['id'])&&isset($_SESSION['token'])){
             #allow
             return $next($request); 

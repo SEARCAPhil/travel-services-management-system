@@ -285,9 +285,10 @@ function updateVerifiedTravel(id,status,type){
 		$('.modal-submit').on('click',function(){
 
 			ajax_updateVerifiedTravel('api/travel/official/verified/',id,status,type,function(){
-				if(type=='official') $('.official'+id).slideUp();
+				/*if(type=='official') $('.official'+id).slideUp();
 				if(type=='personal') $('.personal'+id).slideUp();
-				if(type=='campus') $('.campus'+id).slideUp();
+				if(type=='campus') $('.campus'+id).slideUp();*/
+				$('.official'+id).slideUp();
 			})
 
 		})
@@ -437,8 +438,7 @@ function appendTravelToList(json){
 				 <div class="col col-md-10 col-sm-10">
 				 	<p><b><u>`+data.location+`</u></b> - <b><u>`+data.destination+`</u></b></p>
 				 	<p><b>`+data.departure_date+`</b>  - `+data.departure_time+`</p>
-				 	<p><small>`+data.requester+`</small></p>
-				 	<p><span class="badge"># ${data.id}</b></span></p>
+				 	<p><span class="badge">`+data.requester+`</span> <span class="badge">TT # ${data.id}</b></span> <span class="badge">TR # ${data.tr_id}</b></span></p>
 
 				 </div>
 
@@ -446,8 +446,8 @@ function appendTravelToList(json){
 
 				 	<div class="col col-lg-offset-1 col-md-offset-2 col-md-10 col-sm-offset-1 col-sm-11">
 						<small>
-							<a href="#" class="travel-link advance-menu pull-left  travel-other-details-read-more travel-other-details-read-more-`+data.id+`" title="Read other details" data-target="travel-other-details-`+data.id+`">
-								<span class="glyphicon glyphicon-option-horizontal"></span>
+							<a href="#" class="travel-link advance-menu pull-right  travel-other-details-read-more travel-other-details-read-more-`+data.id+`" title="Read other details" data-target="travel-other-details-`+data.id+`">
+								click to read full details
 							</a>
 						</small>
 					</div>
@@ -566,7 +566,7 @@ function appendTravelToList(json){
 
 						 <div class="row  verified-travel-passenger">
 							<div class="col col-md-1 col-sm-1">
-						 		<div class="profile-image  profileImage profile-image-requester" display-image="`+official_staff[a].profile_image+`" data-mode="staff" style="background: url(&quot;/profiler/profile/`+official_staff[a].profile_image+`&quot;) center center / cover no-repeat;"></div>
+						 		<div class="profile-image  profileImage profile-image-requester" display-image="`+official_staff[a].profile_image+`" data-mode="staff" style="background: url(uploads/profile/${official_staff[a].profile_image}.jpeg) center center / cover no-repeat;"></div>
 						 	</div>
 
 						 	<div class="col col-md-10 col-sm-10">
@@ -1063,5 +1063,42 @@ function changeDateAndTimeSettings(){
 	var jsonEncoded=JSON.stringify(json)
 	//change value
 	$(selectedTrips).attr('data-content',jsonEncoded)
+
+}
+
+
+/*-----------------------------------------------
+| Search
+| ----------------------------------------------*/
+function bindSearchTrips () {
+	let timeout = {}
+	document.getElementById('travel-search-input').addEventListener('keyup', (e) => {
+		clearTimeout(timeout)
+		timeout = setTimeout(() => {
+			if (!e.target.value.length) {
+				showVerifiedRecentTravel(1)
+			} else {
+				showSearchedTravel(e.target.value, 1)
+			}
+			
+		}, 800)
+	})
+}
+
+function showSearchedTravel(param, page=1){
+
+	//clear result section
+	$('.verified_travel_result').html('Loading . . .');
+
+	ajax_getVerifiedTravel(`travel/verified/search/${param}/`,page,function(json){
+		appendTravelToList(json);
+		//next page
+		setTimeout(function(){
+			tripsPager(function(val){
+				showSearchedTravel(param, val)
+			});
+
+		},800)
+	})
 
 }

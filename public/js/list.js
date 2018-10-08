@@ -342,13 +342,17 @@ function appendToList(callback=function(){}){
 	$('.list-current_page').val(travel.current_page);
 
 	//NO CONTENT MESSAGE
-	var no_content_message=`<center class="content-section text-muted" id="no-content-message" style="margin-top:50px;"><i class="material-icons md-48">accessibility</i><h1>No available content to load</h1><p>Please try to refresh the page<p></center>`;
+	var no_content_message=`<center class="content-section text-muted" id="no-content-message" style="margin-top:15vh;">
+		<img src="img/bag.png" width="100px"/>
+		<h2>No available content to load</h2>
+		<p>Please try to refresh the page<p>
+	</center>`;
 
 	//empty variable
 	var htm='';
 
 	if(list.length<1){
-		$('.list-section').hide();
+		//$('.list-section').hide();
 		$('.preview-section').html(no_content_message)
 	}else{
 		$('.list-section').show();
@@ -379,6 +383,10 @@ function appendToList(callback=function(){}){
 			if(list[x].trp_status==0) status_message='<i class="material-icons md-18" title="draft">drafts</i>'
 		}
 
+		if(list[x].status == 2){
+			status_message='<span class="badge badge-sm badge-success" style="background: #00a093;"><i class="material-icons md-18" title="verified">check</i> Verified</span>'
+		}
+
 
 
 		if(list[x].status==4){
@@ -391,10 +399,11 @@ function appendToList(callback=function(){}){
 			activeClass='closed';
 		}
 
-		if(localStorage.getItem('priv')=='admin'){
+		if(localStorage.getItem('role')=='admin'){
 			//append to the DIV
 			htm+=`<dd id="`+list[x].id+`" class="`+activeClass+`">
-				<h4><b>`+list[x].id+`</b>  <small class="text-danger">`+status_message+`</small></h4>
+			<span style="font-size: 12px;padding:4px;" class="pull-right">${status_message}</span>
+				<h4><b>`+list[x].id+`</b></h4>
 				<p><small><b>Date created : </b>`+list[x].date_created+`</small><br/>
 					<small><b>Requested by : </b><span class="badge">`+list[x].profile_name+`</span></small>
 				<p><div class="list-active-status" style="float:left;"></div></p>
@@ -402,10 +411,13 @@ function appendToList(callback=function(){}){
 				`
 		}else{
 			htm+=`<dd id="`+list[x].id+`" class="`+activeClass+`">
-
-			<h4><b>`+list[x].id+`</b>  <small class="text-danger">`+status_message+`</small></h4>
-
-			<p><small>`+purpose+`</small></p>
+			<span style="font-size: 12px;padding:4px;" class="pull-right">${status_message}</span>
+			<h4><b>`+list[x].id+`</b></h4>
+			
+			<p>
+				<small>${purpose}<br/><br/><b>${list[x].date_created}</b></small>
+			</p>
+			
 
 			<p><div class="list-active-status" style="float:left;"></div></p>
 

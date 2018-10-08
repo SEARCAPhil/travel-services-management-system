@@ -1,4 +1,4 @@
-<article class="col col-md-8 col-md-offset-1">
+<article class="col col-md-8 col-md-offset-1" style="height: 100vh; overflow-y: auto;padding-bottom: 50px; padding-top: 3vh;">
 
 		<div class="col col-md-12"></div>
 		<div class="col col-md-12"></div>

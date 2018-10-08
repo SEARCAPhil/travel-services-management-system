@@ -1,379 +1,148 @@
 <?php
-
 namespace App\Http\Controllers;
-
-
-
 use App\Http\Controllers\Authentication;
-
-
-
+use App\Http\Controllers\Accounts;
+use App\Http\Controllers\Sessions;
+use App\Http\Controllers\Directory;
 use Illuminate\Http\Request;
-
-
-
 use App\Http\Requests;
-
-
-
 use Illuminate\Support\Facades\DB;
-
-
 
 #start session
 
 @session_start(); 
 
-
-
 class Authentication extends Controller
 
 {
+  static $redirectTo = '/trs/public/';
 
+  /**
 
+    * Display a listing of the resource.
 
-    static $redirectTo='/trs/public/';
+    *
 
+    * @return \Illuminate\Http\Response
 
+    */
 
-    /**
-
-     * Display a listing of the resource.
-
-     *
-
-     * @return \Illuminate\Http\Response
-
-     */
-
-
-
-    public function index(Request $request)
-
-    {
-
-
-
-       $login=self::login($request);
-
+  public function index(Request $request)
+  {
       
+    $login = self::login($request);
+
+    if(!isset($login['id'])) return false;
+
+    self::session($login);
+    
+    return json_encode(array('id' => $login['id'], 
+                'token' => $login['token'],
+                'role' => $login['role']));
 
 
+    /*return view('authentication',array('message'=>'
+      <div class="alert alert-danger auth-error" style="border-radius: 5px !important;">
+          <small>Oops! Invalid Username or Password!  
+              <p class="text-important">Is this your account? 
+                  <small><a href="'.url("/").'">not my account.</a></small>
+              </p>
+          </small>
+      </div><br/>'));*/
+  }
 
-       if($login&&$login!=null){
+  public function map_department ($dept_name) {
+    $dept_id = null;
+    $Dir = new Directory(DB::connection()->getPdo());
+    $department_list = $Dir->departments_list();
+    foreach($department_list as $key => $value) {
+      # compare department assigned in OWA against in TRS
+      if($value->dept_name === $dept_name) $dept_id = $value->dept_id;
+    }
+    return $dept_id;
+  }
 
-            $res=json_decode($login);
+  public function login(Request $request)
+  {
+    $Ses = new Sessions(DB::connection()->getPdo());
+    $Acc = new Accounts(DB::connection()->getPdo());
+    $Dir = new Directory(DB::connection()->getPdo());
 
+    //browsers , curl, etc...
+    $agent = isset($_SERVER['HTTP_USER_AGENT'])?$_SERVER['HTTP_USER_AGENT']:null;
+    // token, salt
+    $token = ($Ses->generate_token(date('y-m-d h:i:s'),'bms-2/26/2018'));
+    $result = [];
 
+    $input = @json_decode($request->getContent())->data;
+    $credential = $Acc->loginO365($input->mail,$input->id);
+    $department_list = $Dir->departments_list();
+    $dept_id = self::map_department($credential->department);
+    $department_alias = explode(' ', @$input->department);
+    $dept_alias = '';
+    
+    foreach($department_alias as $key => $value) {
+      $dept_alias.=  strtoupper(substr($value, 0, 1));
+    }
+    
 
-            //if exists [unmodified] get existing id
+    // set OPENID
+    if(is_null($credential->openID) || empty($credential->openID)) $Acc->setOpenID($credential->uid, $input->id);
 
-            $from_own_db=self::profile_exists($res->id,$res->date_modified);
+    // register
+    if(!isset($credential->uid)) {
+      // create($company_id, $username, $password, $uid)
+      // This is for creating Office365 account
+      /*------------------------------------------------------
+      // username = @email
+      -------------------------------------------------------*/
+      $accountId = (int) @$Acc->create(isset($input->mail) ? $input->mail : null, null, $input->id);
 
+      // if account successfully created, save profile to DB
+      if($accountId > 0) {
 
+        // create_profile($id, $profile_name, $last_name, $first_name, $middle_name, $email, $department, $department_alias, $position)
+        $profileId = (int) @$Acc->create_profile($accountId, $input->displayName, $input->surname, $input->givenName, $input->givenName, $input->mail, $input->department, $dept_alias, $input->jobTitle, $dept_id);
+        $sessionId = $Ses->set($token,$accountId,$agent);
+        
+        if($sessionId) {
+          $result['token'] = $token;
+          $result['role'] = @$credential->role;
+          $result['id'] = $accountId;
+          $result['profile_id'] = $profileId;
+          $result['fields'] = $input;
+          $result['dept_id'] = $dept_id;
+        }
 
-            if($from_own_db>0){
+        return $result;
 
+      }
+    } else {
+      // proceed to login
+      // no need to register again
+      $sessionId = $Ses->set($token,$credential->uid,$agent);
 
+      // update profile
+      $isUpdated = (int) $Acc->update_profile($credential->profile_id, $input->displayName, $input->surname, $input->givenName, $input->givenName, $input->mail, $input->department, $dept_alias, $input->jobTitle, $dept_id, $input->id);
 
-                #set session manually
+      if($sessionId) {
+        $result['token'] = $token;
+        $result['role'] = $credential->role;
+        $result['fields'] = $input;
+        $result['id'] = $credential->uid;
+        $result['profile_id'] = $credential->profile_id;
+        $result['dept_id'] = $dept_id;
+      }	
 
-                $_SESSION['id']=$from_own_db;
-
-                $_SESSION['token']=$res->token;
-
-                $_SESSION['uid']=$res->id;
-
-                $_SESSION['dept']=$res->dept;
-
-                $_SESSION['priv']=$res->priv;
-
-                $_SESSION['position']=$res->position;
-
-                $_SESSION['unit']=$res->dept_name;
-
-                $_SESSION['name']=$res->profile_name;
-
-                $_SESSION['image']=$res->profile_image;
-
-                 echo "authenticating . . .";
-
-                 $script='<script>localStorage.setItem("priv","'.$_SESSION['priv'].'");setTimeout(function(){window.location="'.self::$redirectTo.'";},600)</script>';
-
-                 echo $script;
-
-
-
-            }else{
-
-                #save to own database
-
-                $to_own_db=self::register($res->id,$res->profile_name,$res->last_name,$res->first_name,$res->profile_image,$res->dept_name,$res->dept_alias,$res->position,$res->date_modified);
-
-
-
-                if($to_own_db>0){
-
-
-
-                    $_SESSION['id']=$to_own_db;
-
-                    $_SESSION['token']=$res->token;
-
-                    $_SESSION['uid']=$res->id;
-
-                    $_SESSION['dept']=$res->dept;
-
-                    $_SESSION['priv']=$res->priv;
-
-                    $_SESSION['position']=$res->position;
-
-                    $_SESSION['unit']=$res->dept_name;
-
-                    $_SESSION['name']=$res->profile_name;
-
-                    $_SESSION['image']=$res->profile_image;   
-
-
-
-                    echo "authenticating . . .";
-
-                    $script='<script>localStorage.setItem("priv", "'.$_SESSION['priv'].'"); setTimeout(function(){window.location="'.self::$redirectTo.'";},600)</script>';
-
-                    echo $script;
-
-
-
-                }
-
-            }
-
-       }else{
-
-        return view('authentication',array('message'=>'<div class="alert alert-danger auth-error" style="border-radius: 5px !important;"><small>Oops! Invalid Username or Password!  <p class="text-important">Is this your account? <small><a href="'.url("/").'">not my account.</a></small></small></p></div><br/>'));
-
-       }
-
-
-
-
-
-       
-
+      return $result;
     }
 
-
-
-
-
-    public function login(Request $request)
-
-    {
-
-        $this->username=htmlentities(htmlspecialchars($request->input('username')));
-
-        $password=htmlentities(htmlspecialchars($request->input('password')));
-
-
-
-        $this->password=sha1($password);
-
-
-
-         try{
-
-                $this->pdoObject=DB::connection()->getPdo();
-
-                $this->pdoObject->beginTransaction();
-
-                 $login_sql="SELECT searcaba_login_db.accounts.id,searcaba_login_db.mpts_sys_privilege.priv,searcaba_login_db.account_profile.profile_image,searcaba_login_db.account_profile.profile_name,searcaba_login_db.account_profile.profile_name,searcaba_login_db.account_profile.position,searcaba_login_db.account_profile.first_name,searcaba_login_db.account_profile.last_name,searcaba_login_db.account_profile.date_modified,searcaba_login_db.department.dept_name,searcaba_login_db.department.dept_id,searcaba_login_db.department.dept_alias FROM searcaba_login_db.accounts left join searcaba_login_db.account_profile on searcaba_login_db.account_profile.uid=searcaba_login_db.accounts.id left JOIN searcaba_login_db.department on searcaba_login_db.department.dept_id=searcaba_login_db.account_profile.dept_id left join searcaba_login_db.mpts_sys_privilege on searcaba_login_db.mpts_sys_privilege.uid=searcaba_login_db.accounts.id where searcaba_login_db.accounts.account_username=:user and searcaba_login_db.accounts.account_password=:pass";
-
-                $login_statement=$this->pdoObject->prepare($login_sql);
-
-                $login_statement->bindParam(':user',$this->username);
-
-                $login_statement->bindParam(':pass',$this->password);
-
-                $login_statement->execute();
-
-                $res="";
-
-
-
-                #password hash
-
-                if($row=$login_statement->fetch(\PDO::FETCH_OBJ)){
-
-                    $token=md5('--boundery--'.(integer)$row->id);
-
-                    $hash = password_hash($token, PASSWORD_BCRYPT);
-
-                    $res=json_encode(array('id'=>(integer)$row->id,'priv'=>$row->priv,'dept'=>$row->dept_id,'dept_name'=>$row->dept_name,'dept_alias'=>$row->dept_alias,'profile_image'=>$row->profile_image,'profile_name'=>$row->profile_name,'last_name'=>$row->last_name,'first_name'=>$row->first_name,'position'=>$row->position,'date_modified'=>$row->date_modified,'token'=>$hash));
-
-
-
-                }else{
-
-                    $res=false;
-
-
-
-                }
-
-                
-
-                $this->pdoObject->commit();
-
-                return $res;
-
-
-
-        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
-
-       
-
+    // $res=json_encode(array('id'=>(integer)$row->id,'priv'=>$row->priv,'dept'=>$row->dept_id,'dept_name'=>$row->dept_name,'dept_alias'=>$row->dept_alias,'profile_image'=>$row->profile_image,'profile_name'=>$row->profile_name,'last_name'=>$row->last_name,'first_name'=>$row->first_name,'position'=>$row->position,'date_modified'=>$row->date_modified,'token'=>$hash));
     }
-
-
-
-
-
-    /**check if exists and modified**/
-
-    function profile_exists($user_id,$date_modified){
-
-        try{
-
-                $this->user_id=htmlentities(htmlspecialchars($user_id));
-
-                $this->date=htmlentities(htmlspecialchars($date_modified));
-
-                $this->pdoObject->beginTransaction();
-
-               $sql="SELECT * FROM searcaba_motorpool.account_profile where uid=:id and date_modified=:date_modified ORDER BY id DESC LIMIT 1";
-
-                $statement=$this->pdoObject->prepare($sql);
-
-                $statement->bindParam(':id',$this->user_id);
-
-                $statement->bindParam(':date_modified',$this->date);
-
-                $statement->execute();
-
-                $result=0;
-
-                while($row=$statement->fetch(\PDO::FETCH_OBJ)){
-
-                    $result=$row->id;
-
-                }
-
-                $this->pdoObject->commit();
-
-                return $result;
-
-
-
-        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
-
-
-
-
-
-    }
-
-
-
-
-
-    function register($uid,$full_name,$last_name,$first_name,$image,$department,$alias,$position,$date_modified){
-
-            try{
-
-                $this->pdoObject=DB::connection()->getPdo();
-
-                $this->pdoObject->beginTransaction();
-
-                $this->uid=htmlentities(htmlspecialchars($uid));
-
-                $this->full_name=@htmlentities(htmlspecialchars($full_name));
-
-                $this->last_name=@htmlentities(htmlspecialchars($last_name));
-
-                $this->first_name=@htmlentities(htmlspecialchars($first_name));
-
-                $this->image=@htmlentities(htmlspecialchars($image));
-
-                $this->department=@htmlentities(htmlspecialchars($department));
-
-                $this->alias=@htmlentities(htmlspecialchars($alias));
-
-                $this->position=@htmlentities(htmlspecialchars($position));
-
-                $this->date_modified=@htmlentities(htmlspecialchars($date_modified));
-
-                
-
-                
-
-                 $sql="INSERT INTO account_profile(profile_name,last_name,first_name,profile_image,department,department_alias,position,date_modified,uid)values(:profile_name,:last_name,:first_name,:profile_image,:department,:department_alias,:position,:date_modified,:uid)";
-
-                $statement=$this->pdoObject->prepare($sql);
-
-                $statement->bindParam(':profile_name',$this->full_name);
-
-                $statement->bindParam(':last_name',$this->last_name);
-
-                $statement->bindParam(':first_name',$this->first_name);
-
-                $statement->bindParam(':profile_image',$this->image);
-
-                $statement->bindParam(':department',$this->department);
-
-                $statement->bindParam(':department_alias',$this->alias);
-
-                $statement->bindParam(':position',$this->position);
-
-                $statement->bindParam(':date_modified',$this->date_modified);
-
-                $statement->bindParam(':uid',$this->uid);
-
-                $statement->execute();
-
-
-
-                $lastId=$this->pdoObject->lastInsertId();
-
-                $this->pdoObject->commit();
-
-
-
-                return $lastId;
-
-                
-
-            }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
-
-
-
-    }
-
-
-
 
 
     public function isAdmin(){
-
-        if($_SESSION['priv']==='admin'){
-
-            return true;
-
-        }
-
-
-
-        return false;
-
+      return ($_SESSION['priv'] ==='admin');
     }
 
 
@@ -399,10 +168,26 @@ class Authentication extends Controller
     }
 
 
+    private function session($data) {
+       #set session manually
 
+       $_SESSION['id'] = $data['id'];
+       $_SESSION['token'] = $data['token'];
+       $_SESSION['profile_id'] = $data['profile_id'];
+       $_SESSION['uid'] = $data['profile_id'];
+       $_SESSION['dept'] = $data['fields']->department;
+       $_SESSION['priv'] = $data['role'];
+       $_SESSION['position'] = $data['fields']->jobTitle;
+       $_SESSION['unit'] = $data['fields']->department;
+       $_SESSION['name'] = $data['fields']->displayName;
+       $_SESSION['dept_id'] = $data['dept_id'];
 
+       // echo "authenticating . . .";
 
+      //  $script='<script>localStorage.setItem("priv","'.$_SESSION['priv'].'");setTimeout(function(){window.location="'.self::$redirectTo.'";},600)</script>';
 
+       // echo $script;
+    }
 
 }
 

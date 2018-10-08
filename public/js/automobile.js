@@ -44,7 +44,7 @@ function showAutomobileList(page=1,callback=function(){}){
 	ajax_getAutmobileList(page,function(json){
 
 		var auto=JSON.parse(json);
-		var priv=(window.localStorage.getItem('priv'));
+		var priv=(window.localStorage.getItem('role'));
 
 		//$('.automobile-list').html('Loading . . .');
 
@@ -58,11 +58,11 @@ function showAutomobileList(page=1,callback=function(){}){
 				var click_event_for_admin=priv=='admin'?'modalOpen(this)':'';
 
 
-				var htm=`<div class="col col-md-4 col-sm-6 col-xs-12 col-lg-3 " onclick="`+click_event_for_admin+`" data-content="`+auto[x].id+`" data-json='`+automobile_json+`'>
+				var htm=`<div class="col col-md-4 col-sm-6 col-xs-12 col-lg-2 " onclick="`+click_event_for_admin+`" data-content="`+auto[x].id+`" data-json='`+automobile_json+`'>
 							<div class="automobile-list-item" id="automobile-list-item-`+auto[x].id+`" style="box-shadow: 0px 0px 10px rgba(200,200,200,0.2);">
-				    					<img src="/laravel/public/uploads/automobile/`+auto[x].image+`" onerror="this.src='/laravel/public/img/no-photo-available.jpg'"/>
+				    					<img src="uploads/automobile/`+auto[x].image+`" onerror="this.remove()"/>
 				    					<div class="col col-md-12" style="background:rgba(200,200,200,0.1);border-top:1px solid rgba(200,200,200,0.2);">
-				    						<h4 class="page-header">`+auto[x].brand+`</h4>
+				    						<h5 class="page-header">`+auto[x].brand+`</h5>
 				    						<p><small><b>Plate No.</b> <span class="text-muted">`+auto[x].plate_no+`</span></small></p>
 
 				    						<!--<p><div class="marker marker-danger `+is_unavailable+`">`+auto[x].plate_no+`</div></p>-->`

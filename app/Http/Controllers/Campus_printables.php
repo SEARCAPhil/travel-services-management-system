@@ -22,7 +22,7 @@ class Campus_printables extends Controller
 
 	function is_creator($id){
 		if($_SESSION['priv']!='admin'){
-			if($id!=@$_SESSION['id']){
+			if($id!=@$_SESSION['profile_id']){
 
 				echo '<br/><br/><center><h3>Sorry! File not found.</h3></center>';
 				exit;
@@ -567,8 +567,6 @@ function print_notice_of_charges($id){
 		$pdf->SetMargins(PDF_MARGIN_LEFT, 50, PDF_MARGIN_RIGHT);
 
 		
-
-
 //prevent other users to view this document
 	self::is_creator($travel_request->requested_by);
 

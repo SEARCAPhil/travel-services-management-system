@@ -506,7 +506,7 @@ class Charge extends Controller
 
                 $this->pdoObject->beginTransaction();
 
-                $sql="SELECT travel.*,automobile.manufacturer,searcaba_login_db.account_profile.profile_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.id=driver_id where travel.id=:id";
+                $sql="SELECT travel.*,automobile.manufacturer,account_profile.profile_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN account_profile on account_profile.id=driver_id where travel.id=:id";
 
                 $statement=$this->pdoObject->prepare($sql);
 
