@@ -59,7 +59,7 @@ class Authentication extends Controller
       # compare department assigned in OWA against in TRS
       if($value->dept_name === $dept_name) $dept_id = $value->dept_id;
     }
-    return $dept_id;
+    return array('dept_id' => $dept_id, 'alias' => $value->dept_alias);
   }
 
   public function login(Request $request)
@@ -77,13 +77,16 @@ class Authentication extends Controller
     $input = @json_decode($request->getContent())->data;
     $credential = $Acc->loginO365($input->mail,$input->id);
     $department_list = $Dir->departments_list();
-    $dept_id = self::map_department($credential->department);
+    $dept = self::map_department($credential->department);
+    $dept_id = $dept['dept_id'];
     $department_alias = explode(' ', @$input->department);
     $dept_alias = '';
     
     foreach($department_alias as $key => $value) {
       $dept_alias.=  strtoupper(substr($value, 0, 1));
     }
+
+    $dept_alias = $dept['alias'] ? $dept['alias'] : $dept_alias;
     
 
     // set OPENID
