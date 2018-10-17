@@ -53,13 +53,17 @@ class Authentication extends Controller
 
   public function map_department ($dept_name) {
     $dept_id = null;
+    $dept_alias = '';
     $Dir = new Directory(DB::connection()->getPdo());
     $department_list = $Dir->departments_list();
     foreach($department_list as $key => $value) {
       # compare department assigned in OWA against in TRS
-      if($value->dept_name === $dept_name) $dept_id = $value->dept_id;
+      if($value->dept_name === $dept_name) {
+          $dept_id = $value->dept_id;
+          $dept_alias = $value->dept_alias;
+      }
     }
-    return array('dept_id' => $dept_id, 'alias' => $value->dept_alias);
+    return array('dept_id' => $dept_id, 'alias' => $dept_alias);
   }
 
   public function login(Request $request)
