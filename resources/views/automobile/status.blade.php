@@ -31,7 +31,8 @@
 		document.getElementById('today-span').innerHTML = todaysDate
 		getReserved(d.getFullYear()+'-'+(d.getMonth()+1)+'-'+1).then(res => {
 			const targ = document.getElementById('todays-trip-section')
-			targ.innerHTML = ''
+			targ.innerHTML = `<section  style="padding:10px;text-align: center;margin-bottom:50px;">
+						<img src="img/bag.png" width="150px"/></section>`
 			let num = 0
 			
 				
@@ -39,8 +40,8 @@
 					if (trip.departure_date == todaysDate) {
 						targ.innerHTML += `<div class="col-sm-12 row">
 							<p style="color: green;">${trip.location} - ${trip.destination}</p>
-							<p class="text-muted">${trip.departure_date}emsp; ${trip.departure_time}</p>
-							<p><span class="badge">#${trip.tr_id}</span>&emsp;<span class="text-muted">John Kenneth Abella</span></p>
+							<p class="text-muted">${trip.departure_date} ${trip.departure_time}</p>
+							<p><span class="badge">#${trip.tr_id}</span> <span class="text-muted"> </span></p>
 							<hr/>
 						</div>`
 						num++
