@@ -12,8 +12,8 @@
 
 <script>
 	var d = new Date()
-	var month = d.getMonth() < 10 ? `0${d.getMonth()}` : d.getMonth()
-	var day = d.getDay() < 10 ? `0${d.getDay()}` : d.getDay()	
+	var month = d.getMonth() < 10 ? `0${d.getMonth()}` : d.getMonth()+1
+	var day = d.getDate() < 10 ? `0${d.getDate()}` : d.getDate()	
 	var todaysDate = `${d.getFullYear()}-${month}-${day}`
 
 	function getReserved(res){
