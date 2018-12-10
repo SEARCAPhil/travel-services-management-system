@@ -295,7 +295,7 @@ class Official extends Controller
 
 
 
-                $sql="SELECT tr.*,account_profile.profile_name FROM tr LEFT JOIN account_profile on account_profile.id = tr.requested_by where (status!=0 and status!=5) or (status != 5 and requested_by = :id) and request_type=:type ORDER BY date_created DESC LIMIT :start, 10";
+                $sql="SELECT tr.*,account_profile.profile_name FROM tr LEFT JOIN account_profile on account_profile.id = tr.requested_by where ((status!=0 and status!=5) or (status != 5 and requested_by = :id)) and request_type=:type ORDER BY date_created DESC LIMIT :start, 10";
 
                 $statement=$this->pdoObject->prepare($sql);
 
