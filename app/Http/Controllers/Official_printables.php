@@ -64,7 +64,15 @@ class Official_printables extends Controller
     	$charges=Array();
     	$staff=Array();
     	$scholars=Array();
-    	$custom=Array();
+			$custom=Array();
+			$source_of_funds = [
+				'opf' => 'Operating Funds',
+				'otf' => 'Other Funds',
+				'op' => 'Obligations Payable',
+				'sf' => 'Special Funds',
+				'opfs' => 'Operating Funds (Scholars)',
+				'otfs' => 'Other Funds (Scholars)'
+			];
 
 
    	
@@ -324,7 +332,7 @@ $html.='	<article class="col col-md-12">
 			$f='';
 			
 			for($x=0;$x<count($fundings);$x++){
-				$f.='<br/><b>'.$fundings[$x]->fund.' - '.$fundings[$x]->cost_center.' - '.$fundings[$x]->line_item.'</b>';
+				$f.='<br/><b>'.(isset($source_of_funds[$fundings[$x]->fund]) ? $source_of_funds[$fundings[$x]->fund] : $fundings[$x]->fund).' - '.$fundings[$x]->cost_center.' - '.$fundings[$x]->line_item.'</b>';
 			}	
 
 			$html.=$f;
@@ -416,13 +424,15 @@ $html.='	<article class="col col-md-12">
 
 		$dt = new \DateTime($itenerary->actual_departure_time);
 		$rt = new \DateTime($itenerary->returned_time);
-								
-		
-				
+		$deptTime = new \DateTime($itenerary->departure_time);
+		$isEmptyDeptTime = $itenerary->departure_time == '00:00:00' ? true : false; 
+		$isEmptyReturnedTime = $itenerary->returned_time == '00:00:00' ? true : false; 						
+		$isEmptyRetDate = $itenerary->returned_date == '0000-00-00' ? true : false;
+		$isEmptyActualDeptTime = $itenerary->actual_departure_time == '00:00:00' ? true : false; 
 		$html .= '</table><br/><br/>';
 
 			$html .= '	</td>
-				<td> Purposes/Places to be visited: <b>'.htmlspecialchars(strip_tags($travel_request->purpose)).'</b>
+				<td> Purposes/Places to be visited: <b>'.htmlspecialchars(nl2br($travel_request->purpose)).'</b>
 				</td>
 
 			</tr>
@@ -446,12 +456,12 @@ $html.='	<article class="col col-md-12">
 						<tr style="border:none;">
 							<td style="border-right:1px solid rgb(80,80,80);border-bottom:1px solid rgb(80,80,80);" width="80">Departure</td>
 							<td style="border-right:1px solid rgb(80,80,80);border-bottom:1px solid rgb(80,80,80);" width="100"> <b>'.$itenerary->departure_date.'</b></td>
-							<td style="border-bottom:1px solid rgb(80,80,80);" width="67"> <b>'.$itenerary->departure_time.'</b> </td>
+							<td style="border-bottom:1px solid rgb(80,80,80);" width="67"> <b>'.($isEmptyDeptTime ? '' : $deptTime->format('h:i A')).'</b> </td>
 						</tr>
 						<tr style="border:none;">
 							<td style="border-right:1px solid rgb(80,80,80);border-bottom:1px solid rgb(80,80,80);" width="80">Arrival</td>
-							<td style="border-right:1px solid rgb(80,80,80);border-bottom:1px solid rgb(80,80,80);" width="100"> <b>'.$itenerary->returned_date.'</b></td>
-							<td style="border-bottom:1px solid rgb(80,80,80);" width="67"> <b>'.$itenerary->returned_time.'</b></td>
+							<td style="border-right:1px solid rgb(80,80,80);border-bottom:1px solid rgb(80,80,80);" width="100"> <b>'.($isEmptyRetDate  ? '' : $itenerary->returned_date).'</b></td>
+							<td style="border-bottom:1px solid rgb(80,80,80);" width="67"> <b>'.($isEmptyReturnedTime ? '' : $rt->format('h:i A')).'</b></td>
 						</tr>
 					</table>
 
@@ -570,12 +580,12 @@ $html.='	<article class="col col-md-12">
 					<tr>
 						<td width="80">Date</td>
 						<td width="80"><b>'.$itenerary->departure_date.'</b></td>
-						<td><b>'.$itenerary->returned_date.'</b></td>
+						<td><b>'.($isEmptyRetDate ? '' :$itenerary->returned_date).'</b></td>
 					</tr>
 					<tr>
 						<td width="80">Time</td>
-						<td width="80"><b><!--'.$dt->format('h:i:s').'--></b></td>
-						<td><b><!--'.$rt->format('h:i:s').'--></b></td>
+						<td width="80"><b>'.($isEmptyActualDeptTime ? '' :$dt->format('h:i A')).'</b></td>
+						<td><b>'.($isEmptyReturnedTime ? '' : $rt->format('h:i A')).'</b></td>
 					</tr>
 					<tr>
 						<td width="80">Mileage Reading</td>
@@ -877,7 +887,7 @@ $html.='	<article class="col col-md-12">
 
 		//settings
 		// set margins
-		$pdf->SetMargins(PDF_MARGIN_LEFT, 50, PDF_MARGIN_RIGHT);
+		$pdf->SetMargins(PDF_MARGIN_LEFT, 40, PDF_MARGIN_RIGHT);
 
 		
 
@@ -1011,7 +1021,7 @@ $html.='
 
 	<article>
 		<p><b>II. Purpose:</b></p>
-		<p class="col col-md-12"><p>'.$details->purpose.'</p></p>
+		<p class="col col-md-12"><p>'.nl2br($details->purpose).'</p></p>
 	</article>
 	<br/>
 	<article>
@@ -1027,12 +1037,13 @@ $html.='
 			for($a=0;$a<$itenerary_total_count;$a++){
 				$mode_of_transport=$itenerary[$a]->plate_no!='rent_a_car'?'SEARCA Vehicle':'RENT A CAR';
 				$dt = new \DateTime($itenerary[$a]->departure_time);
+				$isEmptyDeptTime = $itenerary[$a]->departure_time == '00:00:00' ? true : false;
     			$html.='<tr>
 					<td>'.@date_format(date_create($itenerary[$a]->departure_date),'m-d-y').'</td>
 					<td>'.$itenerary[$a]->location.'</td>
 					<td>'.html_entity_decode($itenerary[$a]->destination).'</td>
 					<td>'.$mode_of_transport.'</td>
-					<td>'.$dt->format('h:i:s A').'</td>
+					<td>'.(is_null($itenerary[$a]->departure_time) || $isEmptyDeptTime ? '' : $dt->format('h:i A')).'</td>
 				</tr>';
     		}
 
@@ -1074,11 +1085,18 @@ for($a=0;$a<count($details->projects);$a++){
 
 
 $f='';
-			
-for($x=0;$x<count($fundings);$x++){
-	$f.='<b style="font-size:8px;"> '.$fundings[$x]->fund.' - '.$fundings[$x]->cost_center.' - '.$fundings[$x]->line_item.''.(count($fundings)>0&&count($fundings)>$x+1?',':'').'</b><br/>';
-}	
+$source_of_funds = [
+	'opf' => 'Operating Funds',
+	'otf' => 'Other Funds',
+	'op' => 'Obligations Payable',
+	'sf' => 'Special Funds',
+	'opfs' => 'Operating Funds (Scholars)',
+	'otfs' => 'Other Funds (Scholars)'
+];
 
+for($x=0;$x<count($fundings);$x++){ 
+	$f.='<b style="font-size:8px;"> '.(isset($source_of_funds[$fundings[$x]->fund]) ? $source_of_funds[$fundings[$x]->fund] : $fundings[$x]->fund).' - '.$fundings[$x]->cost_center.' - '.$fundings[$x]->line_item.''.(count($fundings)>0&&count($fundings)>$x+1?',':'').'</b><br/>';
+}	
 
 
 
@@ -1120,13 +1138,6 @@ $html.='		<table>
 			</tr>
 
 			<tr>
-				<td >Others (Pls. Specify)  </td>
-				<td class="withLine" width="160"> </td>
-				<td width="10"></td>
-				<td class="withLine"></td>
-			</tr>
-
-			<tr>
 				<td>  </td>
 				<td class="withLine" width="160"> </td>
 				<td width="10"></td>
@@ -1145,6 +1156,9 @@ $html.='		<table>
 	</article>
 
 </section>';
+$notes = nl2br($details->purpose); 
+
+$notePage = "<br/><h4>Notes</h4><hr/>${notes}";
 
 
 
@@ -1152,9 +1166,13 @@ $html.='		<table>
 		$pdf->setFontSize(10);	
 
 		//output
-        $pdf->AddPage();
-        $pdf->Writehtml($html);
-        $pdf->output('Travel Request', 'I');
+		$pdf->AddPage();
+		$pdf->Writehtml($html);
+		
+
+		$pdf->AddPage();
+		$pdf->Writehtml($notePage);
+		$pdf->output('Travel Request', 'I');
 
 
     }

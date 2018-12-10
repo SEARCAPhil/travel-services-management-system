@@ -468,6 +468,14 @@ function print_notice_of_charges($id){
     	$staff=Array();
     	$scholars=Array();
     	$custom=Array();
+			$source_of_funds = [
+				'opf' => 'Operating Funds',
+				'otf' => 'Other Funds',
+				'op' => 'Obligations Payable',
+				'sf' => 'Special Funds',
+				'opfs' => 'Operating Funds (Scholars)',
+				'otfs' => 'Other Funds (Scholars)'
+			];
 
 
    	
@@ -693,7 +701,7 @@ $html.='
 					$f='';
 			
 			for($x=0;$x<count($fundings);$x++){
-				$f.='<span style="font-size:8px;">&nbsp;&nbsp;'.$fundings[$x]->fund.' - '.$fundings[$x]->cost_center.' - '.$fundings[$x]->line_item.'</span><br/>';
+				$f.='<span style="font-size:8px;">&nbsp;&nbsp;'.(isset($source_of_funds[$fundings[$x]->fund]) ? $source_of_funds[$fundings[$x]->fund] : $fundings[$x]->fund ).' - '.$fundings[$x]->cost_center.' - '.$fundings[$x]->line_item.'</span><br/>';
 			}	
 
 			$html.=$f;
