@@ -1045,13 +1045,27 @@ class Official_itenerary extends Controller
         try{
            
                 $this->id=htmlentities(htmlspecialchars($id));
-               $this->pdoObject=DB::connection()->getPdo();
+                $this->pdoObject=DB::connection()->getPdo();
                 $sql="SELECT travel.*,automobile.manufacturer,account_profile.profile_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN account_profile on account_profile.id=driver_id where travel.id=:id";
                 $statement=$this->pdoObject->prepare($sql);
                 $statement->bindParam(':id',$this->id);
                 $statement->execute();
                 $res=Array();
-                while($row=$statement->fetch()){
+
+                // gasoline records
+                $sql2="SELECT * FROM gasoline where tt_number=:id";
+                
+                
+                // result
+                while($row=$statement->fetch()){$statement2=$this->pdoObject->prepare($sql2);
+                    $statement2->bindParam(':id',$row['id']);
+                    $statement2->execute();
+                    $row['gasoline_records'] = [];
+                    //gas
+                    while($row2=$statement2->fetch()) {
+                        $row['gasoline_records'][] = $row2;
+                    }
+                    
                     $res[]=$row;
                 }
                 
@@ -1059,8 +1073,6 @@ class Official_itenerary extends Controller
                 return json_encode($res);
 
         }catch(Exception $e){echo $e->getMessage();}
-
-
         
     }
 

@@ -307,7 +307,12 @@ $html .='<style>
 		</table>
 
 	</article>';
-	
+$adf_no= '';
+$service_station = '';
+foreach($itenerary->gasoline_records as $key => $value) {
+	$adf_no.=$value->id.' ' ;
+	$service_station.=$value->station.' ';
+}	
 $html.='	<article class="col col-md-12">
 		<table class="table table-bordered sa-table "  style="font-size:0.8em;" cellspacing="0">
 			<tr class="mini-tr">
@@ -317,7 +322,7 @@ $html.='	<article class="col col-md-12">
 
 				</td>
 				<td>
-					<p><label> <b>ADS # : </b></label> <span> </span></p>
+					<p><label> <b>ADS # : '.$adf_no.'</b></label> <span> </span></p>
 					
 				</td>				
 			</tr>
@@ -482,7 +487,7 @@ $html.='	<article class="col col-md-12">
 
 			<!--station-->
 			<tr>
-				<td> Service Station.:
+				<td> Service Station.: '.$service_station.'
 			
 				</td>
 				<td> 
