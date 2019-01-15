@@ -1,86 +1,148 @@
 @extends('layouts.home')
 @section('title','SEARCA System Authentication')
 @section('content')
-<style type="text/css">
+<style>
 	body{
-		background: rgb(255,255,255);
+		background: #fff !important;
+		overflow: hidden;
 	}
-  input[type="text"],input[type="password"]{
-    border: none;
-    border-radius: 0 !important;
-    -webkit-border-radius: 0 !important;
-    padding:20px;
-    box-shadow: none;
-    text-align: center;
-  }
+	.main-login {
+		height:100vh;
+		overflow:hidden;
+	}
+	.main-login-banner {
+		height:100vh;
+		padding-top:10%;
+		color:rgb(255,255,255);
+		z-index:1;
+		position:relative;
+	}
 
-  .btn-submit{
-    background: #009688;
-     padding: 10px;
-     border-radius: 20px;
-     color:rgb(250,250,250) !important;
-  }
+	.main-login-backdrop {
+		float:left;
+		position:absolute;
+		width:100%;
+		height:100%;
+		top:0;
+			background:rgba(0,0,0,0.8);
+			z-index:1;
+	}
 
-  .searca-about,.searca-footer{
-    font-size: 9px;
-    margin-top: 50px;
-  }
-  .searca-footer{
-    line-height: 0;
-    margin-top: 60px;
-  }
+	.main-login-banner-text {
+		float:left;
+		position:absolute;
+		width:100%;
+		height:100%;
+		top:100px;
+		z-index:2;
+	}
 
-   .auth-error{
-      transition: all 0.3s ease-in-out;
-      opacity: 0.9;
-   }
 
+	.green {
+		color: #23f98b;
+	}
+
+	.sub-login-banner {
+		padding-top:7%;
+		position:relative;
+		height:100%;
+		overflow:hidden;
+		overflow-y: auto;
+	}
+	.go-to-app-btn {
+		border-radius: 50px !important;
+		color: #fff !important;
+		background: #e91e63 !important;
+		padding: 15px !important;
+		text-transform: none !important;
+	}
+	.doodle-section {
+		height:100%;
+		width:100%;
+		background:url('{{url('/')}}/img/doodle.png') no-repeat;
+		overflow:hidden;
+		position:absolute;
+		z-index:0;
+		top:35%;
+	}
+	.sub-banner-deco {
+		position:absolute;
+		height:30vh;
+		width:50%;
+		background:url('{{url('/')}}/img/sub-banner-deco.png') no-repeat;
+		background-size:cover;
+		overflow:hidden;
+		bottom:0;
+		right:0;
+	}
 </style>
-	<section class="col col-xs-12 col-lg-4 col-lg-offset-4 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1" style="margin-top: 10vh;">
-		<div class="col col-md-12 text-center">
-			<form class="form form-horizontal text-center" method="POST" action="/trs/public/authentication/confirmation">
-				{{csrf_field()}}
-
-				<div class="row">
-		         	<div class="col col-md-12 text-center row">
-		         	 	<p><img src="{{url('/')}}/img/logo-new.png"  width="50%"></p>
-		         	</div>
-
-		         	<div class="col col-xs-12 row">
-		            	<h1> Sign In </h1>
-		           	 	<p><small><a href="#"  class="text-muted">Travel Services Information System</a></b></small></p>
-		         	</div>
-		         
-		        </div>
-
-				
-
-				<div class="col col-md-12 row form-group">
-					<?php echo @$message; ?>
-					<input type="text" class="form-control" name="username" placeholder="Username" autocomplete="off" />
-				</div>
-
-				<div class="col col-md-12 form-group">
-					<input type="password" class="form-control" name="password" placeholder="Password" />
-				</div>
-
-				<div class="col col-md-12 form-group">
-					
-					<button class="btn btn btn-block btn-submit pull-right">Sign-in</button>
-				</div>
-			</form>
+<article class="main-login row" id="{{ csrf_token() }}">
+ 
+    <section class="col col-12 col-lg-7 main-login-banner">
+        <div class="container col col-lg-10 col-8 col-md-8 col-lg-offset-1 col-sm-offset-2 col-xs-offset-1 main-login-banner-text"> 
+            <h2>Travel Services Management System</h2><?php echo @$message; ?>
+            <p class="text-muted">
+							Monitor your land travel in one place! <span class="green">Book your travel</span> and we will take care the rest
+						</p>
+						<br/><br/>
+						<h3 class="text-muted">Sign-in</h3>
+            <button class="btn btn-office365 btn-lg   go-to-app-btn" type="button">Login with Office365</button>
+        </div>
+        <div class="main-login-backdrop"></div>
+        <div class="doodle-section"></div>
+    </section>
 
 
-			<footer class="searca-footer"> 
-			   <center>
-			      <p>&copy;2017www.searca.org</p>
-			   </center>
-			</footer>
-     
-		</div>
-		
-	</section>
 
+    <section class="col col-lg-5 sub-login-banner">
+        <div class="sub-banner-deco"></div>
+        <div class="col-lg-10 col-lg-offset-1">
+            <img src="{{url('/')}}/img/searca-new.png" width="150px">
+            <br/><br/>
+            <div class="media">
+                <div class="media-left">
+                <img src="{{url('/')}}/img/checked-green.png" width="50px">
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">Well structured and organized</h4>
+                    <p><small>Classified your records as personal, official or campus travel</small></p>
+                </div>
+                <hr/>
+            </div>
 
-	
-@endsection
+             <div class="media">
+                <div class="media-left">
+                <img src="{{url('/')}}/img/checked-green.png" width="50px">
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">Safe and secured</h4>
+                    <p><small>Stored your data in the cloud with security and privacy. By using your Office365 account, you gain 1 more extra security layer to protect your files against hackers and viruses  </small></p>
+                </div>
+                <hr/>
+            </div>
+
+             <div class="media">
+                <div class="media-left">
+                <img src="{{url('/')}}/img/checked-green.png" width="50px">
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">Accessible everywhere</h4>
+                    <p><small>You can always book your land travel anytime and everytime in the world!</small></p>
+                </div>
+                <hr/>
+            </div>
+
+            <br/>
+            <br/>
+            <p>
+                <small>By signing in to TRS you are agree to <span class="text-success">Users License agreement</span> and <span class="text-success">Data policy</span> settings of SEARCA</small>
+            </p>
+						
+        </div> 
+        
+    </section>
+
+<!--end content-->
+</article>
+
+<script type="text/javascript" src="{{url('/')}}/js/auth.es.module.js"></script>

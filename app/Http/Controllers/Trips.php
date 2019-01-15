@@ -63,6 +63,13 @@ class Trips extends Controller
         echo json_encode($data); 
     }
 
+    public function search($param, $page){
+        $official_class = new Official();
+        $official_recent = @json_decode($official_class->search_trips($param, $page));
+        $data=Array('total'=>$official_recent->total,'pages'=>$official_recent->pages,'current_page'=>$page,'data'=>$official_recent->data);           
+        echo json_encode($data); 
+    }
+
 
 
 
@@ -129,9 +136,10 @@ class Trips extends Controller
         if(!empty($status)){
 
             #filter by status
-            if($type=='official') echo $official_class->update_status($id,$status); 
+            echo $official_class->update_status($id,$status); 
+            /*if($type=='official') echo $official_class->update_status($id,$status); 
             if($type=='personal') echo $personal_class->update_status($id,$status);
-            if($type=='campus') echo $campus_class->update_status($id,$status); 
+            if($type=='campus') echo $campus_class->update_status($id,$status); */
 
         }
         

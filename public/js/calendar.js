@@ -121,14 +121,14 @@
 				if(x>rd&&dayPointer<calendar.monthMaxDays[calendar.month]){
 					++dayPointer
 					//htm+='<td  context="'+(dayPointer)+'" data-menu="selectCarMenu"><b>'+(dayPointer)+'</b>'
-					htm+='<td><b>'+(dayPointer)+'</b>'
+					htm+='<td><b style="color: #e91e63;">'+(dayPointer)+'</b>'
 					htm+='<div class="sched"  id='+new Date(calendar.year+'-'+(calendar.month+1)+'-'+dayPointer).toLocaleDateString()+'></div></td>'
 					
 				}else{
 					/**continue counting if next row*/
 					if(r>0&&dayPointer<calendar.monthMaxDays[calendar.month]){
 						++dayPointer
-						htm+='<td><b>'+dayPointer+'</b>'
+						htm+='<td><b style="color: #e91e63;">'+dayPointer+'</b>'
 						htm+='<div class="sched"  id='+new Date(calendar.year+'-'+(calendar.month+1)+'-'+dayPointer).toLocaleDateString()+'></div></td>'
 					
 					}else{
@@ -190,18 +190,19 @@
 					//dayVal[new Date(reserved[x].departure_date).getDay()]++;
 
 					var htm=`<div> 
-								<small>
-									<h5 class="text-success">`+reserved[x].location +` /`+reserved[x].destination + `</h5>  
+								<small style="line-height: 12px;">
+									<span class="text-success">`+reserved[x].location +` - `+reserved[x].destination + `</span><br/> 
 									<input type="time" class="timeSelector" style="margin:0;background:none;border:none;padding:none;" value="`+reserved[x].departure_time+`" disabled="disabled">
-
+									<span class="badge">${reserved[x].tr_id}</span>
 								`
 
 
-						htm+=`<p>`+mobile+`</p>`;
+						htm+=`<br/><span class="text-muted">`+mobile+`</span>`;
 						
 						//hide driver
 						
-						htm+=`<p>`+reserved[x].driver+`</p></small><hr/>`
+						htm+=`<br/><span class="text-muted">`+reserved[x].driver+`<span><br/>
+						</small><hr/>`
 						
 						
 						htm+=`</div>`

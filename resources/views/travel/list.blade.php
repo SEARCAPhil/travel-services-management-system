@@ -28,29 +28,38 @@
 
 
 </div>
-<div class=" list-section col col col-md-3 col-lg-3 col-sm-9 hidden-sm hidden-xs row">
-	<div class="col col-xs-12">
-		<input type="text" class="form-control" placeholder="Search" id="searchInput" autofocus="">
-	</div>
+<div class=" list-section col col col-md-3 col-lg-3 col-sm-9 hidden-sm hidden-xs">
+	<div class="row">
+		<div class="col col-xs-12">
+			<div class="row" style="background:#F7F7FA;">
+			<div class="col-sm-2" style="padding: 10px;border-right: 1px solid rgba(200,200,200,0.6);">
+					<i class="material-icons">search</i>
+				</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" placeholder="Search" id="searchInput" autofocus="" style="padding: 20px;background-image: none;">
+				</div>
+			</div>
+			<div class="row" style="border-bottom: 1px solid rgba(200, 200, 200, 0.6);padding:2px;">
+				<div class="col-sm-2 text-muted" style="padding: 10px;">Page</div>
+				<div class="col-sm-8"><input type="number" class="form-control list-current-page" value="1" min="1" style="background-image: none;"></div>
+				<div class="col-sm-2 text-danger"><br/> / <span class="list-total-pages">1</span></div>
+			</div>
+		</div>
 
-	<div class="col col-md-12 content-section">
-		<dl class="row list-details">	
-			<!--<dd>
-				<h4 class="page-header"><b>5690</b></h4>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-			</dd>-->
-			
-		</dl>
-
-		<p class="row">
-				<b class="text-danger">Page /<span class="list-total-pages">1</span></b>
-				<input type="number" class="form-control list-current-page" value="1" min="1">
-		</p>
+		<div class="col col-md-12 content-section" style="padding: none;">
+			<dl class="row list-details">	
+				<!--<dd>
+					<h4 class="page-header"><b>5690</b></h4>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+				</dd>-->
+				
+			</dl>
+		</div>	
 	</div>
 </div>
 
 
-<div class="col col-md-6 col-sm-9 preview-section">
+<div class="col col-md-7 col-sm-9 preview-section">
 	
 </div>
 

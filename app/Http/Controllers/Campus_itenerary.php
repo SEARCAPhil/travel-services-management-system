@@ -1337,7 +1337,7 @@ class Campus_itenerary extends Controller
 
 
 
-                 $sql="SELECT tr.status as tr_status,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no,automobile.manufacturer, searcaba_login_db.account_profile.last_name, searcaba_login_db.account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where departure_date>= :datez1  and departure_date< (:datez2 +INTERVAL 1 MONTH)  and linked='no' and tr.status>0 ORDER BY departure_date DESC";
+                 $sql="SELECT tr.status as tr_status,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no,automobile.manufacturer, account_profile.last_name, account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN account_profile on account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where departure_date>= :datez1  and departure_date< (:datez2 +INTERVAL 1 MONTH)  and linked='no' and tr.status>0 ORDER BY departure_date DESC";
 
 
 
@@ -1425,7 +1425,7 @@ class Campus_itenerary extends Controller
 
 
 
-                  $sql="SELECT trc.requested_by,trc.status as trc_status,trc_travel.*,automobile.manufacturer, searcaba_login_db.account_profile.last_name, searcaba_login_db.account_profile.first_name FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no  LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.id=driver_id LEFT JOIN trc on trc_travel.trc_id=trc.id where trc.requested_by=:id and departure_date>= :datez1  and departure_date< (:datez2 +INTERVAL 1 MONTH)   and trc.status>0 ORDER BY departure_date DESC";
+                  $sql="SELECT trc.requested_by,trc.status as trc_status,trc_travel.*,automobile.manufacturer, account_profile.last_name, account_profile.first_name FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no  LEFT JOIN account_profile on account_profile.id=driver_id LEFT JOIN trc on trc_travel.trc_id=trc.id where trc.requested_by=:id and departure_date>= :datez1  and departure_date< (:datez2 +INTERVAL 1 MONTH)   and trc.status>0 ORDER BY departure_date DESC";
 
 
 
@@ -1539,7 +1539,7 @@ class Campus_itenerary extends Controller
 
                 
 
-                $sql="SELECT trc_travel.*,automobile.manufacturer,searcaba_login_db.account_profile.profile_name FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.id=driver_id where trc_travel.id=:id";
+                $sql="SELECT trc_travel.*,automobile.manufacturer,account_profile.profile_name FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no LEFT JOIN account_profile on account_profile.id=driver_id where trc_travel.id=:id";
 
                 $statement=$this->pdoObject->prepare($sql);
 
@@ -1693,7 +1693,7 @@ class Campus_itenerary extends Controller
 
 
 
-                  $sql="SELECT trc.requested_by,trc.status as trc_status,trc_travel.*,automobile.manufacturer, searcaba_login_db.account_profile.last_name, searcaba_login_db.account_profile.first_name FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no  LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.id=driver_id LEFT JOIN trc on trc_travel.trc_id=trc.id where departure_date>= :datez1  and departure_date< (:datez2 +INTERVAL 1 MONTH) and (trc.status=2||trc.status=4) ORDER BY departure_date DESC";
+                  $sql="SELECT trc.requested_by,trc.status as trc_status,trc_travel.*,automobile.manufacturer, account_profile.last_name, account_profile.first_name FROM trc_travel LEFT JOIN automobile on automobile.plate_no=trc_travel.plate_no  LEFT JOIN account_profile on account_profile.id=driver_id LEFT JOIN trc on trc_travel.trc_id=trc.id where departure_date>= :datez1  and departure_date< (:datez2 +INTERVAL 1 MONTH) and (trc.status=2||trc.status=4) ORDER BY departure_date DESC";
 
 
 

@@ -220,8 +220,8 @@ function showTotalIteneraryCount(){
 */
 
 function isAdmin(){
-	var priv=localStorage.getItem('priv');
-	return priv==='admin';
+	var priv = localStorage.getItem('role');
+	return priv === 'admin';
 }
 
 
@@ -242,19 +242,39 @@ function isAdmin(){
 function showOfficialTravelListPreview(id){
 	//call ajax function 
 	ajax_getOfficialTravelListPreview(id,function(json){
-
 		$('.preview-id').html(json[0].tr)
 		$('.preview-name').html(json[0].profile_name)
 		$('.preview-unit').html(json[0].department)
 		$('.preview-created').html(((json[0].date_created).split(' '))[0])
-		$('.preview-purpose').html(json[0].purpose.replace(/[\n]/g,'<br/>'))
+
+		// disable line breaks removal in form
+		if($('#form-purpose').prop('nodeName') === 'TEXTAREA') {
+			$('#form-purpose').html(json[0].purpose)
+			if(json[0].notes) $('.preview-notes').html(json[0].notes)
+		} else {
+			$('.preview-purpose').html(json[0].purpose.replace(/[\n]/g,'<br/>'))
+			if(json[0].notes){
+				var n=json[0].notes.replace(/[\n]/g,'<br/>');
+				$('.preview-notes').html(n)
+			}
+		}
+		
+		$('.preview-profile-image').each(function(i) {
+			// profile image
+			var img = document.createElement('img')
+			img.src = `uploads/profile/${json[0].profile_image}.jpeg`
+			img.setAttribute('width', '100%')
+			img.setAttribute('onerror', `this.src="img/user-account-empty.png"`)
+			$('.preview-profile-image')[i].append(img)
+			//$('.preview-profile-image')[i].style.background = `url("uploads/profile/${json[0].profile_image}.jpeg") no-repeat`
+			//$('.preview-profile-image')[i].style.backgroundSize = 'cover'
+			$('.preview-profile-image')[i].parentNode.classList.remove('hide')
+		})
+		
 		//$('.preview-cash-advance').html(' &emsp;&emsp;<b>'+json[0].source_of_fund_value+'</b>')
 		$('.preview-signatory').html(' &emsp;&emsp;<b>'+json[0].approved_by+'</b>')
 
-		if(json[0].notes){
-			var n=json[0].notes.replace(/[\n]/g,'<br/>');
-			$('.preview-notes').html(n)
-		}
+
 		
 		$('input[name="vtype"]').each(function(index,el){
 			if(el.value==json[0].vehicle_type) $(el).attr('checked','checked')
@@ -522,7 +542,14 @@ function showOfficialTravelItenerary(id){
 		for(var x=0; x<official_travel_itenerary.length;x++){
 			itenerary_count++;
 			showTotalIteneraryCount();
-
+			
+			let isEmptyDepTime = official_travel_itenerary[x].departure_time === '00:00:00' ? true : false
+			let timeString = ''
+			let hourEnd = official_travel_itenerary[x].departure_time.indexOf(":");
+			let H = +official_travel_itenerary[x].departure_time.substr(0, hourEnd);
+			let h = H % 12 || 12;
+			let ampm = (H < 12 || H === 24) ? " AM" : " PM";
+			timeString = h + official_travel_itenerary[x].departure_time.substr(hourEnd, 3) + ampm;
 
 			//printables
 			if(official_travel_itenerary[x].request_type=="official") ttURL='travel/official/print/trip_ticket'
@@ -540,8 +567,9 @@ function showOfficialTravelItenerary(id){
 								<td>
 									<a href="#" onclick="event.preventDefault();window.open('${ttURL}/${official_travel_itenerary[x].id}');">`+official_travel_itenerary[x].location+`</a><br/>
 									`
+									htm+=`<button class="btn btn-xs btn-danger" onclick="event.preventDefault();window.open('travel/campus/print/notice_of_charges/${official_travel_itenerary[x].id}');">NOC</button>`
+
 									if(official_travel_itenerary[x].request_type=='official'){
-										htm+=`<button class="btn btn-xs btn-danger" onclick="event.preventDefault();window.open('travel/campus/print/notice_of_charges/${official_travel_itenerary[x].id}');">NOC</button>`
 		
 										htm+=`<button class="btn btn-xs btn-danger" onclick="event.preventDefault();window.open('${ttURL}/${official_travel_itenerary[x].id}');">TT</button>`
 									}
@@ -550,13 +578,17 @@ function showOfficialTravelItenerary(id){
 										htm+=`<button class="btn btn-xs btn-danger" onclick="event.preventDefault();window.open('travel/official/print/trip_ticket/${official_travel_itenerary[x].id}');">TT</button>`
 									}
 
+									if(official_travel_itenerary[x].request_type=='campus'){
+										htm+=`<button class="btn btn-xs btn-danger" onclick="event.preventDefault();window.open('${ttURL}/${official_travel_itenerary[x].id}');">TT</button>`
+									}
+
 									htm+=`<button class="btn btn-xs btn-danger" onclick="event.preventDefault();window.open('https://form.jotform.me/81214740186453');">Feedback form</button>`
 								
 
-				htm+=				`</td>
+								htm+=				`</td>
 								<td>`+official_travel_itenerary[x].destination+`</td>
 								<td>`+official_travel_itenerary[x].departure_date+`</td>
-								<td>`+official_travel_itenerary[x].departure_time+`</td>
+								<td>`+(isEmptyDepTime ? '<em>To Be Determined</em>' : timeString)+`</td>
 							</tr>
 						</tbody>
 					</table>

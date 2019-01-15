@@ -138,7 +138,7 @@ class Official extends Controller
 
                 $this->page=$page>1?$page:1;
 
-                $this->id=$_SESSION['id'];
+                $this->id=$_SESSION['profile_id'];
 
                 #set starting limit(page 1=10,page 2=20)
 
@@ -279,7 +279,7 @@ class Official extends Controller
 
                 $this->page=$page>1?$page:1;
 
-                $this->id=$_SESSION['id'];
+                $this->id=$_SESSION['profile_id'];
 
                 #set starting limit(page 1=10,page 2=20)
 
@@ -295,11 +295,12 @@ class Official extends Controller
 
 
 
-                $sql="SELECT tr.*,account_profile.profile_name FROM tr LEFT JOIN account_profile on account_profile.id = tr.requested_by where status!=0 and status!=5 and request_type=:type ORDER BY date_created DESC LIMIT :start, 10";
+                $sql="SELECT tr.*,account_profile.profile_name FROM tr LEFT JOIN account_profile on account_profile.id = tr.requested_by where ((status!=0 and status!=5) or (status != 5 and requested_by = :id)) and request_type=:type ORDER BY date_created DESC LIMIT :start, 10";
 
                 $statement=$this->pdoObject->prepare($sql);
 
                 $statement->bindParam(':start',$start_page,\PDO::PARAM_INT);
+                $statement->bindParam(':id',$this->id,\PDO::PARAM_INT);
                 $statement->bindParam(':type',$type);
 
                 $statement->execute();
@@ -308,10 +309,11 @@ class Official extends Controller
 
 
 
-                $sql2="SELECT count(*) as total FROM tr where status!=0 and request_type=:type and status!=5";
+                $sql2="SELECT count(*) as total FROM tr where (status!=0 and status!=5) or (status != 5 and requested_by = :id) and request_type=:type ";
 
                 $statement2=$this->pdoObject->prepare($sql2);
                 $statement2->bindParam(':type',$type);
+                $statement2->bindParam(':id',$this->id,\PDO::PARAM_INT);
 
                 $statement2->execute();
 
@@ -413,17 +415,15 @@ class Official extends Controller
 
     public function create_purpose(Request $request){
 
-
-
         try{
 
-            $uid=$_SESSION['id'];
+            $uid = $_SESSION['profile_id'];
 
 
 
             //uid saved in login_db
 
-            $original_uid=($_SESSION['uid']);
+            //$original_uid=($_SESSION['uid']);
 
             //$uid=16;
 
@@ -435,21 +435,20 @@ class Official extends Controller
 
             #get signatory
 
-            $official_signatory=new Directory();
-            $signatory=json_decode($official_signatory->signatory_department($_SESSION['dept']));
+            $official_signatory = new Directory();
+            $signatory = is_null($_SESSION['dept_id']) ? array() : @json_decode($official_signatory->signatory_department($_SESSION['dept_id']));
 
-
-            $approved_by=@$signatory[0]->profile_name;
-            $approved_by_id=NULL;
-            $recommended_by_id=NULL;
+            $approved_by = @$signatory[0]->profile_name;
+            $approved_by_id = NULL;
+            $recommended_by_id = NULL;
 
             if($type=='official'){
                 if(@strip_tags($_SESSION['name'])!=$approved_by){
-                     $approved_by_id=($signatory[0]->account_profile_id);
+                     $approved_by_id = @($signatory[0]->account_profile_id);
                 }
             }
 
-            if($type=='personal'||$type=='campus'){
+            if($type =='personal' || $type == 'campus'){
                 //set to gsu head by default
                 //currently RAM: 5
                 $approved_by_id=5; 
@@ -457,7 +456,7 @@ class Official extends Controller
 
             if($type=='campus'){
                 //set recommending
-                $recommended_by_id=($signatory[0]->account_profile_id);
+                $recommended_by_id = @($signatory[0]->account_profile_id);
             }
 
             $this->pdoObject=DB::connection()->getPdo();
@@ -1377,7 +1376,7 @@ class Official extends Controller
 
                 $this->pdoObject->beginTransaction();
 
-                $sql="SELECT tr.status as tr_status,tr.requested_by,tr.request_type,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,other_driver,travel.id,travel.plate_no,automobile.manufacturer, searcaba_login_db.account_profile.last_name, searcaba_login_db.account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='scheduled' and departure_date!='0000-00-00' and linked='no' and tr.status='2'  ORDER BY travel.id DESC LIMIT :start,10";
+                $sql="SELECT tr.status as tr_status,tr.requested_by,tr.request_type,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,other_driver,travel.id,travel.plate_no,automobile.manufacturer, account_profile.last_name, account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN account_profile on account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='scheduled' and departure_date!='0000-00-00' and linked='no' and tr.status='2'  ORDER BY travel.id DESC LIMIT :start,10";
 
 
 
@@ -1531,6 +1530,196 @@ class Official extends Controller
 
 
 
+    function search_trips($param, $page=1){
+
+
+
+        try{
+
+                $this->pdoObject=DB::connection()->getPdo();
+
+                $this->page=htmlentities(htmlspecialchars($page));
+
+                $this->page=$page>1?$page:1;
+
+                $dest = "%{$param}%";
+
+
+
+                #set starting limit(page 1=10,page 2=20)
+
+                $start_page=$this->page<2?0:( integer)($this->page-1)*10;
+
+
+
+                $this->pdoObject->beginTransaction();
+
+                $sql="SELECT tr.status as tr_status,tr.requested_by,tr.request_type,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,other_driver,travel.id,travel.plate_no,automobile.manufacturer, account_profile.last_name, account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN account_profile on account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where departure_date!='0000-00-00' and linked='no' and tr.status='2'  and (tr.id = :tr_id) OR (travel.id = :tr_id2) OR destination LIKE :dest  ORDER BY travel.id DESC LIMIT :start,10";
+
+
+
+                $sql2="SELECT count(*) as total FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN tr on travel.tr_id=tr.id  where departure_date!='0000-00-00' and linked='no' and tr.status='2'  and (travel.tr_id = :tr_id)  OR (travel.id = :tr_id2)  OR destination LIKE :dest ";
+
+
+
+                $sql3="SELECT * FROM automobile_rent where travel_id=:id and travel_type='tr' ORDER BY travel_id DESC LIMIT 1 ";
+
+                $sql4="SELECT * FROM account_profile where id=:id LIMIT 1 ";
+
+
+
+
+
+                //passengers
+
+                $passenger_staff_class=new Official_staff();
+
+                $passenger_scholar_class=new Official_scholars();
+
+                $passenger_custom_class=new Official_custom();
+
+
+
+
+
+
+
+                $statement=$this->pdoObject->prepare($sql);
+
+                $statement2=$this->pdoObject->prepare($sql2);
+
+                $statement3=$this->pdoObject->prepare($sql3);
+
+                $statement4=$this->pdoObject->prepare($sql4);
+
+                $statement->bindValue(':tr_id', $param, \PDO::PARAM_INT);
+                
+                $statement->bindValue(':tr_id2', $param, \PDO::PARAM_INT);
+
+                $statement->bindValue(':dest', $dest, \PDO::PARAM_STR);
+
+                $statement->bindParam(':start', $start_page, \PDO::PARAM_INT);
+
+                $statement2->bindValue(':tr_id', $param,  \PDO::PARAM_INT);
+
+                $statement2->bindValue(':tr_id2', $param,  \PDO::PARAM_INT);
+
+                $statement2->bindValue(':dest', $dest, \PDO::PARAM_STR);
+
+                $statement->execute();
+
+                $statement2->execute();
+
+                $res=Array();
+
+                $row_count=$statement2->fetch(\PDO::FETCH_OBJ);
+
+                $count=$row_count->total;
+
+                $requester=$department=$image='';
+
+
+
+                while($row=$statement->fetch(\PDO::FETCH_OBJ)){
+
+                    
+
+                    $passenger_staff=$passenger_staff_class->index($row->tr_id);
+
+                    $passenger_scholar=$passenger_scholar_class->index($row->tr_id);
+
+                    $passenger_custom=$passenger_custom_class->index($row->tr_id);
+
+                    //default driver
+
+                    $driver=@$row->first_name. ' '. @$row->last_name;
+
+                    $statement3->bindValue(':id',$row->id,\PDO::PARAM_INT);
+
+                    $statement3->execute();
+
+
+
+                    while($row3=$statement3->fetch(\PDO::FETCH_OBJ)){
+
+                        $driver=$row3->drivers_name;    
+
+                    }
+
+                    //override driver by other driver
+                    if(!empty($row->other_driver)) $driver=$row->other_driver;
+
+
+                    //requester
+
+                    $statement4->bindValue(':id',$row->requested_by,\PDO::PARAM_INT);
+
+                    $statement4->execute();
+
+
+
+
+
+                    while($row4=$statement4->fetch(\PDO::FETCH_OBJ)){
+
+                        $requester=$row4->profile_name; 
+
+                        $image=$row4->profile_image;    
+
+                        $department=$row4->department_alias;
+
+                    }
+
+
+
+                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->tr_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'actual_time'=>$row->actual_departure_time,'returned_date'=>$row->returned_date,'returned_time'=>$row->returned_time,'plate_no'=>$row->plate_no,'manufacturer'=>$row->manufacturer,'type'=>$row->request_type,'driver'=>$driver,'requester'=>$requester,'department'=>$department,'image'=>$image,'passengers'=>array('staff'=>$passenger_staff,'scholars'=>$passenger_scholar,'custom'=>$passenger_custom));
+
+
+
+                    
+
+                }
+
+                $no_pages=1;
+
+                if($count>=10){
+
+                        $pages=ceil($count/10);
+
+                        $no_pages=$pages;
+
+                        
+
+                }else{
+
+                        $no_pages=1;
+
+
+
+                }
+
+                $data=Array('total'=>$count,'pages'=>$no_pages,'current_page'=>$this->page,'data'=>$res);
+
+                $this->pdoObject->commit();
+
+                
+
+                
+
+
+
+                return json_encode($data);
+
+
+
+        }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
+
+
+
+    }
+
+
+
 
 
 
@@ -1559,7 +1748,7 @@ function ongoing($page=1){
 
                 $this->pdoObject->beginTransaction();
 
-                $sql="SELECT tr.status as tr_status,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no,travel.other_driver,automobile.manufacturer, searcaba_login_db.account_profile.last_name, searcaba_login_db.account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='ongoing' and departure_date!='0000-00-00' and linked='no'  ORDER BY travel.id DESC LIMIT :start,10";
+                $sql="SELECT tr.status as tr_status,tr.requested_by,travel.status,tr.request_type,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no,travel.other_driver,automobile.manufacturer, account_profile.last_name, account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN account_profile on account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='ongoing' and departure_date!='0000-00-00' and linked='no'  ORDER BY travel.id DESC LIMIT :start,10";
 
 
 
@@ -1664,7 +1853,7 @@ function ongoing($page=1){
 
 
 
-                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->tr_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'actual_time'=>$row->actual_departure_time,'returned_date'=>$row->returned_date,'returned_time'=>$row->returned_time,'plate_no'=>$row->plate_no,'manufacturer'=>$row->manufacturer,'type'=>'official','driver'=>$driver,'requester'=>$requester,'department'=>$department,'image'=>$image,'passengers'=>array('staff'=>$passenger_staff,'scholars'=>$passenger_scholar,'custom'=>$passenger_custom));
+                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->tr_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'actual_time'=>$row->actual_departure_time,'returned_date'=>$row->returned_date,'returned_time'=>$row->returned_time,'plate_no'=>$row->plate_no,'manufacturer'=>$row->manufacturer,'type'=>$row->request_type,'driver'=>$driver,'requester'=>$requester,'department'=>$department,'image'=>$image,'passengers'=>array('staff'=>$passenger_staff,'scholars'=>$passenger_scholar,'custom'=>$passenger_custom));
 
 
 
@@ -1738,7 +1927,7 @@ function ongoing($page=1){
 
                 $this->pdoObject->beginTransaction();
 
-                $sql="SELECT tr.status as tr_status,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no,travel.other_driver,automobile.manufacturer, searcaba_login_db.account_profile.last_name, searcaba_login_db.account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN searcaba_login_db.account_profile on searcaba_login_db.account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='finished' and departure_date!='0000-00-00' and linked='no'  ORDER BY travel.id DESC LIMIT :start,10";
+                $sql="SELECT tr.status as tr_status,tr.request_type,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no,travel.other_driver,automobile.manufacturer, account_profile.last_name, account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN account_profile on account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='finished' and departure_date!='0000-00-00' and linked='no'  ORDER BY travel.id DESC LIMIT :start,10";
 
 
 
@@ -1843,7 +2032,7 @@ function ongoing($page=1){
 
 
 
-                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->tr_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'actual_time'=>$row->actual_departure_time,'returned_date'=>$row->returned_date,'returned_time'=>$row->returned_time,'plate_no'=>$row->plate_no,'manufacturer'=>$row->manufacturer,'type'=>'official','driver'=>$driver,'requester'=>$requester,'department'=>$department,'image'=>$image,'passengers'=>array('staff'=>$passenger_staff,'scholars'=>$passenger_scholar,'custom'=>$passenger_custom));
+                    $res[]=Array('id'=>$row->id,'tr_id'=>$row->tr_id,'status'=>$row->status,'location'=>$row->location,'destination'=>$row->destination,'departure_date'=>$row->departure_date,'departure_time'=>$row->departure_time,'actual_time'=>$row->actual_departure_time,'returned_date'=>$row->returned_date,'returned_time'=>$row->returned_time,'plate_no'=>$row->plate_no,'manufacturer'=>$row->manufacturer,'type'=>$row->request_type,'driver'=>$driver,'requester'=>$requester,'department'=>$department,'image'=>$image,'passengers'=>array('staff'=>$passenger_staff,'scholars'=>$passenger_scholar,'custom'=>$passenger_custom));
 
 
 
