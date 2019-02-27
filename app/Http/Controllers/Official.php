@@ -1370,13 +1370,13 @@ class Official extends Controller
 
                 #set starting limit(page 1=10,page 2=20)
 
-                $start_page=$this->page<2?0:( integer)($this->page-1)*10;
+                $start_page=$this->page<2?0:( integer)($this->page-1)*50;
 
 
 
                 $this->pdoObject->beginTransaction();
 
-                $sql="SELECT tr.status as tr_status,tr.requested_by,tr.request_type,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,other_driver,travel.id,travel.plate_no,automobile.manufacturer, account_profile.last_name, account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN account_profile on account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='scheduled' and departure_date!='0000-00-00' and linked='no' and tr.status='2'  ORDER BY travel.id DESC LIMIT :start,10";
+                $sql="SELECT tr.status as tr_status,tr.requested_by,tr.request_type,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,other_driver,travel.id,travel.plate_no,automobile.manufacturer, account_profile.last_name, account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN account_profile on account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='scheduled' and departure_date!='0000-00-00' and linked='no' and tr.status='2'  ORDER BY travel.id DESC LIMIT :start,50";
 
 
 
@@ -1492,9 +1492,9 @@ class Official extends Controller
 
                 $no_pages=1;
 
-                if($count>=10){
+                if($count>=50){
 
-                        $pages=ceil($count/10);
+                        $pages=ceil($count/50);
 
                         $no_pages=$pages;
 
@@ -1742,13 +1742,13 @@ function ongoing($page=1){
 
                 #set starting limit(page 1=10,page 2=20)
 
-                $start_page=$this->page<2?0:( integer)($this->page-1)*10;
+                $start_page=$this->page<2?0:( integer)($this->page-1)*50;
 
 
 
                 $this->pdoObject->beginTransaction();
 
-                $sql="SELECT tr.status as tr_status,tr.requested_by,travel.status,tr.request_type,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no,travel.other_driver,automobile.manufacturer, account_profile.last_name, account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN account_profile on account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='ongoing' and departure_date!='0000-00-00' and linked='no'  ORDER BY travel.id DESC LIMIT :start,10";
+                $sql="SELECT tr.status as tr_status,tr.requested_by,travel.status,tr.request_type,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no,travel.other_driver,automobile.manufacturer, account_profile.last_name, account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN account_profile on account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='ongoing' and departure_date!='0000-00-00' and linked='no'  ORDER BY travel.id DESC LIMIT :start,50";
 
 
 
@@ -1863,9 +1863,9 @@ function ongoing($page=1){
 
                 $no_pages=1;
 
-                if($count>=10){
+                if($count>=50){
 
-                        $pages=ceil($count/10);
+                        $pages=ceil($count/50);
 
                         $no_pages=$pages;
 
@@ -1921,13 +1921,13 @@ function ongoing($page=1){
 
                 #set starting limit(page 1=10,page 2=20)
 
-                $start_page=$this->page<2?0:( integer)($this->page-1)*10;
+                $start_page=$this->page<2?0:( integer)($this->page-1)*50;
 
 
 
                 $this->pdoObject->beginTransaction();
 
-                $sql="SELECT tr.status as tr_status,tr.request_type,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no,travel.other_driver,automobile.manufacturer, account_profile.last_name, account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN account_profile on account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='finished' and departure_date!='0000-00-00' and linked='no'  ORDER BY travel.id DESC LIMIT :start,10";
+                $sql="SELECT tr.status as tr_status,tr.request_type,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no,travel.other_driver,automobile.manufacturer, account_profile.last_name, account_profile.first_name FROM travel LEFT JOIN automobile on automobile.plate_no=travel.plate_no LEFT JOIN account_profile on account_profile.id=driver_id LEFT JOIN tr on travel.tr_id=tr.id  where travel.status='finished' and departure_date!='0000-00-00' and linked='no'  ORDER BY travel.id DESC LIMIT :start,50";
 
 
 
@@ -2042,9 +2042,9 @@ function ongoing($page=1){
 
                 $no_pages=1;
 
-                if($count>=10){
+                if($count>=50){
 
-                        $pages=ceil($count/10);
+                        $pages=ceil($count/50);
 
                         $no_pages=$pages;
 

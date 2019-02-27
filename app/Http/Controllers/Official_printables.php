@@ -309,9 +309,13 @@ $html .='<style>
 	</article>';
 $adf_no= '';
 $service_station = '';
+$gas_type = '';
 foreach($itenerary->gasoline_records as $key => $value) {
-	$adf_no.=$value->id.' ' ;
+	#prevent empty gas type
+	if(!trim(strlen($value->type))) $value->type= 'N/A';
+	$adf_no.='<b>ADS# <u>'.$value->id.'</u></b><br/>' ;
 	$service_station.=$value->station.' ';
+	$liters_gas .= $value->liters.'L ('.ucwords($value->type).') - PHP '.@number_format($value->amount, 2, '.', ',').'<br/>';
 }	
 $html.='	<article class="col col-md-12">
 		<table class="table table-bordered sa-table "  style="font-size:0.8em;" cellspacing="0">
@@ -322,7 +326,7 @@ $html.='	<article class="col col-md-12">
 
 				</td>
 				<td>
-					<p><label> <b>ADS # : '.$adf_no.'</b></label> <span> </span></p>
+					<p><label> '.$adf_no.'</label> <span> </span></p>
 					
 				</td>				
 			</tr>
@@ -522,12 +526,8 @@ $html.='	<article class="col col-md-12">
 					 	<td><b>SUPPLIES/SERVICE</b></td>
 					 </tr>
 					 <tr>
-					 	<td width="100" class="withLine"></td>
-					 	<td>Gasoline</td>
-					 </tr>
-					 <tr>
-					 	<td width="100" class="withLine"></td>
-					 	<td>Diesel</td>
+					 	<td width="100" class="withLine"><b>'.$liters_gas.'</b> '.$gas_amount.'</td>
+					 	<td>Gasoline / Unleaded / etc...</td>
 					 </tr>
 					 <tr>
 					 	<td width="100" class="withLine"></td>
@@ -539,15 +539,7 @@ $html.='	<article class="col col-md-12">
 					 </tr>
 					 <tr>
 					 	<td width="100" class="withLine"></td>
-					 	<td>Break Fluid</td>
-					 </tr>
-					 <tr>
-					 	<td width="100" class="withLine"></td>
 					 	<td>Transmission Fluid</td>
-					 </tr>
-					 <tr>
-					 	<td width="100" class="withLine"></td>
-					 	<td>Monthly Service</td>
 					 </tr>
 					 <tr>
 					 	<td width="100" class="withLine"></td>
