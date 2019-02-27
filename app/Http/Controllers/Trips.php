@@ -28,8 +28,8 @@ class Trips extends Controller
 
     public function recent($page){
 
-        $official_class=new Official();
-        $official_recent=@json_decode($official_class->recent($page));
+        $official_class = new Official();
+        $official_recent = @json_decode($official_class->recent($page));
 
 
 

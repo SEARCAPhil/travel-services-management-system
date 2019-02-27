@@ -629,10 +629,10 @@ $html ='<style>
 			</tr>
 			<tr>
 				<td width="150"><b>Office/Unit/Program/Project :</b></td>
-				<td width="150" class="withLine">'.$travel_request->department_alias.'</td>
+				<td width="150" class="withLine">'.($travel_request->department_alias ? $travel_request->department_alias : 'N/A').'</td>
 				<td width="10"></td>
 				<td width="10"><b></b></td>
-				<td width="150" class="withLine" align="center"><b>'.date('m/d/Y') .'</b></td>
+				<td width="150" class="withLine" align="center"><b>'.date('F d, Y') .'</b></td>
 			</tr>
 
 			<tr>
@@ -665,7 +665,7 @@ $html.='
 				<td height="100"><br/>
 				<p>'.$itenerary->location.' - '.$itenerary->destination.'</p>
 				<br/><br/>
-					<b>Note:</b> Php '.@$charges->gasoline_charge.', base '.@$charges->base.' km <br/>
+					<b>Note:</b> Php '.@number_format($charges->gasoline_charge, 2, '.', ',').' (base '.@$charges->base.' km) <br/>
 				';
 				
 				if(strlen(@$charges->notes)>1){
@@ -682,13 +682,13 @@ $html.='
 					<b>Charge :</b> Php '.$charges->gasoline_charge.'<br/>
 					<b>Additional Charge:</b> Php '.@$charges->additional_charge.'<br/>
 					<b>Over time :</b> '.@$overtime_days.' day(s) and '.@$overtime_hours.' hour(s)<br/>
-					<b>Driver\'s Overtime Charge:</b> Php '.@round($charges->drivers_charge,2).'<br/>
+					<b>Driver\'s Overtime Charge:</b> Php '.@number_format($charges->drivers_charge, 2, '.', ',').'<br/>
 				</td>
 				
 			</tr>';
 			$html.='<tr>
 				<td><input type="date" class="dateSelector"><b>Received by: </b></td>
-				<td><input type="text" class="form-control text"><b>TOTAL : Php '.@round($charges->total,2).'</b></td>
+				<td><input type="text" class="form-control text"><b>TOTAL : Php '.@number_format($charges->total, 2, '.', ',').'</b></td>
 				
 			</tr>';
 			$html.='<tr>

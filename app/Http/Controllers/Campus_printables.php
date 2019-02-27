@@ -197,7 +197,7 @@ class Campus_printables extends Controller
 					<tr cellpadding="-5">
 						<td  width="180" style="text-align:center;"><b>Unit/Office Head</b></td>
 						<td width="150"></td>
-						<td  width="90" style="text-align:center;"><b>'.$details->approved_by_position.'</b></td>
+						<td  width="90" style="text-align:center;"><b>'.($details->approved_by_position ? $details->approved_by_position : 'N/A').'</b></td>
 					
 
 					</tr>
@@ -289,17 +289,20 @@ $html .='<style>
 					<td  width="180" class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$details->profile_name.'</td>
 					<td  width="30" ></td>
 					<td  width="60"><b>Unit/Office:</b></td>
-					<td  width="120"  class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$details->department_alias.'</td>
+					<td  width="120"  class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.($details->department_alias ? $details->department_alias : 'N/A').'</td>
 				</tr>
 				<tr>
 					<td  width="98"><b>Request Date : </b></td>
-					<td  width="180">&nbsp;&nbsp;&nbsp;&nbsp;<u>'.date('m/d/Y') .' </u></td>
-					<td  width="30" ></td>
-					<td  width="70"><b>Charge To:</b></td>
-					<td width="120">';
+					<td  width="180">&nbsp;&nbsp;&nbsp;&nbsp;<u>'.date('F d,y') .'</u></td>
+					<td  width="30"></td>
+					<td  width="60"><b>Charge&nbsp;To:&nbsp;</b></td>
+					<td  width="120">';
 					
 					$f='';
-			
+				
+					if(!count($fundings)) {
+						$f.='&nbsp;&nbsp;&nbsp;&nbsp;N/A';
+					}
 				for($x=0;$x<count($fundings);$x++){
 					$f.='<span style="font-size:8px;padding-left:100px;text-decoration:underline;">'.$fundings[$x]->fund.' - '.$fundings[$x]->cost_center.' - '.$fundings[$x]->line_item.'</span><br/>';
 				}	
@@ -407,14 +410,16 @@ $html.='
 
 		#fetch intenerary result
 			$itenerary_total_count=count($itenerary);
+			$itenerary_departure_date_formatted = @((new \Datetime($itenerary[$a]->departure_date))->format('F d, Y'));
+			$itenerary_departure_time_formatted = @((new \Datetime($itenerary[$a]->departure_time))->format('h:i A'));
 
 			for($a=0;$a<$itenerary_total_count;$a++){
 				$mode_of_transport=$itenerary[$a]->plate_no!='rent_a_car'?'SEARCA Vehicle':'RENT A CAR';
     			$html.='<tr>
-					<td>'.$itenerary[$a]->departure_date.'</td>
+					<td>'.$itenerary_departure_date_formatted.'</td>
 					<td>'.$itenerary[$a]->location.'</td>
 					<td>'.$itenerary[$a]->destination.'</td>
-					<td>'.$itenerary[$a]->departure_time.'</td>
+					<td>'.$itenerary_departure_time_formatted.'</td>
 				</tr>';
     		}
 
@@ -642,7 +647,7 @@ $html .='<style>
 
 		<table>
 			<tr>
-				<td width="400"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date('m/d/Y') .'</b></td>
+				<td width="400"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date('F d, Y') .'</b></td>
 			</tr>
 			<tr>
 				<td></td><td></td><td style="text-align:center;"><b>Date</b><br/></td>
@@ -665,7 +670,7 @@ $html .='<style>
 			</tr>
 			<tr>
 				<td width="50"><b>Purpose:</b></td>
-				<td width="250" class="withLine"></td>
+				<td width="250" class="withLine">'.(@strlen($travel_request->purpose) > 100 ? substr($travel_request->purpose, 0, 80) : $travel_request->purpose).'</td>
 				<td width="140"></td>
 				<td width="40"><b>Month:</b></td>
 				<td width="250" class="withLine">'.date_format(date_create($itenerary->date_created),'F') .' '.date_format(date_create($itenerary->date_created),'Y') .'</td>
@@ -691,9 +696,9 @@ $html.='
 
 			
 				
-					
+			$itenerary_departure_date_formatted = @(new \DateTime($itenerary->departure_date))->format('F d, Y');
 			$html.='<tr>
-				<td><br/><br/>&nbsp;&nbsp;&nbsp;'.$itenerary->departure_date.'</td>
+				<td><br/><br/>&nbsp;&nbsp;&nbsp;'.$itenerary_departure_date_formatted .'</td>
 				<td height="60">
 				<br/><br/>
 					<b>&nbsp;&nbsp;'.$itenerary->location.' - '.$itenerary->destination.'</b><br/><br/>';
@@ -723,7 +728,7 @@ $html.='
 
 
 				<td><br/><br/>&nbsp;&nbsp;
-					Php '.@number_format(round($charges->total,2)).'<br/><br/>
+					Php '.@number_format($charges->total, 2, '.', ',').'<br/><br/>
 					
 				</td>
 				
@@ -736,7 +741,7 @@ $html.='
 
 
 				<td>
-					<b>Php '.@number_format(round($charges->total,2)).'</b>
+					<b>Php '.@number_format($charges->total, 2, '.', ',').'</b>
 					
 				</td>
 				
@@ -764,8 +769,8 @@ $html.='
 				<td>
 					<br/><br/>
 					<b>Conforme:</b><br/><br/>
-					<b style="text-align:center;">'.$travel_request->recommended_by.'</b><br/>
-					<span style="text-align:center;font-size:9px;">'.$travel_request->recommended_by_position.'</span><br/>
+					<b style="text-align:center;">'.$travel_request->approved_by.'</b><br/>
+					<span style="text-align:center;font-size:9px;">'.$travel_request->approved_by_position.'</span><br/>
 
 				</td>
 				

@@ -297,7 +297,7 @@ $html .='<style>
 
 		<table>
 			<tr>
-				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date('m/d/Y').'</b></td>
+				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date('F d, Y').'</b></td>
 			</tr>
 			<tr>
 				<td></td><td></td><td style="text-align:center;"><b>Date</b></td>
@@ -359,8 +359,8 @@ $html.='	<article class="col col-md-12">
 					
 							<tr>
 								<th><b>Name</b></th>
-								<th>&nbsp;&nbsp;&nbsp;&nbsp;<b>Designation</b></th>
-								<th>&nbsp;&nbsp;&nbsp;&nbsp;<b>Office/Unit</b></th>
+								<th><b>Designation</b></th>
+								<th><b>Office/Unit</b></th>
 							</tr>
 					';
 
@@ -376,8 +376,8 @@ $html.='	<article class="col col-md-12">
 		$passenger_count++;
 		$html.='<tr class="tr-passenger">
 				<td class="withLine">'.$staff[$a]->name.'</td>
-				<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$staff[$a]->designation.'</td>
-				<td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$staff[$a]->alias.'</td>
+				<td class="withLine">'.$staff[$a]->designation.'</td>
+				<td class="withLine">'.$staff[$a]->alias.'</td>
 			</tr>';	
 	}
 
@@ -434,6 +434,10 @@ $html.='	<article class="col col-md-12">
 		$isEmptyReturnedTime = $itenerary->returned_time == '00:00:00' ? true : false; 						
 		$isEmptyRetDate = $itenerary->returned_date == '0000-00-00' ? true : false;
 		$isEmptyActualDeptTime = $itenerary->actual_departure_time == '00:00:00' ? true : false; 
+
+		$itenerary_departure_date_formatted = (@new \DateTime($itenerary->departure_date))->format('F d, Y');
+		$itenerary_arrival_date_formatted = (@new \DateTime($itenerary->returned_date))->format('F d, Y');
+
 		$html .= '</table><br/><br/>';
 
 			$html .= '	</td>
@@ -460,12 +464,12 @@ $html.='	<article class="col col-md-12">
 						</tr>
 						<tr style="border:none;">
 							<td style="border-right:1px solid rgb(80,80,80);border-bottom:1px solid rgb(80,80,80);" width="80">Departure</td>
-							<td style="border-right:1px solid rgb(80,80,80);border-bottom:1px solid rgb(80,80,80);" width="100"> <b>'.$itenerary->departure_date.'</b></td>
+							<td style="border-right:1px solid rgb(80,80,80);border-bottom:1px solid rgb(80,80,80);" width="100"> <b>'.$itenerary_departure_date_formatted.'</b></td>
 							<td style="border-bottom:1px solid rgb(80,80,80);" width="67"> <b>'.($isEmptyDeptTime ? '' : $deptTime->format('h:i A')).'</b> </td>
 						</tr>
 						<tr style="border:none;">
 							<td style="border-right:1px solid rgb(80,80,80);border-bottom:1px solid rgb(80,80,80);" width="80">Arrival</td>
-							<td style="border-right:1px solid rgb(80,80,80);border-bottom:1px solid rgb(80,80,80);" width="100"> <b>'.($isEmptyRetDate  ? '' : $itenerary->returned_date).'</b></td>
+							<td style="border-right:1px solid rgb(80,80,80);border-bottom:1px solid rgb(80,80,80);" width="100"> <b>'.($isEmptyRetDate  ? '' : $itenerary_arrival_date_formatted).'</b></td>
 							<td style="border-bottom:1px solid rgb(80,80,80);" width="67"> <b>'.($isEmptyReturnedTime ? '' : $rt->format('h:i A')).'</b></td>
 						</tr>
 					</table>
@@ -480,7 +484,7 @@ $html.='	<article class="col col-md-12">
 				<td> Vehicle/Plate no.:  <b>'.@$itenerary->manufacturer.'</b> <b>'.@$itenerary->plate_no.'</b>
 			
 				</td>
-				<td> Assigned Driver: <b>'.@$itenerary->profile_name.'</b> </td>
+				<td> Assigned Driver: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>'.@$itenerary->profile_name.'</b> </td>
 
 			</tr>
 
@@ -583,32 +587,32 @@ $html.='	<article class="col col-md-12">
 					<br/><br/>
 				<table cellspacing="10">
 					<tr>
-						<td width="80">Date</td>
-						<td width="80"><b>'.$itenerary->departure_date.'</b></td>
-						<td><b>'.($isEmptyRetDate ? '' :$itenerary->returned_date).'</b></td>
+						<td width="60">Date</td>
+						<td width="80"><b>'.$itenerary_departure_date_formatted.'</b></td>
+						<td><b>'.($isEmptyRetDate ? '' :$itenerary_arrival_date_formatted).'</b></td>
 					</tr>
 					<tr>
-						<td width="80">Time</td>
+						<td width="60">Time</td>
 						<td width="80"><b>'.($isEmptyActualDeptTime ? '' :$dt->format('h:i A')).'</b></td>
 						<td><b>'.($isEmptyReturnedTime ? '' : $rt->format('h:i A')).'</b></td>
 					</tr>
 					<tr>
-						<td width="80">Mileage Reading</td>
+						<td width="60">Mileage Reading</td>
 						<td width="80">'.@$charges->start.'</td>
 						<td>'.@$charges->end.'</td>
 					</tr>
 					<tr>
-						<td width="80">Signature of driver</td>
+						<td width="60">Signature of driver</td>
 						<td width="80"></td>
 						<td></td>
 					</tr>
 					<tr>
-						<td width="80">Attested by;</td>
+						<td width="60">Attested by;</td>
 						<td width="80"></td>
 						<td></td>
 					</tr>
 					<tr>
-						<td width="80">Guard-on-duty</td>
+						<td width="60">Guard-on-duty</td>
 						<td width="80"></td>
 						<td></td>
 					</tr>
@@ -647,13 +651,13 @@ $html.='	<article class="col col-md-12">
 			
 				</td>
 				<td> <b>For Motorpool Unit\'s Use:</b><br/><br/>
-				 &nbsp; No. of kms. : <b>'.@($charges->end-$charges->start).' km/s </b><br/>
-				 &nbsp; Rate/km : <b>'.@($charges->gasoline_charge).'</b><br/>
-				 &nbsp;Amount : <b>'.@$charges->total.'</b><br/>  
+				 &nbsp; No. of kms. : <b>'.@($charges->end-$charges->start).' kms </b><br/>
+				 &nbsp; Rate/km : <b>PHP '.@number_format($charges->gasoline_charge, 2, '.', ',').'</b><br/>
+				 &nbsp;Amount : <b>PHP '.@number_format($charges->total, 2, '.', ',').'</b><br/>  
 				 ';
 
 				 if(strlen(@$charges->notes)>1){
-				 	$html.='<br/><b style="font-size:6px;">NOTE : '.@ucfirst($charges->notes).'</b>';
+				 	$html.='<br/><p style="font-size:6px;"><b>NOTE :</b> '.@ucfirst($charges->notes).'</p>';
 				 }
 
 				 $html.='

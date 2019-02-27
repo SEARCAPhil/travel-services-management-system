@@ -1000,9 +1000,13 @@ function bindTravelLinkNavigation(){
 	$('.trip-link').on('click',function(e){
 		e.preventDefault();
 		e.stopPropagation();
+
 		//change title
 		var type=$(this).attr('data-type');
+		var desc=$(this).attr('data-description');
+
 		$('.verified_travel_title').html(type);
+		$('.verified_travel_subtitle').html(desc);
 
 		//show loading
 		$('.verified_travel_result').html('Loading . . .');
