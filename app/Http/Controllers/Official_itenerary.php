@@ -330,7 +330,7 @@ class Official_itenerary extends Controller
                 $this->pdoObject->beginTransaction();
                 $sql="SELECT travel_link.id,travel_link.parent_id,travel_link.child_id,travel.tr_id FROM travel_link LEFT JOIN travel on travel_link.child_id=travel.id where parent_id=:id ORDER BY travel_link.date_created DESC ";
                 
-                $sql2="SELECT account_profile.profile_name as requester, account_profile.last_name, account_profile.first_name,tr.status as tr_status,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no, account_profile.last_name, account_profile.first_name FROM travel  LEFT JOIN tr on travel.tr_id=tr.id LEFT JOIN account_profile on account_profile.id=tr.requested_by where travel.id=:id  ORDER BY travel.id DESC LIMIT 1";
+                $sql2="SELECT account_profile.profile_name as requester, account_profile.last_name, account_profile.first_name,tr.status as tr_status,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no, account_profile.last_name, account_profile.first_name, travel.id as travel_id, tr.request_type as type FROM travel  LEFT JOIN tr on travel.tr_id=tr.id LEFT JOIN account_profile on account_profile.id=tr.requested_by where travel.id=:id  ORDER BY travel.id DESC LIMIT 1";
                 
                 $statement=$this->pdoObject->prepare($sql);
                 $statement2=$this->pdoObject->prepare($sql2);
