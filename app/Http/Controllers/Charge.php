@@ -95,10 +95,15 @@ class Charge extends Controller
         $amount=$rate;
 
         $additional_charges=0;
+        
+        # if campus charge (base 25)
+        if($threshold === $default_rate) {
+           $amount=$mileage*$default_rate; 
+            return array('amount'=>$amount,'additional'=>$additional_charges);
+        }
+        
 
-
-
-        if($mileage>$threshold){
+        if(($mileage>$threshold)&& $threshold){
 
 
 
@@ -380,17 +385,23 @@ class Charge extends Controller
 
             $hours_per_day=($days_to_hours-$regular_hours)>0?($days_to_hours-$regular_hours):0;#deduct 8am-12pm
 
-           
+         
 
             #before 8 and after 5 OT
             $rt_offset=new \Datetime('17:00:00');
             $rt=new \Datetime($returned_time);
             $rt_diff=$rt->diff($rt_offset);
+            # returned time must be after 17:00 to charge an overtime
+            if($rt_offset >= $rt) $rt_diff = new \Datetime('00:00:00'); 
 
 
-            $dt_offset= new \Datetime('08:00:00');
+            $dt_offset = new \Datetime('08:00:00');
             $dt=new \Datetime($departure_time);
             $dt_diff=$dt_offset->diff($dt);
+#var_dump($departure_time);var_dump($dt_offset->format('H')); exit;            
+            # OT must before 8:00
+            if($dt >=$dt_offset) $dt_diff = new \Datetime('00:00:00'); 
+
 
             $ot_after=abs($rt_diff->format('%H')>0?$rt_diff->format('%H'):0);
 
@@ -398,7 +409,7 @@ class Charge extends Controller
 
             $overtime_charge=($ot_before+$ot_after)*$rate;
 
-
+ 
 
 
 

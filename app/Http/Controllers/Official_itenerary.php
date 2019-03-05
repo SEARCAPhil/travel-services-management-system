@@ -330,7 +330,7 @@ class Official_itenerary extends Controller
                 $this->pdoObject->beginTransaction();
                 $sql="SELECT travel_link.id,travel_link.parent_id,travel_link.child_id,travel.tr_id FROM travel_link LEFT JOIN travel on travel_link.child_id=travel.id where parent_id=:id ORDER BY travel_link.date_created DESC ";
                 
-                $sql2="SELECT account_profile.profile_name as requester, account_profile.last_name, account_profile.first_name,tr.status as tr_status,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no, account_profile.last_name, account_profile.first_name FROM travel  LEFT JOIN tr on travel.tr_id=tr.id LEFT JOIN account_profile on account_profile.id=tr.requested_by where travel.id=:id  ORDER BY travel.id DESC LIMIT 1";
+                $sql2="SELECT account_profile.profile_name as requester, account_profile.last_name, account_profile.first_name,tr.status as tr_status,tr.requested_by,travel.status,location,departure_date,returned_date,departure_time,actual_departure_time,returned_time,destination,tr_id,travel.id,travel.plate_no, account_profile.last_name, account_profile.first_name, travel.id as travel_id, tr.request_type as type FROM travel  LEFT JOIN tr on travel.tr_id=tr.id LEFT JOIN account_profile on account_profile.id=tr.requested_by where travel.id=:id  ORDER BY travel.id DESC LIMIT 1";
                 
                 $statement=$this->pdoObject->prepare($sql);
                 $statement2=$this->pdoObject->prepare($sql2);
@@ -504,7 +504,7 @@ class Official_itenerary extends Controller
     }
 
 
-     function charge($id,Request $request){
+     function charge($id,Request $request){ 
 
             try{
                 $this->token = $request->input('_token');
@@ -567,7 +567,7 @@ class Official_itenerary extends Controller
                     $insert_sql="INSERT INTO tr_charge(rid,start,end,dca,gasoline_charge,drivers_charge,gc,dc,base_km,drivers_day_rate) values (:rid,:start,:end,:dca,:gasoline_charge,:drivers_charge,:gc,:dc,:base_km,:drivers_day_rate)";
 
                     $insert_statement=$this->pdoObject->prepare($insert_sql);
-            
+                if(is_null($this->base)) $this->base = 25; 
                     #params
                     $insert_statement->bindParam(':rid',$this->id);
                     $insert_statement->bindParam(':start',$this->in);
@@ -601,14 +601,14 @@ class Official_itenerary extends Controller
                 #get ravel details
                 $itenerary=@json_decode(self::show($this->id))[0];
 
-
-                $gasoline_charge=$charge_travel->calculate_gasoline_charge($this->base,$this->out-$this->in,$this->gc,$default_rate='25');
+                
+                $gasoline_charge=$charge_travel->calculate_gasoline_charge($this->base,($this->out-$this->in),$this->gc,$default_rate='25');
         
 
                 if($this->appointment=='emergency'){
-                    $drivers_charge=($charge_travel->calculate_emergency_drivers_charge($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time,$this->dc));
+                    $drivers_charge=($charge_travel->calculate_emergency_drivers_charge($itenerary->departure_date,$itenerary->actual_departure_time,$itenerary->returned_date,$itenerary->returned_time,$this->dc));
                 }else{
-                    $drivers_charge=($charge_travel->calculate_contracted_drivers_charge($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time,$this->dc,$this->drivers_day_rate));
+                    $drivers_charge=($charge_travel->calculate_contracted_drivers_charge($itenerary->departure_date,$itenerary->actual_departure_time,$itenerary->returned_date,$itenerary->returned_time,$this->dc,$this->drivers_day_rate));
                 }
 
                 $overall_gasoline_charge=@array_sum($gasoline_charge);
@@ -791,7 +791,7 @@ class Official_itenerary extends Controller
                 
                 $insert_sql="UPDATE tr_charge SET start=:start,end=:end,dca=:dca,gasoline_charge=:gasoline_charge,drivers_charge=:drivers_charge,gc=:gc,dc=:dc,base_km=:base,drivers_day_rate=:day where id=:id";
                 $insert_statement=$this->pdoObject->prepare($insert_sql);
-        
+                if(is_null($this->base)) $this->base = 25;
                 #params
                 $insert_statement->bindParam(':id',$this->id);
                 $insert_statement->bindParam(':start',$this->in);
@@ -821,9 +821,9 @@ class Official_itenerary extends Controller
         
 
                 if($this->appointment=='emergency'){
-                    $drivers_charge=($charge_travel->calculate_emergency_drivers_charge($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time,$this->dc));
+                    $drivers_charge=($charge_travel->calculate_emergency_drivers_charge($itenerary->departure_date,$itenerary->actual_departure_time,$itenerary->returned_date,$itenerary->returned_time,$this->dc));
                 }else{
-                    $drivers_charge=($charge_travel->calculate_contracted_drivers_charge($itenerary->departure_date,$itenerary->departure_time,$itenerary->returned_date,$itenerary->returned_time,$this->dc,$this->drivers_day_rate));
+                    $drivers_charge=($charge_travel->calculate_contracted_drivers_charge($itenerary->departure_date,$itenerary->actual_departure_time,$itenerary->returned_date,$itenerary->returned_time,$this->dc,$this->drivers_day_rate));
                 }
 
                 $overall_gasoline_charge=@array_sum($gasoline_charge);

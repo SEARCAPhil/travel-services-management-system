@@ -2,9 +2,9 @@
 <section class="col-lg-10 text-right" style="margin-top: 1vh;margin-bottom: 10px;box-shadow: 0px 10px 25px rgba(200,200,200,0.2);padding-bottom:15px;padding-left: 50px;border-bottom:1px solid rgba(200,200,200,0.5);">
 
 	<ul class="list-unstyled travel-link-ul">
-		<li class="active"><a href="#" class="trip-link" data-type="Scheduled">Scheduled</a> </li>
-		<li><a href="#" class="trip-link" data-type="Ongoing">Ongoing</a> </li>
-		<li><a href="#" class="trip-link" data-type="Finished">Finished</a></li>
+		<li class="active"><a href="#" class="trip-link" data-type="Scheduled" data-description="List of Approved / Accepted Trips">Scheduled</a> </li>
+		<li><a href="#" class="trip-link" data-type="Ongoing" data-description="Unpaid SOA/NOC/TT">Ongoing</a> </li>
+		<li><a href="#" class="trip-link" data-type="Finished" data-description="Fully-paid SOA/NOC/TT">Finished</a></li>
 		<li style="width: 50%;"><div class="col col-md-1"><i class="material-icons">search</i></div>
 		<div class="col col-md-5"><input type="text" class="form-control" placeholder="Search" id="travel-search-input"/></div></li>
 	</ul>
@@ -15,7 +15,10 @@
 	<div class="col col-md-12 trip-section content-section">
 		
 		<br/><br/>
-		 <h3 class="page-header"><span class="verified_travel_title">Scheduled</span> trips and travels</h3><br/>
+		 <h3 class="page-header"><span class="verified_travel_title">Scheduled</span> trips and travels</h3>
+		 <p class="well well-sm" style="margin-bottom: 20px;background:#2C474B;color: rgba(240,240,240,0.9);">
+		 		<i class="material-icons md-18">label</i> <span class="verified_travel_subtitle">List of Approved / Accepted Trips</span>
+			</p><br/>
 
 		 <div class="col col-md-12">
 		 	<div class="verified_travel_result"></div>

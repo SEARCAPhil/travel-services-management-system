@@ -350,11 +350,11 @@ function tripsPager(callback){
 */
 
 function appendToLinkedTravel(json,target){
-var htm='';
+		var htm='';
 
 		var json=JSON.parse(json);
 
-		if(typeof json.data=='undefined') return false;
+		if(typeof json.data === 'undefined') return false;
 
 		for(var x=0; x<json.data.length; x++){
 			var data=json.data[x];
@@ -371,15 +371,51 @@ var htm='';
 					 <div class="col col-md-10 col-sm-10">
 					 	<p><b><u>`+data.location+`</u></b> - <b><u>`+data.destination+`</u></b></p>
 					 	<p><b>`+data.departure_date+`</b>  - `+data.departure_time+`</p>
-					 	<p><small>`+data.requester+`</small></p>
+					 	<p><small><span class="badge">`+data.requester+`</span> <span class="badge">TT # ${data.travel_id}</span> <span class="badge">Link # ${data.id}</span></small></p>
 
 					 </div>
 
 				 <div class="col col-md-offset-1 col-md-11 col-sm-offset-1 col-sm-11" style="border-bottom:1px solid rgb(250,250,250);">
 					 `;
 
-					htm+=`<p>&nbsp;<a href="#" data-link="`+data.id+`" class="travel-unlink-button">Unlink <span class="glyphicon glyphicon-link"></span></a></p>`;
 				
+					
+
+					htm+=`<ul class="list-unstyled trip-list">
+					<li>&nbsp;<a href="#" data-link="`+data.id+`" class="travel-unlink-button">Unlink <span class="glyphicon glyphicon-link"></span></a></li>
+					<li class="dropdown"> <a href="#" class="travel-link advance-menu pull-left dropdown-toggle" data-type="personal" data-toggle="dropdown"  data-content='`+JSON.stringify(data)+`' aria-haspopup="true" aria-expanded="true">Advanced Options
+						 <span class="glyphicon glyphicon-option-vertical"></span> </span>
+						 </a>
+						
+							<ul class="dropdown-menu advance-menu-dropdown">
+									<li><a href="#" class="advance-menu-selector"  id="charge" data-charge="`+data.travel_id+`">Charge</a></li>
+									<li><a href="#" class="advance-menu-selector"  id="charge_advance" data-charge="`+data.travel_id+`">Override Computation</a></li>
+								</ul>
+						
+					</li>`;
+
+					
+					if(data.type=='official'){
+
+						htm+=`<li> <a href="travel/official/print/trip_ticket/`+data.travel_id+`" target="_blank" class="travel-link"><span class="glyphicon glyphicon-print"></span></a></li>`
+
+					}
+
+					if(data.type=='personal'){
+
+						htm+=`<li> <a href="travel/personal/print/statement_of_account/`+data.travel_id+`" target="_blank" class="travel-link"><span class="glyphicon glyphicon-print"></span></a></li>`
+
+					}
+
+
+					if(data.type=='campus'){
+
+						htm+=`<li> <a href="travel/campus/print/notice_of_charges/`+data.travel_id+`" target="_blank" class="travel-link"><span class="glyphicon glyphicon-print"></span></a></li>`
+
+					}
+
+
+				htm+=`</ul>`
 
 
 				htm+=`</div></div>`;
@@ -389,7 +425,7 @@ var htm='';
 		
 		$(target).html(htm)
 		
-
+		
 }
 
 
@@ -635,6 +671,11 @@ function appendTravelToList(json){
 				
 				appendToLinkedTravel(json,'.linked-section'+id)
 				bindTravelUnlinkButton();
+				$('.mark-as-menu , .advance-menu').off('click');
+				$('.mark-as-menu , .advance-menu').on('click',function(){
+					selectedTrips=this;
+				})		
+				bindAdvanceSelector();	
 			});
 			
 
@@ -779,10 +820,11 @@ function bindAdvanceSelector(){
 	$('.advance-menu-selector').off('click');
 	$('.advance-menu-selector').on('click',function(e){
 		e.preventDefault();
-		
 		var content=JSON.parse($(selectedTrips).attr('data-content'))
-		var id=content.id
-		var type=content.type
+		// prioritize travel ID since content.id is different in linked travel
+		// this will prevent wrong ID
+		var id = content.travel_id ? content.travel_id : content.id
+		var type = content.type
 
 		var menu=$(this).attr('id')
 
@@ -792,6 +834,7 @@ function bindAdvanceSelector(){
 		if(menu=='driver') advanceMenuDriver(type);
 		if(menu=='charge'){
 			var charge=$(this).attr('data-charge')
+			
 			advanceMenuCharge(charge,type);
 		} 
 
@@ -1000,9 +1043,13 @@ function bindTravelLinkNavigation(){
 	$('.trip-link').on('click',function(e){
 		e.preventDefault();
 		e.stopPropagation();
+
 		//change title
 		var type=$(this).attr('data-type');
+		var desc=$(this).attr('data-description');
+
 		$('.verified_travel_title').html(type);
+		$('.verified_travel_subtitle').html(desc);
 
 		//show loading
 		$('.verified_travel_result').html('Loading . . .');
@@ -1037,6 +1084,8 @@ function showDateAndTimeSettings(){
 	var json=JSON.parse(content);
 
 	//departure
+	//avoid conflict on linked travel
+	json.actual_time = json.actual_time ? json.actual_time : json.actual_departure_time
 	$('#departure-date-input').val(json.departure_date)
 	$('#departure-time-input').val(json.actual_time)
 

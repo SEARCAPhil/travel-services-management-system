@@ -200,7 +200,9 @@ function showAdvanceChargesOfficial(id){
 function showAdvanceGasolineCharge(){
     var content=$(selectedTrips).attr('data-content');
     var json=JSON.parse(content);
-    var id=json.id;
+    // prioritize travel ID since content.id is different in linked travel
+	// this will prevent wrong ID
+	var id = json.travel_id ? json.travel_id : json.id
     var type=json.type; 
 
     showAdvanceChargesOfficial(id)
@@ -212,7 +214,9 @@ function gasolineCharge(){
 
     var content=$(selectedTrips).attr('data-content');
     var json=JSON.parse(content);
-    var id=json.id;
+    // prioritize travel ID since content.id is different in linked travel
+	// this will prevent wrong ID
+	var id = json.travel_id ? json.travel_id : json.id
     var type=json.type;
 
 
@@ -231,7 +235,9 @@ function advanceGasolineCharge(type){
 
     var content=$(selectedTrips).attr('data-content');
     var json=JSON.parse(content);
-    var id=json.id;
+    // prioritize travel ID since content.id is different in linked travel
+	// this will prevent wrong ID
+	var id = json.travel_id ? json.travel_id : json.id
     var type=json.type;
 
   
@@ -260,7 +266,9 @@ function bindGasolineCharge(type){
 
             var content=$(selectedTrips).attr('data-content');
             var json=JSON.parse(content);
-            var id=json.id;
+            // prioritize travel ID since content.id is different in linked travel
+            // this will prevent wrong ID
+            var id = json.travel_id ? json.travel_id : json.id
             var type=json.type;
             var mileage_in=$('#start_km').val()
             var mileage_out=$('#end_km').val()
@@ -322,7 +330,9 @@ function bindAdvanceGasolineCharge(type){
 
             var content=$(selectedTrips).attr('data-content');
             var json=JSON.parse(content);
-            var id=json.id;
+            // prioritize travel ID since content.id is different in linked travel
+            // this will prevent wrong ID
+            var id = json.travel_id ? json.travel_id : json.id
             var type=json.type
             var gasoline_charge=$('#gasoline_charge').val()
             var drivers_charge=$('#drivers_charge').val()
