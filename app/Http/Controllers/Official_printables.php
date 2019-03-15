@@ -932,7 +932,7 @@ $html .='<style>
 
 		<table>
 			<tr>
-				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date('m/d/Y').'</b></td>
+				<td width="220"></td><td></td><td class="withLine" style="text-align:center;"  width="100"><b>'.date('F-d-Y').'</b></td>
 			</tr>
 			<tr>
 				<td></td><td></td><td style="text-align:center;">Date</td>
@@ -1040,7 +1040,7 @@ $html.='
 				$dt = new \DateTime($itenerary[$a]->departure_time);
 				$isEmptyDeptTime = $itenerary[$a]->departure_time == '00:00:00' ? true : false;
     			$html.='<tr>
-					<td>'.@date_format(date_create($itenerary[$a]->departure_date),'m-d-y').'</td>
+					<td>'.@date_format(date_create($itenerary[$a]->departure_date),'F-d-Y').'</td>
 					<td>'.$itenerary[$a]->location.'</td>
 					<td>'.html_entity_decode($itenerary[$a]->destination).'</td>
 					<td>'.$mode_of_transport.'</td>
@@ -1157,7 +1157,7 @@ $html.='		<table>
 	</article>
 
 </section>';
-$notes = nl2br($details->purpose); 
+$notes = nl2br($details->notes); 
 
 $notePage = "<br/><h4>Notes</h4><hr/>${notes}";
 
