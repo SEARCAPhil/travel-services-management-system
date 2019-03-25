@@ -30,7 +30,7 @@ class Profile extends Controller
             exit;
         }
         
-        var_dump(file_put_contents("uploads/profile/{$id}.{$type}", $data));
+        echo (@file_put_contents("uploads/profile/{$id}.{$type}", $data));
         //move_uploaded_file($_FILES["attachment"]["tmp_name"], 'uploads/automobile/'.$filename)
     }
 }

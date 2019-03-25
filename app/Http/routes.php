@@ -157,6 +157,8 @@ Route::post('api/travel/official/verified/scheduled/{id}',['uses'=>'Official_ite
 Route::get('api/travel/official/verified/scheduled/{id}',['uses'=>'Official_itenerary@show_linked_travel']);
 Route::delete('api/travel/official/verified/scheduled/{id}',['uses'=>'Official_itenerary@destroy_linked_travel']);
 
+Route::get('api/travel/official/verified/scheduled/search/{param}/{page}',['uses'=>'Official_itenerary@tr_search']);
+
 /**RECENTLY VERIFIED TRAVEL REQUEST MARK AS**/
 Route::put('api/travel/official/verified/{id}',['uses' =>'Trips@update_status']);
 

@@ -10,7 +10,7 @@ use App\Http\Requests;
 
 class Directory extends Controller
 {
-	public $ischo_db = 'trsdev_ischo_db';
+	public $ischo_db = 'trs_ischo_db';
 
     function staff($page=1){
 

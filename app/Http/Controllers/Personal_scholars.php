@@ -54,7 +54,7 @@ class Personal_scholars extends Controller
 
 
 
-                $sql="SELECT trp_passengers.id,trp_passengers.uid,searcaba_ischo_db.personal_tb.*  FROM trp_passengers LEFT JOIN searcaba_ischo_db.personal_tb on searcaba_ischo_db.personal_tb.pers_id=trp_passengers.uid  where trp_id=:id and type='scholar'";
+                $sql="SELECT trp_passengers.id,trp_passengers.uid,trs_ischo_db.personal_tb.*  FROM trp_passengers LEFT JOIN trs_ischo_db.personal_tb on trs_ischo_db.personal_tb.pers_id=trp_passengers.uid  where trp_id=:id and type='scholar'";
 
                 $statement=$this->pdoObject->prepare($sql);
 

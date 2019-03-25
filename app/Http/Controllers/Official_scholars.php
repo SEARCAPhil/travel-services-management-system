@@ -15,7 +15,7 @@ class Official_scholars extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public $ischo_db = 'trsdev_ischo_db';
+    public $ischo_db = 'trs_ischo_db';
 
     public function index($id)
     {

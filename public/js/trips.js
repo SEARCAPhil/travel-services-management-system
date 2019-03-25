@@ -925,7 +925,7 @@ function bindUnlink(target){
 	});
 }
 
-function bindTravelLinkButton(){
+function bindTravelLinkButton () {
 
 	$('.travel-link-button').off('click')
 	$('.travel-link-button').on('click',function(e){
@@ -937,8 +937,30 @@ function bindTravelLinkButton(){
 			ajax_getVerifiedTravelForLinking('api/travel/official/verified/scheduled/',1,id,function(json){
 				appendToListInLinkModal(json,target);
 			});
+
+			bindTravelLinkTrSearch (target); 
 		});
 	})
+}
+
+let timeout = {}
+function bindTravelLinkTrSearch (target) {
+	
+
+	timeout = setTimeout(() => {
+		$('.tr-link-search-box').off('keyup')
+		$('.tr-link-search-box').on('keyup', (e) => { 
+			let val = e.target.value
+			if(val.length === 0) return 0;
+			console.log(val)
+			// search
+			ajax_getVerifiedTravelForLinking('api/travel/official/verified/scheduled/search/',val, 1,function(json){
+				appendToListInLinkModal(json,target);
+			});
+			
+			clearTimeout(timeout)
+		})
+	},1000)
 }
 
 function bindTravelUnlinkButton(){

@@ -780,7 +780,7 @@ $html.='
 		
 	</article>';
 
-$html.='</section>';
+	$html.='</section>';
 
 
 
@@ -793,5 +793,11 @@ $html.='</section>';
         $pdf->output('Travel Request', 'I');
 
 
-    }
+		}
+		
+	
 }
+
+
+
+
