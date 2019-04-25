@@ -293,10 +293,10 @@ $html .='<style>
 				</tr>
 				<tr>
 					<td  width="98"><b>Request Date : </b></td>
-					<td  width="180">&nbsp;&nbsp;&nbsp;&nbsp;<u>'.date('F d,y') .'</u></td>
+					<td  width="180">&nbsp;&nbsp;&nbsp;&nbsp;<u>'.date('F d, Y') .'</u></td>
 					<td  width="30"></td>
-					<td  width="60"><b>Charge&nbsp;To:&nbsp;</b></td>
-					<td  width="120">';
+					<td  width="70"><b>Charge&nbsp;To:&nbsp;</b></td>
+					<td  width="150">';
 					
 					$f='';
 				
@@ -304,7 +304,7 @@ $html .='<style>
 						$f.='&nbsp;&nbsp;&nbsp;&nbsp;N/A';
 					}
 				for($x=0;$x<count($fundings);$x++){
-					$f.='<span style="font-size:8px;padding-left:100px;text-decoration:underline;">'.$fundings[$x]->fund.' - '.$fundings[$x]->cost_center.' - '.$fundings[$x]->line_item.'</span><br/>';
+					$f.='<span style="font-size:8px;padding-left:100px;text-decoration:underline;">'.strtoupper($fundings[$x]->fund).' - '.$fundings[$x]->cost_center.' - '.$fundings[$x]->line_item.'</span><br/>';
 				}	
 
 				$html.=$f;
