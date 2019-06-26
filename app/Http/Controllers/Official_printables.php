@@ -1157,22 +1157,23 @@ $html.='		<table>
 	</article>
 
 </section>';
-$notes = nl2br($details->notes); 
-
-$notePage = "<br/><h4>Notes</h4><hr/>${notes}";
 
 
-
-		
 		$pdf->setFontSize(10);	
 
 		//output
 		$pdf->AddPage();
 		$pdf->Writehtml($html);
 		
-
-		$pdf->AddPage();
-		$pdf->Writehtml($notePage);
+		if(strlen(@$charges->notes)>1){
+			$notes = nl2br($details->notes); 
+		
+			$notePage = "<br/><h4>Notes</h4><hr/>${notes}";
+		
+			$pdf->AddPage();
+			$pdf->Writehtml($notePage);
+		}
+		
 		$pdf->output('Travel Request', 'I');
 
 

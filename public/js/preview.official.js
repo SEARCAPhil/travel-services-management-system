@@ -152,6 +152,15 @@ function ajax_getOfficialTravelItenerary(id,callback){
 	})
 }
 
+function ajax_getOfficialTravelIteneraryPreview(id,callback){
+	$.get('api/travel/official/itenerary/preview/'+id,function(json){
+		official_travel_itenerary=JSON.parse(json)
+		callback(official_travel_itenerary);
+		return official_travel_itenerary;
+	})
+}
+
+
 
 
 
@@ -743,6 +752,29 @@ function removeOfficialTravelItenerary(id){
 	
 }
 
+function updateOfficialTravelItenerary(id){
+	$('#preview-modal').on('show.bs.modal', function (e) {
+	    $('#preview-modal-dialog').load('travel/modal/itenerary',function(data){
+				var context=($(contextSelectedElement).attr('data-selection'));
+				
+				ajax_getOfficialTravelIteneraryPreview(context, function (res) {
+					if(!res[0]) return
+					$('#officialTravelOrigin').val(res[0].location)
+					$('#officialTravelDestination').val(res[0].destination)
+					$('#officialTravelDepartureDate').val(res[0].departure_date)
+					$('#officialTravelDepartureTime').val(res[0].departure_time)
+					if(res[0].driver_id > 0) {
+						$('#officialTravelDriver').val(res[0].driver_id)
+					}
+				})
+	    	removeContextListElement('api/travel/official/itenerary/',id);
+	    })
+	});
+
+	$('#preview-modal').modal('toggle');
+	
+}
+
 
 function removeFund(id){
 	$('#preview-modal').on('show.bs.modal', function (e) {
@@ -794,6 +826,14 @@ function bindRemoveItenerary(){
 	$('.removeIteneraryButton').on('click',function(){
 		var context=($(contextSelectedElement).attr('data-selection'));
 		removeOfficialTravelItenerary(context)
+	})
+}
+
+function bindUpdateItenerary(){
+	$('.updateIteneraryButton').off('click');
+	$('.updateIteneraryButton').on('click',function(){
+		var context=($(contextSelectedElement).attr('data-selection'));
+		updateOfficialTravelItenerary(context)
 	})
 }
 
@@ -849,6 +889,7 @@ function bindUpdateOfficialPreview(){
 					setTimeout(function(){
 						bindRemoveStaff();
 						bindRemoveItenerary();
+						bindUpdateItenerary()
 						bindRemoveOfficialScholar();
 						bindRemoveOfficialCustom();
 					},2000)

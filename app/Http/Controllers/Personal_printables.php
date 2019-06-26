@@ -368,6 +368,11 @@ $custom_total_count=count($custom);
 
 $passenger_count=0;
 $GLOBALS['passenger_names']=array();
+$mode_of_payment = $details->mode_of_payment;
+#mode of payment
+if($mode_of_payment == 'sd') {
+	$mode_of_payment = 'Salary Deduction';
+}
 for($a=0;$a<$staff_total_count;$a++){
 	array_push($GLOBALS['passenger_names'], $staff[$a]->name);
 
@@ -467,7 +472,7 @@ $html.='<br/><br/><br/><article>
 		<table>
 			<tr>
 				<td width="100"><b>&nbsp;&nbsp;Mode of Payment:</b></td>
-				<td width="100" class="withLine">'.@ucwords($details->mode_of_payment).'</td>
+				<td width="100" class="withLine">'.@ucwords($mode_of_payment).'</td>
 			</tr>
 		</table>
 

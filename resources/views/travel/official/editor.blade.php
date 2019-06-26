@@ -17,6 +17,7 @@
 <div class="contextMenu" id="iteneraryMenu">
 	<ul class="list-group">		
 		<li class="list-group-item removeIteneraryButton"><span class="glyphicon glyphicon-remove basket"></span> Remove</li>
+		<li class="list-group-item updateIteneraryButton"><span class="glyphicon glyphicon-edit basket"></span> Update</li>
 	</ul>
 </div>
 <div class="contextMenu" id="fundingMenu">

@@ -42,12 +42,22 @@ class Official_itenerary extends Controller
         
     }
 
+    
+
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create (Request $request) {
+        if($request->input('id')) {
+            return self::__update($request);
+        } else {
+            return self::__create($request);
+        }
+    }
+
+    public function __create(Request $request)
     {
         $token = $request->input('_token');
         $origin = $request->input('location');
@@ -100,6 +110,57 @@ class Official_itenerary extends Controller
 
             $res=array('id'=>$lastId,'departure_date'=>$this->date,'location'=>$this->from,'destination'=>$this->destination,'departure_time'=>$this->time);
             return json_encode($res);
+            
+            
+            
+
+        }catch(Exception $e){ echo $e->getMessage();$this->pdoObject->rollback();}
+    }
+
+    public function __update(Request $request)
+    {
+        $token = $request->input('_token');
+        $origin = $request->input('location');
+        $destination = $request->input('destination');
+        $departure_date = $request->input('departure_date');
+        $departure_time= $request->input('departure_time');
+        $driver=$request->input('driver_id');
+        $tr=$request->input('tr_id');
+        $id=$request->input('id');
+
+         try{
+
+            $this->pdoObject=DB::connection()->getPdo();
+            $this->tr=htmlentities(htmlspecialchars($tr));
+            $this->destination=$destination;
+            $this->from=$origin;
+            $this->time=htmlentities(htmlspecialchars($departure_time));
+            $this->date=htmlentities(htmlspecialchars($departure_date));
+        
+
+            #begin transaction
+            $this->pdoObject->beginTransaction();
+            #if action is create
+            $insert_sql="UPDATE travel SET location =:location,destination = :destination,departure_time =:time, departure_date =:datez,driver_id = :driver_id WHERE travel.id = :id";
+            #prepare sql first
+            $insert_statement=$this->pdoObject->prepare($insert_sql);
+         
+
+            #all param for both
+            $insert_statement->bindParam(':location',$this->from);
+            $insert_statement->bindParam(':time',$this->time);
+            $insert_statement->bindParam(':datez',$this->date);
+            $insert_statement->bindParam(':destination',$this->destination);
+            $insert_statement->bindParam(':driver_id',$driver);
+            $insert_statement->bindParam(':id',$id);
+            
+            
+            #exec the transaction
+            $insert_statement->execute();;
+            $this->pdoObject->commit();
+            
+        
+            return $insert_statement->rowCount();
             
             
             

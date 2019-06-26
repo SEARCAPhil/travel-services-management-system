@@ -76,7 +76,7 @@ function appendIteneraryListPreviewConfirmation(){
 
 	//add event handler in confirmation button
 	$('#iteneraryConfirmationButton').click(function(){
-		
+		var contextId=($(contextSelectedElement).attr('data-selection'));
 		$(this).html('saving . . .')
 		var that=this
 
@@ -92,64 +92,92 @@ function appendIteneraryListPreviewConfirmation(){
 
 		var tr_id=form_id
 
-		
 
 		if(typeof $(selectedElement).attr('id')!='undefined') tr_id=$(selectedElement).attr('id');
 		//json data
 		var data={"id":null,"tr_id":tr_id,"res_id":null,"location":origin,"destination":destination,"departure_time":departure_time,"actual_departure_time":"00:00:00","returned_time":"00:00:00","departure_date":departure_date,"returned_date":"0000-00-00","status":"scheduled","plate_no":null,"driver_id":"0","linked":"no","date_created":date_created,driver_id:driver,_token:$('input[name=_token]').val()}
 
-
-
-
-
-		$.post('api/travel/official/itenerary',data,function(res){
-
-			try{
-				var id=JSON.parse(res).id;
-				data.id=id;
-
-
-				//add to preview
-				appendIteneraryToListPreview(data,function(data){
-					//saved button
-					$(that).html('saved')
-
-					//clear form
-					$('#officialTravelOrigin').val('');
-					$('#officialTravelDestination').val('');
-					$('#officialTravelDepartureDate').val('');
-					$('#officialTravelDepartureTime').val('');
-
-					//enabling contextmenu
-					unbindContext();
-					context();
-
-					appendIteneraryToListPreviewCallback(data);
-
-				})
-
-
-			}catch(e){
-				//alert('Something went wrong.Please try again later!');
-			}
-
-
-		}).fail(function(){
-			alert('Something went wrong.Please try again later!');
-		})
-
+		
+		// for update
+		if(contextId) {
+			data.id = contextId
+		}
 			
+			$.post('api/travel/official/itenerary',data,function(res){
+				// update res only returns 1 or 0
+				if(contextId) {
+					if(res == 1) {
+						$(contextSelectedElement).remove()
+						//add to preview
+						appendIteneraryToListPreview(data,function(data){
+							//saved button
+							$(that).html('saved')
+	
+							//clear form
+							$('#officialTravelOrigin').val('');
+							$('#officialTravelDestination').val('');
+							$('#officialTravelDepartureDate').val('');
+							$('#officialTravelDepartureTime').val('');
+	
+							//enabling contextmenu
+							unbindContext();
+							context();
+							$('#itenerary-modal').modal('hide');
+							$('#preview-modal').hide()
+						})
+	
+					} else {
+						alert('Something went wrong.Please try again later!');
+					}
+				} else {
+					try{
+						var id=JSON.parse(res).id;
+						data.id=id;
+						//add to preview
+						appendIteneraryToListPreview(data,function(data){
+							//saved button
+							$(that).html('saved')
+	
+							//clear form
+							$('#officialTravelOrigin').val('');
+							$('#officialTravelDestination').val('');
+							$('#officialTravelDepartureDate').val('');
+							$('#officialTravelDepartureTime').val('');
+	
+							//enabling contextmenu
+							unbindContext();
+							context();
+	
+							appendIteneraryToListPreviewCallback(data);
+	
+						})
+	
+	
+					}catch(e){
+						console.log(e)
+						//alert('Something went wrong.Please try again later!');
+					}
 
-		//show form
-		setTimeout(function(){
+							
+					//show form
+					setTimeout(function(){
 
-			$('#itenerary-modal').modal('hide');
-			//clear form
+						$('#itenerary-modal').modal('hide');
+						//clear form
 
-			//display default view
-			$('#itenerary-dialog-content').show();
-			$('#itenerary-confirmation').html('')
-		},900)
+						//display default view
+						$('#itenerary-dialog-content').show();
+						$('#itenerary-confirmation').html('')
+					},900)
+
+	
+				}
+
+
+
+			}).fail(function(){
+				alert('Something went wrong.Please try again later!');
+			})
 	})
 
 

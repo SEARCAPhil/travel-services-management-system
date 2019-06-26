@@ -205,6 +205,7 @@ Route::get('api/travel/official/staff/{id}',['uses' =>'Official_staff@index']);
 Route::get('api/travel/official/scholars/{id}',['uses' =>'Official_scholars@index']);
 Route::get('api/travel/official/custom/{id}',['uses' =>'Official_custom@index']);
 Route::get('api/travel/official/itenerary/{id}',['uses' =>'Official_itenerary@index']);
+Route::get('api/travel/official/itenerary/preview/{id}',['uses' =>'Official_itenerary@show']);
 Route::get('api/travel/official/search/{param}',['uses' =>'Official@search']);
 
 
