@@ -75,6 +75,20 @@ input:focus,input:active,textarea:focus,textarea:active,select:active,select:foc
 	font-weight: normal;
 }
 
+.badge-success {
+	background: #4caf50;
+	color: #fff;
+}
+
+.badge-danger {
+	background: #e91e63;
+	color: #fff;
+}
+
+.badge-approval {
+	margin: 5px;
+}
+
 .automobile-color {
 	-webkit-appearance: none;
 	border: none;

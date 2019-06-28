@@ -906,6 +906,8 @@ class Official extends Controller
 
 
 
+
+
     /**
 
      * Display the specified resource.
@@ -1026,11 +1028,12 @@ class Official extends Controller
                     while($row4=$statement3->fetch(\PDO::FETCH_OBJ)){
                         $row->recommended_by=$row4->profile_name;
                         $row->recommended_by_position=$row4->position;
+                        $row->recommended_by_uid=@$row4->uid;
                     }
                 }
 
-               
-
+               // approval
+               $row->approval = self::get_approval($row->tr);
 
                 $res[]=$row;
 
@@ -2346,6 +2349,30 @@ function ongoing($page=1){
         }catch(Exception $e){echo $e->getMessage();$this->pdoObject->rollback();}
 
     }
+
+    private function get_approval ($tr_id) {
+        $this->pdoObject=DB::connection()->getPdo();
+        $sql="SELECT * FROM approval WHERE tr_id = :tr_id ORDER BY id DESC ";
+        $statement=$this->pdoObject->prepare($sql);
+        $statement->bindParam(':tr_id', $tr_id);
+        $statement->execute();
+
+        $sql2="SELECT * FROM account_profile where uid=:uid ORDER BY id DESC LIMIT 1";
+        $result = [];
+
+        while($row = $statement->fetch(\PDO::FETCH_OBJ)) {
+            $statement2=$this->pdoObject->prepare($sql2);
+            $statement2->bindValue(':uid',$row->uid);
+            $statement2->execute(); 
+            while($row2 = $statement2->fetch(\PDO::FETCH_OBJ)) {
+                $row->profile = $row2;
+            }   
+
+            $result[] = $row;
+        }
+
+        return $result;
+      }
 
 }
 

@@ -18,12 +18,12 @@
 |
 */
 
-function ajax_updateTravelStatusPreview(url,id,status,callback){
+function ajax_updateTravelStatusPreview(url,id,status,callback, method = 'PUT'){
 	//ajax here
 	$.ajax({
 
 		url:url+''+id,
-		method:'PUT',
+		method,
 		data: { _token: $("input[name=_token]").val(),id:id,status:status},
 		success:function(data){
 			if(data>0){
@@ -284,6 +284,33 @@ function forwardOfficialTravelRequest(){
 }
 
 
+function sendApproval(){
+	
+	$('.modal-submit').on('click',function(){
+
+		//loading
+	    previewLoadingEffect()
+	    		
+	    //disable onclick
+	    $(this).attr('disabled','disabled')
+			$('#preview-modal .modal-body').html('<h3>Please wait while sending your request</h3>Do not close the browser or leave the page while we are processing your request. This will only take a few seconds.');
+	    //ajax here
+	    ajax_updateTravelStatusPreview('api/travel/official/approval/',$(selectedElement).attr('id'),1,function(data){
+	    	if(data==1){
+	    		$('.preview-send').html('<span class="badge badge-danger"><span class="glyphicon glyphicon-send"></span> Request Sent (Waiting for approval)</span>')
+	    	}else{
+	    		//show error
+	    		alert('Oops!Something went wrong.Please try again later.')
+				}
+				
+				//$('#preview-modal').modal('hide');
+
+		}, 'POST')
+	})
+	
+}
+
+
 function verifyOfficialTravelRequest(id){
 	
 	$('.modal-submit').on('click',function(){
@@ -432,6 +459,18 @@ function bindForwardOfficial(){
 			//forward
 			forwardOfficialTravelRequest()
 
+		})
+	})
+
+}
+
+function bindSend(){
+	$('.preview-send').off('click');
+	$('.preview-send').on('click',function(){
+		//call custom bootstrap dialog
+		showBootstrapDialog('#preview-modal','#preview-modal-dialog','travel/modal/send_approval',function(){
+			//forward
+			sendApproval()
 		})
 	})
 

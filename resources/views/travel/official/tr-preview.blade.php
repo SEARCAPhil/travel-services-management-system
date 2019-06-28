@@ -7,7 +7,7 @@
 			<li class="preview-remove preview-command disabled" title="remove"><span class="glyphicon glyphicon-remove"></span> Remove</li>
 			<li class="preview-update preview-command disabled" title="update"><span class="glyphicon glyphicon-pencil"></span> Update</li>
 			<li class="text-danger preview-forward preview-command disabled" title="send"> <span class="glyphicon glyphicon-send"></span> Send</li>
-
+			<li class="text-danger preview-send preview-command" title="send to approver"> <span class="glyphicon glyphicon-send"></span> Send to Approver</li>
 		</ul>
 </section>
 	
@@ -25,7 +25,8 @@
 			<div class="col col-md-9">
 				<h3 class="preview-name"></h3>
 				<small class="preview-unit">. . .</small><br/>
-				<small class="preview-created">. . .</small>
+				<small class="preview-created">. . .</small><br>
+				<small class="preview-approval"></small>
 			</div>
 		</div>
 
@@ -140,16 +141,3 @@
 <script type="text/javascript" src="js/common.js"></script>
 <script type="text/javascript" src="js/status.official.js"></script>
 <script type="text/javascript" src="js/preview.official.js"></script>
-<script type="text/javascript">	
-
-
-$(document).ready(function(){
-
-
-
-
-
-
-	
-});
-</script>

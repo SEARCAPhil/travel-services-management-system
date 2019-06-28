@@ -255,6 +255,7 @@ function showOfficialTravelListPreview(id){
 		$('.preview-name').html(json[0].profile_name)
 		$('.preview-unit').html(json[0].department)
 		$('.preview-created').html(((json[0].date_created).split(' '))[0])
+		$('.preview-approval').html('')
 
 		// disable line breaks removal in form
 		if($('#form-purpose').prop('nodeName') === 'TEXTAREA') {
@@ -278,6 +279,17 @@ function showOfficialTravelListPreview(id){
 			//$('.preview-profile-image')[i].style.background = `url("uploads/profile/${json[0].profile_image}.jpeg") no-repeat`
 			//$('.preview-profile-image')[i].style.backgroundSize = 'cover'
 			$('.preview-profile-image')[i].parentNode.classList.remove('hide')
+		})
+
+		json[0].approval.forEach((el, index) => { 
+			$('.preview-approval').append(`<span class="badge ${el.status ? 'badge-success': 'badge-danger col col-lg-12 col-md-12 col-sm-12 col-xs-12'} badge-approval" title="approved" style="padding: 5px;"><i class="material-icons md-18">${el.status ? 'check_circle': 'warning'}</i> ${el.profile.profile_name || 'N/A'}<br/>
+			<small>(${el.created_at})</small>
+			${el.status ? '' : `<br>
+			<details class="pull-left text-left col-12 col-lg-12 col-sm-12 col-md-12 col-xs-12">
+				<summary>Reason :</summary>	<br>
+				${el.remarks || 'No Remarks'}
+			</details>`}
+			</span>`)
 		})
 		
 		//$('.preview-cash-advance').html(' &emsp;&emsp;<b>'+json[0].source_of_fund_value+'</b>')
@@ -427,6 +439,9 @@ function showOfficialTravelListPreview(id){
 			if(preview[0].status==4){
 				showClosedStatus()
 			}
+
+			// send approval to email
+			bindSend()
 		}
 
 	})
@@ -929,6 +944,15 @@ function unbindForwardOfficial(){
 	$('.preview-forward').off('click');
 	$('.preview-forward').attr('disabled','disabled').addClass('disabled')
 }
+
+
+function unbindSend(){
+	$('.preview-send').off('click');
+	$('.preview-send').attr('disabled','disabled').addClass('disabled')
+}
+
+
+
 
 
 

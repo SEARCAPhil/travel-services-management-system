@@ -276,6 +276,10 @@ Route::get('api/travel/official/charge/advance/{id}',['uses' =>'Official_itenera
 Route::post('api/travel/official/charge/advance/{id}',['uses' =>'Official_itenerary@create_advance_charge_breakdown']);
 
 
+# approval
+Route::post('api/travel/official/approval/{id}',['uses' =>'Approval@create_approval_request']);
+Route::post('api/travel/official/approval/response/{id}',['uses' =>'Approval_response@index']);
+Route::get('api/travel/official/approval/response/{id}',['uses' =>'Approval_response@index']);
 
 
 ######################################################################################
