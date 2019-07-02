@@ -35,7 +35,11 @@ class Campus_printables extends Controller
     	
     	    	#variables
     	global $details;
-    	global $staff;
+			global $staff;
+			global $approved_by_checksum;
+			global $approved_by_date;
+			global $recommended_by_checksum;
+			global $recommended_by_date;
 
     	$itenerary=Array();
     	$staff=Array();
@@ -53,7 +57,40 @@ class Campus_printables extends Controller
     	$GLOBALS['official']=$official;
 
     	$data=json_decode($official->show($id));
-    	$details=$data[0];
+			$details=$data[0];
+			
+
+			$approved_by_unique = [];
+			$recommended_by_unique = [];
+
+			#var_dump($details->approval[0]);
+			foreach($details->approval as $key => $val) {
+				if(!isset($approved_by_unique[$val->profile->uid]) && $details->approved_by_uid == $val->profile->uid) {
+					$approved_by_unique[$val->profile->uid] = $val;
+				}
+
+				if(!isset($recommended_by_unique[$val->profile->uid]) && $details->recommended_by_uid == $val->profile->uid) {
+					$recommended_by_unique[$val->profile->uid] = $val;
+				}
+			}
+
+			$approved_by_checksum ='';
+			$approved_by_date = '';
+			$recommended_by_checksum ='';
+			$recommended_by_date = '';
+			if(isset($approved_by_unique[$details->approved_by_uid])) {
+				if($approved_by_unique[$details->approved_by_uid]->status) { 
+					$approved_by_checksum = $approved_by_unique[$details->approved_by_uid]->checksum;
+					$approved_by_date = $approved_by_unique[$details->approved_by_uid]->created_at;
+				}
+			}
+
+			if(isset($recommended_by_unique[$details->recommended_by_uid])) {
+				if($recommended_by_unique[$details->recommended_by_uid]->status) { 
+					$recommended_by_checksum = $recommended_by_unique[$details->recommended_by_uid]->checksum;
+					$recommended_by_date = $recommended_by_unique[$details->recommended_by_uid]->created_at;
+				}
+			}
 
 
     	//var_dump($details);
@@ -138,6 +175,13 @@ class Campus_printables extends Controller
 
 			global $details;
 			global $staff;
+			global $approved_by_checksum;
+			global $approved_by_date;
+			global $recommended_by_checksum;
+			global $recommended_by_date;
+
+			if($approved_by_date) $approved_by_date = @(explode(' ', $approved_by_date))[0];
+			if($recommended_by_date) $recommended_by_date = @(explode(' ', $recommended_by_date))[0];
 
 			//clear recommended if one of the passengers
 			for($x=0;$x<count($staff);$x++){
@@ -176,13 +220,13 @@ class Campus_printables extends Controller
 
 					<tr>
 						<td width="180"><br/>
-							<div class="withLine" style="border 1px solid rgb(20,20,20);text-align:center;">'.$details->recommended_by.'</div>
+							<div class="withLine" style="border 1px solid rgb(20,20,20);text-align:center;">'.($recommended_by_checksum ? '<small>'.$recommended_by_checksum.' <br/>('.$recommended_by_date.')</small><br>': '').''.$details->recommended_by.'</div>
 						</td>
 						<td width="5"></td>
 						
 						<td width="100"></td>
 						<td width="180"><br/>
-							<div class="withLine" style="border 1px solid rgb(20,20,20);text-align:center;">'.$details->approved_by.'</div>
+							<div class="withLine" style="border 1px solid rgb(20,20,20);text-align:center;">'.($approved_by_checksum ? '<small>'.$approved_by_checksum.' <br/>('.$approved_by_date.')</small><br>': '').''.$details->approved_by.'</div>
 						</td>
 						<td width="10"></td>
 						<td width="50"></td>

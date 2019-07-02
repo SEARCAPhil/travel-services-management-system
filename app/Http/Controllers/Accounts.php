@@ -112,6 +112,18 @@ class Accounts extends Controller
 			$results[]=$row;
 		}
 		return $results;
+	}
+	
+	public function view_username($id){
+		$results=[];
+		$SQL='SELECT username FROM account  WHERE id = :id';
+		$sth=$this->DB->prepare($SQL);
+		$sth->bindParam(':id', $id, \PDO::PARAM_INT);
+		$sth->execute();
+		while($row=$sth->fetch(\PDO::FETCH_OBJ)) {
+			$results[]=$row;
+		}
+		return $results;
   }
 
 }

@@ -429,8 +429,6 @@ $html.='	<article class="col col-md-12">
 	$approved_by_position = isset($_GET['position'])?htmlentities(htmlspecialchars($_GET['position'])):'Unit head,General Services';
 
 
-
-
 		$dt = new \DateTime($itenerary->actual_departure_time);
 		$rt = new \DateTime($itenerary->returned_time);
 		$deptTime = new \DateTime($itenerary->departure_time);
@@ -686,7 +684,11 @@ $html.='	<article class="col col-md-12">
 
     	
     	#variables
-    	global $details;
+			global $details;
+			global $approved_by_checksum;
+			global $approved_by_date;
+			global $recommended_by_checksum;
+			global $recommended_by_date;
 
     	$itenerary=Array();
     	$staff=Array();
@@ -704,10 +706,39 @@ $html.='	<article class="col col-md-12">
     	$GLOBALS['official']=$official;
 
     	$data=json_decode($official->show($id));
-    	$details=$data[0];
+			$details=$data[0];
+			
+			$approved_by_unique = [];
+			$recommended_by_unique = [];
 
+			#var_dump($details->approval[0]);
+			foreach($details->approval as $key => $val) {
+				if(!isset($approved_by_unique[$val->profile->uid]) && $details->approved_by_uid == $val->profile->uid) {
+					$approved_by_unique[$val->profile->uid] = $val;
+				}
 
+				if(!isset($recommended_by_unique[$val->profile->uid]) && $details->recommended_by_uid == $val->profile->uid) {
+					$recommended_by_unique[$val->profile->uid] = $val;
+				}
+			}
 
+			$approved_by_checksum ='';
+			$approved_by_date = '';
+			$recommended_by_checksum ='';
+			$recommended_by_date = '';
+			if(isset($approved_by_unique[$details->approved_by_uid])) {
+				if($approved_by_unique[$details->approved_by_uid]->status) { 
+					$approved_by_checksum = $approved_by_unique[$details->approved_by_uid]->checksum;
+					$approved_by_date = $approved_by_unique[$details->approved_by_uid]->created_at;
+				}
+			}
+
+			if(isset($recommended_by_unique[$details->recommended_by_uid])) {
+				if($recommended_by_unique[$details->recommended_by_uid]->status) { 
+					$recommended_by_checksum = $recommended_by_unique[$details->recommended_by_uid]->checksum;
+					$recommended_by_date = $recommended_by_unique[$details->recommended_by_uid]->created_at;
+				}
+			}
 
     	//var_dump($details);
     	#get itenerary
@@ -787,6 +818,13 @@ $html.='	<article class="col col-md-12">
 		$pdf->setFooterCallback(function($pdf) {
 			//details object
 			global $details;
+			global $approved_by_checksum;
+			global $approved_by_date;
+			global $recommended_by_checksum;
+			global $recommended_by_date;
+
+			if($approved_by_date) $approved_by_date = @(explode(' ', $approved_by_date))[0];
+			if($recommended_by_date) $recommended_by_date = @(explode(' ', $recommended_by_date))[0];
 
 			self::is_creator($details->requested_by);
 			
@@ -831,16 +869,16 @@ $html.='	<article class="col col-md-12">
 					</tr>
 					<tr>
 						<td width="130">
-							<div class="withLine" style="border 1px solid rgb(20,20,20);"></div>
+							<div class="withLine" style="border 1px solid rgb(20,20,20);">'.($recommended_by_checksum ? '<small>'.$recommended_by_checksum.'</small><br>': '').''.$details->recommended_by.'</div>
 						</td>
 						<td width="5"></td>
 						<td width="50">
-							<div class="withLine" ></div>
+							<div class="withLine" >'.($recommended_by_date ? '<br/>'.$recommended_by_date: '').'</div>
 						</td>
 						<td width="100"></td>
-						<td width="150"><div class="withLine">'.$details->approved_by.'</div></td>
+						<td width="150"><div class="withLine">'.($approved_by_checksum ? '<small>'.$approved_by_checksum.'</small><br>': '').''.$details->approved_by.'</div></td>
 						<td width="10"></td>
-						<td width="50"><div class="withLine"></div></td>
+						<td width="50"><div class="withLine">'.($approved_by_date ? '<br/>'.$approved_by_date: '').'</div></td>
 						
 					</tr>
 

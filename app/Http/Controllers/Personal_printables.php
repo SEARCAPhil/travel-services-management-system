@@ -35,7 +35,11 @@ class Personal_printables extends Controller
     
 
     	#variables
-    	global $details;
+			global $details;
+			global $approved_by_checksum;
+			global $approved_by_date;
+			global $recommended_by_checksum;
+			global $recommended_by_date;
 
     	$itenerary=Array();
     	$staff=Array();
@@ -53,7 +57,39 @@ class Personal_printables extends Controller
     	$GLOBALS['official']=$official;
 
     	$data=json_decode($official->show($id));
-    	$details=$data[0];
+			$details=$data[0];
+			
+			$approved_by_unique = [];
+			$recommended_by_unique = [];
+
+			#var_dump($details->approval[0]);
+			foreach($details->approval as $key => $val) {
+				if(!isset($approved_by_unique[$val->profile->uid]) && $details->approved_by_uid == $val->profile->uid) {
+					$approved_by_unique[$val->profile->uid] = $val;
+				}
+
+				if(!isset($recommended_by_unique[$val->profile->uid]) && $details->recommended_by_uid == $val->profile->uid) {
+					$recommended_by_unique[$val->profile->uid] = $val;
+				}
+			}
+
+			$approved_by_checksum ='';
+			$approved_by_date = '';
+			$recommended_by_checksum ='';
+			$recommended_by_date = '';
+			if(isset($approved_by_unique[$details->approved_by_uid])) {
+				if($approved_by_unique[$details->approved_by_uid]->status) { 
+					$approved_by_checksum = $approved_by_unique[$details->approved_by_uid]->checksum;
+					$approved_by_date = $approved_by_unique[$details->approved_by_uid]->created_at;
+				}
+			}
+
+			if(isset($recommended_by_unique[$details->recommended_by_uid])) {
+				if($recommended_by_unique[$details->recommended_by_uid]->status) { 
+					$recommended_by_checksum = $recommended_by_unique[$details->recommended_by_uid]->checksum;
+					$recommended_by_date = $recommended_by_unique[$details->recommended_by_uid]->created_at;
+				}
+			}
 
 
     	//var_dump($details);
@@ -145,6 +181,13 @@ class Personal_printables extends Controller
 		$pdf->setFooterCallback(function($pdf) {
 
 			global $details;
+			global $approved_by_checksum;
+			global $approved_by_date;
+			global $recommended_by_checksum;
+			global $recommended_by_date;
+
+			if($approved_by_date) $approved_by_date = @(explode(' ', $approved_by_date))[0];
+			if($recommended_by_date) $recommended_by_date = @(explode(' ', $recommended_by_date))[0];
 
 			
 			$pdf->SetY(-50);
@@ -179,14 +222,14 @@ class Personal_printables extends Controller
 					</tr>
 					<tr>
 						<td width="130">
-							<div>VAN ALLEN S. LIMBACO</div>
+							<div>'.($recommended_by_checksum ? '<small>'.$recommended_by_checksum.' ('.$recommended_by_date.')</small><br>': 'VAN ALLEN S. LIMBACO').''.strtoupper($details->recommended_by).'</div>
 						</td>
 						<td width="5"></td>
 						<td width="50">
 							
 						</td>
 						<td width="100"></td>
-						<td width="150">'.strtoupper($details->approved_by).'</td>
+						<td width="150">'.($approved_by_checksum ? '<small>'.$approved_by_checksum.' <br/>('.$approved_by_date.')</small><br>': '').''.strtoupper($details->approved_by).'</td>
 						<td width="10"></td>
 						<td width="50"></td>
 						
@@ -194,7 +237,7 @@ class Personal_printables extends Controller
 
 					<tr>
 						<td width="130">
-							<div>Travel Services Assistant</div>
+							<div>'.($details->recommended_by_position ? $details->recommended_by_position: 'Travel Services Assistant').'</div>
 						</td>
 						<td width="5"></td>
 						<td width="50"></td>

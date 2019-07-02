@@ -30,6 +30,7 @@ use App\Http\Controllers\Official_custom;
 use App\Http\Controllers\Official_itenerary;
 
 use App\Http\Controllers\Directory;
+use App\Http\Controllers\Accounts;
 
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -88,41 +89,57 @@ class Approval extends Controller
     }
 
     public function create_approval_request (Request $request) {
-      $official = new Official();
-      $tr_details = json_decode($official->show($request->id));
-      $official_itinerary = new Official_itenerary ();
-      $official_staff=new Official_staff();
-    	$official_scholars=new Official_scholars();
-      $official_custom=new Official_custom();
+        $official = new Official();
+        $tr_details = json_decode($official->show($request->id));
+        $official_itinerary = new Official_itenerary ();
+        $official_staff=new Official_staff();
+        $official_scholars=new Official_scholars();
+        $official_custom=new Official_custom();
 
-      if(!isset($tr_details[0])) return;
+        if(!isset($tr_details[0])) return;
 
-      $staff=json_decode($official_staff->index($tr_details[0]->tr));
-    	$scholars=json_decode($official_scholars->index($tr_details[0]->tr));
-      $custom=json_decode($official_custom->index($tr_details[0]->tr));
-      $sent = array();
-
+            $staff=json_decode($official_staff->index($tr_details[0]->tr));
+            $scholars=json_decode($official_scholars->index($tr_details[0]->tr));
+            $custom=json_decode($official_custom->index($tr_details[0]->tr));
+            $sent = array();
       # send approval
-      if(isset($tr_details[0]->approved_by_uid)) {
-        $itinerary = $official_itinerary->index($tr_details[0]->tr);
-        $dateTime = new \DateTime();
-        $timestamp = $dateTime->getTimestamp();
-        $after_one_week = strtotime('+7 day', time()); 
-        $token = self::create_hash_token ($request->id);
-        $access_token = self::create_email_token($tr_details[0]->approved_by_uid, $token, date('Y-m-d H:i:s', $after_one_week));
-        
-        if($access_token) $sent[] = self::send_card($token, $tr_details[0], @json_decode($itinerary), $staff, $scholars, $custom);
+      if(isset($tr_details[0]->approved_by_uid)) { 
+        # check email
+        $account = new Accounts(DB::connection()->getPdo());
+        $email = $account->view_username($tr_details[0]->approved_by_uid); 
+        if(isset($email[0]->username)) {
+            $itinerary = $official_itinerary->index($tr_details[0]->tr);
+            $dateTime = new \DateTime();
+            $timestamp = $dateTime->getTimestamp();
+            $after_one_week = strtotime('+7 day', time()); 
+            $token = self::create_hash_token ($request->id);
+            $access_token = self::create_email_token($tr_details[0]->approved_by_uid, $token, date('Y-m-d H:i:s', $after_one_week));
+            
+            if($access_token) $sent[] = self::send_card($email[0]->username, $token, $tr_details[0], @json_decode($itinerary), $staff, $scholars, $custom);
+        } 
       }
 
       # recommended by
       if(isset($tr_details[0]->recommended_by_uid)) {
-
+         # check email
+         $account = new Accounts(DB::connection()->getPdo());
+         $email = $account->view_username($tr_details[0]->recommended_by_uid);
+         if(isset($email[0]->username)) {
+            $itinerary = $official_itinerary->index($tr_details[0]->tr);
+            $dateTime = new \DateTime();
+            $timestamp = $dateTime->getTimestamp();
+            $after_one_week = strtotime('+7 day', time()); 
+            $token = self::create_hash_token ($request->id);
+            $access_token = self::create_email_token($tr_details[0]->approved_by_uid, $token, date('Y-m-d H:i:s', $after_one_week));
+            
+            if($access_token) $sent[] = self::send_card($email[0]->username, $token, $tr_details[0], @json_decode($itinerary), $staff, $scholars, $custom);
+        } 
       }
 
       echo in_array(1, $sent);
     }
 
-    private function send_card ($access_token, $data, $itinerary, $staff, $scholars, $custom) {
+    private function send_card ($email, $access_token, $data, $itinerary, $staff, $scholars, $custom) {
       #\var_dump($itinerary); exit;
       $itinerary_json = '';
       $passenger_json = '';
@@ -197,23 +214,133 @@ class Approval extends Controller
 
       }
 
-      /*for($a=0;$a<$scholars_total_count;$a++){
+      for($a=0;$a<$scholars_total_count;$a++){
         $passenger_count++;
-        $html.='<tr class="tr-passenger">
-            <td class="withLine">'.$scholars[$a]->full_name.'</td>
-            <td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$scholars[$a]->nationality.'</td>
-            <td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;<i>Scholar</i></td>
-          </tr>';	
+        $passenger_json.='{
+          "type": "Container",
+          "style": null,
+          "backgroundImage": null,
+          "items": [
+              {
+                  "type": "ColumnSet",
+                  "style": null,
+                  "columns": [
+                      {
+                          "type": "Column",
+                          "style": null,
+                          "backgroundImage": null,
+                          "items": [
+                              {
+                                  "type": "TextBlock",
+                                  "size": "Small",
+                                  "text": "'.@$scholars[$a]->full_name.'",
+                                  "wrap": true
+                              }
+                          ],
+                          "bleed": false,
+                          "width": "stretch"
+                      },
+                      {
+                          "type": "Column",
+                          "style": null,
+                          "backgroundImage": null,
+                          "items": [
+                              {
+                                  "type": "TextBlock",
+                                  "size": "Small",
+                                  "text": "'.@$scholars[$a]->nationality.'",
+                                  "wrap": true
+                              }
+                          ],
+                          "bleed": false,
+                          "width": "stretch"
+                      },
+                      {
+                          "type": "Column",
+                          "style": null,
+                          "backgroundImage": null,
+                          "items": [
+                              {
+                                  "type": "TextBlock",
+                                  "size": "Small",
+                                  "text": " Scholar",
+                                  "wrap": true
+                              }
+                          ],
+                          "bleed": false,
+                          "width": "stretch"
+                      }
+                  ],
+                  "bleed": false
+              }
+          ],
+          "bleed": false
+      },';
       }
 
       for($a=0;$a<$custom_total_count;$a++){
         $passenger_count++;
-        $html.='<tr class="tr-passenger">
-            <td class="withLine">'.$custom[$a]->full_name.'</td>
-            <td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;'.$custom[$a]->designation.'</td>
-            <td class="withLine">&nbsp;&nbsp;&nbsp;&nbsp;</td>
-          </tr>';	
-      }*/
+        $passenger_json.='{
+          "type": "Container",
+          "style": null,
+          "backgroundImage": null,
+          "items": [
+              {
+                  "type": "ColumnSet",
+                  "style": null,
+                  "columns": [
+                      {
+                          "type": "Column",
+                          "style": null,
+                          "backgroundImage": null,
+                          "items": [
+                              {
+                                  "type": "TextBlock",
+                                  "size": "Small",
+                                  "text": "'.@$custom[$a]->full_name.'",
+                                  "wrap": true
+                              }
+                          ],
+                          "bleed": false,
+                          "width": "stretch"
+                      },
+                      {
+                          "type": "Column",
+                          "style": null,
+                          "backgroundImage": null,
+                          "items": [
+                              {
+                                  "type": "TextBlock",
+                                  "size": "Small",
+                                  "text": "'.@$custom[$a]->designation.'",
+                                  "wrap": true
+                              }
+                          ],
+                          "bleed": false,
+                          "width": "stretch"
+                      },
+                      {
+                          "type": "Column",
+                          "style": null,
+                          "backgroundImage": null,
+                          "items": [
+                              {
+                                  "type": "TextBlock",
+                                  "size": "Small",
+                                  "text": " ",
+                                  "wrap": true
+                              }
+                          ],
+                          "bleed": false,
+                          "width": "stretch"
+                      }
+                  ],
+                  "bleed": false
+              }
+          ],
+          "bleed": false
+      },';
+      }
 
       foreach($itinerary as $key => $value) {
         $isEmptyDeptTime = $value->departure_time == '00:00:00' ? true : false; 
@@ -339,7 +466,7 @@ class Approval extends Controller
 
           //Recipients
           $mail->setFrom(env('MAIL_USERNAME'), 'Mailer');
-          $mail->addAddress('jkga@searca.org', 'Joe User');     // Add a recipient
+          $mail->addAddress($email, $email);     // Add a recipient
           #$mail->addAddress('ellen@example.com');               // Name is optional
           #$mail->addReplyTo('info@example.com', 'Information');
           #$mail->addCC('edrj@searca.org');
@@ -359,7 +486,7 @@ class Approval extends Controller
               "version": "1.0",
               "padding": "none",
               "originator": "'.env('MAIL_ORIGINATOR').'",
-              "expectedActors": ["itsu@searca.org"],
+              "expectedActors": ["'.$email.'"],
               "body": [
                   {
                       "type": "Container",
@@ -791,7 +918,7 @@ class Approval extends Controller
                                       "method": "POST",
                                       "isPrimary": true,
                                       "body": "{\"token\":\"abcd\", \"id\":\"'.$data->tr.'\", \"access_token\":'.$access_token.'}",
-                                      "url": "https://677ffaa0.ngrok.io/trs/public/api/travel/official/approval/response/'.$data->tr.'?access_token='.$access_token.'"
+                                      "url": "'.url('/').'api/travel/official/approval/response/'.$data->tr.'?access_token='.$access_token.'"
                                   },
                                   {
                                       "type": "Action.ShowCard",
@@ -817,7 +944,7 @@ class Approval extends Controller
                                                   "method": "POST",
                                                   "url": "https://actionsplayground.azurewebsites.net/workspaces/_qkQW8dJlUeLVi7ZMEzYVw",
                                                   "body": "{\"token\":\"abcd\", \"id\":\"'.$data->tr.'\", \"access_token\":'.$access_token.', \"comment\":\"{{RejectCommentID.value}}\"}",
-                                                  "url": "https://677ffaa0.ngrok.io/trs/public/api/travel/official/approval/response/'.$data->tr.'?access_token='.$access_token.'&comment={{RejectCommentID.value}}"
+                                                  "url": "'.url('/').'/travel/official/approval/response/'.$data->tr.'?access_token='.$access_token.'&comment={{RejectCommentID.value}}"
                                               }
                                           ],
                                           "backgroundImage": null,
