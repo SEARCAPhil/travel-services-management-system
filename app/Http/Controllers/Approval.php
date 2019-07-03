@@ -918,7 +918,7 @@ class Approval extends Controller
                                       "method": "POST",
                                       "isPrimary": true,
                                       "body": "{\"token\":\"abcd\", \"id\":\"'.$data->tr.'\", \"access_token\":'.$access_token.'}",
-                                      "url": "'.url('/').'api/travel/official/approval/response/'.$data->tr.'?access_token='.$access_token.'"
+                                      "url": "'.url('/').'/api/travel/official/approval/response/'.$data->tr.'?access_token='.$access_token.'"
                                   },
                                   {
                                       "type": "Action.ShowCard",
