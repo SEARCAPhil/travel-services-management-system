@@ -944,7 +944,7 @@ class Approval extends Controller
                                                   "method": "POST",
                                                   "url": "https://actionsplayground.azurewebsites.net/workspaces/_qkQW8dJlUeLVi7ZMEzYVw",
                                                   "body": "{\"token\":\"abcd\", \"id\":\"'.$data->tr.'\", \"access_token\":'.$access_token.', \"comment\":\"{{RejectCommentID.value}}\"}",
-                                                  "url": "'.url('/').'/travel/official/approval/response/'.$data->tr.'?access_token='.$access_token.'&comment={{RejectCommentID.value}}"
+                                                  "url": "'.url('/').'/api/travel/official/approval/response/'.$data->tr.'?access_token='.$access_token.'&comment={{RejectCommentID.value}}"
                                               }
                                           ],
                                           "backgroundImage": null,
